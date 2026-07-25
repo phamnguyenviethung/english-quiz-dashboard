@@ -1,0 +1,19 @@
+# TechStack
+- ReactJS, Typescript
+- Tanstack Start
+- Tanstack Query
+- ShadcnUI
+- Tabler Icon
+ # Coding
+ - Các modules được chia theo domain tại src/features: có các hooks, serivces, pure components,utils,....
+ - Còn lại là các common, config, xài chung nhé
+ - Design UI đúng quy chuẩn của shadcnUI, áp dụng các best pratice về UI & UX
+ - Build các component & hooks có thể reuse và dễ maintain: cần break chuẩn (ko nhỏ quá cũng như không lớn quá)
+ - Hạn chế commnet vô code nhiều nhất có thể, chỉ nên trong các case đặc biệt, cần lưu ý
+ - Bắt buộc dùng lib Icon chứ không được render ra UI emoji
+
+# Plan Mode Guidelines
+- Tập trung vào vấn đề được yêu cầu, nếu có vấn đề gì đó cần xác nhận thì cần hỏi lại chứ không được tự quyết
+- Tập trung response về nội dung chính trước rồi mới nói về thứ khác (nếu có)
+
+
