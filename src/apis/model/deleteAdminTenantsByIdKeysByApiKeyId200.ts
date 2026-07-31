@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { DeleteAdminTenantsByIdKeysByApiKeyId200Data } from './deleteAdminTenantsByIdKeysByApiKeyId200Data.ts';
+import type { DeleteAdminTenantsByIdKeysByApiKeyId200Data } from "./deleteAdminTenantsByIdKeysByApiKeyId200Data.ts"
 
 export type DeleteAdminTenantsByIdKeysByApiKeyId200 = {
-  success: true;
-  data: DeleteAdminTenantsByIdKeysByApiKeyId200Data;
-};
+  success: true
+  data: DeleteAdminTenantsByIdKeysByApiKeyId200Data
+}

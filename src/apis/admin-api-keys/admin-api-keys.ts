@@ -5,10 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type {
   MutationFunction,
   QueryFunction,
@@ -16,8 +13,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query"
 
 import type {
   DeleteAdminTenantsByIdKeysByApiKeyId200,
@@ -34,227 +31,361 @@ import type {
   PostAdminTenantsByIdKeys500,
   PostAdminTenantsByIdKeysBodyOne,
   PostAdminTenantsByIdKeysBodyThree,
-  PostAdminTenantsByIdKeysBodyTwo
-} from '../model';
+  PostAdminTenantsByIdKeysBodyTwo,
+} from "../model"
 
-import { axiosClient } from '../../configs/axiosClient.ts';
-import type { ErrorType , BodyType } from '../../configs/axiosClient.ts';
+import { axiosClient } from "../../configs/axiosClient.ts"
+import type { ErrorType, BodyType } from "../../configs/axiosClient.ts"
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
-
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
+const withQueryKey = <T extends object, K>(
+  query: T,
+  queryKey: K
+): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K }
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
+    if (key === "queryKey") continue
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    });
+    })
   }
-  return result;
-};
+  return result
+}
 
 /**
  * Cấp API key mới cho tenant. Response chứa `apiKey` dạng plaintext — CHỈ trả về đúng 1 lần này, client phải lưu lại ngay. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Issue API key
  */
 export const postAdminTenantsByIdKeys = (
-    id: string | number,
-    postAdminTenantsByIdKeysBody: BodyType<PostAdminTenantsByIdKeysBodyOne | PostAdminTenantsByIdKeysBodyTwo | PostAdminTenantsByIdKeysBodyThree>| PostAdminTenantsByIdKeysBodyTwo | PostAdminTenantsByIdKeysBodyThree,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  id: string | number,
+  postAdminTenantsByIdKeysBody:
+    | BodyType<
+        | PostAdminTenantsByIdKeysBodyOne
+        | PostAdminTenantsByIdKeysBodyTwo
+        | PostAdminTenantsByIdKeysBodyThree
+      >
+    | PostAdminTenantsByIdKeysBodyTwo
+    | PostAdminTenantsByIdKeysBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<PostAdminTenantsByIdKeys201>(
-      {url: `/admin/tenants/${id}/keys`, method: 'POST',
-      data: postAdminTenantsByIdKeysBody, signal
+  return axiosClient<PostAdminTenantsByIdKeys201>(
+    {
+      url: `/admin/tenants/${id}/keys`,
+      method: "POST",
+      data: postAdminTenantsByIdKeysBody,
+      signal,
     },
-      options);
+    options
+  )
+}
+
+export const getPostAdminTenantsByIdKeysMutationOptions = <
+  TError = ErrorType<
+    | PostAdminTenantsByIdKeys400
+    | PostAdminTenantsByIdKeys401
+    | PostAdminTenantsByIdKeys404
+    | PostAdminTenantsByIdKeys500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>,
+    TError,
+    {
+      id: string | number
+      data: BodyType<
+        | PostAdminTenantsByIdKeysBodyOne
+        | PostAdminTenantsByIdKeysBodyTwo
+        | PostAdminTenantsByIdKeysBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>,
+  TError,
+  {
+    id: string | number
+    data: BodyType<
+      | PostAdminTenantsByIdKeysBodyOne
+      | PostAdminTenantsByIdKeysBodyTwo
+      | PostAdminTenantsByIdKeysBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["postAdminTenantsByIdKeys"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>,
+    {
+      id: string | number
+      data: BodyType<
+        | PostAdminTenantsByIdKeysBodyOne
+        | PostAdminTenantsByIdKeysBodyTwo
+        | PostAdminTenantsByIdKeysBodyThree
+      >
     }
+  > = (props) => {
+    const { id, data } = props ?? {}
 
+    return postAdminTenantsByIdKeys(id, data, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type PostAdminTenantsByIdKeysMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>
+>
+export type PostAdminTenantsByIdKeysMutationBody = BodyType<
+  | PostAdminTenantsByIdKeysBodyOne
+  | PostAdminTenantsByIdKeysBodyTwo
+  | PostAdminTenantsByIdKeysBodyThree
+>
+export type PostAdminTenantsByIdKeysMutationError = ErrorType<
+  | PostAdminTenantsByIdKeys400
+  | PostAdminTenantsByIdKeys401
+  | PostAdminTenantsByIdKeys404
+  | PostAdminTenantsByIdKeys500
+>
 
-export const getPostAdminTenantsByIdKeysMutationOptions = <TError = ErrorType<PostAdminTenantsByIdKeys400 | PostAdminTenantsByIdKeys401 | PostAdminTenantsByIdKeys404 | PostAdminTenantsByIdKeys500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>, TError,{id: string | number;data: BodyType<PostAdminTenantsByIdKeysBodyOne | PostAdminTenantsByIdKeysBodyTwo | PostAdminTenantsByIdKeysBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>, TError,{id: string | number;data: BodyType<PostAdminTenantsByIdKeysBodyOne | PostAdminTenantsByIdKeysBodyTwo | PostAdminTenantsByIdKeysBodyThree>}, TContext> => {
-
-const mutationKey = ['postAdminTenantsByIdKeys'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>, {id: string | number;data: BodyType<PostAdminTenantsByIdKeysBodyOne | PostAdminTenantsByIdKeysBodyTwo | PostAdminTenantsByIdKeysBodyThree>}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  postAdminTenantsByIdKeys(id,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostAdminTenantsByIdKeysMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>>
-    export type PostAdminTenantsByIdKeysMutationBody = BodyType<PostAdminTenantsByIdKeysBodyOne | PostAdminTenantsByIdKeysBodyTwo | PostAdminTenantsByIdKeysBodyThree>
-    export type PostAdminTenantsByIdKeysMutationError = ErrorType<PostAdminTenantsByIdKeys400 | PostAdminTenantsByIdKeys401 | PostAdminTenantsByIdKeys404 | PostAdminTenantsByIdKeys500>
-
-    /**
+/**
  * @summary Issue API key
  */
-export const usePostAdminTenantsByIdKeys = <TError = ErrorType<PostAdminTenantsByIdKeys400 | PostAdminTenantsByIdKeys401 | PostAdminTenantsByIdKeys404 | PostAdminTenantsByIdKeys500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>, TError,{id: string | number;data: BodyType<PostAdminTenantsByIdKeysBodyOne | PostAdminTenantsByIdKeysBodyTwo | PostAdminTenantsByIdKeysBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
- ): UseMutationResult<
-        Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>,
-        TError,
-        {id: string | number;data: BodyType<PostAdminTenantsByIdKeysBodyOne | PostAdminTenantsByIdKeysBodyTwo | PostAdminTenantsByIdKeysBodyThree>},
-        TContext
-      > => {
-      return useMutation(getPostAdminTenantsByIdKeysMutationOptions(options));
-    }
-    /**
+export const usePostAdminTenantsByIdKeys = <
+  TError = ErrorType<
+    | PostAdminTenantsByIdKeys400
+    | PostAdminTenantsByIdKeys401
+    | PostAdminTenantsByIdKeys404
+    | PostAdminTenantsByIdKeys500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>,
+    TError,
+    {
+      id: string | number
+      data: BodyType<
+        | PostAdminTenantsByIdKeysBodyOne
+        | PostAdminTenantsByIdKeysBodyTwo
+        | PostAdminTenantsByIdKeysBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationResult<
+  Awaited<ReturnType<typeof postAdminTenantsByIdKeys>>,
+  TError,
+  {
+    id: string | number
+    data: BodyType<
+      | PostAdminTenantsByIdKeysBodyOne
+      | PostAdminTenantsByIdKeysBodyTwo
+      | PostAdminTenantsByIdKeysBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(getPostAdminTenantsByIdKeysMutationOptions(options))
+}
+/**
  * Danh sách API key của tenant (ẩn cột `key` plaintext). Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary List API keys
  */
 export const getAdminTenantsByIdKeys = (
-    id: string | number,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  id: string | number,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<GetAdminTenantsByIdKeys200>(
-      {url: `/admin/tenants/${id}/keys`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetAdminTenantsByIdKeysQueryKey = (id: string | number,) => {
-    return [
-    `/admin/tenants/${id}/keys`
-    ] as const;
-    }
-
-
-export const getGetAdminTenantsByIdKeysQueryOptions = <TData = Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>, TError = ErrorType<GetAdminTenantsByIdKeys401 | GetAdminTenantsByIdKeys500>>(id: string | number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>, TError, TData>, request?: SecondParameter<typeof axiosClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminTenantsByIdKeysQueryKey(id);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>> = ({ signal }) => getAdminTenantsByIdKeys(id, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>, TError, TData> & { queryKey: QueryKey }
+  return axiosClient<GetAdminTenantsByIdKeys200>(
+    { url: `/admin/tenants/${id}/keys`, method: "GET", signal },
+    options
+  )
 }
 
-export type GetAdminTenantsByIdKeysQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>>
-export type GetAdminTenantsByIdKeysQueryError = ErrorType<GetAdminTenantsByIdKeys401 | GetAdminTenantsByIdKeys500>
+export const getGetAdminTenantsByIdKeysQueryKey = (id: string | number) => {
+  return [`/admin/tenants/${id}/keys`] as const
+}
 
+export const getGetAdminTenantsByIdKeysQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>,
+  TError = ErrorType<GetAdminTenantsByIdKeys401 | GetAdminTenantsByIdKeys500>,
+>(
+  id: string | number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>,
+      TError,
+      TData
+    >
+    request?: SecondParameter<typeof axiosClient>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAdminTenantsByIdKeysQueryKey(id)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>
+  > = ({ signal }) => getAdminTenantsByIdKeys(id, requestOptions, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: id !== null && id !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
+}
+
+export type GetAdminTenantsByIdKeysQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>
+>
+export type GetAdminTenantsByIdKeysQueryError = ErrorType<
+  GetAdminTenantsByIdKeys401 | GetAdminTenantsByIdKeys500
+>
 
 /**
  * @summary List API keys
  */
 
-export function useGetAdminTenantsByIdKeys<TData = Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>, TError = ErrorType<GetAdminTenantsByIdKeys401 | GetAdminTenantsByIdKeys500>>(
- id: string | number, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>, TError, TData>, request?: SecondParameter<typeof axiosClient>}
+export function useGetAdminTenantsByIdKeys<
+  TData = Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>,
+  TError = ErrorType<GetAdminTenantsByIdKeys401 | GetAdminTenantsByIdKeys500>,
+>(
+  id: string | number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAdminTenantsByIdKeys>>,
+      TError,
+      TData
+    >
+    request?: SecondParameter<typeof axiosClient>
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAdminTenantsByIdKeysQueryOptions(id, options)
 
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey
+  }
 
-  const queryOptions = getGetAdminTenantsByIdKeysQueryOptions(id,options)
-
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  return withQueryKey(query, queryOptions.queryKey);
+  return withQueryKey(query, queryOptions.queryKey)
 }
-
-
-
-
-
 
 /**
  * Thu hồi key theo id (set isActive=false). Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Revoke API key
  */
 export const deleteAdminTenantsByIdKeysByApiKeyId = (
-    id: string | number,
-    apiKeyId: string | number,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  id: string | number,
+  apiKeyId: string | number,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
+  return axiosClient<DeleteAdminTenantsByIdKeysByApiKeyId200>(
+    { url: `/admin/tenants/${id}/keys/${apiKeyId}`, method: "DELETE", signal },
+    options
+  )
+}
 
+export const getDeleteAdminTenantsByIdKeysByApiKeyIdMutationOptions = <
+  TError = ErrorType<
+    | DeleteAdminTenantsByIdKeysByApiKeyId401
+    | DeleteAdminTenantsByIdKeysByApiKeyId404
+    | DeleteAdminTenantsByIdKeysByApiKeyId500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>,
+    TError,
+    { id: string | number; apiKeyId: string | number },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>,
+  TError,
+  { id: string | number; apiKeyId: string | number },
+  TContext
+> => {
+  const mutationKey = ["deleteAdminTenantsByIdKeysByApiKeyId"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
 
-      return axiosClient<DeleteAdminTenantsByIdKeysByApiKeyId200>(
-      {url: `/admin/tenants/${id}/keys/${apiKeyId}`, method: 'DELETE', signal
-    },
-      options);
-    }
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>,
+    { id: string | number; apiKeyId: string | number }
+  > = (props) => {
+    const { id, apiKeyId } = props ?? {}
 
+    return deleteAdminTenantsByIdKeysByApiKeyId(id, apiKeyId, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type DeleteAdminTenantsByIdKeysByApiKeyIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>
+>
 
-export const getDeleteAdminTenantsByIdKeysByApiKeyIdMutationOptions = <TError = ErrorType<DeleteAdminTenantsByIdKeysByApiKeyId401 | DeleteAdminTenantsByIdKeysByApiKeyId404 | DeleteAdminTenantsByIdKeysByApiKeyId500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>, TError,{id: string | number;apiKeyId: string | number}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>, TError,{id: string | number;apiKeyId: string | number}, TContext> => {
+export type DeleteAdminTenantsByIdKeysByApiKeyIdMutationError = ErrorType<
+  | DeleteAdminTenantsByIdKeysByApiKeyId401
+  | DeleteAdminTenantsByIdKeysByApiKeyId404
+  | DeleteAdminTenantsByIdKeysByApiKeyId500
+>
 
-const mutationKey = ['deleteAdminTenantsByIdKeysByApiKeyId'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>, {id: string | number;apiKeyId: string | number}> = (props) => {
-          const {id,apiKeyId} = props ?? {};
-
-          return  deleteAdminTenantsByIdKeysByApiKeyId(id,apiKeyId,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeleteAdminTenantsByIdKeysByApiKeyIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>>
-
-    export type DeleteAdminTenantsByIdKeysByApiKeyIdMutationError = ErrorType<DeleteAdminTenantsByIdKeysByApiKeyId401 | DeleteAdminTenantsByIdKeysByApiKeyId404 | DeleteAdminTenantsByIdKeysByApiKeyId500>
-
-    /**
+/**
  * @summary Revoke API key
  */
-export const useDeleteAdminTenantsByIdKeysByApiKeyId = <TError = ErrorType<DeleteAdminTenantsByIdKeysByApiKeyId401 | DeleteAdminTenantsByIdKeysByApiKeyId404 | DeleteAdminTenantsByIdKeysByApiKeyId500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>, TError,{id: string | number;apiKeyId: string | number}, TContext>, request?: SecondParameter<typeof axiosClient>}
- ): UseMutationResult<
-        Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>,
-        TError,
-        {id: string | number;apiKeyId: string | number},
-        TContext
-      > => {
-      return useMutation(getDeleteAdminTenantsByIdKeysByApiKeyIdMutationOptions(options));
-    }
+export const useDeleteAdminTenantsByIdKeysByApiKeyId = <
+  TError = ErrorType<
+    | DeleteAdminTenantsByIdKeysByApiKeyId401
+    | DeleteAdminTenantsByIdKeysByApiKeyId404
+    | DeleteAdminTenantsByIdKeysByApiKeyId500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>,
+    TError,
+    { id: string | number; apiKeyId: string | number },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteAdminTenantsByIdKeysByApiKeyId>>,
+  TError,
+  { id: string | number; apiKeyId: string | number },
+  TContext
+> => {
+  return useMutation(
+    getDeleteAdminTenantsByIdKeysByApiKeyIdMutationOptions(options)
+  )
+}

@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishTopicsRandomPairs401ErrorCode = typeof GetEnglishTopicsRandomPairs401ErrorCode[keyof typeof GetEnglishTopicsRandomPairs401ErrorCode];
-
+export type GetEnglishTopicsRandomPairs401ErrorCode =
+  (typeof GetEnglishTopicsRandomPairs401ErrorCode)[keyof typeof GetEnglishTopicsRandomPairs401ErrorCode]
 
 export const GetEnglishTopicsRandomPairs401ErrorCode = {
-  VALIDATION: 'VALIDATION',
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  FORBIDDEN: 'FORBIDDEN',
-  NOT_FOUND: 'NOT_FOUND',
-  CONFLICT: 'CONFLICT',
-  BUSINESS_ERROR: 'BUSINESS_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-} as const;
+  VALIDATION: "VALIDATION",
+  UNAUTHORIZED: "UNAUTHORIZED",
+  FORBIDDEN: "FORBIDDEN",
+  NOT_FOUND: "NOT_FOUND",
+  CONFLICT: "CONFLICT",
+  BUSINESS_ERROR: "BUSINESS_ERROR",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+} as const

@@ -7,7 +7,7 @@
  */
 
 export type PostEnglishGenerateReading200DataUsage = {
-  inputTokens: number;
-  outputTokens: number;
-  model: string;
-};
+  inputTokens: number
+  outputTokens: number
+  model: string
+}

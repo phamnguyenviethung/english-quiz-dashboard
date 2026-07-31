@@ -8,33 +8,33 @@
 
 export type GetEnglishConfig200DataQuestionPool = {
   /**
-     * @maximum 9007199254740991
-     * @exclusiveMinimum 0
-     */
-  maxPerBucket: number;
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  maxPerBucket: number
   /**
-     * @minimum 0
-     * @maximum 1
-     */
-  refillThresholdRatio: number;
+   * @minimum 0
+   * @maximum 1
+   */
+  refillThresholdRatio: number
   /**
-     * @maximum 9007199254740991
-     * @exclusiveMinimum 0
-     */
-  manualFillMinCount: number;
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  manualFillMinCount: number
   /**
-     * @maximum 9007199254740991
-     * @exclusiveMinimum 0
-     */
-  manualFillMaxCount: number;
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  manualFillMaxCount: number
   /**
-     * @maximum 9007199254740991
-     * @exclusiveMinimum 0
-     */
-  manualFillDefaultCount: number;
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  manualFillDefaultCount: number
   /**
-     * @maximum 9007199254740991
-     * @exclusiveMinimum 0
-     */
-  manualFillConcurrency: number;
-};
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  manualFillConcurrency: number
+}

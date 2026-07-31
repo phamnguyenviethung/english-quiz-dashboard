@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishConfig200Data } from './getEnglishConfig200Data.ts';
+import type { GetEnglishConfig200Data } from "./getEnglishConfig200Data.ts"
 
 export type GetEnglishConfig200 = {
-  success: true;
-  data: GetEnglishConfig200Data;
-};
+  success: true
+  data: GetEnglishConfig200Data
+}

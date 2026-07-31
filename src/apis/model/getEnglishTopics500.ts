@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishTopics500Error } from './getEnglishTopics500Error.ts';
+import type { GetEnglishTopics500Error } from "./getEnglishTopics500Error.ts"
 
 export type GetEnglishTopics500 = {
-  success: false;
-  error: GetEnglishTopics500Error;
-};
+  success: false
+  error: GetEnglishTopics500Error
+}

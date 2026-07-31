@@ -7,6 +7,6 @@
  */
 
 export type DeleteAdminTenantsByIdKeysByApiKeyId200Data = {
-  apiKeyId: number;
-  revoked: boolean;
-};
+  apiKeyId: number
+  revoked: boolean
+}

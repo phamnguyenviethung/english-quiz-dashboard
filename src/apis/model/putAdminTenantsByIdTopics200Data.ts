@@ -7,6 +7,6 @@
  */
 
 export type PutAdminTenantsByIdTopics200Data = {
-  tenantId: number;
-  topicIds: number[];
-};
+  tenantId: number
+  topicIds: number[]
+}

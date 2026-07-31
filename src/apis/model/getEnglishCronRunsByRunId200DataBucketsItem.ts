@@ -7,16 +7,16 @@
  */
 
 export type GetEnglishCronRunsByRunId200DataBucketsItem = {
-  id: number;
-  status: string;
-  engLevel: string;
-  quizType: string;
-  topicId: number | null;
-  topicName: string | null;
-  requestedCount: number;
-  generatedCount: number;
-  insertedCount: number;
-  errorPhase: string | null;
-  errorMessage: string | null;
-  errorStack: string | null;
-};
+  id: number
+  status: string
+  engLevel: string
+  quizType: string
+  topicId: number | null
+  topicName: string | null
+  requestedCount: number
+  generatedCount: number
+  insertedCount: number
+  errorPhase: string | null
+  errorMessage: string | null
+  errorStack: string | null
+}

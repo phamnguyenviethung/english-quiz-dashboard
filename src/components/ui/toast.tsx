@@ -3,7 +3,14 @@ import { Toast as ToastPrimitive } from "@base-ui/react/toast"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { IconX, IconCircleCheck, IconInfoCircle, IconAlertTriangle, IconAlertOctagon, IconLoader } from "@tabler/icons-react"
+import {
+  IconX,
+  IconCircleCheck,
+  IconInfoCircle,
+  IconAlertTriangle,
+  IconAlertOctagon,
+  IconLoader,
+} from "@tabler/icons-react"
 
 const toast = ToastPrimitive.createToastManager()
 
@@ -115,7 +122,7 @@ function ToastClose({
   return (
     <ToastPrimitive.Close
       data-slot="toast-close"
-      aria-label="Close toast"
+      aria-label="Đóng thông báo"
       render={render}
       className={cn(
         "relative shrink-0 text-muted-foreground after:absolute after:-inset-2 after:content-[''] hover:text-foreground",
@@ -123,9 +130,7 @@ function ToastClose({
       )}
       {...props}
     >
-      {children ?? (
-        <IconX aria-hidden="true" />
-      )}
+      {children ?? <IconX aria-hidden="true" />}
     </ToastPrimitive.Close>
   )
 }
@@ -134,33 +139,23 @@ function ToastIcon({ type }: { type: string | undefined }) {
   let icon: React.ReactNode = null
 
   if (type === "success") {
-    icon = (
-      <IconCircleCheck aria-hidden="true" />
-    )
+    icon = <IconCircleCheck aria-hidden="true" />
   }
 
   if (type === "info") {
-    icon = (
-      <IconInfoCircle aria-hidden="true" />
-    )
+    icon = <IconInfoCircle aria-hidden="true" />
   }
 
   if (type === "warning") {
-    icon = (
-      <IconAlertTriangle aria-hidden="true" />
-    )
+    icon = <IconAlertTriangle aria-hidden="true" />
   }
 
   if (type === "error") {
-    icon = (
-      <IconAlertOctagon className="text-destructive" aria-hidden="true" />
-    )
+    icon = <IconAlertOctagon className="text-destructive" aria-hidden="true" />
   }
 
   if (type === "loading") {
-    icon = (
-      <IconLoader className="animate-spin" aria-hidden="true" />
-    )
+    icon = <IconLoader className="animate-spin" aria-hidden="true" />
   }
 
   if (!icon) {

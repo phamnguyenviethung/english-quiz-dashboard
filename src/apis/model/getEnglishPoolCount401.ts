@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolCount401Error } from './getEnglishPoolCount401Error.ts';
+import type { GetEnglishPoolCount401Error } from "./getEnglishPoolCount401Error.ts"
 
 export type GetEnglishPoolCount401 = {
-  success: false;
-  error: GetEnglishPoolCount401Error;
-};
+  success: false
+  error: GetEnglishPoolCount401Error
+}

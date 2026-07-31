@@ -1,10 +1,25 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import type { QueryClient } from "@tanstack/react-query"
+import {
+  HeadContent,
+  Scripts,
+  createRootRouteWithContext,
+} from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
+import { IconAlertOctagon, IconMoodSad } from "@tabler/icons-react"
+
+import { ThemeScript } from "@/components/theme/theme-script.tsx"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Toaster } from "@/components/ui/toast"
+import { getApiErrorMessage } from "@/lib/api-error.ts"
 
 import appCss from "../styles.css?url"
 
-export const Route = createRootRoute({
+export interface RouterContext {
+  queryClient: QueryClient
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       {
@@ -15,7 +30,11 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        name: "color-scheme",
+        content: "light dark",
+      },
+      {
+        title: "English Quiz · Quản trị",
       },
     ],
     links: [
@@ -26,9 +45,23 @@ export const Route = createRootRoute({
     ],
   }),
   notFoundComponent: () => (
-    <main className="container mx-auto p-4 pt-16">
-      <h1>404</h1>
-      <p>The requested page could not be found.</p>
+    <main className="mx-auto flex max-w-md flex-col items-center gap-3 px-4 pt-24 text-center">
+      <IconMoodSad className="size-10 text-muted-foreground" stroke={1.5} />
+      <h1 className="text-2xl font-semibold tracking-tight">
+        Không tìm thấy trang
+      </h1>
+      <p className="text-sm text-muted-foreground">
+        Đường dẫn bạn truy cập không tồn tại hoặc đã bị đổi tên.
+      </p>
+    </main>
+  ),
+  errorComponent: ({ error }) => (
+    <main className="mx-auto max-w-lg px-4 pt-24">
+      <Alert variant="destructive">
+        <IconAlertOctagon stroke={1.5} />
+        <AlertTitle>Ứng dụng gặp lỗi</AlertTitle>
+        <AlertDescription>{getApiErrorMessage(error)}</AlertDescription>
+      </Alert>
     </main>
   ),
   shellComponent: RootDocument,
@@ -36,12 +69,14 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <head>
+        <ThemeScript />
         <HeadContent />
       </head>
       <body>
         {children}
+        <Toaster />
         <TanStackDevtools
           config={{
             position: "bottom-right",

@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PatchEnglishConfigByRecordKey400ErrorCode = typeof PatchEnglishConfigByRecordKey400ErrorCode[keyof typeof PatchEnglishConfigByRecordKey400ErrorCode];
-
+export type PatchEnglishConfigByRecordKey400ErrorCode =
+  (typeof PatchEnglishConfigByRecordKey400ErrorCode)[keyof typeof PatchEnglishConfigByRecordKey400ErrorCode]
 
 export const PatchEnglishConfigByRecordKey400ErrorCode = {
-  VALIDATION: 'VALIDATION',
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  FORBIDDEN: 'FORBIDDEN',
-  NOT_FOUND: 'NOT_FOUND',
-  CONFLICT: 'CONFLICT',
-  BUSINESS_ERROR: 'BUSINESS_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-} as const;
+  VALIDATION: "VALIDATION",
+  UNAUTHORIZED: "UNAUTHORIZED",
+  FORBIDDEN: "FORBIDDEN",
+  NOT_FOUND: "NOT_FOUND",
+  CONFLICT: "CONFLICT",
+  BUSINESS_ERROR: "BUSINESS_ERROR",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+} as const

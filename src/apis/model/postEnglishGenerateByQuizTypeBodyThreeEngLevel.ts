@@ -6,12 +6,12 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishGenerateByQuizTypeBodyThreeEngLevel = typeof PostEnglishGenerateByQuizTypeBodyThreeEngLevel[keyof typeof PostEnglishGenerateByQuizTypeBodyThreeEngLevel];
-
+export type PostEnglishGenerateByQuizTypeBodyThreeEngLevel =
+  (typeof PostEnglishGenerateByQuizTypeBodyThreeEngLevel)[keyof typeof PostEnglishGenerateByQuizTypeBodyThreeEngLevel]
 
 export const PostEnglishGenerateByQuizTypeBodyThreeEngLevel = {
-  A1: 'A1',
-  A2: 'A2',
-  B1: 'B1',
-  B2: 'B2',
-} as const;
+  A1: "A1",
+  A2: "A2",
+  B1: "B1",
+  B2: "B2",
+} as const

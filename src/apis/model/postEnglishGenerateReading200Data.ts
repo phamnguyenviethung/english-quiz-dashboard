@@ -5,11 +5,11 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateReading200DataQuestion } from './postEnglishGenerateReading200DataQuestion.ts';
-import type { PostEnglishGenerateReading200DataUsage } from './postEnglishGenerateReading200DataUsage.ts';
+import type { PostEnglishGenerateReading200DataQuestion } from "./postEnglishGenerateReading200DataQuestion.ts"
+import type { PostEnglishGenerateReading200DataUsage } from "./postEnglishGenerateReading200DataUsage.ts"
 
 export type PostEnglishGenerateReading200Data = {
-  quizType: 'reading';
-  question: PostEnglishGenerateReading200DataQuestion;
-  usage?: PostEnglishGenerateReading200DataUsage;
-};
+  quizType: "reading"
+  question: PostEnglishGenerateReading200DataQuestion
+  usage?: PostEnglishGenerateReading200DataUsage
+}

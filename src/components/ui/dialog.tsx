@@ -70,9 +70,8 @@ function DialogContent({
               />
             }
           >
-            <IconX
-            />
-            <span className="sr-only">Close</span>
+            <IconX />
+            <span className="sr-only">Đóng</span>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Popup>

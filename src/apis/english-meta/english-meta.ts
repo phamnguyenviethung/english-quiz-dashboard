@@ -5,112 +5,119 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query"
 import type {
   QueryFunction,
   QueryKey,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query"
 
 import type {
   GetEnglishQuizTypes200,
   GetEnglishQuizTypes401,
   GetEnglishQuizTypes403,
-  GetEnglishQuizTypes500
-} from '../model';
+  GetEnglishQuizTypes500,
+} from "../model"
 
-import { axiosClient } from '../../configs/axiosClient.ts';
-import type { ErrorType } from '../../configs/axiosClient.ts';
+import { axiosClient } from "../../configs/axiosClient.ts"
+import type { ErrorType } from "../../configs/axiosClient.ts"
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
-
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
+const withQueryKey = <T extends object, K>(
+  query: T,
+  queryKey: K
+): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K }
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
+    if (key === "queryKey") continue
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    });
+    })
   }
-  return result;
-};
+  return result
+}
 
 /**
  * Danh sách toàn bộ quizType được hỗ trợ. Yêu cầu scope `quiz:read`.
  * @summary List quiz types
  */
 export const getEnglishQuizTypes = (
-
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<GetEnglishQuizTypes200>(
-      {url: `/english/quiz-types`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetEnglishQuizTypesQueryKey = () => {
-    return [
-    `/english/quiz-types`
-    ] as const;
-    }
-
-
-export const getGetEnglishQuizTypesQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData>, request?: SecondParameter<typeof axiosClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetEnglishQuizTypesQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishQuizTypes>>> = ({ signal }) => getEnglishQuizTypes(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData> & { queryKey: QueryKey }
+  return axiosClient<GetEnglishQuizTypes200>(
+    { url: `/english/quiz-types`, method: "GET", signal },
+    options
+  )
 }
 
-export type GetEnglishQuizTypesQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishQuizTypes>>>
-export type GetEnglishQuizTypesQueryError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>
+export const getGetEnglishQuizTypesQueryKey = () => {
+  return [`/english/quiz-types`] as const
+}
 
+export const getGetEnglishQuizTypesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>,
+  TError = ErrorType<
+    GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500
+  >,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getEnglishQuizTypes>>,
+    TError,
+    TData
+  >
+  request?: SecondParameter<typeof axiosClient>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetEnglishQuizTypesQueryKey()
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getEnglishQuizTypes>>
+  > = ({ signal }) => getEnglishQuizTypes(requestOptions, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getEnglishQuizTypes>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey }
+}
+
+export type GetEnglishQuizTypesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getEnglishQuizTypes>>
+>
+export type GetEnglishQuizTypesQueryError = ErrorType<
+  GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500
+>
 
 /**
  * @summary List quiz types
  */
 
-export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>>(
-  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData>, request?: SecondParameter<typeof axiosClient>}
-
- ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-
+export function useGetEnglishQuizTypes<
+  TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>,
+  TError = ErrorType<
+    GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500
+  >,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getEnglishQuizTypes>>,
+    TError,
+    TData
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
   const queryOptions = getGetEnglishQuizTypesQueryOptions(options)
 
-  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey
+  }
 
-  return withQueryKey(query, queryOptions.queryKey);
+  return withQueryKey(query, queryOptions.queryKey)
 }
-
-
-
-
-
-

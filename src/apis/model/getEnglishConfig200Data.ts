@@ -5,13 +5,13 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishConfig200DataJobFlags } from './getEnglishConfig200DataJobFlags.ts';
-import type { GetEnglishConfig200DataQuestionPool } from './getEnglishConfig200DataQuestionPool.ts';
-import type { GetEnglishConfig200DataQuizDistributionItem } from './getEnglishConfig200DataQuizDistributionItem.ts';
+import type { GetEnglishConfig200DataJobFlags } from "./getEnglishConfig200DataJobFlags.ts"
+import type { GetEnglishConfig200DataQuestionPool } from "./getEnglishConfig200DataQuestionPool.ts"
+import type { GetEnglishConfig200DataQuizDistributionItem } from "./getEnglishConfig200DataQuizDistributionItem.ts"
 
 export type GetEnglishConfig200Data = {
-  question_pool: GetEnglishConfig200DataQuestionPool;
+  question_pool: GetEnglishConfig200DataQuestionPool
   /** @minItems 1 */
-  quiz_distribution: GetEnglishConfig200DataQuizDistributionItem[];
-  job_flags: GetEnglishConfig200DataJobFlags;
-};
+  quiz_distribution: GetEnglishConfig200DataQuizDistributionItem[]
+  job_flags: GetEnglishConfig200DataJobFlags
+}

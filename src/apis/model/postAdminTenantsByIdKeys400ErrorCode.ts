@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminTenantsByIdKeys400ErrorCode = typeof PostAdminTenantsByIdKeys400ErrorCode[keyof typeof PostAdminTenantsByIdKeys400ErrorCode];
-
+export type PostAdminTenantsByIdKeys400ErrorCode =
+  (typeof PostAdminTenantsByIdKeys400ErrorCode)[keyof typeof PostAdminTenantsByIdKeys400ErrorCode]
 
 export const PostAdminTenantsByIdKeys400ErrorCode = {
-  VALIDATION: 'VALIDATION',
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  FORBIDDEN: 'FORBIDDEN',
-  NOT_FOUND: 'NOT_FOUND',
-  CONFLICT: 'CONFLICT',
-  BUSINESS_ERROR: 'BUSINESS_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-} as const;
+  VALIDATION: "VALIDATION",
+  UNAUTHORIZED: "UNAUTHORIZED",
+  FORBIDDEN: "FORBIDDEN",
+  NOT_FOUND: "NOT_FOUND",
+  CONFLICT: "CONFLICT",
+  BUSINESS_ERROR: "BUSINESS_ERROR",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+} as const

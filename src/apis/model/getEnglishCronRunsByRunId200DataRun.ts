@@ -7,31 +7,31 @@
  */
 
 export type GetEnglishCronRunsByRunId200DataRun = {
-  id: number;
-  runId: string;
-  jobKey: string;
-  trigger: string;
-  status: string;
-  queueName: string | null;
-  bullJobId: string | null;
-  bullJobName: string | null;
-  totalBuckets: number;
-  deficientBuckets: number;
-  succeededBuckets: number;
-  failedBuckets: number;
-  skippedBuckets: number;
-  requestedQuestions: number;
-  generatedQuestions: number;
-  insertedQuestions: number;
-  tokenIn: number;
-  tokenOut: number;
-  errorPhase: string | null;
-  errorMessage: string | null;
-  errorStack: string | null;
-  metadata: unknown | null;
-  startedAt: string | number;
-  finishedAt: string | number | null;
-  durationMs: number | null;
-  createdAt: string | number | null;
-  updatedAt: string | number | null;
-};
+  id: number
+  runId: string
+  jobKey: string
+  trigger: string
+  status: string
+  queueName: string | null
+  bullJobId: string | null
+  bullJobName: string | null
+  totalBuckets: number
+  deficientBuckets: number
+  succeededBuckets: number
+  failedBuckets: number
+  skippedBuckets: number
+  requestedQuestions: number
+  generatedQuestions: number
+  insertedQuestions: number
+  tokenIn: number
+  tokenOut: number
+  errorPhase: string | null
+  errorMessage: string | null
+  errorStack: string | null
+  metadata: unknown | null
+  startedAt: string | number
+  finishedAt: string | number | null
+  durationMs: number | null
+  createdAt: string | number | null
+  updatedAt: string | number | null
+}
