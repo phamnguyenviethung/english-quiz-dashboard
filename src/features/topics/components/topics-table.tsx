@@ -1,5 +1,5 @@
+import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import { formatDateTime } from "@/lib/format.ts"
 import { TOPIC_STATUS_META } from "../constants.ts"
 import type { Topic } from "../hooks/use-topics.ts"
 
-const SKELETON_ROWS = 5
+const COLUMN_COUNT = 6
 
 export function TopicsTable({
   topics,
@@ -36,54 +36,35 @@ export function TopicsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isPending
-            ? Array.from({ length: SKELETON_ROWS }, (_, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Skeleton className="h-4 w-8" />
+          {isPending ? (
+            <TableSkeletonRows columns={COLUMN_COUNT} />
+          ) : (
+            topics.map((topic) => {
+              const status =
+                TOPIC_STATUS_META[topic.isActive ? "active" : "inactive"]
+
+              return (
+                <TableRow key={topic.id}>
+                  <TableCell className="font-mono text-xs text-muted-foreground">
+                    {topic.id}
+                  </TableCell>
+                  <TableCell className="font-medium">{topic.name}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {topic.displayName ?? "-"}
+                  </TableCell>
+                  <TableCell className="max-w-[40ch] truncate text-muted-foreground">
+                    {topic.description ?? "-"}
                   </TableCell>
                   <TableCell>
-                    <Skeleton className="h-4 w-32" />
+                    <Badge variant={status.variant}>{status.label}</Badge>
                   </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-4 w-28" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-4 w-48" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-5 w-16 rounded-3xl" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-4 w-32" />
+                  <TableCell className="text-xs text-muted-foreground tabular-nums">
+                    {formatDateTime(topic.createdAt)}
                   </TableCell>
                 </TableRow>
-              ))
-            : topics.map((topic) => {
-                const status =
-                  TOPIC_STATUS_META[topic.isActive ? "active" : "inactive"]
-
-                return (
-                  <TableRow key={topic.id}>
-                    <TableCell className="font-mono text-xs text-muted-foreground">
-                      {topic.id}
-                    </TableCell>
-                    <TableCell className="font-medium">{topic.name}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {topic.displayName ?? "-"}
-                    </TableCell>
-                    <TableCell className="max-w-[40ch] truncate text-muted-foreground">
-                      {topic.description ?? "-"}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={status.variant}>{status.label}</Badge>
-                    </TableCell>
-                    <TableCell className="text-xs text-muted-foreground tabular-nums">
-                      {formatDateTime(topic.createdAt)}
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
+              )
+            })
+          )}
         </TableBody>
       </Table>
     </div>

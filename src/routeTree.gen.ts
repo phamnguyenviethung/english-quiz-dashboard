@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/_dashboard'
 import { Route as DashboardIndexRouteImport } from './routes/_dashboard/index'
+import { Route as DashboardConfigRouteImport } from './routes/_dashboard/config'
+import { Route as DashboardCronRunsRouteImport } from './routes/_dashboard/cron-runs'
+import { Route as DashboardGenerateRouteImport } from './routes/_dashboard/generate'
+import { Route as DashboardMetadataRouteImport } from './routes/_dashboard/metadata'
 import { Route as DashboardQuestionPoolRouteImport } from './routes/_dashboard/question-pool'
 import { Route as DashboardTopicsRouteImport } from './routes/_dashboard/topics'
 
@@ -21,6 +25,26 @@ const DashboardRoute = DashboardRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardConfigRoute = DashboardConfigRouteImport.update({
+  id: '/config',
+  path: '/config',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCronRunsRoute = DashboardCronRunsRouteImport.update({
+  id: '/cron-runs',
+  path: '/cron-runs',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardGenerateRoute = DashboardGenerateRouteImport.update({
+  id: '/generate',
+  path: '/generate',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardMetadataRoute = DashboardMetadataRouteImport.update({
+  id: '/metadata',
+  path: '/metadata',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardQuestionPoolRoute = DashboardQuestionPoolRouteImport.update({
@@ -36,10 +60,18 @@ const DashboardTopicsRoute = DashboardTopicsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof DashboardIndexRoute
+  '/config': typeof DashboardConfigRoute
+  '/cron-runs': typeof DashboardCronRunsRoute
+  '/generate': typeof DashboardGenerateRoute
+  '/metadata': typeof DashboardMetadataRoute
   '/question-pool': typeof DashboardQuestionPoolRoute
   '/topics': typeof DashboardTopicsRoute
 }
 export interface FileRoutesByTo {
+  '/config': typeof DashboardConfigRoute
+  '/cron-runs': typeof DashboardCronRunsRoute
+  '/generate': typeof DashboardGenerateRoute
+  '/metadata': typeof DashboardMetadataRoute
   '/question-pool': typeof DashboardQuestionPoolRoute
   '/topics': typeof DashboardTopicsRoute
   '/': typeof DashboardIndexRoute
@@ -47,18 +79,40 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_dashboard': typeof DashboardRouteWithChildren
+  '/_dashboard/config': typeof DashboardConfigRoute
+  '/_dashboard/cron-runs': typeof DashboardCronRunsRoute
+  '/_dashboard/generate': typeof DashboardGenerateRoute
+  '/_dashboard/metadata': typeof DashboardMetadataRoute
   '/_dashboard/question-pool': typeof DashboardQuestionPoolRoute
   '/_dashboard/topics': typeof DashboardTopicsRoute
   '/_dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/question-pool' | '/topics'
+  fullPaths:
+    | '/'
+    | '/config'
+    | '/cron-runs'
+    | '/generate'
+    | '/metadata'
+    | '/question-pool'
+    | '/topics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/question-pool' | '/topics' | '/'
+  to:
+    | '/config'
+    | '/cron-runs'
+    | '/generate'
+    | '/metadata'
+    | '/question-pool'
+    | '/topics'
+    | '/'
   id:
     | '__root__'
     | '/_dashboard'
+    | '/_dashboard/config'
+    | '/_dashboard/cron-runs'
+    | '/_dashboard/generate'
+    | '/_dashboard/metadata'
     | '/_dashboard/question-pool'
     | '/_dashboard/topics'
     | '/_dashboard/'
@@ -84,6 +138,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/config': {
+      id: '/_dashboard/config'
+      path: '/config'
+      fullPath: '/config'
+      preLoaderRoute: typeof DashboardConfigRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/cron-runs': {
+      id: '/_dashboard/cron-runs'
+      path: '/cron-runs'
+      fullPath: '/cron-runs'
+      preLoaderRoute: typeof DashboardCronRunsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/generate': {
+      id: '/_dashboard/generate'
+      path: '/generate'
+      fullPath: '/generate'
+      preLoaderRoute: typeof DashboardGenerateRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/metadata': {
+      id: '/_dashboard/metadata'
+      path: '/metadata'
+      fullPath: '/metadata'
+      preLoaderRoute: typeof DashboardMetadataRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/question-pool': {
       id: '/_dashboard/question-pool'
       path: '/question-pool'
@@ -102,12 +184,20 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardRouteChildren {
+  DashboardConfigRoute: typeof DashboardConfigRoute
+  DashboardCronRunsRoute: typeof DashboardCronRunsRoute
+  DashboardGenerateRoute: typeof DashboardGenerateRoute
+  DashboardMetadataRoute: typeof DashboardMetadataRoute
   DashboardQuestionPoolRoute: typeof DashboardQuestionPoolRoute
   DashboardTopicsRoute: typeof DashboardTopicsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardConfigRoute: DashboardConfigRoute,
+  DashboardCronRunsRoute: DashboardCronRunsRoute,
+  DashboardGenerateRoute: DashboardGenerateRoute,
+  DashboardMetadataRoute: DashboardMetadataRoute,
   DashboardQuestionPoolRoute: DashboardQuestionPoolRoute,
   DashboardTopicsRoute: DashboardTopicsRoute,
   DashboardIndexRoute: DashboardIndexRoute,

@@ -7,11 +7,9 @@ import { Spinner } from "@/components/ui/spinner"
 import { getApiErrorMessage } from "@/lib/api-error.ts"
 import { formatNumber } from "@/lib/format.ts"
 
-import {
-  POOL_STATUS_META,
-  QUIZ_TYPE_META,
-  getPoolStatus,
-} from "../constants.ts"
+import { QUIZ_TYPE_META } from "@/features/quiz/constants.ts"
+
+import { POOL_STATUS_META, getPoolStatus } from "../constants.ts"
 import type { PoolCoverageCell } from "../types.ts"
 
 export function PoolBucketCard({

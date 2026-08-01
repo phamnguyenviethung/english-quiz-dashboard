@@ -1,4 +1,6 @@
-import type { PoolCoverageCell, QuizType } from "../types.ts"
+import type { QuizType } from "@/features/quiz/types.ts"
+
+import type { PoolCoverageCell } from "../types.ts"
 import { PoolBucketCard } from "./pool-bucket-card.tsx"
 
 export function PoolCoverageGrid({

@@ -36,3 +36,17 @@ export function useTopicOptions() {
 
   return { topics, items, isPending, isError }
 }
+
+export function useTopicNameOptions() {
+  const { topics, isPending, isError } = useTopics()
+
+  const items = useMemo(() => {
+    const record: Record<string, string> = {}
+    for (const topic of topics) {
+      record[topic.name] = topic.displayName ?? topic.name
+    }
+    return record
+  }, [topics])
+
+  return { topics, items, isPending, isError }
+}

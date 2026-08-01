@@ -10,16 +10,15 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useTopicOptions } from "@/features/topics/hooks/use-topics.ts"
-
 import {
-  ALL_TOPICS_LABEL,
-  ALL_TOPICS_VALUE,
   ENG_LEVELS,
   OPTION_COUNTS,
   formatOptionCountLabel,
-} from "../constants.ts"
-import type { EngLevel, OptionCount } from "../types.ts"
+} from "@/features/quiz/constants.ts"
+import type { EngLevel, OptionCount } from "@/features/quiz/types.ts"
+import { useTopicOptions } from "@/features/topics/hooks/use-topics.ts"
+
+import { ALL_TOPICS_LABEL, ALL_TOPICS_VALUE } from "../constants.ts"
 
 export function PoolFilters({
   engLevel,

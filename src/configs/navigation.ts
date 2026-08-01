@@ -1,6 +1,5 @@
 import type { Icon } from "@tabler/icons-react"
 import {
-  IconActivityHeartbeat,
   IconAdjustmentsAlt,
   IconClockBolt,
   IconDatabase,
@@ -13,7 +12,14 @@ import {
   IconUsersGroup,
 } from "@tabler/icons-react"
 
-export type NavPath = "/" | "/topics" | "/question-pool"
+export type NavPath =
+  | "/"
+  | "/topics"
+  | "/question-pool"
+  | "/generate"
+  | "/metadata"
+  | "/config"
+  | "/cron-runs"
 
 export interface NavItem {
   key: string
@@ -52,17 +58,36 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: IconDatabase,
         to: "/question-pool",
       },
-      { key: "generation", label: "Tạo câu hỏi", icon: IconSparkles },
-      { key: "meta", label: "Metadata", icon: IconListDetails },
+      {
+        key: "generation",
+        label: "Tạo câu hỏi",
+        icon: IconSparkles,
+        to: "/generate",
+      },
+      {
+        key: "meta",
+        label: "Metadata & Health",
+        icon: IconListDetails,
+        to: "/metadata",
+      },
     ],
   },
   {
     key: "system",
     label: "Hệ thống",
     items: [
-      { key: "config", label: "Cấu hình", icon: IconAdjustmentsAlt },
-      { key: "cron", label: "Lịch sử cron", icon: IconClockBolt },
-      { key: "health", label: "Health check", icon: IconActivityHeartbeat },
+      {
+        key: "config",
+        label: "Cấu hình",
+        icon: IconAdjustmentsAlt,
+        to: "/config",
+      },
+      {
+        key: "cron",
+        label: "Lịch sử cron",
+        icon: IconClockBolt,
+        to: "/cron-runs",
+      },
     ],
   },
   {

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
+import type { QuizType } from "@/features/quiz/types.ts"
+
 import { PENDING_FILL_MAX_MS } from "../constants.ts"
-import type { QuizType } from "../types.ts"
 
 export function usePendingFills() {
   const [pending, setPending] = useState<ReadonlySet<QuizType>>(new Set())

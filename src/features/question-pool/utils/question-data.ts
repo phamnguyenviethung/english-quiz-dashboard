@@ -72,11 +72,3 @@ export function parseQuestionData(raw: string): QuestionDataResult {
 
   return { kind: "structured", question, raw: parsed }
 }
-
-export function stringifyRaw(value: unknown): string {
-  try {
-    return JSON.stringify(value, null, 2)
-  } catch {
-    return String(value)
-  }
-}

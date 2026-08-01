@@ -6,7 +6,7 @@ import {
 } from "@/apis/english-question-pool/english-question-pool.ts"
 import { getHttpStatus } from "@/lib/api-error.ts"
 
-import type { EngLevel } from "../types.ts"
+import type { EngLevel } from "@/features/quiz/types.ts"
 import { parseQuestionData } from "../utils/question-data.ts"
 
 export function usePoolPreview({

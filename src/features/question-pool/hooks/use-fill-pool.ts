@@ -7,8 +7,8 @@ import {
 import { toast } from "@/components/ui/toast"
 import { getApiErrorMessage } from "@/lib/api-error.ts"
 
-import { QUIZ_TYPE_META } from "../constants.ts"
-import type { EngLevel, OptionCount, QuizType } from "../types.ts"
+import { QUIZ_TYPE_META } from "@/features/quiz/constants.ts"
+import type { EngLevel, OptionCount, QuizType } from "@/features/quiz/types.ts"
 
 export function useFillPool({
   engLevel,

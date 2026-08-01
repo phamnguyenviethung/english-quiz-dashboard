@@ -4,17 +4,14 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { getGetEnglishPoolCountQueryKey } from "@/apis/english-question-pool/english-question-pool.ts"
 import { PageHeader } from "@/components/common/page-header.tsx"
 import { QueryError } from "@/components/common/query-error.tsx"
-import {
-  ENG_LEVELS,
-  OPTION_COUNTS,
-} from "@/features/question-pool/constants.ts"
+import { ENG_LEVELS, OPTION_COUNTS } from "@/features/quiz/constants.ts"
 import { PoolCoverageGrid } from "@/features/question-pool/components/pool-coverage-grid.tsx"
 import { PoolFilters } from "@/features/question-pool/components/pool-filters.tsx"
 import { PoolPreviewDialog } from "@/features/question-pool/components/pool-preview-dialog.tsx"
 import { useFillPool } from "@/features/question-pool/hooks/use-fill-pool.ts"
 import { usePendingFills } from "@/features/question-pool/hooks/use-pending-fills.ts"
 import { usePoolCoverage } from "@/features/question-pool/hooks/use-pool-coverage.ts"
-import type { EngLevel, OptionCount } from "@/features/question-pool/types.ts"
+import type { EngLevel, OptionCount } from "@/features/quiz/types.ts"
 import { formatNumber } from "@/lib/format.ts"
 import { useQueryClient } from "@tanstack/react-query"
 

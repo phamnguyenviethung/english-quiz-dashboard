@@ -3,8 +3,11 @@ import { useQueries } from "@tanstack/react-query"
 import { getGetEnglishPoolCountQueryOptions } from "@/apis/english-question-pool/english-question-pool.ts"
 import { isAuthError } from "@/lib/api-error.ts"
 
-import { PENDING_FILL_POLL_MS, QUIZ_TYPES } from "../constants.ts"
-import type { EngLevel, PoolCoverageCell, QuizType } from "../types.ts"
+import { QUIZ_TYPES } from "@/features/quiz/constants.ts"
+import type { EngLevel, QuizType } from "@/features/quiz/types.ts"
+
+import { PENDING_FILL_POLL_MS } from "../constants.ts"
+import type { PoolCoverageCell } from "../types.ts"
 
 export function usePoolCoverage({
   engLevel,

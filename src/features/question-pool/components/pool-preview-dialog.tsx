@@ -1,5 +1,6 @@
 import { IconDatabaseOff, IconRefresh } from "@tabler/icons-react"
 
+import { CollapsibleJson } from "@/components/common/json-block.tsx"
 import { QueryError } from "@/components/common/query-error.tsx"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -20,10 +21,13 @@ import {
 } from "@/components/ui/empty"
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { QUIZ_TYPE_META, formatOptionCountLabel } from "../constants.ts"
+import {
+  QUIZ_TYPE_META,
+  formatOptionCountLabel,
+} from "@/features/quiz/constants.ts"
+import type { EngLevel } from "@/features/quiz/types.ts"
+
 import { usePoolPreview } from "../hooks/use-pool-preview.ts"
-import type { EngLevel } from "../types.ts"
-import { stringifyRaw } from "../utils/question-data.ts"
 
 export function PoolPreviewDialog({
   open,
@@ -130,16 +134,10 @@ export function PoolPreviewDialog({
               </div>
             ) : null}
 
-            <details className="group">
-              <summary className="cursor-pointer text-xs text-muted-foreground select-none hover:text-foreground">
-                Xem dữ liệu gốc
-              </summary>
-              <pre className="mt-2 max-h-64 overflow-auto rounded-2xl bg-muted p-3 text-xs">
-                {parsed.kind === "structured"
-                  ? stringifyRaw(parsed.raw)
-                  : parsed.text}
-              </pre>
-            </details>
+            <CollapsibleJson
+              label="Xem dữ liệu gốc"
+              value={parsed.kind === "structured" ? parsed.raw : parsed.text}
+            />
           </div>
         ) : null}
 
