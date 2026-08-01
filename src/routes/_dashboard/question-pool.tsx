@@ -22,6 +22,7 @@ import {
   OPTION_COUNTS,
   QUIZ_TYPES,
 } from "@/features/quiz/constants.ts"
+import { ManualRefillDialog } from "@/features/question-pool/components/manual-refill-dialog.tsx"
 import { PoolCoverageGrid } from "@/features/question-pool/components/pool-coverage-grid.tsx"
 import { PoolFilters } from "@/features/question-pool/components/pool-filters.tsx"
 import { PoolPreviewDialog } from "@/features/question-pool/components/pool-preview-dialog.tsx"
@@ -30,6 +31,7 @@ import { PoolQuestionsFilters } from "@/features/question-pool/components/pool-q
 import { PoolQuestionsPagination } from "@/features/question-pool/components/pool-questions-pagination.tsx"
 import { PoolQuestionsTable } from "@/features/question-pool/components/pool-questions-table.tsx"
 import { useFillPool } from "@/features/question-pool/hooks/use-fill-pool.ts"
+import { useManualRefill } from "@/features/question-pool/hooks/use-manual-refill.ts"
 import { usePendingFills } from "@/features/question-pool/hooks/use-pending-fills.ts"
 import { usePoolCoverage } from "@/features/question-pool/hooks/use-pool-coverage.ts"
 import {
@@ -203,6 +205,7 @@ function OverviewTab({
     optionCount,
     onEnqueued: markPending,
   })
+  const { startRefill, isPending: isRefillPending } = useManualRefill()
 
   const refreshAll = () => {
     for (const quizType of pending) clearPending(quizType)
@@ -219,6 +222,12 @@ function OverviewTab({
           total === undefined
             ? "Số câu hỏi có sẵn theo từng loại, ở cấp độ và chủ đề đang chọn."
             : `Có sẵn ${formatNumber(total)} câu ở cấp độ ${engLevel}.`
+        }
+        actions={
+          <ManualRefillDialog
+            isPending={isRefillPending}
+            onConfirm={startRefill}
+          />
         }
       />
 

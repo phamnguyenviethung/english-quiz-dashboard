@@ -1,3 +1,6 @@
+import { IconPlus, IconTrash } from "@tabler/icons-react"
+
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -94,6 +97,14 @@ function CellEditor({
   )
 }
 
+/** Giá trị khởi tạo cho ô mới, khớp kiểu khai báo trong itemFields. */
+function emptyValueFor(schema: ConfigFieldSchema): unknown {
+  if (schema.options?.length) return schema.options[0]
+  if (schema.type === "boolean") return false
+  if (schema.type === "num") return schema.min ?? 0
+  return ""
+}
+
 export function ConfigArrayEditor({
   rows,
   itemFields,
@@ -115,36 +126,69 @@ export function ConfigArrayEditor({
     )
   }
 
+  const removeRow = (rowIndex: number) => {
+    onChange(rows.filter((_, index) => index !== rowIndex))
+  }
+
+  const addRow = () => {
+    const next = Object.fromEntries(
+      fieldKeys.map((fieldKey) => [
+        fieldKey,
+        emptyValueFor(itemFields[fieldKey]),
+      ])
+    )
+    onChange([...rows, next])
+  }
+
   return (
-    <div className="overflow-x-auto rounded-2xl border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {fieldKeys.map((fieldKey) => (
-              <TableHead key={fieldKey}>
-                {itemFields[fieldKey].label ?? fieldKey}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {rows.map((row, rowIndex) => (
-            <TableRow key={rowIndex}>
+    <div className="space-y-2">
+      <div className="overflow-x-auto rounded-2xl border">
+        <Table>
+          <TableHeader>
+            <TableRow>
               {fieldKeys.map((fieldKey) => (
-                <TableCell key={fieldKey}>
-                  <CellEditor
-                    fieldKey={fieldKey}
-                    schema={itemFields[fieldKey]}
-                    value={row[fieldKey]}
-                    disabled={disabled}
-                    onChange={(next) => updateCell(rowIndex, fieldKey, next)}
-                  />
-                </TableCell>
+                <TableHead key={fieldKey}>
+                  {itemFields[fieldKey].label ?? fieldKey}
+                </TableHead>
               ))}
+              <TableHead className="w-12" />
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {rows.map((row, rowIndex) => (
+              <TableRow key={rowIndex}>
+                {fieldKeys.map((fieldKey) => (
+                  <TableCell key={fieldKey}>
+                    <CellEditor
+                      fieldKey={fieldKey}
+                      schema={itemFields[fieldKey]}
+                      value={row[fieldKey]}
+                      disabled={disabled}
+                      onChange={(next) => updateCell(rowIndex, fieldKey, next)}
+                    />
+                  </TableCell>
+                ))}
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    disabled={disabled}
+                    onClick={() => removeRow(rowIndex)}
+                    aria-label={`Xoá dòng ${rowIndex + 1}`}
+                  >
+                    <IconTrash stroke={1.5} />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <Button variant="outline" size="sm" disabled={disabled} onClick={addRow}>
+        <IconPlus stroke={1.5} data-icon="inline-start" />
+        Thêm dòng
+      </Button>
     </div>
   )
 }

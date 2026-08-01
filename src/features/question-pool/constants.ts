@@ -1,4 +1,4 @@
-import type { PoolStatus } from "./types.ts"
+import type { ManualRefillScope, PoolStatus } from "./types.ts"
 
 export const POOL_LOW_THRESHOLD = 20
 
@@ -34,3 +34,19 @@ export const QUESTIONS_PAGE_SIZE = 20
 
 export const PENDING_FILL_POLL_MS = 15_000
 export const PENDING_FILL_MAX_MS = 4 * 60_000
+
+export const MANUAL_REFILL_SCOPE_META: Record<
+  ManualRefillScope,
+  { label: string; description: string }
+> = {
+  deficient: {
+    label: "Chỉ bucket còn thiếu",
+    description:
+      "Chỉ bù cho bucket chưa đạt số câu tối đa. Bucket đã đầy được bỏ qua.",
+  },
+  all: {
+    label: "Toàn bộ bucket",
+    description:
+      "Ép sinh thêm câu cho mọi bucket, kể cả bucket đã đầy. Bỏ qua giới hạn chi phí mỗi lần chạy.",
+  },
+}

@@ -21,6 +21,11 @@ export type GetEnglishConfig200DataQuestionPool = {
    * @maximum 9007199254740991
    * @exclusiveMinimum 0
    */
+  perBucketGenerationCap: number
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
   manualFillMinCount: number
   /**
    * @maximum 9007199254740991

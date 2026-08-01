@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 5542",
+    "api:gen": "orval",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",

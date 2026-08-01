@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.0.0
  */
 import type { GetEnglishConfig200DataJobFlags } from "./getEnglishConfig200DataJobFlags.ts"
+import type { GetEnglishConfig200DataPoolRefillScheduleItem } from "./getEnglishConfig200DataPoolRefillScheduleItem.ts"
 import type { GetEnglishConfig200DataQuestionPool } from "./getEnglishConfig200DataQuestionPool.ts"
 import type { GetEnglishConfig200DataQuizDistributionItem } from "./getEnglishConfig200DataQuizDistributionItem.ts"
 
@@ -14,4 +15,5 @@ export type GetEnglishConfig200Data = {
   /** @minItems 1 */
   quiz_distribution: GetEnglishConfig200DataQuizDistributionItem[]
   job_flags: GetEnglishConfig200DataJobFlags
+  pool_refill_schedule: GetEnglishConfig200DataPoolRefillScheduleItem[]
 }
