@@ -7,8 +7,13 @@
  */
 import { useQuery } from "@tanstack/react-query"
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  QueryClient,
   QueryFunction,
   QueryKey,
+  UndefinedInitialDataOptions,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query"
@@ -82,10 +87,12 @@ export const getGetEnglishCronRunsQueryOptions = <
 >(
   params?: GetEnglishCronRunsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getEnglishCronRuns>>,
-      TError,
-      TData
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRuns>>,
+        TError,
+        TData
+      >
     >
     request?: SecondParameter<typeof axiosClient>
   }
@@ -103,7 +110,7 @@ export const getGetEnglishCronRunsQueryOptions = <
     Awaited<ReturnType<typeof getEnglishCronRuns>>,
     TError,
     TData
-  > & { queryKey: QueryKey }
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetEnglishCronRunsQueryResult = NonNullable<
@@ -116,6 +123,94 @@ export type GetEnglishCronRunsQueryError = ErrorType<
   | GetEnglishCronRuns500
 >
 
+export function useGetEnglishCronRuns<
+  TData = Awaited<ReturnType<typeof getEnglishCronRuns>>,
+  TError = ErrorType<
+    | GetEnglishCronRuns400
+    | GetEnglishCronRuns401
+    | GetEnglishCronRuns403
+    | GetEnglishCronRuns500
+  >,
+>(
+  params: undefined | GetEnglishCronRunsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRuns>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishCronRuns>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishCronRuns>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishCronRuns<
+  TData = Awaited<ReturnType<typeof getEnglishCronRuns>>,
+  TError = ErrorType<
+    | GetEnglishCronRuns400
+    | GetEnglishCronRuns401
+    | GetEnglishCronRuns403
+    | GetEnglishCronRuns500
+  >,
+>(
+  params?: GetEnglishCronRunsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRuns>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishCronRuns>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishCronRuns>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishCronRuns<
+  TData = Awaited<ReturnType<typeof getEnglishCronRuns>>,
+  TError = ErrorType<
+    | GetEnglishCronRuns400
+    | GetEnglishCronRuns401
+    | GetEnglishCronRuns403
+    | GetEnglishCronRuns500
+  >,
+>(
+  params?: GetEnglishCronRunsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRuns>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary List recent cron job runs
  */
@@ -131,19 +226,25 @@ export function useGetEnglishCronRuns<
 >(
   params?: GetEnglishCronRunsParams,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getEnglishCronRuns>>,
-      TError,
-      TData
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRuns>>,
+        TError,
+        TData
+      >
     >
     request?: SecondParameter<typeof axiosClient>
-  }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
   const queryOptions = getGetEnglishCronRunsQueryOptions(params, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
   return withQueryKey(query, queryOptions.queryKey)
 }
@@ -178,10 +279,12 @@ export const getGetEnglishCronRunsByRunIdQueryOptions = <
 >(
   runId: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
-      TError,
-      TData
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+        TError,
+        TData
+      >
     >
     request?: SecondParameter<typeof axiosClient>
   }
@@ -204,7 +307,7 @@ export const getGetEnglishCronRunsByRunIdQueryOptions = <
     Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
     TError,
     TData
-  > & { queryKey: QueryKey }
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetEnglishCronRunsByRunIdQueryResult = NonNullable<
@@ -217,6 +320,94 @@ export type GetEnglishCronRunsByRunIdQueryError = ErrorType<
   | GetEnglishCronRunsByRunId500
 >
 
+export function useGetEnglishCronRunsByRunId<
+  TData = Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+  TError = ErrorType<
+    | GetEnglishCronRunsByRunId401
+    | GetEnglishCronRunsByRunId403
+    | GetEnglishCronRunsByRunId404
+    | GetEnglishCronRunsByRunId500
+  >,
+>(
+  runId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishCronRunsByRunId<
+  TData = Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+  TError = ErrorType<
+    | GetEnglishCronRunsByRunId401
+    | GetEnglishCronRunsByRunId403
+    | GetEnglishCronRunsByRunId404
+    | GetEnglishCronRunsByRunId500
+  >,
+>(
+  runId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishCronRunsByRunId<
+  TData = Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+  TError = ErrorType<
+    | GetEnglishCronRunsByRunId401
+    | GetEnglishCronRunsByRunId403
+    | GetEnglishCronRunsByRunId404
+    | GetEnglishCronRunsByRunId500
+  >,
+>(
+  runId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get cron run detail
  */
@@ -232,19 +423,25 @@ export function useGetEnglishCronRunsByRunId<
 >(
   runId: string,
   options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
-      TError,
-      TData
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishCronRunsByRunId>>,
+        TError,
+        TData
+      >
     >
     request?: SecondParameter<typeof axiosClient>
-  }
-): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
   const queryOptions = getGetEnglishCronRunsByRunIdQueryOptions(runId, options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
   return withQueryKey(query, queryOptions.queryKey)
 }

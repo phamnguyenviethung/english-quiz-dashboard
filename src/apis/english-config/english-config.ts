@@ -7,9 +7,14 @@
  */
 import { useMutation, useQuery } from "@tanstack/react-query"
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
+  QueryClient,
   QueryFunction,
   QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
@@ -86,10 +91,8 @@ export const getGetEnglishConfigQueryOptions = <
     GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
   >,
 >(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishConfig>>,
-    TError,
-    TData
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfig>>, TError, TData>
   >
   request?: SecondParameter<typeof axiosClient>
 }) => {
@@ -105,7 +108,7 @@ export const getGetEnglishConfigQueryOptions = <
     Awaited<ReturnType<typeof getEnglishConfig>>,
     TError,
     TData
-  > & { queryKey: QueryKey }
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetEnglishConfigQueryResult = NonNullable<
@@ -115,6 +118,82 @@ export type GetEnglishConfigQueryError = ErrorType<
   GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
 >
 
+export function useGetEnglishConfig<
+  TData = Awaited<ReturnType<typeof getEnglishConfig>>,
+  TError = ErrorType<
+    GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
+  >,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishConfig>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishConfig>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishConfig>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishConfig<
+  TData = Awaited<ReturnType<typeof getEnglishConfig>>,
+  TError = ErrorType<
+    GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
+  >,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishConfig>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishConfig>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishConfig>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishConfig<
+  TData = Awaited<ReturnType<typeof getEnglishConfig>>,
+  TError = ErrorType<
+    GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
+  >,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishConfig>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get current config snapshot
  */
@@ -124,19 +203,27 @@ export function useGetEnglishConfig<
   TError = ErrorType<
     GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
   >,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishConfig>>,
-    TError,
-    TData
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishConfig>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
   const queryOptions = getGetEnglishConfigQueryOptions(options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
   return withQueryKey(query, queryOptions.queryKey)
 }
@@ -167,10 +254,12 @@ export const getGetEnglishConfigRecordsQueryOptions = <
     | GetEnglishConfigRecords500
   >,
 >(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-    TError,
-    TData
+  query?: Partial<
+    UseQueryOptions<
+      Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+      TError,
+      TData
+    >
   >
   request?: SecondParameter<typeof axiosClient>
 }) => {
@@ -187,7 +276,7 @@ export const getGetEnglishConfigRecordsQueryOptions = <
     Awaited<ReturnType<typeof getEnglishConfigRecords>>,
     TError,
     TData
-  > & { queryKey: QueryKey }
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetEnglishConfigRecordsQueryResult = NonNullable<
@@ -199,6 +288,88 @@ export type GetEnglishConfigRecordsQueryError = ErrorType<
   | GetEnglishConfigRecords500
 >
 
+export function useGetEnglishConfigRecords<
+  TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+  TError = ErrorType<
+    | GetEnglishConfigRecords401
+    | GetEnglishConfigRecords403
+    | GetEnglishConfigRecords500
+  >,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishConfigRecords>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishConfigRecords<
+  TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+  TError = ErrorType<
+    | GetEnglishConfigRecords401
+    | GetEnglishConfigRecords403
+    | GetEnglishConfigRecords500
+  >,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishConfigRecords>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishConfigRecords<
+  TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+  TError = ErrorType<
+    | GetEnglishConfigRecords401
+    | GetEnglishConfigRecords403
+    | GetEnglishConfigRecords500
+  >,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary List config records
  */
@@ -210,19 +381,27 @@ export function useGetEnglishConfigRecords<
     | GetEnglishConfigRecords403
     | GetEnglishConfigRecords500
   >,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-    TError,
-    TData
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishConfigRecords>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
   const queryOptions = getGetEnglishConfigRecordsQueryOptions(options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
   return withQueryKey(query, queryOptions.queryKey)
 }
@@ -345,22 +524,25 @@ export const usePatchEnglishConfigByRecordKey = <
     | PatchEnglishConfigByRecordKey500
   >,
   TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
-    TError,
-    {
-      recordKey: string
-      data: BodyType<
-        | PatchEnglishConfigByRecordKeyBodyOne
-        | PatchEnglishConfigByRecordKeyBodyTwo
-        | PatchEnglishConfigByRecordKeyBodyThree
-      >
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationResult<
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
+      TError,
+      {
+        recordKey: string
+        data: BodyType<
+          | PatchEnglishConfigByRecordKeyBodyOne
+          | PatchEnglishConfigByRecordKeyBodyTwo
+          | PatchEnglishConfigByRecordKeyBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
   Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
   TError,
   {
@@ -373,7 +555,10 @@ export const usePatchEnglishConfigByRecordKey = <
   },
   TContext
 > => {
-  return useMutation(getPatchEnglishConfigByRecordKeyMutationOptions(options))
+  return useMutation(
+    getPatchEnglishConfigByRecordKeyMutationOptions(options),
+    queryClient
+  )
 }
 /**
  * Reset 1 config record về giá trị mặc định. Yêu cầu scope `config:write`.
@@ -452,21 +637,25 @@ export const usePostEnglishConfigByRecordKeyReset = <
     | PostEnglishConfigByRecordKeyReset500
   >,
   TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
-    TError,
-    { recordKey: string },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationResult<
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
+      TError,
+      { recordKey: string },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
   Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
   TError,
   { recordKey: string },
   TContext
 > => {
   return useMutation(
-    getPostEnglishConfigByRecordKeyResetMutationOptions(options)
+    getPostEnglishConfigByRecordKeyResetMutationOptions(options),
+    queryClient
   )
 }

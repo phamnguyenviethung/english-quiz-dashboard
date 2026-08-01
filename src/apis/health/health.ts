@@ -7,8 +7,13 @@
  */
 import { useQuery } from "@tanstack/react-query"
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
+  QueryClient,
   QueryFunction,
   QueryKey,
+  UndefinedInitialDataOptions,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query"
@@ -60,7 +65,9 @@ export const getGetHealthQueryOptions = <
   TData = Awaited<ReturnType<typeof getHealth>>,
   TError = ErrorType<GetHealth500>,
 >(options?: {
-  query?: UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
+  >
   request?: SecondParameter<typeof axiosClient>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
@@ -75,7 +82,7 @@ export const getGetHealthQueryOptions = <
     Awaited<ReturnType<typeof getHealth>>,
     TError,
     TData
-  > & { queryKey: QueryKey }
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetHealthQueryResult = NonNullable<
@@ -83,6 +90,64 @@ export type GetHealthQueryResult = NonNullable<
 >
 export type GetHealthQueryError = ErrorType<GetHealth500>
 
+export function useGetHealth<
+  TData = Awaited<ReturnType<typeof getHealth>>,
+  TError = ErrorType<GetHealth500>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getHealth>>,
+          TError,
+          Awaited<ReturnType<typeof getHealth>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetHealth<
+  TData = Awaited<ReturnType<typeof getHealth>>,
+  TError = ErrorType<GetHealth500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getHealth>>,
+          TError,
+          Awaited<ReturnType<typeof getHealth>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetHealth<
+  TData = Awaited<ReturnType<typeof getHealth>>,
+  TError = ErrorType<GetHealth500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Health check
  */
@@ -90,15 +155,23 @@ export type GetHealthQueryError = ErrorType<GetHealth500>
 export function useGetHealth<
   TData = Awaited<ReturnType<typeof getHealth>>,
   TError = ErrorType<GetHealth500>,
->(options?: {
-  query?: UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
-  request?: SecondParameter<typeof axiosClient>
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
   const queryOptions = getGetHealthQueryOptions(options)
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey
-  }
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
   return withQueryKey(query, queryOptions.queryKey)
 }

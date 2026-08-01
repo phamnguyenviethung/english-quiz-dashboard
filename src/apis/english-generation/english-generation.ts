@@ -8,6 +8,7 @@
 import { useMutation } from "@tanstack/react-query"
 import type {
   MutationFunction,
+  QueryClient,
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query"
@@ -198,33 +199,36 @@ export const usePostEnglishGenerateByQuizType = <
     | PostEnglishGenerateByQuizType500
   >,
   TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
-    TError,
-    {
-      quizType:
-        | "vocab"
-        | "fillblank"
-        | "phrase"
-        | "conversation"
-        | "description"
-        | "synonym"
-        | "slang"
-        | "odd-one-out"
-        | "paragraph"
-        | "idiom"
-        | "verb-use-match"
-      data: BodyType<
-        | PostEnglishGenerateByQuizTypeBodyOne
-        | PostEnglishGenerateByQuizTypeBodyTwo
-        | PostEnglishGenerateByQuizTypeBodyThree
-      >
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationResult<
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
+      TError,
+      {
+        quizType:
+          | "vocab"
+          | "fillblank"
+          | "phrase"
+          | "conversation"
+          | "description"
+          | "synonym"
+          | "slang"
+          | "odd-one-out"
+          | "paragraph"
+          | "idiom"
+          | "verb-use-match"
+        data: BodyType<
+          | PostEnglishGenerateByQuizTypeBodyOne
+          | PostEnglishGenerateByQuizTypeBodyTwo
+          | PostEnglishGenerateByQuizTypeBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
   Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
   TError,
   {
@@ -248,7 +252,10 @@ export const usePostEnglishGenerateByQuizType = <
   },
   TContext
 > => {
-  return useMutation(getPostEnglishGenerateByQuizTypeMutationOptions(options))
+  return useMutation(
+    getPostEnglishGenerateByQuizTypeMutationOptions(options),
+    queryClient
+  )
 }
 /**
  * Sinh 1 câu hỏi đọc hiểu + mental math bằng LLM. Loại đặc biệt, không nằm trong quiz pool distribution. Yêu cầu scope `quiz:read`.
@@ -364,21 +371,24 @@ export const usePostEnglishGenerateReading = <
     | PostEnglishGenerateReading500
   >,
   TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postEnglishGenerateReading>>,
-    TError,
-    {
-      data: BodyType<
-        | PostEnglishGenerateReadingBodyOne
-        | PostEnglishGenerateReadingBodyTwo
-        | PostEnglishGenerateReadingBodyThree
-      >
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationResult<
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postEnglishGenerateReading>>,
+      TError,
+      {
+        data: BodyType<
+          | PostEnglishGenerateReadingBodyOne
+          | PostEnglishGenerateReadingBodyTwo
+          | PostEnglishGenerateReadingBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
   Awaited<ReturnType<typeof postEnglishGenerateReading>>,
   TError,
   {
@@ -390,5 +400,8 @@ export const usePostEnglishGenerateReading = <
   },
   TContext
 > => {
-  return useMutation(getPostEnglishGenerateReadingMutationOptions(options))
+  return useMutation(
+    getPostEnglishGenerateReadingMutationOptions(options),
+    queryClient
+  )
 }

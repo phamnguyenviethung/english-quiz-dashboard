@@ -8,6 +8,7 @@
 import { useMutation } from "@tanstack/react-query"
 import type {
   MutationFunction,
+  QueryClient,
   UseMutationOptions,
   UseMutationResult,
 } from "@tanstack/react-query"
@@ -154,22 +155,25 @@ export const usePutAdminTenantsByIdTopics = <
     | PutAdminTenantsByIdTopics500
   >,
   TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putAdminTenantsByIdTopics>>,
-    TError,
-    {
-      id: string | number
-      data: BodyType<
-        | PutAdminTenantsByIdTopicsBodyOne
-        | PutAdminTenantsByIdTopicsBodyTwo
-        | PutAdminTenantsByIdTopicsBodyThree
-      >
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationResult<
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof putAdminTenantsByIdTopics>>,
+      TError,
+      {
+        id: string | number
+        data: BodyType<
+          | PutAdminTenantsByIdTopicsBodyOne
+          | PutAdminTenantsByIdTopicsBodyTwo
+          | PutAdminTenantsByIdTopicsBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
   Awaited<ReturnType<typeof putAdminTenantsByIdTopics>>,
   TError,
   {
@@ -182,7 +186,10 @@ export const usePutAdminTenantsByIdTopics = <
   },
   TContext
 > => {
-  return useMutation(getPutAdminTenantsByIdTopicsMutationOptions(options))
+  return useMutation(
+    getPutAdminTenantsByIdTopicsMutationOptions(options),
+    queryClient
+  )
 }
 /**
  * Thay thế toàn bộ allow-list quizType của tenant (replace, không merge). quizType không hợp lệ trả 400. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
@@ -302,22 +309,25 @@ export const usePutAdminTenantsByIdQuizTypes = <
     | PutAdminTenantsByIdQuizTypes500
   >,
   TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putAdminTenantsByIdQuizTypes>>,
-    TError,
-    {
-      id: string | number
-      data: BodyType<
-        | PutAdminTenantsByIdQuizTypesBodyOne
-        | PutAdminTenantsByIdQuizTypesBodyTwo
-        | PutAdminTenantsByIdQuizTypesBodyThree
-      >
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationResult<
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof putAdminTenantsByIdQuizTypes>>,
+      TError,
+      {
+        id: string | number
+        data: BodyType<
+          | PutAdminTenantsByIdQuizTypesBodyOne
+          | PutAdminTenantsByIdQuizTypesBodyTwo
+          | PutAdminTenantsByIdQuizTypesBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
   Awaited<ReturnType<typeof putAdminTenantsByIdQuizTypes>>,
   TError,
   {
@@ -330,5 +340,8 @@ export const usePutAdminTenantsByIdQuizTypes = <
   },
   TContext
 > => {
-  return useMutation(getPutAdminTenantsByIdQuizTypesMutationOptions(options))
+  return useMutation(
+    getPutAdminTenantsByIdQuizTypesMutationOptions(options),
+    queryClient
+  )
 }

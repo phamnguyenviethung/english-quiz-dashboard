@@ -1,6 +1,5 @@
 import { IconDatabaseOff, IconRefresh } from "@tabler/icons-react"
 
-import { CollapsibleJson } from "@/components/common/json-block.tsx"
 import { QueryError } from "@/components/common/query-error.tsx"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -28,6 +27,7 @@ import {
 import type { EngLevel } from "@/features/quiz/types.ts"
 
 import { usePoolPreview } from "../hooks/use-pool-preview.ts"
+import { PoolQuestionBody } from "./pool-question-body.tsx"
 
 export function PoolPreviewDialog({
   open,
@@ -102,42 +102,7 @@ export function PoolPreviewDialog({
               </span>
             </div>
 
-            {parsed.kind === "structured" ? (
-              <div className="space-y-4">
-                {parsed.question.prompt ? (
-                  <p className="text-sm leading-relaxed font-medium">
-                    {parsed.question.prompt}
-                  </p>
-                ) : null}
-
-                {parsed.question.options ? (
-                  <ol className="space-y-1.5 text-sm">
-                    {parsed.question.options.map((option, index) => (
-                      <li key={index} className="flex gap-2">
-                        <span className="font-mono text-xs text-muted-foreground">
-                          {String.fromCharCode(65 + index)}.
-                        </span>
-                        <span>{option}</span>
-                      </li>
-                    ))}
-                  </ol>
-                ) : null}
-
-                {parsed.question.answer ? (
-                  <p className="text-sm text-muted-foreground">
-                    Đáp án:{" "}
-                    <span className="font-medium text-foreground">
-                      {parsed.question.answer}
-                    </span>
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
-
-            <CollapsibleJson
-              label="Xem dữ liệu gốc"
-              value={parsed.kind === "structured" ? parsed.raw : parsed.text}
-            />
+            <PoolQuestionBody parsed={parsed} />
           </div>
         ) : null}
 
