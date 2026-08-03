@@ -1,19 +1,30 @@
 import type { AxiosError, AxiosRequestConfig } from "axios"
 import Axios from "axios"
 
-import { env } from "./env.ts"
+import { API_PROXY_PATH, LOGIN_PATH } from "./constants.ts"
 
+// Mọi request đi qua Vercel function ở /api/proxy — function mới là nơi giữ và
+// gắn admin key. Client không cầm secret nào.
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: env.apiBaseUrl,
+  baseURL: API_PROXY_PATH,
 })
 
-AXIOS_INSTANCE.interceptors.request.use((config) => {
-  if (env.adminApiKey) {
-    config.headers.set("x-admin-key", env.adminApiKey)
-    config.headers.set("Authorization", `Bearer ${env.adminApiKey}`)
+AXIOS_INSTANCE.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    // Chỉ redirect khi 401 đến từ chính proxy (thiếu/hết phiên dashboard). 401
+    // do API backend trả về không có header này nên để component tự xử lý.
+    const needsLogin =
+      error.response?.status === 401 &&
+      error.response.headers["x-dashboard-auth"] === "required"
+
+    if (needsLogin && window.location.pathname !== LOGIN_PATH) {
+      window.location.href = LOGIN_PATH
+    }
+
+    return Promise.reject(error)
   }
-  return config
-})
+)
 
 export const axiosClient = <T>(
   config: AxiosRequestConfig,

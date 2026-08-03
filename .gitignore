@@ -4,7 +4,9 @@ dist
 dist-ssr
 *.local
 .env*
+!.env.example
 .tanstack
+.vercel
 .wrangler
 .output
 .vinxi
