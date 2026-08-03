@@ -17,6 +17,8 @@ import { Route as DashboardGenerateRouteImport } from './routes/_dashboard/gener
 import { Route as DashboardMetadataRouteImport } from './routes/_dashboard/metadata'
 import { Route as DashboardQuestionPoolRouteImport } from './routes/_dashboard/question-pool'
 import { Route as DashboardTopicsRouteImport } from './routes/_dashboard/topics'
+import { Route as DashboardTenantsIndexRouteImport } from './routes/_dashboard/tenants/index'
+import { Route as DashboardTenantsTenantIdRouteImport } from './routes/_dashboard/tenants/$tenantId'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/_dashboard',
@@ -57,6 +59,17 @@ const DashboardTopicsRoute = DashboardTopicsRouteImport.update({
   path: '/topics',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardTenantsIndexRoute = DashboardTenantsIndexRouteImport.update({
+  id: '/tenants/',
+  path: '/tenants/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardTenantsTenantIdRoute =
+  DashboardTenantsTenantIdRouteImport.update({
+    id: '/tenants/$tenantId',
+    path: '/tenants/$tenantId',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof DashboardIndexRoute
@@ -66,6 +79,8 @@ export interface FileRoutesByFullPath {
   '/metadata': typeof DashboardMetadataRoute
   '/question-pool': typeof DashboardQuestionPoolRoute
   '/topics': typeof DashboardTopicsRoute
+  '/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
+  '/tenants/': typeof DashboardTenantsIndexRoute
 }
 export interface FileRoutesByTo {
   '/config': typeof DashboardConfigRoute
@@ -75,6 +90,8 @@ export interface FileRoutesByTo {
   '/question-pool': typeof DashboardQuestionPoolRoute
   '/topics': typeof DashboardTopicsRoute
   '/': typeof DashboardIndexRoute
+  '/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
+  '/tenants': typeof DashboardTenantsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -86,6 +103,8 @@ export interface FileRoutesById {
   '/_dashboard/question-pool': typeof DashboardQuestionPoolRoute
   '/_dashboard/topics': typeof DashboardTopicsRoute
   '/_dashboard/': typeof DashboardIndexRoute
+  '/_dashboard/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
+  '/_dashboard/tenants/': typeof DashboardTenantsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -97,6 +116,8 @@ export interface FileRouteTypes {
     | '/metadata'
     | '/question-pool'
     | '/topics'
+    | '/tenants/$tenantId'
+    | '/tenants/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/config'
@@ -106,6 +127,8 @@ export interface FileRouteTypes {
     | '/question-pool'
     | '/topics'
     | '/'
+    | '/tenants/$tenantId'
+    | '/tenants'
   id:
     | '__root__'
     | '/_dashboard'
@@ -116,6 +139,8 @@ export interface FileRouteTypes {
     | '/_dashboard/question-pool'
     | '/_dashboard/topics'
     | '/_dashboard/'
+    | '/_dashboard/tenants/$tenantId'
+    | '/_dashboard/tenants/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -180,6 +205,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardTopicsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/tenants/': {
+      id: '/_dashboard/tenants/'
+      path: '/tenants'
+      fullPath: '/tenants/'
+      preLoaderRoute: typeof DashboardTenantsIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/tenants/$tenantId': {
+      id: '/_dashboard/tenants/$tenantId'
+      path: '/tenants/$tenantId'
+      fullPath: '/tenants/$tenantId'
+      preLoaderRoute: typeof DashboardTenantsTenantIdRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
@@ -191,6 +230,8 @@ interface DashboardRouteChildren {
   DashboardQuestionPoolRoute: typeof DashboardQuestionPoolRoute
   DashboardTopicsRoute: typeof DashboardTopicsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardTenantsTenantIdRoute: typeof DashboardTenantsTenantIdRoute
+  DashboardTenantsIndexRoute: typeof DashboardTenantsIndexRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
@@ -201,6 +242,8 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardQuestionPoolRoute: DashboardQuestionPoolRoute,
   DashboardTopicsRoute: DashboardTopicsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardTenantsTenantIdRoute: DashboardTenantsTenantIdRoute,
+  DashboardTenantsIndexRoute: DashboardTenantsIndexRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(

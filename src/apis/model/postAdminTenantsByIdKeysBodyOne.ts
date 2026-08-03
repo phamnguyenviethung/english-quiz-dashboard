@@ -7,5 +7,5 @@
  */
 
 export type PostAdminTenantsByIdKeysBodyOne = {
-  label?: string | null
-}
+  label?: string | null;
+};

@@ -7,9 +7,9 @@
  */
 
 export type PostAdminTenantsByIdKeys201Data = {
-  id: number
-  label: string | null
+  id: number;
+  label: string | null;
   /** Plaintext API key — chỉ hiển thị một lần này, lưu lại ngay. */
-  apiKey: string
-  warning: string
-}
+  apiKey: string;
+  warning: string;
+};

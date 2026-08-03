@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminPoolRefill400Error } from "./postAdminPoolRefill400Error.ts"
+import type { PostAdminPoolRefill400Error } from './postAdminPoolRefill400Error.ts';
 
 export type PostAdminPoolRefill400 = {
-  success: false
-  error: PostAdminPoolRefill400Error
-}
+  success: false;
+  error: PostAdminPoolRefill400Error;
+};

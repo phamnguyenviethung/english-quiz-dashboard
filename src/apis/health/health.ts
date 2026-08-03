@@ -5,7 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import { useQuery } from "@tanstack/react-query"
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -15,163 +17,127 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query"
+  UseQueryResult
+} from '@tanstack/react-query';
 
-import type { GetHealth200, GetHealth500 } from "../model"
+import type {
+  GetHealth200,
+  GetHealth500
+} from '../model';
 
-import { axiosClient } from "../../configs/axiosClient.ts"
-import type { ErrorType } from "../../configs/axiosClient.ts"
+import { axiosClient } from '../../configs/axiosClient.ts';
+import type { ErrorType } from '../../configs/axiosClient.ts';
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-const withQueryKey = <T extends object, K>(
-  query: T,
-  queryKey: K
-): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K }
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === "queryKey") continue
+    if (key === 'queryKey') continue;
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    })
+    });
   }
-  return result
-}
+  return result;
+};
 
 /**
  * Liveness probe. Luôn trả { status: "ok" } nếu process đang chạy.
  * @summary Health check
  */
 export const getHealth = (
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetHealth200>(
-    { url: `/health`, method: "GET", signal },
-    options
-  )
-}
+
+
+      return axiosClient<GetHealth200>(
+      {url: `/health`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getGetHealthQueryKey = () => {
-  return [`/health`] as const
+    return [
+    `/health`
+    ] as const;
+    }
+
+
+export const getGetHealthQueryOptions = <TData = Awaited<ReturnType<typeof getHealth>>, TError = ErrorType<GetHealth500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetHealthQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHealth>>> = ({ signal }) => getHealth(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetHealthQueryOptions = <
-  TData = Awaited<ReturnType<typeof getHealth>>,
-  TError = ErrorType<GetHealth500>,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
-  >
-  request?: SecondParameter<typeof axiosClient>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
-
-  const queryKey = queryOptions?.queryKey ?? getGetHealthQueryKey()
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getHealth>>> = ({
-    signal,
-  }) => getHealth(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getHealth>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetHealthQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getHealth>>
->
+export type GetHealthQueryResult = NonNullable<Awaited<ReturnType<typeof getHealth>>>
 export type GetHealthQueryError = ErrorType<GetHealth500>
 
-export function useGetHealth<
-  TData = Awaited<ReturnType<typeof getHealth>>,
-  TError = ErrorType<GetHealth500>,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
-    > &
-      Pick<
+
+export function useGetHealth<TData = Awaited<ReturnType<typeof getHealth>>, TError = ErrorType<GetHealth500>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHealth>>,
           TError,
           Awaited<ReturnType<typeof getHealth>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetHealth<
-  TData = Awaited<ReturnType<typeof getHealth>>,
-  TError = ErrorType<GetHealth500>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetHealth<TData = Awaited<ReturnType<typeof getHealth>>, TError = ErrorType<GetHealth500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHealth>>,
           TError,
           Awaited<ReturnType<typeof getHealth>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetHealth<
-  TData = Awaited<ReturnType<typeof getHealth>>,
-  TError = ErrorType<GetHealth500>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetHealth<TData = Awaited<ReturnType<typeof getHealth>>, TError = ErrorType<GetHealth500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Health check
  */
 
-export function useGetHealth<
-  TData = Awaited<ReturnType<typeof getHealth>>,
-  TError = ErrorType<GetHealth500>,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function useGetHealth<TData = Awaited<ReturnType<typeof getHealth>>, TError = ErrorType<GetHealth500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHealth>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetHealthQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return withQueryKey(query, queryOptions.queryKey)
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
+

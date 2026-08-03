@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishPoolFill200Data } from "./postEnglishPoolFill200Data.ts"
+import type { PostEnglishPoolFill200Data } from './postEnglishPoolFill200Data.ts';
 
 export type PostEnglishPoolFill200 = {
-  success: true
-  data: PostEnglishPoolFill200Data
-}
+  success: true;
+  data: PostEnglishPoolFill200Data;
+};

@@ -7,5 +7,5 @@
  */
 
 export type PostEnglishPoolFill200Data = {
-  enqueued: boolean
-}
+  enqueued: boolean;
+};

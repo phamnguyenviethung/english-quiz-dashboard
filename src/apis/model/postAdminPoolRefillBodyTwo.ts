@@ -5,15 +5,15 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminPoolRefillBodyTwoScope } from "./postAdminPoolRefillBodyTwoScope.ts"
+import type { PostAdminPoolRefillBodyTwoScope } from './postAdminPoolRefillBodyTwoScope.ts';
 
 export type PostAdminPoolRefillBodyTwo = {
   /** OpenRouter model id, mặc định model rẻ nhất (Gemini Flash Lite). */
-  model?: string
+  model?: string;
   /**
-   * Số câu ép sinh cho mỗi bucket. Mặc định question_pool.manualFillDefaultCount.
-   * @minimum 1
-   */
-  countPerBucket?: string | number
-  scope?: PostAdminPoolRefillBodyTwoScope
-}
+     * Số câu ép sinh cho mỗi bucket. Mặc định question_pool.manualFillDefaultCount.
+     * @minimum 1
+     */
+  countPerBucket?: string | number;
+  scope?: PostAdminPoolRefillBodyTwoScope;
+};

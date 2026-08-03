@@ -1,7 +1,6 @@
 import { useRouterState } from "@tanstack/react-router"
 
-import type { NavPath } from "@/configs/navigation.ts"
-import { NAV_ITEMS_BY_PATH } from "@/configs/navigation.ts"
+import { findNavItemByPathname } from "@/configs/navigation.ts"
 import { ThemeToggle } from "@/components/theme/theme-toggle.tsx"
 import {
   Breadcrumb,
@@ -16,7 +15,7 @@ export function AppHeader() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
-  const current = NAV_ITEMS_BY_PATH.get(pathname as NavPath)
+  const current = findNavItemByPathname(pathname)
 
   return (
     <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur-sm">

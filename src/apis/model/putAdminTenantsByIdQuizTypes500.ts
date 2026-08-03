@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PutAdminTenantsByIdQuizTypes500Error } from "./putAdminTenantsByIdQuizTypes500Error.ts"
+import type { PutAdminTenantsByIdQuizTypes500Error } from './putAdminTenantsByIdQuizTypes500Error.ts';
 
 export type PutAdminTenantsByIdQuizTypes500 = {
-  success: false
-  error: PutAdminTenantsByIdQuizTypes500Error
-}
+  success: false;
+  error: PutAdminTenantsByIdQuizTypes500Error;
+};

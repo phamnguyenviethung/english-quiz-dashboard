@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishConfigByRecordKeyReset500Error } from "./postEnglishConfigByRecordKeyReset500Error.ts"
+import type { PostEnglishConfigByRecordKeyReset500Error } from './postEnglishConfigByRecordKeyReset500Error.ts';
 
 export type PostEnglishConfigByRecordKeyReset500 = {
-  success: false
-  error: PostEnglishConfigByRecordKeyReset500Error
-}
+  success: false;
+  error: PostEnglishConfigByRecordKeyReset500Error;
+};

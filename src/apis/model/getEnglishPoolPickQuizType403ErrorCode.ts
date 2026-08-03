@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishPoolPickQuizType403ErrorCode =
-  (typeof GetEnglishPoolPickQuizType403ErrorCode)[keyof typeof GetEnglishPoolPickQuizType403ErrorCode]
+export type GetEnglishPoolPickQuizType403ErrorCode = typeof GetEnglishPoolPickQuizType403ErrorCode[keyof typeof GetEnglishPoolPickQuizType403ErrorCode];
+
 
 export const GetEnglishPoolPickQuizType403ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

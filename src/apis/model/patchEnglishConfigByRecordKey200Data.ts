@@ -5,35 +5,35 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchEnglishConfigByRecordKey200DataRecordType } from "./patchEnglishConfigByRecordKey200DataRecordType.ts"
+import type { PatchEnglishConfigByRecordKey200DataRecordType } from './patchEnglishConfigByRecordKey200DataRecordType.ts';
 
 export type PatchEnglishConfigByRecordKey200Data = {
-  id: number
-  recordKey: string
-  namespace: string
-  path: string
-  category: string
-  label: string
-  description: string | null
-  recordTypeId: number
-  valueText: string | null
-  valueNumber: number | null
-  valueBoolean: boolean | null
-  valueJson: unknown | null
-  defaultText: string | null
-  defaultNumber: number | null
-  defaultBoolean: boolean | null
-  defaultJson: unknown | null
+  id: number;
+  recordKey: string;
+  namespace: string;
+  path: string;
+  category: string;
+  label: string;
+  description: string | null;
+  recordTypeId: number;
+  valueText: string | null;
+  valueNumber: number | null;
+  valueBoolean: boolean | null;
+  valueJson: unknown | null;
+  defaultText: string | null;
+  defaultNumber: number | null;
+  defaultBoolean: boolean | null;
+  defaultJson: unknown | null;
   /** Mô tả ràng buộc giá trị (dùng để build form admin). */
-  validation: unknown
+  validation: unknown;
   /** Gợi ý hiển thị form admin. */
-  uiSchema: unknown
-  sortOrder: number
-  createdAt: string | number | null
-  updatedAt: string | number | null
-  recordType: PatchEnglishConfigByRecordKey200DataRecordType
+  uiSchema: unknown;
+  sortOrder: number;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+  recordType: PatchEnglishConfigByRecordKey200DataRecordType;
   /** Giá trị hiện tại, đã coerce theo recordType. */
-  value: unknown
+  value: unknown;
   /** Giá trị mặc định, đã coerce theo recordType. */
-  defaultValue: unknown
-}
+  defaultValue: unknown;
+};

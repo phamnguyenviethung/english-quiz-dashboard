@@ -6,13 +6,13 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishConfigRecords200DataItemRecordType =
-  (typeof GetEnglishConfigRecords200DataItemRecordType)[keyof typeof GetEnglishConfigRecords200DataItemRecordType]
+export type GetEnglishConfigRecords200DataItemRecordType = typeof GetEnglishConfigRecords200DataItemRecordType[keyof typeof GetEnglishConfigRecords200DataItemRecordType];
+
 
 export const GetEnglishConfigRecords200DataItemRecordType = {
-  str: "str",
-  num: "num",
-  boolean: "boolean",
-  arr: "arr",
-  obj: "obj",
-} as const
+  str: 'str',
+  num: 'num',
+  boolean: 'boolean',
+  arr: 'arr',
+  obj: 'obj',
+} as const;

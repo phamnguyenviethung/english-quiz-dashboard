@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PutAdminTenantsByIdTopics404Error } from "./putAdminTenantsByIdTopics404Error.ts"
+import type { PutAdminTenantsByIdTopics404Error } from './putAdminTenantsByIdTopics404Error.ts';
 
 export type PutAdminTenantsByIdTopics404 = {
-  success: false
-  error: PutAdminTenantsByIdTopics404Error
-}
+  success: false;
+  error: PutAdminTenantsByIdTopics404Error;
+};

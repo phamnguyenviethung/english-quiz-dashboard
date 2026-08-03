@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateReading403Error } from "./postEnglishGenerateReading403Error.ts"
+import type { PostEnglishGenerateReading403Error } from './postEnglishGenerateReading403Error.ts';
 
 export type PostEnglishGenerateReading403 = {
-  success: false
-  error: PostEnglishGenerateReading403Error
-}
+  success: false;
+  error: PostEnglishGenerateReading403Error;
+};

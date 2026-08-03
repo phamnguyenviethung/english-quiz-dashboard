@@ -7,8 +7,8 @@
  */
 
 export type GetEnglishCronRunsParams = {
-  /**
-   * @minimum 1
-   */
-  limit?: string | number
-}
+/**
+ * @minimum 1
+ */
+limit?: string | number;
+};

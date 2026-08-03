@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishPoolFill500Error } from "./postEnglishPoolFill500Error.ts"
+import type { PostEnglishPoolFill500Error } from './postEnglishPoolFill500Error.ts';
 
 export type PostEnglishPoolFill500 = {
-  success: false
-  error: PostEnglishPoolFill500Error
-}
+  success: false;
+  error: PostEnglishPoolFill500Error;
+};

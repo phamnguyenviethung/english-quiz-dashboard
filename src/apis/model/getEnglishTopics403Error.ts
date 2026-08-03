@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishTopics403ErrorCode } from "./getEnglishTopics403ErrorCode.ts"
+import type { GetEnglishTopics403ErrorCode } from './getEnglishTopics403ErrorCode.ts';
 
 export type GetEnglishTopics403Error = {
-  code: GetEnglishTopics403ErrorCode
-  message: string
-}
+  code: GetEnglishTopics403ErrorCode;
+  message: string;
+};

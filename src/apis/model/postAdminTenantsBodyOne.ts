@@ -8,9 +8,9 @@
 
 export type PostAdminTenantsBodyOne = {
   /** @minLength 1 */
-  name: string
-  description?: string | null
-  scopes?: string[]
-  allowAllTopics?: boolean
-  allowAllQuizTypes?: boolean
-}
+  name: string;
+  description?: string | null;
+  scopes?: string[];
+  allowAllTopics?: boolean;
+  allowAllQuizTypes?: boolean;
+};

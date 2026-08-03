@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminTenants500ErrorCode =
-  (typeof PostAdminTenants500ErrorCode)[keyof typeof PostAdminTenants500ErrorCode]
+export type PostAdminTenants500ErrorCode = typeof PostAdminTenants500ErrorCode[keyof typeof PostAdminTenants500ErrorCode];
+
 
 export const PostAdminTenants500ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

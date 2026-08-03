@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminPoolRefill200Data } from "./postAdminPoolRefill200Data.ts"
+import type { PostAdminPoolRefill200Data } from './postAdminPoolRefill200Data.ts';
 
 export type PostAdminPoolRefill200 = {
-  success: true
-  data: PostAdminPoolRefill200Data
-}
+  success: true;
+  data: PostAdminPoolRefill200Data;
+};

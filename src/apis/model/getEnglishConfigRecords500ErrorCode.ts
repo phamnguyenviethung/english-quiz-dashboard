@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishConfigRecords500ErrorCode =
-  (typeof GetEnglishConfigRecords500ErrorCode)[keyof typeof GetEnglishConfigRecords500ErrorCode]
+export type GetEnglishConfigRecords500ErrorCode = typeof GetEnglishConfigRecords500ErrorCode[keyof typeof GetEnglishConfigRecords500ErrorCode];
+
 
 export const GetEnglishConfigRecords500ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

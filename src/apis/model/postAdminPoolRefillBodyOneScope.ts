@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminPoolRefillBodyOneScope =
-  (typeof PostAdminPoolRefillBodyOneScope)[keyof typeof PostAdminPoolRefillBodyOneScope]
+export type PostAdminPoolRefillBodyOneScope = typeof PostAdminPoolRefillBodyOneScope[keyof typeof PostAdminPoolRefillBodyOneScope];
+
 
 export const PostAdminPoolRefillBodyOneScope = {
-  all: "all",
-  deficient: "deficient",
-} as const
+  all: 'all',
+  deficient: 'deficient',
+} as const;

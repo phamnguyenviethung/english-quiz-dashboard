@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateReading200Data } from "./postEnglishGenerateReading200Data.ts"
+import type { PostEnglishGenerateReading200Data } from './postEnglishGenerateReading200Data.ts';
 
 export type PostEnglishGenerateReading200 = {
-  success: true
-  data: PostEnglishGenerateReading200Data
-}
+  success: true;
+  data: PostEnglishGenerateReading200Data;
+};

@@ -7,13 +7,13 @@
  */
 
 export type GetAdminTenants200DataItem = {
-  id: number
-  name: string
-  description: string | null
-  isActive: boolean
-  scopes: string[]
-  allowAllTopics: boolean
-  allowAllQuizTypes: boolean
-  createdAt: string | number | null
-  updatedAt: string | number | null
-}
+  id: number;
+  name: string;
+  description: string | null;
+  isActive: boolean;
+  scopes: string[];
+  allowAllTopics: boolean;
+  allowAllQuizTypes: boolean;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+};

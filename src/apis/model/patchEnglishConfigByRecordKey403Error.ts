@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchEnglishConfigByRecordKey403ErrorCode } from "./patchEnglishConfigByRecordKey403ErrorCode.ts"
+import type { PatchEnglishConfigByRecordKey403ErrorCode } from './patchEnglishConfigByRecordKey403ErrorCode.ts';
 
 export type PatchEnglishConfigByRecordKey403Error = {
-  code: PatchEnglishConfigByRecordKey403ErrorCode
-  message: string
-}
+  code: PatchEnglishConfigByRecordKey403ErrorCode;
+  message: string;
+};

@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishCronRuns403ErrorCode =
-  (typeof GetEnglishCronRuns403ErrorCode)[keyof typeof GetEnglishCronRuns403ErrorCode]
+export type GetEnglishCronRuns403ErrorCode = typeof GetEnglishCronRuns403ErrorCode[keyof typeof GetEnglishCronRuns403ErrorCode];
+
 
 export const GetEnglishCronRuns403ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

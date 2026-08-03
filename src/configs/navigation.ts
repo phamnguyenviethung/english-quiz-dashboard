@@ -3,10 +3,8 @@ import {
   IconAdjustmentsAlt,
   IconClockBolt,
   IconDatabase,
-  IconKey,
   IconLayoutGrid,
   IconListDetails,
-  IconShieldCheck,
   IconSparkles,
   IconTags,
   IconUsersGroup,
@@ -20,6 +18,7 @@ export type NavPath =
   | "/metadata"
   | "/config"
   | "/cron-runs"
+  | "/tenants"
 
 export interface NavItem {
   key: string
@@ -94,9 +93,9 @@ export const NAV_GROUPS: NavGroup[] = [
     key: "admin",
     label: "Quản trị",
     items: [
-      { key: "tenants", label: "Tenant", icon: IconUsersGroup },
-      { key: "api-keys", label: "API key", icon: IconKey },
-      { key: "grants", label: "Phân quyền", icon: IconShieldCheck },
+      // API key và phân quyền đều nested dưới 1 tenant nên nằm trong tab của
+      // trang chi tiết, không tách nav item riêng.
+      { key: "tenants", label: "Tenant", icon: IconUsersGroup, to: "/tenants" },
     ],
   },
 ]
@@ -106,3 +105,20 @@ export const NAV_ITEMS_BY_PATH = new Map<NavPath, NavItem>(
     .filter((item): item is NavItem & { to: NavPath } => item.to !== undefined)
     .map((item) => [item.to, item])
 )
+
+/** Khớp cả route con (vd `/tenants/3` → nav item `/tenants`) để breadcrumb không rơi về fallback. */
+export function findNavItemByPathname(pathname: string): NavItem | undefined {
+  const exact = NAV_ITEMS_BY_PATH.get(pathname as NavPath)
+  if (exact) return exact
+
+  let matched: NavItem | undefined
+  let matchedLength = 0
+  for (const [path, item] of NAV_ITEMS_BY_PATH) {
+    if (path === "/") continue
+    if (pathname.startsWith(`${path}/`) && path.length > matchedLength) {
+      matched = item
+      matchedLength = path.length
+    }
+  }
+  return matched
+}

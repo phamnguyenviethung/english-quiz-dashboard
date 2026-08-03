@@ -8,10 +8,10 @@
 
 export type PatchAdminTenantsByIdBodyThree = {
   /** @minLength 1 */
-  name?: string
-  description?: string | null
-  scopes?: string[]
-  allowAllTopics?: boolean
-  allowAllQuizTypes?: boolean
-  isActive?: boolean
-}
+  name?: string;
+  description?: string | null;
+  scopes?: string[];
+  allowAllTopics?: boolean;
+  allowAllQuizTypes?: boolean;
+  isActive?: boolean;
+};

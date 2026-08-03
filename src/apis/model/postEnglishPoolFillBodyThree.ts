@@ -5,14 +5,14 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishPoolFillBodyThreeEngLevel } from "./postEnglishPoolFillBodyThreeEngLevel.ts"
-import type { PostEnglishPoolFillBodyThreeOptionCount } from "./postEnglishPoolFillBodyThreeOptionCount.ts"
-import type { PostEnglishPoolFillBodyThreeQuizType } from "./postEnglishPoolFillBodyThreeQuizType.ts"
+import type { PostEnglishPoolFillBodyThreeEngLevel } from './postEnglishPoolFillBodyThreeEngLevel.ts';
+import type { PostEnglishPoolFillBodyThreeOptionCount } from './postEnglishPoolFillBodyThreeOptionCount.ts';
+import type { PostEnglishPoolFillBodyThreeQuizType } from './postEnglishPoolFillBodyThreeQuizType.ts';
 
 export type PostEnglishPoolFillBodyThree = {
-  engLevel: PostEnglishPoolFillBodyThreeEngLevel
-  quizType: PostEnglishPoolFillBodyThreeQuizType
-  optionCount: PostEnglishPoolFillBodyThreeOptionCount
-  topicId?: number | null
-  topicName?: string | null
-}
+  engLevel: PostEnglishPoolFillBodyThreeEngLevel;
+  quizType: PostEnglishPoolFillBodyThreeQuizType;
+  optionCount: PostEnglishPoolFillBodyThreeOptionCount;
+  topicId?: number | null;
+  topicName?: string | null;
+};

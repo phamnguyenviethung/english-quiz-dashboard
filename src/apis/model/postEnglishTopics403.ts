@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishTopics403Error } from "./postEnglishTopics403Error.ts"
+import type { PostEnglishTopics403Error } from './postEnglishTopics403Error.ts';
 
 export type PostEnglishTopics403 = {
-  success: false
-  error: PostEnglishTopics403Error
-}
+  success: false;
+  error: PostEnglishTopics403Error;
+};

@@ -5,7 +5,10 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,8 +21,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query"
+  UseQueryResult
+} from '@tanstack/react-query';
 
 import type {
   GetEnglishPoolCount200,
@@ -52,942 +55,468 @@ import type {
   PostEnglishPoolFill500,
   PostEnglishPoolFillBodyOne,
   PostEnglishPoolFillBodyThree,
-  PostEnglishPoolFillBodyTwo,
-} from "../model"
+  PostEnglishPoolFillBodyTwo
+} from '../model';
 
-import { axiosClient } from "../../configs/axiosClient.ts"
-import type { ErrorType, BodyType } from "../../configs/axiosClient.ts"
+import { axiosClient } from '../../configs/axiosClient.ts';
+import type { ErrorType , BodyType } from '../../configs/axiosClient.ts';
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-const withQueryKey = <T extends object, K>(
-  query: T,
-  queryKey: K
-): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K }
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === "queryKey") continue
+    if (key === 'queryKey') continue;
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    })
+    });
   }
-  return result
-}
+  return result;
+};
 
 /**
  * Lấy 1 câu hỏi random trong bucket (engLevel, topicId) — câu KHÔNG bị xoá, pool là kho dùng lại được. Yêu cầu scope `quiz:read`. topicId ngoài allow-list trả 403. Pool trống trả 404.
  * @summary Pop a question from the pre-generated pool
  */
 export const getEnglishPoolPop = (
-  params: GetEnglishPoolPopParams,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    params: GetEnglishPoolPopParams,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetEnglishPoolPop200>(
-    { url: `/english/pool/pop`, method: "GET", params, signal },
-    options
-  )
+
+
+      return axiosClient<GetEnglishPoolPop200>(
+      {url: `/english/pool/pop`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetEnglishPoolPopQueryKey = (params?: GetEnglishPoolPopParams,) => {
+    return [
+    `/english/pool/pop`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetEnglishPoolPopQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolPop>>, TError = ErrorType<GetEnglishPoolPop400 | GetEnglishPoolPop401 | GetEnglishPoolPop403 | GetEnglishPoolPop404 | GetEnglishPoolPop500>>(params: GetEnglishPoolPopParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPop>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishPoolPopQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishPoolPop>>> = ({ signal }) => getEnglishPoolPop(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPop>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetEnglishPoolPopQueryKey = (
-  params?: GetEnglishPoolPopParams
-) => {
-  return [`/english/pool/pop`, ...(params ? [params] : [])] as const
-}
+export type GetEnglishPoolPopQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishPoolPop>>>
+export type GetEnglishPoolPopQueryError = ErrorType<GetEnglishPoolPop400 | GetEnglishPoolPop401 | GetEnglishPoolPop403 | GetEnglishPoolPop404 | GetEnglishPoolPop500>
 
-export const getGetEnglishPoolPopQueryOptions = <
-  TData = Awaited<ReturnType<typeof getEnglishPoolPop>>,
-  TError = ErrorType<
-    | GetEnglishPoolPop400
-    | GetEnglishPoolPop401
-    | GetEnglishPoolPop403
-    | GetEnglishPoolPop404
-    | GetEnglishPoolPop500
-  >,
->(
-  params: GetEnglishPoolPopParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPop>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  }
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetEnglishPoolPopQueryKey(params)
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getEnglishPoolPop>>
-  > = ({ signal }) => getEnglishPoolPop(params, requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishPoolPop>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnglishPoolPopQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getEnglishPoolPop>>
->
-export type GetEnglishPoolPopQueryError = ErrorType<
-  | GetEnglishPoolPop400
-  | GetEnglishPoolPop401
-  | GetEnglishPoolPop403
-  | GetEnglishPoolPop404
-  | GetEnglishPoolPop500
->
-
-export function useGetEnglishPoolPop<
-  TData = Awaited<ReturnType<typeof getEnglishPoolPop>>,
-  TError = ErrorType<
-    | GetEnglishPoolPop400
-    | GetEnglishPoolPop401
-    | GetEnglishPoolPop403
-    | GetEnglishPoolPop404
-    | GetEnglishPoolPop500
-  >,
->(
-  params: GetEnglishPoolPopParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPop>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+export function useGetEnglishPoolPop<TData = Awaited<ReturnType<typeof getEnglishPoolPop>>, TError = ErrorType<GetEnglishPoolPop400 | GetEnglishPoolPop401 | GetEnglishPoolPop403 | GetEnglishPoolPop404 | GetEnglishPoolPop500>>(
+ params: GetEnglishPoolPopParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPop>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolPop>>,
           TError,
           Awaited<ReturnType<typeof getEnglishPoolPop>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishPoolPop<
-  TData = Awaited<ReturnType<typeof getEnglishPoolPop>>,
-  TError = ErrorType<
-    | GetEnglishPoolPop400
-    | GetEnglishPoolPop401
-    | GetEnglishPoolPop403
-    | GetEnglishPoolPop404
-    | GetEnglishPoolPop500
-  >,
->(
-  params: GetEnglishPoolPopParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPop>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolPop<TData = Awaited<ReturnType<typeof getEnglishPoolPop>>, TError = ErrorType<GetEnglishPoolPop400 | GetEnglishPoolPop401 | GetEnglishPoolPop403 | GetEnglishPoolPop404 | GetEnglishPoolPop500>>(
+ params: GetEnglishPoolPopParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPop>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolPop>>,
           TError,
           Awaited<ReturnType<typeof getEnglishPoolPop>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishPoolPop<
-  TData = Awaited<ReturnType<typeof getEnglishPoolPop>>,
-  TError = ErrorType<
-    | GetEnglishPoolPop400
-    | GetEnglishPoolPop401
-    | GetEnglishPoolPop403
-    | GetEnglishPoolPop404
-    | GetEnglishPoolPop500
-  >,
->(
-  params: GetEnglishPoolPopParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPop>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolPop<TData = Awaited<ReturnType<typeof getEnglishPoolPop>>, TError = ErrorType<GetEnglishPoolPop400 | GetEnglishPoolPop401 | GetEnglishPoolPop403 | GetEnglishPoolPop404 | GetEnglishPoolPop500>>(
+ params: GetEnglishPoolPopParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPop>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Pop a question from the pre-generated pool
  */
 
-export function useGetEnglishPoolPop<
-  TData = Awaited<ReturnType<typeof getEnglishPoolPop>>,
-  TError = ErrorType<
-    | GetEnglishPoolPop400
-    | GetEnglishPoolPop401
-    | GetEnglishPoolPop403
-    | GetEnglishPoolPop404
-    | GetEnglishPoolPop500
-  >,
->(
-  params: GetEnglishPoolPopParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPop>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getGetEnglishPoolPopQueryOptions(params, options)
+export function useGetEnglishPoolPop<TData = Awaited<ReturnType<typeof getEnglishPoolPop>>, TError = ErrorType<GetEnglishPoolPop400 | GetEnglishPoolPop401 | GetEnglishPoolPop403 | GetEnglishPoolPop404 | GetEnglishPoolPop500>>(
+ params: GetEnglishPoolPopParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPop>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const queryOptions = getGetEnglishPoolPopQueryOptions(params,options)
 
-  return withQueryKey(query, queryOptions.queryKey)
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
 
 /**
  * Đếm số câu hỏi hiện có trong bucket (engLevel, quizType, topicId). Yêu cầu scope `quiz:read`.
  * @summary Count questions in a pool bucket
  */
 export const getEnglishPoolCount = (
-  params: GetEnglishPoolCountParams,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    params: GetEnglishPoolCountParams,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetEnglishPoolCount200>(
-    { url: `/english/pool/count`, method: "GET", params, signal },
-    options
-  )
+
+
+      return axiosClient<GetEnglishPoolCount200>(
+      {url: `/english/pool/count`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetEnglishPoolCountQueryKey = (params?: GetEnglishPoolCountParams,) => {
+    return [
+    `/english/pool/count`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetEnglishPoolCountQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolCount>>, TError = ErrorType<GetEnglishPoolCount400 | GetEnglishPoolCount401 | GetEnglishPoolCount403 | GetEnglishPoolCount500>>(params: GetEnglishPoolCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolCount>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishPoolCountQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishPoolCount>>> = ({ signal }) => getEnglishPoolCount(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolCount>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetEnglishPoolCountQueryKey = (
-  params?: GetEnglishPoolCountParams
-) => {
-  return [`/english/pool/count`, ...(params ? [params] : [])] as const
-}
+export type GetEnglishPoolCountQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishPoolCount>>>
+export type GetEnglishPoolCountQueryError = ErrorType<GetEnglishPoolCount400 | GetEnglishPoolCount401 | GetEnglishPoolCount403 | GetEnglishPoolCount500>
 
-export const getGetEnglishPoolCountQueryOptions = <
-  TData = Awaited<ReturnType<typeof getEnglishPoolCount>>,
-  TError = ErrorType<
-    | GetEnglishPoolCount400
-    | GetEnglishPoolCount401
-    | GetEnglishPoolCount403
-    | GetEnglishPoolCount500
-  >,
->(
-  params: GetEnglishPoolCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolCount>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  }
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetEnglishPoolCountQueryKey(params)
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getEnglishPoolCount>>
-  > = ({ signal }) => getEnglishPoolCount(params, requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishPoolCount>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnglishPoolCountQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getEnglishPoolCount>>
->
-export type GetEnglishPoolCountQueryError = ErrorType<
-  | GetEnglishPoolCount400
-  | GetEnglishPoolCount401
-  | GetEnglishPoolCount403
-  | GetEnglishPoolCount500
->
-
-export function useGetEnglishPoolCount<
-  TData = Awaited<ReturnType<typeof getEnglishPoolCount>>,
-  TError = ErrorType<
-    | GetEnglishPoolCount400
-    | GetEnglishPoolCount401
-    | GetEnglishPoolCount403
-    | GetEnglishPoolCount500
-  >,
->(
-  params: GetEnglishPoolCountParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolCount>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+export function useGetEnglishPoolCount<TData = Awaited<ReturnType<typeof getEnglishPoolCount>>, TError = ErrorType<GetEnglishPoolCount400 | GetEnglishPoolCount401 | GetEnglishPoolCount403 | GetEnglishPoolCount500>>(
+ params: GetEnglishPoolCountParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolCount>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolCount>>,
           TError,
           Awaited<ReturnType<typeof getEnglishPoolCount>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishPoolCount<
-  TData = Awaited<ReturnType<typeof getEnglishPoolCount>>,
-  TError = ErrorType<
-    | GetEnglishPoolCount400
-    | GetEnglishPoolCount401
-    | GetEnglishPoolCount403
-    | GetEnglishPoolCount500
-  >,
->(
-  params: GetEnglishPoolCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolCount>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolCount<TData = Awaited<ReturnType<typeof getEnglishPoolCount>>, TError = ErrorType<GetEnglishPoolCount400 | GetEnglishPoolCount401 | GetEnglishPoolCount403 | GetEnglishPoolCount500>>(
+ params: GetEnglishPoolCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolCount>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolCount>>,
           TError,
           Awaited<ReturnType<typeof getEnglishPoolCount>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishPoolCount<
-  TData = Awaited<ReturnType<typeof getEnglishPoolCount>>,
-  TError = ErrorType<
-    | GetEnglishPoolCount400
-    | GetEnglishPoolCount401
-    | GetEnglishPoolCount403
-    | GetEnglishPoolCount500
-  >,
->(
-  params: GetEnglishPoolCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolCount>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolCount<TData = Awaited<ReturnType<typeof getEnglishPoolCount>>, TError = ErrorType<GetEnglishPoolCount400 | GetEnglishPoolCount401 | GetEnglishPoolCount403 | GetEnglishPoolCount500>>(
+ params: GetEnglishPoolCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolCount>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Count questions in a pool bucket
  */
 
-export function useGetEnglishPoolCount<
-  TData = Awaited<ReturnType<typeof getEnglishPoolCount>>,
-  TError = ErrorType<
-    | GetEnglishPoolCount400
-    | GetEnglishPoolCount401
-    | GetEnglishPoolCount403
-    | GetEnglishPoolCount500
-  >,
->(
-  params: GetEnglishPoolCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolCount>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getGetEnglishPoolCountQueryOptions(params, options)
+export function useGetEnglishPoolCount<TData = Awaited<ReturnType<typeof getEnglishPoolCount>>, TError = ErrorType<GetEnglishPoolCount400 | GetEnglishPoolCount401 | GetEnglishPoolCount403 | GetEnglishPoolCount500>>(
+ params: GetEnglishPoolCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolCount>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const queryOptions = getGetEnglishPoolCountQueryOptions(params,options)
 
-  return withQueryKey(query, queryOptions.queryKey)
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
 
 /**
  * Danh sách câu hỏi trong pool, có filter + phân trang (mặc định pageSize 20, tối đa 100, sort id_asc). Mọi filter đều optional — không truyền gì là lấy toàn bộ pool. `withoutTopic=true` lọc riêng bucket không có topic (topicId IS NULL) và thắng `topicId` nếu truyền cả hai. `q` tìm ILIKE trên nội dung câu hỏi + tên model; nếu `q` toàn số thì thêm điều kiện khớp chính xác `id`. Yêu cầu scope `quiz:read`; topicId/quizType ngoài allow-list của tenant trả 403.
  * @summary List pool questions
  */
 export const getEnglishPoolQuestions = (
-  params?: GetEnglishPoolQuestionsParams,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    params?: GetEnglishPoolQuestionsParams,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetEnglishPoolQuestions200>(
-    { url: `/english/pool/questions`, method: "GET", params, signal },
-    options
-  )
+
+
+      return axiosClient<GetEnglishPoolQuestions200>(
+      {url: `/english/pool/questions`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetEnglishPoolQuestionsQueryKey = (params?: GetEnglishPoolQuestionsParams,) => {
+    return [
+    `/english/pool/questions`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetEnglishPoolQuestionsQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError = ErrorType<GetEnglishPoolQuestions400 | GetEnglishPoolQuestions401 | GetEnglishPoolQuestions403 | GetEnglishPoolQuestions500>>(params?: GetEnglishPoolQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishPoolQuestionsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishPoolQuestions>>> = ({ signal }) => getEnglishPoolQuestions(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetEnglishPoolQuestionsQueryKey = (
-  params?: GetEnglishPoolQuestionsParams
-) => {
-  return [`/english/pool/questions`, ...(params ? [params] : [])] as const
-}
+export type GetEnglishPoolQuestionsQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishPoolQuestions>>>
+export type GetEnglishPoolQuestionsQueryError = ErrorType<GetEnglishPoolQuestions400 | GetEnglishPoolQuestions401 | GetEnglishPoolQuestions403 | GetEnglishPoolQuestions500>
 
-export const getGetEnglishPoolQuestionsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-  TError = ErrorType<
-    | GetEnglishPoolQuestions400
-    | GetEnglishPoolQuestions401
-    | GetEnglishPoolQuestions403
-    | GetEnglishPoolQuestions500
-  >,
->(
-  params?: GetEnglishPoolQuestionsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  }
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetEnglishPoolQuestionsQueryKey(params)
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getEnglishPoolQuestions>>
-  > = ({ signal }) => getEnglishPoolQuestions(params, requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnglishPoolQuestionsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getEnglishPoolQuestions>>
->
-export type GetEnglishPoolQuestionsQueryError = ErrorType<
-  | GetEnglishPoolQuestions400
-  | GetEnglishPoolQuestions401
-  | GetEnglishPoolQuestions403
-  | GetEnglishPoolQuestions500
->
-
-export function useGetEnglishPoolQuestions<
-  TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-  TError = ErrorType<
-    | GetEnglishPoolQuestions400
-    | GetEnglishPoolQuestions401
-    | GetEnglishPoolQuestions403
-    | GetEnglishPoolQuestions500
-  >,
->(
-  params: undefined | GetEnglishPoolQuestionsParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+export function useGetEnglishPoolQuestions<TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError = ErrorType<GetEnglishPoolQuestions400 | GetEnglishPoolQuestions401 | GetEnglishPoolQuestions403 | GetEnglishPoolQuestions500>>(
+ params: undefined |  GetEnglishPoolQuestionsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
           TError,
           Awaited<ReturnType<typeof getEnglishPoolQuestions>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishPoolQuestions<
-  TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-  TError = ErrorType<
-    | GetEnglishPoolQuestions400
-    | GetEnglishPoolQuestions401
-    | GetEnglishPoolQuestions403
-    | GetEnglishPoolQuestions500
-  >,
->(
-  params?: GetEnglishPoolQuestionsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolQuestions<TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError = ErrorType<GetEnglishPoolQuestions400 | GetEnglishPoolQuestions401 | GetEnglishPoolQuestions403 | GetEnglishPoolQuestions500>>(
+ params?: GetEnglishPoolQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
           TError,
           Awaited<ReturnType<typeof getEnglishPoolQuestions>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishPoolQuestions<
-  TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-  TError = ErrorType<
-    | GetEnglishPoolQuestions400
-    | GetEnglishPoolQuestions401
-    | GetEnglishPoolQuestions403
-    | GetEnglishPoolQuestions500
-  >,
->(
-  params?: GetEnglishPoolQuestionsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolQuestions<TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError = ErrorType<GetEnglishPoolQuestions400 | GetEnglishPoolQuestions401 | GetEnglishPoolQuestions403 | GetEnglishPoolQuestions500>>(
+ params?: GetEnglishPoolQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary List pool questions
  */
 
-export function useGetEnglishPoolQuestions<
-  TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-  TError = ErrorType<
-    | GetEnglishPoolQuestions400
-    | GetEnglishPoolQuestions401
-    | GetEnglishPoolQuestions403
-    | GetEnglishPoolQuestions500
-  >,
->(
-  params?: GetEnglishPoolQuestionsParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolQuestions>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getGetEnglishPoolQuestionsQueryOptions(params, options)
+export function useGetEnglishPoolQuestions<TData = Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError = ErrorType<GetEnglishPoolQuestions400 | GetEnglishPoolQuestions401 | GetEnglishPoolQuestions403 | GetEnglishPoolQuestions500>>(
+ params?: GetEnglishPoolQuestionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolQuestions>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const queryOptions = getGetEnglishPoolQuestionsQueryOptions(params,options)
 
-  return withQueryKey(query, queryOptions.queryKey)
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
 
 /**
  * Enqueue job sinh thêm câu hỏi cho bucket nếu dưới ngưỡng refill. Bất đồng bộ — response chỉ xác nhận đã enqueue, không đợi job hoàn tất. Yêu cầu scope `pool:fill`.
  * @summary Trigger pool refill
  */
 export const postEnglishPoolFill = (
-  postEnglishPoolFillBody:
-    | BodyType<
-        | PostEnglishPoolFillBodyOne
-        | PostEnglishPoolFillBodyTwo
-        | PostEnglishPoolFillBodyThree
-      >
-    | PostEnglishPoolFillBodyTwo
-    | PostEnglishPoolFillBodyThree,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    postEnglishPoolFillBody: BodyType<PostEnglishPoolFillBodyOne | PostEnglishPoolFillBodyTwo | PostEnglishPoolFillBodyThree>| PostEnglishPoolFillBodyTwo | PostEnglishPoolFillBodyThree,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<PostEnglishPoolFill200>(
-    {
-      url: `/english/pool/fill`,
-      method: "POST",
-      data: postEnglishPoolFillBody,
-      signal,
-    },
-    options
-  )
-}
 
-export const getPostEnglishPoolFillMutationOptions = <
-  TError = ErrorType<
-    | PostEnglishPoolFill400
-    | PostEnglishPoolFill401
-    | PostEnglishPoolFill403
-    | PostEnglishPoolFill500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postEnglishPoolFill>>,
-    TError,
-    {
-      data: BodyType<
-        | PostEnglishPoolFillBodyOne
-        | PostEnglishPoolFillBodyTwo
-        | PostEnglishPoolFillBodyThree
-      >
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postEnglishPoolFill>>,
-  TError,
-  {
-    data: BodyType<
-      | PostEnglishPoolFillBodyOne
-      | PostEnglishPoolFillBodyTwo
-      | PostEnglishPoolFillBodyThree
-    >
-  },
-  TContext
-> => {
-  const mutationKey = ["postEnglishPoolFill"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postEnglishPoolFill>>,
-    {
-      data: BodyType<
-        | PostEnglishPoolFillBodyOne
-        | PostEnglishPoolFillBodyTwo
-        | PostEnglishPoolFillBodyThree
-      >
+      return axiosClient<PostEnglishPoolFill200>(
+      {url: `/english/pool/fill`, method: 'POST',
+      data: postEnglishPoolFillBody, signal
+    },
+      options);
     }
-  > = (props) => {
-    const { data } = props ?? {}
 
-    return postEnglishPoolFill(data, requestOptions)
-  }
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostEnglishPoolFillMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postEnglishPoolFill>>
->
-export type PostEnglishPoolFillMutationBody = BodyType<
-  | PostEnglishPoolFillBodyOne
-  | PostEnglishPoolFillBodyTwo
-  | PostEnglishPoolFillBodyThree
->
-export type PostEnglishPoolFillMutationError = ErrorType<
-  | PostEnglishPoolFill400
-  | PostEnglishPoolFill401
-  | PostEnglishPoolFill403
-  | PostEnglishPoolFill500
->
 
-/**
+export const getPostEnglishPoolFillMutationOptions = <TError = ErrorType<PostEnglishPoolFill400 | PostEnglishPoolFill401 | PostEnglishPoolFill403 | PostEnglishPoolFill500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishPoolFill>>, TError,{data: BodyType<PostEnglishPoolFillBodyOne | PostEnglishPoolFillBodyTwo | PostEnglishPoolFillBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof postEnglishPoolFill>>, TError,{data: BodyType<PostEnglishPoolFillBodyOne | PostEnglishPoolFillBodyTwo | PostEnglishPoolFillBodyThree>}, TContext> => {
+
+const mutationKey = ['postEnglishPoolFill'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postEnglishPoolFill>>, {data: BodyType<PostEnglishPoolFillBodyOne | PostEnglishPoolFillBodyTwo | PostEnglishPoolFillBodyThree>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postEnglishPoolFill(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostEnglishPoolFillMutationResult = NonNullable<Awaited<ReturnType<typeof postEnglishPoolFill>>>
+    export type PostEnglishPoolFillMutationBody = BodyType<PostEnglishPoolFillBodyOne | PostEnglishPoolFillBodyTwo | PostEnglishPoolFillBodyThree>
+    export type PostEnglishPoolFillMutationError = ErrorType<PostEnglishPoolFill400 | PostEnglishPoolFill401 | PostEnglishPoolFill403 | PostEnglishPoolFill500>
+
+    /**
  * @summary Trigger pool refill
  */
-export const usePostEnglishPoolFill = <
-  TError = ErrorType<
-    | PostEnglishPoolFill400
-    | PostEnglishPoolFill401
-    | PostEnglishPoolFill403
-    | PostEnglishPoolFill500
-  >,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postEnglishPoolFill>>,
-      TError,
-      {
-        data: BodyType<
-          | PostEnglishPoolFillBodyOne
-          | PostEnglishPoolFillBodyTwo
-          | PostEnglishPoolFillBodyThree
-        >
-      },
-      TContext
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postEnglishPoolFill>>,
-  TError,
-  {
-    data: BodyType<
-      | PostEnglishPoolFillBodyOne
-      | PostEnglishPoolFillBodyTwo
-      | PostEnglishPoolFillBodyThree
-    >
-  },
-  TContext
-> => {
-  return useMutation(
-    getPostEnglishPoolFillMutationOptions(options),
-    queryClient
-  )
-}
-/**
+export const usePostEnglishPoolFill = <TError = ErrorType<PostEnglishPoolFill400 | PostEnglishPoolFill401 | PostEnglishPoolFill403 | PostEnglishPoolFill500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishPoolFill>>, TError,{data: BodyType<PostEnglishPoolFillBodyOne | PostEnglishPoolFillBodyTwo | PostEnglishPoolFillBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postEnglishPoolFill>>,
+        TError,
+        {data: BodyType<PostEnglishPoolFillBodyOne | PostEnglishPoolFillBodyTwo | PostEnglishPoolFillBodyThree>},
+        TContext
+      > => {
+      return useMutation(getPostEnglishPoolFillMutationOptions(options), queryClient);
+    }
+    /**
  * Chọn ngẫu nhiên 1 quizType theo trọng số cấu hình trong quiz_distribution (chỉ tính type enabled, weight>0). Yêu cầu scope `quiz:read`.
  * @summary Pick a random quiz type by weighted distribution
  */
 export const getEnglishPoolPickQuizType = (
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetEnglishPoolPickQuizType200>(
-    { url: `/english/pool/pick-quiz-type`, method: "GET", signal },
-    options
-  )
-}
+
+
+      return axiosClient<GetEnglishPoolPickQuizType200>(
+      {url: `/english/pool/pick-quiz-type`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getGetEnglishPoolPickQuizTypeQueryKey = () => {
-  return [`/english/pool/pick-quiz-type`] as const
+    return [
+    `/english/pool/pick-quiz-type`
+    ] as const;
+    }
+
+
+export const getGetEnglishPoolPickQuizTypeQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishPoolPickQuizTypeQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>> = ({ signal }) => getEnglishPoolPickQuizType(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetEnglishPoolPickQuizTypeQueryOptions = <
-  TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-  TError = ErrorType<
-    | GetEnglishPoolPickQuizType401
-    | GetEnglishPoolPickQuizType403
-    | GetEnglishPoolPickQuizType500
-  >,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-      TError,
-      TData
-    >
-  >
-  request?: SecondParameter<typeof axiosClient>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+export type GetEnglishPoolPickQuizTypeQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>>
+export type GetEnglishPoolPickQuizTypeQueryError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetEnglishPoolPickQuizTypeQueryKey()
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>
-  > = ({ signal }) => getEnglishPoolPickQuizType(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnglishPoolPickQuizTypeQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>
->
-export type GetEnglishPoolPickQuizTypeQueryError = ErrorType<
-  | GetEnglishPoolPickQuizType401
-  | GetEnglishPoolPickQuizType403
-  | GetEnglishPoolPickQuizType500
->
-
-export function useGetEnglishPoolPickQuizType<
-  TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-  TError = ErrorType<
-    | GetEnglishPoolPickQuizType401
-    | GetEnglishPoolPickQuizType403
-    | GetEnglishPoolPickQuizType500
-  >,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
           TError,
           Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishPoolPickQuizType<
-  TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-  TError = ErrorType<
-    | GetEnglishPoolPickQuizType401
-    | GetEnglishPoolPickQuizType403
-    | GetEnglishPoolPickQuizType500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
           TError,
           Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishPoolPickQuizType<
-  TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-  TError = ErrorType<
-    | GetEnglishPoolPickQuizType401
-    | GetEnglishPoolPickQuizType403
-    | GetEnglishPoolPickQuizType500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Pick a random quiz type by weighted distribution
  */
 
-export function useGetEnglishPoolPickQuizType<
-  TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-  TError = ErrorType<
-    | GetEnglishPoolPickQuizType401
-    | GetEnglishPoolPickQuizType403
-    | GetEnglishPoolPickQuizType500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetEnglishPoolPickQuizTypeQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return withQueryKey(query, queryOptions.queryKey)
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
+

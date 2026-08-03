@@ -7,5 +7,5 @@
  */
 
 export type PutAdminTenantsByIdTopicsBodyOne = {
-  topicIds: number[]
-}
+  topicIds: number[];
+};

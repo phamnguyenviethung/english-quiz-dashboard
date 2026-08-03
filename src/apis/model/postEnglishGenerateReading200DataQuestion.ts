@@ -5,22 +5,22 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateReading200DataQuestionDistractorTactic } from "./postEnglishGenerateReading200DataQuestionDistractorTactic.ts"
+import type { PostEnglishGenerateReading200DataQuestionDistractorTactic } from './postEnglishGenerateReading200DataQuestionDistractorTactic.ts';
 
 export type PostEnglishGenerateReading200DataQuestion = {
-  distractorTactic: PostEnglishGenerateReading200DataQuestionDistractorTactic
-  context: string
-  questionSentence: string
+  distractorTactic: PostEnglishGenerateReading200DataQuestionDistractorTactic;
+  context: string;
+  questionSentence: string;
   /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  correctAnswer: number
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+  correctAnswer: number;
   /**
-   * @items.maximum 9007199254740991
-   * @items.exclusiveMinimum 0
-   */
-  wrongAnswers: number[]
-  translation: string
-  explanation: string
-}
+     * @items.maximum 9007199254740991
+     * @items.exclusiveMinimum 0
+     */
+  wrongAnswers: number[];
+  translation: string;
+  explanation: string;
+};

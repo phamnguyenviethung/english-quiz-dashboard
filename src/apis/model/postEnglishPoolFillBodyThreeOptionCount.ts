@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishPoolFillBodyThreeOptionCount =
-  (typeof PostEnglishPoolFillBodyThreeOptionCount)[keyof typeof PostEnglishPoolFillBodyThreeOptionCount]
+export type PostEnglishPoolFillBodyThreeOptionCount = typeof PostEnglishPoolFillBodyThreeOptionCount[keyof typeof PostEnglishPoolFillBodyThreeOptionCount];
+
 
 export const PostEnglishPoolFillBodyThreeOptionCount = {
   NUMBER_4: 4,
   NUMBER_5: 5,
-} as const
+} as const;

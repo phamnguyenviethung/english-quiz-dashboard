@@ -7,11 +7,11 @@
  */
 
 export type GetEnglishConfig200DataJobFlags = {
-  questionGenEnabled: boolean
-  poolRefillEnabled: boolean
+  questionGenEnabled: boolean;
+  poolRefillEnabled: boolean;
   /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  poolRefillMaxQuestionsPerRun: number
-}
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+  poolRefillMaxQuestionsPerRun: number;
+};

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchEnglishConfigByRecordKey200Data } from "./patchEnglishConfigByRecordKey200Data.ts"
+import type { PatchEnglishConfigByRecordKey200Data } from './patchEnglishConfigByRecordKey200Data.ts';
 
 export type PatchEnglishConfigByRecordKey200 = {
-  success: true
-  data: PatchEnglishConfigByRecordKey200Data
-}
+  success: true;
+  data: PatchEnglishConfigByRecordKey200Data;
+};

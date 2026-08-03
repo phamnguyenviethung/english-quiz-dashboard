@@ -6,11 +6,11 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishGenerateReadingBodyThreeOptionCount =
-  (typeof PostEnglishGenerateReadingBodyThreeOptionCount)[keyof typeof PostEnglishGenerateReadingBodyThreeOptionCount]
+export type PostEnglishGenerateReadingBodyThreeOptionCount = typeof PostEnglishGenerateReadingBodyThreeOptionCount[keyof typeof PostEnglishGenerateReadingBodyThreeOptionCount];
+
 
 export const PostEnglishGenerateReadingBodyThreeOptionCount = {
   NUMBER_3: 3,
   NUMBER_4: 4,
   NUMBER_5: 5,
-} as const
+} as const;

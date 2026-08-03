@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishQuizTypes403ErrorCode } from "./getEnglishQuizTypes403ErrorCode.ts"
+import type { GetEnglishQuizTypes403ErrorCode } from './getEnglishQuizTypes403ErrorCode.ts';
 
 export type GetEnglishQuizTypes403Error = {
-  code: GetEnglishQuizTypes403ErrorCode
-  message: string
-}
+  code: GetEnglishQuizTypes403ErrorCode;
+  message: string;
+};
