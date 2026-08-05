@@ -5,31 +5,47 @@ import type { GetEnglishPoolQuestionsParams } from "@/apis/model"
 
 import { QUESTIONS_PAGE_SIZE } from "../constants.ts"
 
+export interface PoolQuestionsFilterInput {
+  q: string | undefined
+  engLevel: GetEnglishPoolQuestionsParams["engLevel"]
+  quizType: GetEnglishPoolQuestionsParams["quizType"]
+  topicId: number | undefined
+  noTopic: boolean
+  model: string | undefined
+  optionCount: number | undefined
+  createdFrom: string | undefined
+  createdTo: string | undefined
+  sort: GetEnglishPoolQuestionsParams["sort"]
+  page: number
+  pageSize: number
+}
+
 export function buildPoolQuestionsParams({
   q,
   engLevel,
   quizType,
   topicId,
   noTopic,
+  model,
+  optionCount,
+  createdFrom,
+  createdTo,
   sort,
   page,
-}: {
-  q: string | undefined
-  engLevel: GetEnglishPoolQuestionsParams["engLevel"]
-  quizType: GetEnglishPoolQuestionsParams["quizType"]
-  topicId: number | undefined
-  noTopic: boolean
-  sort: GetEnglishPoolQuestionsParams["sort"]
-  page: number
-}): GetEnglishPoolQuestionsParams {
+  pageSize,
+}: PoolQuestionsFilterInput): GetEnglishPoolQuestionsParams {
   return {
     ...(q ? { q } : {}),
     ...(engLevel ? { engLevel } : {}),
     ...(quizType ? { quizType } : {}),
     ...(noTopic ? { withoutTopic: true } : topicId ? { topicId } : {}),
+    ...(model ? { model } : {}),
+    ...(optionCount ? { optionCount } : {}),
+    ...(createdFrom ? { createdFrom } : {}),
+    ...(createdTo ? { createdTo } : {}),
     ...(sort ? { sort } : {}),
     page,
-    pageSize: QUESTIONS_PAGE_SIZE,
+    pageSize,
   }
 }
 
@@ -42,7 +58,7 @@ export function usePoolQuestions(params: GetEnglishPoolQuestionsParams) {
   const data = query.data?.data
 
   return {
-    items: data?.items ?? [],
+    items: data?.items,
     page: data?.page ?? params.page ?? 1,
     pageSize: data?.pageSize ?? QUESTIONS_PAGE_SIZE,
     total: data?.total,
@@ -51,6 +67,7 @@ export function usePoolQuestions(params: GetEnglishPoolQuestionsParams) {
     isError: query.isError,
     error: query.error,
     refetch: query.refetch,
+    isFetching: query.isFetching,
     isRefetching: query.isRefetching,
   }
 }

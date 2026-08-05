@@ -31,6 +31,9 @@ import type {
   GetEnglishPoolCount403,
   GetEnglishPoolCount500,
   GetEnglishPoolCountParams,
+  GetEnglishPoolModels200,
+  GetEnglishPoolModels401,
+  GetEnglishPoolModels500,
   GetEnglishPoolPickQuizType200,
   GetEnglishPoolPickQuizType401,
   GetEnglishPoolPickQuizType403,
@@ -270,7 +273,7 @@ export function useGetEnglishPoolCount<TData = Awaited<ReturnType<typeof getEngl
 
 
 /**
- * Danh sách câu hỏi trong pool, có filter + phân trang (mặc định pageSize 20, tối đa 100, sort id_asc). Mọi filter đều optional — không truyền gì là lấy toàn bộ pool. `withoutTopic=true` lọc riêng bucket không có topic (topicId IS NULL) và thắng `topicId` nếu truyền cả hai. `q` tìm ILIKE trên nội dung câu hỏi + tên model; nếu `q` toàn số thì thêm điều kiện khớp chính xác `id`. Yêu cầu scope `quiz:read`; topicId/quizType ngoài allow-list của tenant trả 403.
+ * Danh sách câu hỏi trong pool, có filter + phân trang (mặc định pageSize 20, tối đa 100, sort id_asc). Mọi filter đều optional — không truyền gì là lấy toàn bộ pool. `withoutTopic=true` lọc riêng bucket không có topic (topicId IS NULL) và thắng `topicId` nếu truyền cả hai. `q` tìm ILIKE trên nội dung câu hỏi + tên model; nếu `q` toàn số thì thêm điều kiện khớp chính xác `id`. `createdFrom`/`createdTo` là ISO date-time, lọc theo `createdAt` — câu cũ không có `createdAt` sẽ bị loại khi dùng filter này. `sort` theo `token_*` sắp xếp trên tổng `tokenIn + tokenOut`. Yêu cầu scope `quiz:read`; topicId/quizType ngoài allow-list của tenant trả 403.
  * @summary List pool questions
  */
 export const getEnglishPoolQuestions = (
@@ -352,6 +355,99 @@ export function useGetEnglishPoolQuestions<TData = Awaited<ReturnType<typeof get
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetEnglishPoolQuestionsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * Danh sách model đang có câu hỏi trong pool kèm số lượng câu, sắp xếp giảm dần theo số lượng. Dùng để đổ dropdown filter model ở admin UI. Yêu cầu scope `quiz:read`.
+ * @summary List distinct models in pool
+ */
+export const getEnglishPoolModels = (
+
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+) => {
+
+
+      return axiosClient<GetEnglishPoolModels200>(
+      {url: `/english/pool/models`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetEnglishPoolModelsQueryKey = () => {
+    return [
+    `/english/pool/models`
+    ] as const;
+    }
+
+
+export const getGetEnglishPoolModelsQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolModels>>, TError = ErrorType<GetEnglishPoolModels401 | GetEnglishPoolModels500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolModels>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishPoolModelsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishPoolModels>>> = ({ signal }) => getEnglishPoolModels(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolModels>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEnglishPoolModelsQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishPoolModels>>>
+export type GetEnglishPoolModelsQueryError = ErrorType<GetEnglishPoolModels401 | GetEnglishPoolModels500>
+
+
+export function useGetEnglishPoolModels<TData = Awaited<ReturnType<typeof getEnglishPoolModels>>, TError = ErrorType<GetEnglishPoolModels401 | GetEnglishPoolModels500>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolModels>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishPoolModels>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishPoolModels>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolModels<TData = Awaited<ReturnType<typeof getEnglishPoolModels>>, TError = ErrorType<GetEnglishPoolModels401 | GetEnglishPoolModels500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolModels>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getEnglishPoolModels>>,
+          TError,
+          Awaited<ReturnType<typeof getEnglishPoolModels>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishPoolModels<TData = Awaited<ReturnType<typeof getEnglishPoolModels>>, TError = ErrorType<GetEnglishPoolModels401 | GetEnglishPoolModels500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolModels>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List distinct models in pool
+ */
+
+export function useGetEnglishPoolModels<TData = Awaited<ReturnType<typeof getEnglishPoolModels>>, TError = ErrorType<GetEnglishPoolModels401 | GetEnglishPoolModels500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolModels>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetEnglishPoolModelsQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

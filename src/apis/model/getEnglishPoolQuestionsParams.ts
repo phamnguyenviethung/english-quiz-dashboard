@@ -16,6 +16,13 @@ topicId?: string | number;
 withoutTopic?: boolean | string;
 model?: string;
 /**
+ * @minimum 1
+ * @maximum 10
+ */
+optionCount?: string | number;
+createdFrom?: string;
+createdTo?: string;
+/**
  * @maxLength 100
  */
 q?: string;

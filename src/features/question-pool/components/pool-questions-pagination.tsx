@@ -7,7 +7,20 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { formatNumber } from "@/lib/format.ts"
+
+import { PAGE_SIZE_OPTIONS } from "../constants.ts"
+
+const PAGE_SIZE_ITEMS = Object.fromEntries(
+  PAGE_SIZE_OPTIONS.map((size) => [String(size), `${size} dòng`])
+)
 
 /** Cửa sổ trang quanh trang hiện tại; `null` là vị trí chèn dấu lược. */
 function buildPageWindow(page: number, totalPages: number): (number | null)[] {
@@ -32,24 +45,47 @@ function buildPageWindow(page: number, totalPages: number): (number | null)[] {
 
 export function PoolQuestionsPagination({
   page,
+  pageSize,
   totalPages,
   total,
   onPageChange,
+  onPageSizeChange,
 }: {
   page: number
+  pageSize: number
   totalPages: number
   total: number | undefined
   onPageChange: (page: number) => void
+  onPageSizeChange: (pageSize: number) => void
 }) {
   const isFirst = page <= 1
   const isLast = page >= totalPages
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <p className="text-sm text-muted-foreground tabular-nums">
-        Trang {formatNumber(page)} / {formatNumber(totalPages)}
-        {total === undefined ? null : ` · ${formatNumber(total)} câu`}
-      </p>
+      <div className="flex items-center gap-3">
+        <Select
+          items={PAGE_SIZE_ITEMS}
+          value={String(pageSize)}
+          onValueChange={(value) => onPageSizeChange(Number(value))}
+        >
+          <SelectTrigger size="sm" aria-label="Số dòng mỗi trang">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {PAGE_SIZE_OPTIONS.map((size) => (
+              <SelectItem key={size} value={String(size)}>
+                {size} dòng
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <p className="text-sm text-muted-foreground tabular-nums">
+          Trang {formatNumber(page)} / {formatNumber(totalPages)}
+          {total === undefined ? null : ` · ${formatNumber(total)} câu`}
+        </p>
+      </div>
 
       <Pagination className="mx-0 w-auto justify-end">
         <PaginationContent>

@@ -1,39 +1,41 @@
-import type { ManualRefillScope, PoolStatus } from "./types.ts"
+import type { ManualRefillScope } from "./types.ts"
 
-export const POOL_LOW_THRESHOLD = 20
-
-export function getPoolStatus(count: number): PoolStatus {
-  if (count <= 0) return "empty"
-  if (count < POOL_LOW_THRESHOLD) return "low"
-  return "healthy"
-}
-
-export const POOL_STATUS_META: Record<
-  PoolStatus,
-  { label: string; variant: "destructive" | "outline" | "secondary" }
-> = {
-  empty: { label: "Empty", variant: "destructive" },
-  low: { label: "Low", variant: "outline" },
-  healthy: { label: "Healthy", variant: "secondary" },
-}
+// Nhãn filter đã nằm trong trigger của pill ("Cấp độ: Tất cả"), nên giá trị
+// hiển thị chỉ cần "Tất cả" — nhắc lại tên filter ở đây là thừa.
+const ALL_LABEL = "Tất cả"
 
 export const ALL_TOPICS_VALUE = "all"
-export const ALL_TOPICS_LABEL = "Tất cả chủ đề"
+export const ALL_TOPICS_LABEL = ALL_LABEL
 
 /** Bucket không gắn topic là bucket riêng ở API (`withoutTopic=true`), không phải "tất cả". */
 export const NO_TOPIC_VALUE = "none"
 export const NO_TOPIC_LABEL = "Không có chủ đề"
+/** Bản rút gọn cho pill filter — bảng và detail sheet vẫn dùng NO_TOPIC_LABEL. */
+export const NO_TOPIC_FILTER_LABEL = "Không có"
 
 export const ALL_LEVELS_VALUE = "all"
-export const ALL_LEVELS_LABEL = "Tất cả cấp độ"
+export const ALL_LEVELS_LABEL = ALL_LABEL
 
 export const ALL_QUIZ_TYPES_VALUE = "all"
-export const ALL_QUIZ_TYPES_LABEL = "Tất cả loại câu"
+export const ALL_QUIZ_TYPES_LABEL = ALL_LABEL
+
+export const ALL_MODELS_VALUE = "all"
+export const ALL_MODELS_LABEL = ALL_LABEL
+
+export const ALL_OPTION_COUNTS_VALUE = "all"
+export const ALL_OPTION_COUNTS_LABEL = ALL_LABEL
+
+/** Spec chung cho 6 pill filter — giữ chúng cùng cỡ và cùng bo góc. */
+export const FILTER_PILL = "h-9 w-auto max-w-64 gap-1.5 rounded-3xl"
+export const FILTER_PILL_ACTIVE =
+  "border-border bg-secondary text-secondary-foreground"
+/** Nhãn trong pill: bám theo màu chữ nên đạt AA ở cả nền mặc định lẫn bg-secondary. */
+export const FILTER_PILL_LABEL = "text-foreground/60"
 
 export const QUESTIONS_PAGE_SIZE = 20
+export const PAGE_SIZE_OPTIONS = [20, 50, 100]
 
-export const PENDING_FILL_POLL_MS = 15_000
-export const PENDING_FILL_MAX_MS = 4 * 60_000
+export const COLUMN_VISIBILITY_STORAGE_KEY = "question-pool:columns"
 
 export const MANUAL_REFILL_SCOPE_META: Record<
   ManualRefillScope,

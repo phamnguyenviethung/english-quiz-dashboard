@@ -12,4 +12,8 @@ export type GetEnglishPoolQuestionsSort = typeof GetEnglishPoolQuestionsSort[key
 export const GetEnglishPoolQuestionsSort = {
   id_asc: 'id_asc',
   id_desc: 'id_desc',
+  created_asc: 'created_asc',
+  created_desc: 'created_desc',
+  token_asc: 'token_asc',
+  token_desc: 'token_desc',
 } as const;

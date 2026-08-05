@@ -1,22 +1,14 @@
 import type {
+  GetEnglishPoolModels200DataItem,
   GetEnglishPoolQuestions200DataItemsItem,
   GetEnglishPoolQuestionsSort,
   PostAdminPoolRefillBodyOneScope,
 } from "@/apis/model"
-import type { QuizType } from "@/features/quiz/types.ts"
 
 export type PoolQuestion = GetEnglishPoolQuestions200DataItemsItem
 export type PoolQuestionsSort = GetEnglishPoolQuestionsSort
+export type PoolModelStat = GetEnglishPoolModels200DataItem
 export type ManualRefillScope = PostAdminPoolRefillBodyOneScope
 
-export interface PoolCoverageCell {
-  quizType: QuizType
-  count: number | undefined
-  isPending: boolean
-  isError: boolean
-  error: unknown
-  isFetching: boolean
-  refetch: () => void
-}
-
-export type PoolStatus = "empty" | "low" | "healthy"
+/** Cột sort được ở table — map 1-1 với các cặp `*_asc`/`*_desc` mà API nhận. */
+export type PoolSortableColumn = "id" | "token" | "createdAt"

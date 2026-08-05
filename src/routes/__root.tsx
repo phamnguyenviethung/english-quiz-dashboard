@@ -61,6 +61,13 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         <IconAlertOctagon stroke={1.5} />
         <AlertTitle>Ứng dụng gặp lỗi</AlertTitle>
         <AlertDescription>{getApiErrorMessage(error)}</AlertDescription>
+        {/* getApiErrorMessage chỉ hiểu lỗi Axios; lỗi runtime khác rơi hết về
+            message mặc định. Ở dev thì in message thật ra để còn debug được. */}
+        {import.meta.env.DEV && error instanceof Error ? (
+          <pre className="mt-3 overflow-x-auto rounded-xl bg-muted p-3 text-xs whitespace-pre-wrap">
+            {error.message}
+          </pre>
+        ) : null}
       </Alert>
     </main>
   ),
