@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router"
-import { IconLogout, IconSchool } from "@tabler/icons-react"
+import { IconAlertTriangle, IconSchool } from "@tabler/icons-react"
 
 import { NAV_GROUPS } from "@/configs/navigation.ts"
-import { LOGIN_API_PATH, LOGIN_PATH } from "@/configs/constants.ts"
+import { env } from "@/configs/env.ts"
 import {
   Sidebar,
   SidebarContent,
@@ -17,11 +17,6 @@ import {
 import { NavMain } from "./nav-main.tsx"
 
 export function AppSidebar() {
-  const handleLogout = async () => {
-    await fetch(LOGIN_API_PATH, { method: "DELETE" })
-    window.location.href = LOGIN_PATH
-  }
-
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -51,16 +46,18 @@ export function AppSidebar() {
         <NavMain groups={NAV_GROUPS} />
       </SidebarContent>
 
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton onClick={handleLogout} tooltip="Đăng xuất">
-              <IconLogout className="size-4" stroke={1.5} />
-              <span>Đăng xuất</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+      {!env.adminApiKey ? (
+        <SidebarFooter>
+          <div className="flex items-start gap-2 rounded-2xl border border-destructive/40 bg-destructive/10 p-2.5 text-xs text-destructive group-data-[collapsible=icon]:hidden">
+            <IconAlertTriangle className="mt-px size-4 shrink-0" stroke={1.5} />
+            <span>
+              Chưa cấu hình{" "}
+              <code className="font-mono">VITE_ADMIN_API_KEY</code>, mọi request
+              sẽ trả 401.
+            </span>
+          </div>
+        </SidebarFooter>
+      ) : null}
 
       <SidebarRail />
     </Sidebar>

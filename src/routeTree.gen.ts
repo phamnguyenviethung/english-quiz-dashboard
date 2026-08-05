@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/_dashboard'
-import { Route as LoginRouteImport } from './routes/login'
 import { Route as DashboardIndexRouteImport } from './routes/_dashboard/index'
 import { Route as DashboardConfigRouteImport } from './routes/_dashboard/config'
 import { Route as DashboardCronRunsRouteImport } from './routes/_dashboard/cron-runs'
@@ -23,11 +22,6 @@ import { Route as DashboardTenantsTenantIdRouteImport } from './routes/_dashboar
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/_dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -79,7 +73,6 @@ const DashboardTenantsTenantIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof DashboardIndexRoute
-  '/login': typeof LoginRoute
   '/config': typeof DashboardConfigRoute
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
@@ -90,7 +83,6 @@ export interface FileRoutesByFullPath {
   '/tenants/': typeof DashboardTenantsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/login': typeof LoginRoute
   '/config': typeof DashboardConfigRoute
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
@@ -104,7 +96,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_dashboard': typeof DashboardRouteWithChildren
-  '/login': typeof LoginRoute
   '/_dashboard/config': typeof DashboardConfigRoute
   '/_dashboard/cron-runs': typeof DashboardCronRunsRoute
   '/_dashboard/generate': typeof DashboardGenerateRoute
@@ -119,7 +110,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/login'
     | '/config'
     | '/cron-runs'
     | '/generate'
@@ -130,7 +120,6 @@ export interface FileRouteTypes {
     | '/tenants/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/login'
     | '/config'
     | '/cron-runs'
     | '/generate'
@@ -143,7 +132,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_dashboard'
-    | '/login'
     | '/_dashboard/config'
     | '/_dashboard/cron-runs'
     | '/_dashboard/generate'
@@ -157,7 +145,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRouteWithChildren
-  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -167,13 +154,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_dashboard/': {
@@ -272,7 +252,6 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRouteWithChildren,
-  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
