@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 
 import { PageHeader } from "@/components/common/page-header.tsx"
+import { AiModelsPanel } from "@/features/ai-models/components/ai-models-panel.tsx"
 import { HealthCard } from "@/features/metadata/components/health-card.tsx"
 import { PickQuizTypeCard } from "@/features/metadata/components/pick-quiz-type-card.tsx"
 import { QuizTypesPanel } from "@/features/metadata/components/quiz-types-panel.tsx"
@@ -23,6 +24,7 @@ function MetadataPage() {
         <PickQuizTypeCard />
         <QuizTypesPanel />
         <RandomPairsPanel />
+        <AiModelsPanel className="md:col-span-2" />
       </div>
     </>
   )
