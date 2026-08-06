@@ -56,7 +56,6 @@ export function useUpdateTenant(
     return updateTenant({
       name: values.name.trim(),
       description: description || null,
-      scopes: values.scopes,
       allowAllTopics: values.allowAllTopics,
       allowAllQuizTypes: values.allowAllQuizTypes,
     })

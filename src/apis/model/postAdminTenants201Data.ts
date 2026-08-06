@@ -11,7 +11,6 @@ export type PostAdminTenants201Data = {
   name: string;
   description: string | null;
   isActive: boolean;
-  scopes: string[];
   allowAllTopics: boolean;
   allowAllQuizTypes: boolean;
   createdAt: string | number | null;

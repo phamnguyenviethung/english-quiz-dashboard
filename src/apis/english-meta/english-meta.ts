@@ -23,7 +23,6 @@ import type {
 import type {
   GetEnglishQuizTypes200,
   GetEnglishQuizTypes401,
-  GetEnglishQuizTypes403,
   GetEnglishQuizTypes500
 } from '../model';
 
@@ -51,7 +50,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Danh sách toàn bộ quizType được hỗ trợ. Yêu cầu scope `quiz:read`.
+ * Danh sách toàn bộ quizType được hỗ trợ.
  * @summary List quiz types
  */
 export const getEnglishQuizTypes = (
@@ -76,7 +75,7 @@ export const getGetEnglishQuizTypesQueryKey = () => {
     }
 
 
-export const getGetEnglishQuizTypesQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+export const getGetEnglishQuizTypesQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -95,10 +94,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetEnglishQuizTypesQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishQuizTypes>>>
-export type GetEnglishQuizTypesQueryError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>
+export type GetEnglishQuizTypesQueryError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes500>
 
 
-export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>>(
+export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes500>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishQuizTypes>>,
@@ -108,7 +107,7 @@ export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEngl
       >, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>>(
+export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes500>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishQuizTypes>>,
@@ -118,7 +117,7 @@ export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEngl
       >, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>>(
+export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes500>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -126,7 +125,7 @@ export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEngl
  * @summary List quiz types
  */
 
-export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes403 | GetEnglishQuizTypes500>>(
+export function useGetEnglishQuizTypes<TData = Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError = ErrorType<GetEnglishQuizTypes401 | GetEnglishQuizTypes500>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishQuizTypes>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

@@ -42,8 +42,9 @@ export function TenantApiKeysPanel({ tenantId }: { tenantId: number }) {
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="max-w-[65ch] text-sm text-muted-foreground">
-          Key có dạng <code className="font-mono">eqk_...</code> và mang đúng
-          scope của tenant này. Thu hồi để chặn ngay client đang dùng.
+          Key có dạng <code className="font-mono">eqk_...</code>, chỉ đọc được
+          quiz trong phạm vi chủ đề / dạng quiz đã cấp cho tenant này. Thu hồi
+          để chặn ngay client đang dùng.
         </p>
         <IssueApiKeyDialog tenantId={tenantId} />
       </div>

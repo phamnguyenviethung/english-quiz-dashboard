@@ -36,7 +36,6 @@ import type {
   GetEnglishPoolModels500,
   GetEnglishPoolPickQuizType200,
   GetEnglishPoolPickQuizType401,
-  GetEnglishPoolPickQuizType403,
   GetEnglishPoolPickQuizType500,
   GetEnglishPoolPop200,
   GetEnglishPoolPop400,
@@ -85,7 +84,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Lấy 1 câu hỏi random trong bucket (engLevel, topicId) — câu KHÔNG bị xoá, pool là kho dùng lại được. Yêu cầu scope `quiz:read`. topicId ngoài allow-list trả 403. Pool trống trả 404.
+ * Lấy 1 câu hỏi random trong bucket (engLevel, topicId) — câu KHÔNG bị xoá, pool là kho dùng lại được. topicId ngoài allow-list trả 403. Pool trống trả 404.
  * @summary Pop a question from the pre-generated pool
  */
 export const getEnglishPoolPop = (
@@ -179,7 +178,7 @@ export function useGetEnglishPoolPop<TData = Awaited<ReturnType<typeof getEnglis
 
 
 /**
- * Đếm số câu hỏi hiện có trong bucket (engLevel, quizType, topicId). Yêu cầu scope `quiz:read`.
+ * Đếm số câu hỏi hiện có trong bucket (engLevel, quizType, topicId).
  * @summary Count questions in a pool bucket
  */
 export const getEnglishPoolCount = (
@@ -273,7 +272,7 @@ export function useGetEnglishPoolCount<TData = Awaited<ReturnType<typeof getEngl
 
 
 /**
- * Danh sách câu hỏi trong pool, có filter + phân trang (mặc định pageSize 20, tối đa 100, sort id_asc). Mọi filter đều optional — không truyền gì là lấy toàn bộ pool. `withoutTopic=true` lọc riêng bucket không có topic (topicId IS NULL) và thắng `topicId` nếu truyền cả hai. `q` tìm ILIKE trên nội dung câu hỏi + tên model; nếu `q` toàn số thì thêm điều kiện khớp chính xác `id`. `createdFrom`/`createdTo` là ISO date-time, lọc theo `createdAt` — câu cũ không có `createdAt` sẽ bị loại khi dùng filter này. `sort` theo `token_*` sắp xếp trên tổng `tokenIn + tokenOut`. Yêu cầu scope `quiz:read`; topicId/quizType ngoài allow-list của tenant trả 403.
+ * Danh sách câu hỏi trong pool, có filter + phân trang (mặc định pageSize 20, tối đa 100, sort id_asc). Mọi filter đều optional — không truyền gì là lấy toàn bộ pool. `withoutTopic=true` lọc riêng bucket không có topic (topicId IS NULL) và thắng `topicId` nếu truyền cả hai. `q` tìm ILIKE trên nội dung câu hỏi + tên model; nếu `q` toàn số thì thêm điều kiện khớp chính xác `id`. `createdFrom`/`createdTo` là ISO date-time, lọc theo `createdAt` — câu cũ không có `createdAt` sẽ bị loại khi dùng filter này. `sort` theo `token_*` sắp xếp trên tổng `tokenIn + tokenOut`. topicId/quizType ngoài allow-list của tenant trả 403.
  * @summary List pool questions
  */
 export const getEnglishPoolQuestions = (
@@ -367,7 +366,7 @@ export function useGetEnglishPoolQuestions<TData = Awaited<ReturnType<typeof get
 
 
 /**
- * Danh sách model đang có câu hỏi trong pool kèm số lượng câu, sắp xếp giảm dần theo số lượng. Dùng để đổ dropdown filter model ở admin UI. Yêu cầu scope `quiz:read`.
+ * Danh sách model đang có câu hỏi trong pool kèm số lượng câu, sắp xếp giảm dần theo số lượng. Dùng để đổ dropdown filter model ở admin UI.
  * @summary List distinct models in pool
  */
 export const getEnglishPoolModels = (
@@ -460,7 +459,7 @@ export function useGetEnglishPoolModels<TData = Awaited<ReturnType<typeof getEng
 
 
 /**
- * Enqueue job sinh thêm câu hỏi cho bucket nếu dưới ngưỡng refill. Bất đồng bộ — response chỉ xác nhận đã enqueue, không đợi job hoàn tất. Yêu cầu scope `pool:fill`.
+ * Enqueue job sinh thêm câu hỏi cho bucket nếu dưới ngưỡng refill. Bất đồng bộ — response chỉ xác nhận đã enqueue, không đợi job hoàn tất. Chỉ dùng được với ADMIN_API_KEY.
  * @summary Trigger pool refill
  */
 export const postEnglishPoolFill = (
@@ -524,7 +523,7 @@ export const usePostEnglishPoolFill = <TError = ErrorType<PostEnglishPoolFill400
       return useMutation(getPostEnglishPoolFillMutationOptions(options), queryClient);
     }
     /**
- * Chọn ngẫu nhiên 1 quizType theo trọng số cấu hình trong quiz_distribution (chỉ tính type enabled, weight>0). Yêu cầu scope `quiz:read`.
+ * Chọn ngẫu nhiên 1 quizType theo trọng số cấu hình trong quiz_distribution (chỉ tính type enabled, weight>0).
  * @summary Pick a random quiz type by weighted distribution
  */
 export const getEnglishPoolPickQuizType = (
@@ -549,7 +548,7 @@ export const getGetEnglishPoolPickQuizTypeQueryKey = () => {
     }
 
 
-export const getGetEnglishPoolPickQuizTypeQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+export const getGetEnglishPoolPickQuizTypeQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
@@ -568,10 +567,10 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetEnglishPoolPickQuizTypeQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>>
-export type GetEnglishPoolPickQuizTypeQueryError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>
+export type GetEnglishPoolPickQuizTypeQueryError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>
 
 
-export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>(
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
@@ -581,7 +580,7 @@ export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof 
       >, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>(
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
@@ -591,7 +590,7 @@ export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof 
       >, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>(
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
@@ -599,7 +598,7 @@ export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof 
  * @summary Pick a random quiz type by weighted distribution
  */
 
-export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType403 | GetEnglishPoolPickQuizType500>>(
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {

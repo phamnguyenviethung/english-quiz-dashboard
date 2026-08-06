@@ -27,7 +27,6 @@ import type {
   PostEnglishGenerateReading200,
   PostEnglishGenerateReading400,
   PostEnglishGenerateReading401,
-  PostEnglishGenerateReading403,
   PostEnglishGenerateReading500,
   PostEnglishGenerateReadingBodyOne,
   PostEnglishGenerateReadingBodyThree,
@@ -43,7 +42,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Sinh 1 câu hỏi bằng LLM theo `:quizType`. Shape của `question` trong response phụ thuộc quizType — xem oneOf trong response schema. Yêu cầu scope `quiz:read`; quizType ngoài allow-list của tenant trả 403.
+ * Sinh 1 câu hỏi bằng LLM theo `:quizType`. Shape của `question` trong response phụ thuộc quizType — xem oneOf trong response schema. quizType ngoài allow-list của tenant trả 403.
  * @summary Generate a question on-demand
  */
 export const postEnglishGenerateByQuizType = (
@@ -108,7 +107,7 @@ export const usePostEnglishGenerateByQuizType = <TError = ErrorType<PostEnglishG
       return useMutation(getPostEnglishGenerateByQuizTypeMutationOptions(options), queryClient);
     }
     /**
- * Sinh 1 câu hỏi đọc hiểu + mental math bằng LLM. Loại đặc biệt, không nằm trong quiz pool distribution. Yêu cầu scope `quiz:read`.
+ * Sinh 1 câu hỏi đọc hiểu + mental math bằng LLM. Loại đặc biệt, không nằm trong quiz pool distribution.
  * @summary Generate a reading comprehension question
  */
 export const postEnglishGenerateReading = (
@@ -127,7 +126,7 @@ export const postEnglishGenerateReading = (
 
 
 
-export const getPostEnglishGenerateReadingMutationOptions = <TError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading403 | PostEnglishGenerateReading500>,
+export const getPostEnglishGenerateReadingMutationOptions = <TError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading500>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateReading>>, TError,{data: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
 ): UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateReading>>, TError,{data: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>}, TContext> => {
 
@@ -156,12 +155,12 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
     export type PostEnglishGenerateReadingMutationResult = NonNullable<Awaited<ReturnType<typeof postEnglishGenerateReading>>>
     export type PostEnglishGenerateReadingMutationBody = BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>
-    export type PostEnglishGenerateReadingMutationError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading403 | PostEnglishGenerateReading500>
+    export type PostEnglishGenerateReadingMutationError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading500>
 
     /**
  * @summary Generate a reading comprehension question
  */
-export const usePostEnglishGenerateReading = <TError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading403 | PostEnglishGenerateReading500>,
+export const usePostEnglishGenerateReading = <TError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading500>,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateReading>>, TError,{data: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof postEnglishGenerateReading>>,

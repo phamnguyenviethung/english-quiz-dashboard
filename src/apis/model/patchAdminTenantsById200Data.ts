@@ -11,7 +11,6 @@ export type PatchAdminTenantsById200Data = {
   name: string;
   description: string | null;
   isActive: boolean;
-  scopes: string[];
   allowAllTopics: boolean;
   allowAllQuizTypes: boolean;
   createdAt: string | number | null;

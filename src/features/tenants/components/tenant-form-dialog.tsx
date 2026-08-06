@@ -29,12 +29,10 @@ import { useUpdateTenant } from "../hooks/use-update-tenant.ts"
 import type { Tenant, TenantFormValues } from "../types.ts"
 import type { TenantFormErrors } from "../utils/validate-tenant.ts"
 import { hasErrors, validateTenantForm } from "../utils/validate-tenant.ts"
-import { ScopeCheckboxGroup } from "./scope-checkbox-group.tsx"
 
 const EMPTY_VALUES: TenantFormValues = {
   name: "",
   description: "",
-  scopes: [],
   allowAllTopics: false,
   allowAllQuizTypes: false,
 }
@@ -44,7 +42,6 @@ function toFormValues(tenant: Tenant | undefined): TenantFormValues {
   return {
     name: tenant.name,
     description: tenant.description ?? "",
-    scopes: tenant.scopes.filter((scope) => scope.trim().length > 0),
     allowAllTopics: tenant.allowAllTopics,
     allowAllQuizTypes: tenant.allowAllQuizTypes,
   }
@@ -120,8 +117,8 @@ export function TenantFormDialog({
             {isEdit ? `Sửa tenant "${tenant.name}"` : "Tạo tenant mới"}
           </DialogTitle>
           <DialogDescription>
-            Tenant là một client gọi API (vd một bot Discord). Scope quyết định
-            tenant gọi được endpoint nào.
+            Tenant là một client gọi API (vd một bot Discord), chỉ có quyền đọc
+            quiz. Phạm vi chủ đề / dạng quiz cấp ở tab "Phân quyền".
           </DialogDescription>
         </DialogHeader>
 
@@ -159,19 +156,6 @@ export function TenantFormDialog({
               errors={[
                 errors.description ? { message: errors.description } : undefined,
               ]}
-            />
-          </Field>
-
-          <Field>
-            <FieldLabel>Scopes</FieldLabel>
-            <FieldDescription>
-              Thiếu scope thì endpoint tương ứng trả 403.
-            </FieldDescription>
-            <ScopeCheckboxGroup
-              value={values.scopes}
-              onChange={(scopes) => updateValue("scopes", scopes)}
-              disabled={isPending}
-              idPrefix={isEdit ? `tenant-${tenant.id}-scope` : "new-tenant-scope"}
             />
           </Field>
 

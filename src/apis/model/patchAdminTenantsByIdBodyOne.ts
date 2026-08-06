@@ -10,7 +10,6 @@ export type PatchAdminTenantsByIdBodyOne = {
   /** @minLength 1 */
   name?: string;
   description?: string | null;
-  scopes?: string[];
   allowAllTopics?: boolean;
   allowAllQuizTypes?: boolean;
   isActive?: boolean;

@@ -325,7 +325,7 @@ export function useGetAdminTenantsById<TData = Awaited<ReturnType<typeof getAdmi
 
 
 /**
- * Partial update (name/description/scopes/allowAll*\/isActive). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `name` trùng tenant khác trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Partial update (name/description/allowAll*\/isActive). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `name` trùng tenant khác trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Update tenant
  */
 export const patchAdminTenantsById = (

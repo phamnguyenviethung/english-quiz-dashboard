@@ -14,9 +14,8 @@ import { formatDateTime } from "@/lib/format.ts"
 
 import { TENANT_STATUS_META } from "../constants.ts"
 import type { Tenant } from "../types.ts"
-import { TenantScopeBadges } from "./tenant-scope-badges.tsx"
 
-const COLUMN_COUNT = 6
+const COLUMN_COUNT = 5
 
 function AccessCell({ tenant }: { tenant: Tenant }) {
   if (!tenant.allowAllTopics && !tenant.allowAllQuizTypes) {
@@ -55,7 +54,6 @@ export function TenantsTable({
           <TableRow>
             <TableHead className="w-16">ID</TableHead>
             <TableHead>Tên</TableHead>
-            <TableHead>Scopes</TableHead>
             <TableHead className="w-44">Phạm vi truy cập</TableHead>
             <TableHead className="w-32">Trạng thái</TableHead>
             <TableHead className="w-40">Tạo lúc</TableHead>
@@ -90,9 +88,6 @@ export function TenantsTable({
                         {tenant.description}
                       </div>
                     ) : null}
-                  </TableCell>
-                  <TableCell>
-                    <TenantScopeBadges scopes={tenant.scopes} />
                   </TableCell>
                   <TableCell>
                     <AccessCell tenant={tenant} />

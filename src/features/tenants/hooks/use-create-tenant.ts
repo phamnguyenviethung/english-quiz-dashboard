@@ -45,7 +45,6 @@ export function useCreateTenant({ onSuccess }: { onSuccess?: () => void } = {}) 
       data: {
         name: values.name.trim(),
         description: description || null,
-        scopes: values.scopes,
         allowAllTopics: values.allowAllTopics,
         allowAllQuizTypes: values.allowAllQuizTypes,
       },

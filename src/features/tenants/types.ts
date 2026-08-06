@@ -11,7 +11,6 @@ export type IssuedApiKey = PostAdminTenantsByIdKeys201Data
 export interface TenantFormValues {
   name: string
   description: string
-  scopes: string[]
   allowAllTopics: boolean
   allowAllQuizTypes: boolean
 }

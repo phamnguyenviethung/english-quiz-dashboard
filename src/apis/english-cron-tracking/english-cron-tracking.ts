@@ -58,7 +58,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Danh sách các lần chạy cron gần nhất (question_gen/pool_refill/manual_fill), mặc định 8 run. Trả về FULL row (bao gồm errorStack/metadata) — không phải shape rút gọn. Yêu cầu scope `cron:read`.
+ * Danh sách các lần chạy cron gần nhất (question_gen/pool_refill/manual_fill), mặc định 8 run. Trả về FULL row (bao gồm errorStack/metadata) — không phải shape rút gọn. Chỉ dùng được với ADMIN_API_KEY.
  * @summary List recent cron job runs
  */
 export const getEnglishCronRuns = (
@@ -152,7 +152,7 @@ export function useGetEnglishCronRuns<TData = Awaited<ReturnType<typeof getEngli
 
 
 /**
- * Chi tiết 1 lần chạy cron kèm bucket + model attempt. runId không tồn tại trả 404. Yêu cầu scope `cron:read`.
+ * Chi tiết 1 lần chạy cron kèm bucket + model attempt. runId không tồn tại trả 404. Chỉ dùng được với ADMIN_API_KEY.
  * @summary Get cron run detail
  */
 export const getEnglishCronRunsByRunId = (
