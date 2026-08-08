@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModelsByIdSync200Data } from "./postAdminModelsByIdSync200Data.ts"
+import type { PostAdminModelsByIdSync200Data } from './postAdminModelsByIdSync200Data.ts';
 
 export type PostAdminModelsByIdSync200 = {
-  success: true
-  data: PostAdminModelsByIdSync200Data
-}
+  success: true;
+  data: PostAdminModelsByIdSync200Data;
+};

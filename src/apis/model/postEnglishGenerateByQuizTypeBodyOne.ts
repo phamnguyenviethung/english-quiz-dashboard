@@ -5,13 +5,13 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateByQuizTypeBodyOneEngLevel } from "./postEnglishGenerateByQuizTypeBodyOneEngLevel.ts"
-import type { PostEnglishGenerateByQuizTypeBodyOneOptionCount } from "./postEnglishGenerateByQuizTypeBodyOneOptionCount.ts"
+import type { PostEnglishGenerateByQuizTypeBodyOneEngLevel } from './postEnglishGenerateByQuizTypeBodyOneEngLevel.ts';
+import type { PostEnglishGenerateByQuizTypeBodyOneOptionCount } from './postEnglishGenerateByQuizTypeBodyOneOptionCount.ts';
 
 export type PostEnglishGenerateByQuizTypeBodyOne = {
-  engLevel: PostEnglishGenerateByQuizTypeBodyOneEngLevel
-  optionCount: PostEnglishGenerateByQuizTypeBodyOneOptionCount
-  topic?: string
-  model?: string
-  excludeWords?: string[]
-}
+  engLevel: PostEnglishGenerateByQuizTypeBodyOneEngLevel;
+  optionCount: PostEnglishGenerateByQuizTypeBodyOneOptionCount;
+  topic?: string;
+  model?: string;
+  excludeWords?: string[];
+};

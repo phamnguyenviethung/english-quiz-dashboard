@@ -6,11 +6,11 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishGenerateByQuizTypeBodyThreeOptionCount =
-  (typeof PostEnglishGenerateByQuizTypeBodyThreeOptionCount)[keyof typeof PostEnglishGenerateByQuizTypeBodyThreeOptionCount]
+export type PostEnglishGenerateByQuizTypeBodyThreeOptionCount = typeof PostEnglishGenerateByQuizTypeBodyThreeOptionCount[keyof typeof PostEnglishGenerateByQuizTypeBodyThreeOptionCount];
+
 
 export const PostEnglishGenerateByQuizTypeBodyThreeOptionCount = {
   NUMBER_3: 3,
   NUMBER_4: 4,
   NUMBER_5: 5,
-} as const
+} as const;

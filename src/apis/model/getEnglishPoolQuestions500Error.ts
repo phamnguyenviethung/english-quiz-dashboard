@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolQuestions500ErrorCode } from "./getEnglishPoolQuestions500ErrorCode.ts"
+import type { GetEnglishPoolQuestions500ErrorCode } from './getEnglishPoolQuestions500ErrorCode.ts';
 
 export type GetEnglishPoolQuestions500Error = {
-  code: GetEnglishPoolQuestions500ErrorCode
-  message: string
-}
+  code: GetEnglishPoolQuestions500ErrorCode;
+  message: string;
+};

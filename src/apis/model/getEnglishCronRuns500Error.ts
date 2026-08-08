@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishCronRuns500ErrorCode } from "./getEnglishCronRuns500ErrorCode.ts"
+import type { GetEnglishCronRuns500ErrorCode } from './getEnglishCronRuns500ErrorCode.ts';
 
 export type GetEnglishCronRuns500Error = {
-  code: GetEnglishCronRuns500ErrorCode
-  message: string
-}
+  code: GetEnglishCronRuns500ErrorCode;
+  message: string;
+};

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModelsSyncAll200Data } from "./postAdminModelsSyncAll200Data.ts"
+import type { PostAdminModelsSyncAll200Data } from './postAdminModelsSyncAll200Data.ts';
 
 export type PostAdminModelsSyncAll200 = {
-  success: true
-  data: PostAdminModelsSyncAll200Data
-}
+  success: true;
+  data: PostAdminModelsSyncAll200Data;
+};

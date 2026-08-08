@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModelsByIdSync404Error } from "./postAdminModelsByIdSync404Error.ts"
+import type { PostAdminModelsByIdSync404Error } from './postAdminModelsByIdSync404Error.ts';
 
 export type PostAdminModelsByIdSync404 = {
-  success: false
-  error: PostAdminModelsByIdSync404Error
-}
+  success: false;
+  error: PostAdminModelsByIdSync404Error;
+};

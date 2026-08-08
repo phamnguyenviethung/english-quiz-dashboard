@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminTenantsById401Error } from "./getAdminTenantsById401Error.ts"
+import type { GetAdminTenantsById401Error } from './getAdminTenantsById401Error.ts';
 
 export type GetAdminTenantsById401 = {
-  success: false
-  error: GetAdminTenantsById401Error
-}
+  success: false;
+  error: GetAdminTenantsById401Error;
+};

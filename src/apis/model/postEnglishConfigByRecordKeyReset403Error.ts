@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishConfigByRecordKeyReset403ErrorCode } from "./postEnglishConfigByRecordKeyReset403ErrorCode.ts"
+import type { PostEnglishConfigByRecordKeyReset403ErrorCode } from './postEnglishConfigByRecordKeyReset403ErrorCode.ts';
 
 export type PostEnglishConfigByRecordKeyReset403Error = {
-  code: PostEnglishConfigByRecordKeyReset403ErrorCode
-  message: string
-}
+  code: PostEnglishConfigByRecordKeyReset403ErrorCode;
+  message: string;
+};

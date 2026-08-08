@@ -7,5 +7,5 @@
  */
 
 export type PutAdminTenantsByIdQuizTypesBodyOne = {
-  quizTypes: string[]
-}
+  quizTypes: string[];
+};

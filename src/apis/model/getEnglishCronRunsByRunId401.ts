@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishCronRunsByRunId401Error } from "./getEnglishCronRunsByRunId401Error.ts"
+import type { GetEnglishCronRunsByRunId401Error } from './getEnglishCronRunsByRunId401Error.ts';
 
 export type GetEnglishCronRunsByRunId401 = {
-  success: false
-  error: GetEnglishCronRunsByRunId401Error
-}
+  success: false;
+  error: GetEnglishCronRunsByRunId401Error;
+};

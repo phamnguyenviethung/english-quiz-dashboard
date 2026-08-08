@@ -5,15 +5,22 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminPoolRefillBodyTwoScope } from "./postAdminPoolRefillBodyTwoScope.ts"
+import type { PostAdminPoolRefillBodyTwoFilter } from './postAdminPoolRefillBodyTwoFilter.ts';
+import type { PostAdminPoolRefillBodyTwoScope } from './postAdminPoolRefillBodyTwoScope.ts';
 
 export type PostAdminPoolRefillBodyTwo = {
-  /** OpenRouter model id. Bỏ trống → chọn ngẫu nhiên trong các model đang bật `manualEnabled`. Provider routing luôn lấy theo `manualProvider` của model được dùng. */
-  model?: string
+  /** Danh sách OpenRouter model id. Mỗi bucket chọn ngẫu nhiên 1 model trong danh sách này. Bỏ trống → chọn ngẫu nhiên trong mọi model đang bật `manualEnabled`. Model không tồn tại hoặc đang tắt (`isActive=false` / `manualEnabled=false`) trả 400. Provider routing luôn lấy theo `manualProvider` của model được dùng. */
+  models?: string[];
+  /** DEPRECATED: dùng `models`. Tương đương `models: [model]`. */
+  model?: string;
   /**
-   * Số câu ép sinh cho mỗi bucket. Mặc định question_pool.manualFillDefaultCount.
-   * @minimum 1
-   */
-  countPerBucket?: string | number
-  scope?: PostAdminPoolRefillBodyTwoScope
-}
+     * Số câu ép sinh cho mỗi bucket. Mặc định question_pool.manualFillDefaultCount.
+     * @minimum 1
+     */
+  countPerBucket?: string | number;
+  scope?: PostAdminPoolRefillBodyTwoScope;
+  /** Thu hẹp không gian bucket. Chiều nào bỏ trống thì không lọc theo chiều đó. */
+  filter?: PostAdminPoolRefillBodyTwoFilter;
+  /** Chốt đúng danh sách bucketKey (lấy từ GET /admin/pool/buckets), áp dụng sau `filter`. Dùng khi admin bỏ tick một vài bucket trong preview. */
+  bucketKeys?: string[];
+};

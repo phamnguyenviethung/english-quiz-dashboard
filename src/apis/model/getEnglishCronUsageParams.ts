@@ -5,16 +5,16 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishCronUsageGroupBy } from "./getEnglishCronUsageGroupBy.ts"
+import type { GetEnglishCronUsageGroupBy } from './getEnglishCronUsageGroupBy.ts';
 
 export type GetEnglishCronUsageParams = {
-  /**
-   * ISO 8601. Mặc định 30 ngày trước `to`.
-   */
-  from?: string
-  /**
-   * ISO 8601. Mặc định thời điểm hiện tại.
-   */
-  to?: string
-  groupBy?: GetEnglishCronUsageGroupBy
-}
+/**
+ * ISO 8601. Mặc định 30 ngày trước `to`.
+ */
+from?: string;
+/**
+ * ISO 8601. Mặc định thời điểm hiện tại.
+ */
+to?: string;
+groupBy?: GetEnglishCronUsageGroupBy;
+};

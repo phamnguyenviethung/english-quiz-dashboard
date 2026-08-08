@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModels400ErrorCode } from "./postAdminModels400ErrorCode.ts"
+import type { PostAdminModels400ErrorCode } from './postAdminModels400ErrorCode.ts';
 
 export type PostAdminModels400Error = {
-  code: PostAdminModels400ErrorCode
-  message: string
-}
+  code: PostAdminModels400ErrorCode;
+  message: string;
+};

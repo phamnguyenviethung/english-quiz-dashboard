@@ -5,25 +5,25 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminModelsById200DataManualProvider } from "./patchAdminModelsById200DataManualProvider.ts"
-import type { PatchAdminModelsById200DataOpenrouterMeta } from "./patchAdminModelsById200DataOpenrouterMeta.ts"
-import type { PatchAdminModelsById200DataPricingRaw } from "./patchAdminModelsById200DataPricingRaw.ts"
-import type { PatchAdminModelsById200DataScheduleProvider } from "./patchAdminModelsById200DataScheduleProvider.ts"
+import type { PatchAdminModelsById200DataManualProvider } from './patchAdminModelsById200DataManualProvider.ts';
+import type { PatchAdminModelsById200DataOpenrouterMeta } from './patchAdminModelsById200DataOpenrouterMeta.ts';
+import type { PatchAdminModelsById200DataPricingRaw } from './patchAdminModelsById200DataPricingRaw.ts';
+import type { PatchAdminModelsById200DataScheduleProvider } from './patchAdminModelsById200DataScheduleProvider.ts';
 
 export type PatchAdminModelsById200Data = {
-  id: number
-  key: string
-  modelId: string
-  isActive: boolean
-  scheduleEnabled: boolean
-  manualEnabled: boolean
-  scheduleProvider: PatchAdminModelsById200DataScheduleProvider
-  manualProvider: PatchAdminModelsById200DataManualProvider
-  pricePromptPerToken: number | null
-  priceCompletionPerToken: number | null
-  pricingRaw: PatchAdminModelsById200DataPricingRaw
-  openrouterMeta: PatchAdminModelsById200DataOpenrouterMeta
-  pricingSyncedAt: string | number | null
-  createdAt: string | number | null
-  updatedAt: string | number | null
-}
+  id: number;
+  key: string;
+  modelId: string;
+  isActive: boolean;
+  scheduleEnabled: boolean;
+  manualEnabled: boolean;
+  scheduleProvider: PatchAdminModelsById200DataScheduleProvider;
+  manualProvider: PatchAdminModelsById200DataManualProvider;
+  pricePromptPerToken: number | null;
+  priceCompletionPerToken: number | null;
+  pricingRaw: PatchAdminModelsById200DataPricingRaw;
+  openrouterMeta: PatchAdminModelsById200DataOpenrouterMeta;
+  pricingSyncedAt: string | number | null;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+};

@@ -7,5 +7,5 @@
  */
 
 export type PutAdminTenantsByIdQuizTypesBodyThree = {
-  quizTypes: string[]
-}
+  quizTypes: string[];
+};

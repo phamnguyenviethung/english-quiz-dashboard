@@ -7,5 +7,5 @@
  */
 
 export type PostAdminTenantsByIdKeysBodyThree = {
-  label?: string | null
-}
+  label?: string | null;
+};

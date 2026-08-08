@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishConfigByRecordKeyReset500ErrorCode =
-  (typeof PostEnglishConfigByRecordKeyReset500ErrorCode)[keyof typeof PostEnglishConfigByRecordKeyReset500ErrorCode]
+export type PostEnglishConfigByRecordKeyReset500ErrorCode = typeof PostEnglishConfigByRecordKeyReset500ErrorCode[keyof typeof PostEnglishConfigByRecordKeyReset500ErrorCode];
+
 
 export const PostEnglishConfigByRecordKeyReset500ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

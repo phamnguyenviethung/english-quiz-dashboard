@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolPop404Error } from "./getEnglishPoolPop404Error.ts"
+import type { GetEnglishPoolPop404Error } from './getEnglishPoolPop404Error.ts';
 
 export type GetEnglishPoolPop404 = {
-  success: false
-  error: GetEnglishPoolPop404Error
-}
+  success: false;
+  error: GetEnglishPoolPop404Error;
+};

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminModelsById409ErrorCode } from "./patchAdminModelsById409ErrorCode.ts"
+import type { PatchAdminModelsById409ErrorCode } from './patchAdminModelsById409ErrorCode.ts';
 
 export type PatchAdminModelsById409Error = {
-  code: PatchAdminModelsById409ErrorCode
-  message: string
-}
+  code: PatchAdminModelsById409ErrorCode;
+  message: string;
+};

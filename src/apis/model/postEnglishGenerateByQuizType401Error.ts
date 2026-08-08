@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateByQuizType401ErrorCode } from "./postEnglishGenerateByQuizType401ErrorCode.ts"
+import type { PostEnglishGenerateByQuizType401ErrorCode } from './postEnglishGenerateByQuizType401ErrorCode.ts';
 
 export type PostEnglishGenerateByQuizType401Error = {
-  code: PostEnglishGenerateByQuizType401ErrorCode
-  message: string
-}
+  code: PostEnglishGenerateByQuizType401ErrorCode;
+  message: string;
+};

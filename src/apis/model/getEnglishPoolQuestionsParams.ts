@@ -5,35 +5,35 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolQuestionsEngLevel } from "./getEnglishPoolQuestionsEngLevel.ts"
-import type { GetEnglishPoolQuestionsQuizType } from "./getEnglishPoolQuestionsQuizType.ts"
-import type { GetEnglishPoolQuestionsSort } from "./getEnglishPoolQuestionsSort.ts"
+import type { GetEnglishPoolQuestionsEngLevel } from './getEnglishPoolQuestionsEngLevel.ts';
+import type { GetEnglishPoolQuestionsQuizType } from './getEnglishPoolQuestionsQuizType.ts';
+import type { GetEnglishPoolQuestionsSort } from './getEnglishPoolQuestionsSort.ts';
 
 export type GetEnglishPoolQuestionsParams = {
-  engLevel?: GetEnglishPoolQuestionsEngLevel
-  quizType?: GetEnglishPoolQuestionsQuizType
-  topicId?: string | number
-  withoutTopic?: boolean | string
-  model?: string
-  /**
-   * @minimum 1
-   * @maximum 10
-   */
-  optionCount?: string | number
-  createdFrom?: string
-  createdTo?: string
-  /**
-   * @maxLength 100
-   */
-  q?: string
-  sort?: GetEnglishPoolQuestionsSort
-  /**
-   * @minimum 1
-   */
-  page?: string | number
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
-  pageSize?: string | number
-}
+engLevel?: GetEnglishPoolQuestionsEngLevel;
+quizType?: GetEnglishPoolQuestionsQuizType;
+topicId?: string | number;
+withoutTopic?: boolean | string;
+model?: string;
+/**
+ * @minimum 1
+ * @maximum 10
+ */
+optionCount?: string | number;
+createdFrom?: string;
+createdTo?: string;
+/**
+ * @maxLength 100
+ */
+q?: string;
+sort?: GetEnglishPoolQuestionsSort;
+/**
+ * @minimum 1
+ */
+page?: string | number;
+/**
+ * @minimum 1
+ * @maximum 100
+ */
+pageSize?: string | number;
+};

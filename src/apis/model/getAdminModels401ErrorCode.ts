@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetAdminModels401ErrorCode =
-  (typeof GetAdminModels401ErrorCode)[keyof typeof GetAdminModels401ErrorCode]
+export type GetAdminModels401ErrorCode = typeof GetAdminModels401ErrorCode[keyof typeof GetAdminModels401ErrorCode];
+
 
 export const GetAdminModels401ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

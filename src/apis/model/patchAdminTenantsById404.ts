@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminTenantsById404Error } from "./patchAdminTenantsById404Error.ts"
+import type { PatchAdminTenantsById404Error } from './patchAdminTenantsById404Error.ts';
 
 export type PatchAdminTenantsById404 = {
-  success: false
-  error: PatchAdminTenantsById404Error
-}
+  success: false;
+  error: PatchAdminTenantsById404Error;
+};

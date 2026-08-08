@@ -5,25 +5,25 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModels201DataManualProvider } from "./postAdminModels201DataManualProvider.ts"
-import type { PostAdminModels201DataOpenrouterMeta } from "./postAdminModels201DataOpenrouterMeta.ts"
-import type { PostAdminModels201DataPricingRaw } from "./postAdminModels201DataPricingRaw.ts"
-import type { PostAdminModels201DataScheduleProvider } from "./postAdminModels201DataScheduleProvider.ts"
+import type { PostAdminModels201DataManualProvider } from './postAdminModels201DataManualProvider.ts';
+import type { PostAdminModels201DataOpenrouterMeta } from './postAdminModels201DataOpenrouterMeta.ts';
+import type { PostAdminModels201DataPricingRaw } from './postAdminModels201DataPricingRaw.ts';
+import type { PostAdminModels201DataScheduleProvider } from './postAdminModels201DataScheduleProvider.ts';
 
 export type PostAdminModels201Data = {
-  id: number
-  key: string
-  modelId: string
-  isActive: boolean
-  scheduleEnabled: boolean
-  manualEnabled: boolean
-  scheduleProvider: PostAdminModels201DataScheduleProvider
-  manualProvider: PostAdminModels201DataManualProvider
-  pricePromptPerToken: number | null
-  priceCompletionPerToken: number | null
-  pricingRaw: PostAdminModels201DataPricingRaw
-  openrouterMeta: PostAdminModels201DataOpenrouterMeta
-  pricingSyncedAt: string | number | null
-  createdAt: string | number | null
-  updatedAt: string | number | null
-}
+  id: number;
+  key: string;
+  modelId: string;
+  isActive: boolean;
+  scheduleEnabled: boolean;
+  manualEnabled: boolean;
+  scheduleProvider: PostAdminModels201DataScheduleProvider;
+  manualProvider: PostAdminModels201DataManualProvider;
+  pricePromptPerToken: number | null;
+  priceCompletionPerToken: number | null;
+  pricingRaw: PostAdminModels201DataPricingRaw;
+  openrouterMeta: PostAdminModels201DataOpenrouterMeta;
+  pricingSyncedAt: string | number | null;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+};

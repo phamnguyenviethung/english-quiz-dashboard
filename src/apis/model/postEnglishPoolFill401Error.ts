@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishPoolFill401ErrorCode } from "./postEnglishPoolFill401ErrorCode.ts"
+import type { PostEnglishPoolFill401ErrorCode } from './postEnglishPoolFill401ErrorCode.ts';
 
 export type PostEnglishPoolFill401Error = {
-  code: PostEnglishPoolFill401ErrorCode
-  message: string
-}
+  code: PostEnglishPoolFill401ErrorCode;
+  message: string;
+};

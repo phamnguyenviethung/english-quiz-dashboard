@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolPopEngLevel } from "./getEnglishPoolPopEngLevel.ts"
+import type { GetEnglishPoolPopEngLevel } from './getEnglishPoolPopEngLevel.ts';
 
 export type GetEnglishPoolPopParams = {
-  engLevel: GetEnglishPoolPopEngLevel
-  topicId?: string | number
-}
+engLevel: GetEnglishPoolPopEngLevel;
+topicId?: string | number;
+};

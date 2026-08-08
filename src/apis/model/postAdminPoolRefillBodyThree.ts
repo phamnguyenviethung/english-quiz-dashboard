@@ -5,15 +5,22 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminPoolRefillBodyThreeScope } from "./postAdminPoolRefillBodyThreeScope.ts"
+import type { PostAdminPoolRefillBodyThreeFilter } from './postAdminPoolRefillBodyThreeFilter.ts';
+import type { PostAdminPoolRefillBodyThreeScope } from './postAdminPoolRefillBodyThreeScope.ts';
 
 export type PostAdminPoolRefillBodyThree = {
-  /** OpenRouter model id. Bỏ trống → chọn ngẫu nhiên trong các model đang bật `manualEnabled`. Provider routing luôn lấy theo `manualProvider` của model được dùng. */
-  model?: string
+  /** Danh sách OpenRouter model id. Mỗi bucket chọn ngẫu nhiên 1 model trong danh sách này. Bỏ trống → chọn ngẫu nhiên trong mọi model đang bật `manualEnabled`. Model không tồn tại hoặc đang tắt (`isActive=false` / `manualEnabled=false`) trả 400. Provider routing luôn lấy theo `manualProvider` của model được dùng. */
+  models?: string[];
+  /** DEPRECATED: dùng `models`. Tương đương `models: [model]`. */
+  model?: string;
   /**
-   * Số câu ép sinh cho mỗi bucket. Mặc định question_pool.manualFillDefaultCount.
-   * @minimum 1
-   */
-  countPerBucket?: string | number
-  scope?: PostAdminPoolRefillBodyThreeScope
-}
+     * Số câu ép sinh cho mỗi bucket. Mặc định question_pool.manualFillDefaultCount.
+     * @minimum 1
+     */
+  countPerBucket?: string | number;
+  scope?: PostAdminPoolRefillBodyThreeScope;
+  /** Thu hẹp không gian bucket. Chiều nào bỏ trống thì không lọc theo chiều đó. */
+  filter?: PostAdminPoolRefillBodyThreeFilter;
+  /** Chốt đúng danh sách bucketKey (lấy từ GET /admin/pool/buckets), áp dụng sau `filter`. Dùng khi admin bỏ tick một vài bucket trong preview. */
+  bucketKeys?: string[];
+};

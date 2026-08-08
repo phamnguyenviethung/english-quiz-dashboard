@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishCronRuns200DataItem } from "./getEnglishCronRuns200DataItem.ts"
+import type { GetEnglishCronRuns200DataItem } from './getEnglishCronRuns200DataItem.ts';
 
 export type GetEnglishCronRuns200 = {
-  success: true
-  data: GetEnglishCronRuns200DataItem[]
-}
+  success: true;
+  data: GetEnglishCronRuns200DataItem[];
+};
