@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolCount200Data } from './getEnglishPoolCount200Data.ts';
+import type { GetEnglishPoolCount200Data } from "./getEnglishPoolCount200Data.ts"
 
 export type GetEnglishPoolCount200 = {
-  success: true;
-  data: GetEnglishPoolCount200Data;
-};
+  success: true
+  data: GetEnglishPoolCount200Data
+}

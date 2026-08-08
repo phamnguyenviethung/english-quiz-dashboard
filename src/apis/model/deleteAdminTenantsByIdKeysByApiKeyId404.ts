@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { DeleteAdminTenantsByIdKeysByApiKeyId404Error } from './deleteAdminTenantsByIdKeysByApiKeyId404Error.ts';
+import type { DeleteAdminTenantsByIdKeysByApiKeyId404Error } from "./deleteAdminTenantsByIdKeysByApiKeyId404Error.ts"
 
 export type DeleteAdminTenantsByIdKeysByApiKeyId404 = {
-  success: false;
-  error: DeleteAdminTenantsByIdKeysByApiKeyId404Error;
-};
+  success: false
+  error: DeleteAdminTenantsByIdKeysByApiKeyId404Error
+}

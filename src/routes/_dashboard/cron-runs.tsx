@@ -1,7 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { IconClockOff } from "@tabler/icons-react"
 
-import { getGetEnglishCronRunsQueryOptions } from "@/apis/english-cron-tracking/english-cron-tracking.ts"
+import {
+  getGetEnglishCronRunsQueryOptions,
+  getGetEnglishCronUsageQueryOptions,
+} from "@/apis/english-cron-tracking/english-cron-tracking.ts"
 import { PageHeader } from "@/components/common/page-header.tsx"
 import { QueryError } from "@/components/common/query-error.tsx"
 import {
@@ -14,17 +17,26 @@ import {
 import { CronRunDetailSheet } from "@/features/cron-runs/components/cron-run-detail-sheet.tsx"
 import { CronRunsFilters } from "@/features/cron-runs/components/cron-runs-filters.tsx"
 import { CronRunsTable } from "@/features/cron-runs/components/cron-runs-table.tsx"
+import { CronUsageSection } from "@/features/cron-runs/components/cron-usage-section.tsx"
+import type { UsageGroupBy } from "@/features/cron-runs/constants.ts"
 import {
   ALL_STATUS_VALUE,
   CRON_LIMIT_OPTIONS,
   DEFAULT_CRON_LIMIT,
+  DEFAULT_USAGE_GROUP_BY,
+  DEFAULT_USAGE_RANGE_DAYS,
+  USAGE_GROUP_BY_VALUES,
+  USAGE_RANGE_OPTIONS,
 } from "@/features/cron-runs/constants.ts"
 import { useCronRuns } from "@/features/cron-runs/hooks/use-cron-runs.ts"
+import { usageRangeFrom } from "@/features/cron-runs/hooks/use-cron-usage.ts"
 
 interface CronRunsSearch {
   limit?: number
   status?: string
   runId?: string
+  days?: number
+  groupBy?: UsageGroupBy
 }
 
 export const Route = createFileRoute("/_dashboard/cron-runs")({
@@ -40,18 +52,38 @@ export const Route = createFileRoute("/_dashboard/cron-runs")({
       typeof search.runId === "string" && search.runId
         ? search.runId
         : undefined
+    const days = USAGE_RANGE_OPTIONS.find(
+      (option) => option === Number(search.days)
+    )
+    const groupBy = USAGE_GROUP_BY_VALUES.find(
+      (option) => option === search.groupBy
+    )
 
     return {
       ...(limit ? { limit } : {}),
       ...(status ? { status } : {}),
       ...(runId ? { runId } : {}),
+      ...(days ? { days } : {}),
+      ...(groupBy ? { groupBy } : {}),
     }
   },
-  loaderDeps: ({ search }) => ({ limit: search.limit ?? DEFAULT_CRON_LIMIT }),
+  loaderDeps: ({ search }) => ({
+    limit: search.limit ?? DEFAULT_CRON_LIMIT,
+    days: search.days ?? DEFAULT_USAGE_RANGE_DAYS,
+    groupBy: search.groupBy ?? DEFAULT_USAGE_GROUP_BY,
+  }),
   loader: ({ context, deps }) =>
-    context.queryClient.prefetchQuery(
-      getGetEnglishCronRunsQueryOptions({ limit: deps.limit })
-    ),
+    Promise.all([
+      context.queryClient.prefetchQuery(
+        getGetEnglishCronRunsQueryOptions({ limit: deps.limit })
+      ),
+      context.queryClient.prefetchQuery(
+        getGetEnglishCronUsageQueryOptions({
+          from: usageRangeFrom(deps.days).toISOString(),
+          groupBy: deps.groupBy,
+        })
+      ),
+    ]),
   component: CronRunsPage,
 })
 
@@ -61,6 +93,8 @@ function CronRunsPage() {
 
   const limit = search.limit ?? DEFAULT_CRON_LIMIT
   const status = search.status ?? ALL_STATUS_VALUE
+  const days = search.days ?? DEFAULT_USAGE_RANGE_DAYS
+  const groupBy = search.groupBy ?? DEFAULT_USAGE_GROUP_BY
 
   const { runs, statuses, isPending, isError, error, refetch, isRefetching } =
     useCronRuns({ limit, status })
@@ -74,6 +108,13 @@ function CronRunsPage() {
       <PageHeader
         title="Lịch sử cron"
         description="Các lượt chạy job nền: số bucket xử lý, câu hỏi sinh ra và lỗi phát sinh."
+      />
+
+      <CronUsageSection
+        days={days}
+        groupBy={groupBy}
+        onDaysChange={(value) => updateSearch({ days: value })}
+        onGroupByChange={(value) => updateSearch({ groupBy: value })}
       />
 
       <CronRunsFilters

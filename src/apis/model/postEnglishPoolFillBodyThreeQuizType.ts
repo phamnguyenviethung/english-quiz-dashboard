@@ -6,19 +6,19 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishPoolFillBodyThreeQuizType = typeof PostEnglishPoolFillBodyThreeQuizType[keyof typeof PostEnglishPoolFillBodyThreeQuizType];
-
+export type PostEnglishPoolFillBodyThreeQuizType =
+  (typeof PostEnglishPoolFillBodyThreeQuizType)[keyof typeof PostEnglishPoolFillBodyThreeQuizType]
 
 export const PostEnglishPoolFillBodyThreeQuizType = {
-  vocab: 'vocab',
-  fillblank: 'fillblank',
-  phrase: 'phrase',
-  conversation: 'conversation',
-  description: 'description',
-  synonym: 'synonym',
-  slang: 'slang',
-  'odd-one-out': 'odd-one-out',
-  paragraph: 'paragraph',
-  idiom: 'idiom',
-  'verb-use-match': 'verb-use-match',
-} as const;
+  vocab: "vocab",
+  fillblank: "fillblank",
+  phrase: "phrase",
+  conversation: "conversation",
+  description: "description",
+  synonym: "synonym",
+  slang: "slang",
+  "odd-one-out": "odd-one-out",
+  paragraph: "paragraph",
+  idiom: "idiom",
+  "verb-use-match": "verb-use-match",
+} as const

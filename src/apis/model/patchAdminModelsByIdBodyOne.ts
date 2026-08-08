@@ -5,11 +5,17 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { PatchAdminModelsByIdBodyOneManualProvider } from "./patchAdminModelsByIdBodyOneManualProvider.ts"
+import type { PatchAdminModelsByIdBodyOneScheduleProvider } from "./patchAdminModelsByIdBodyOneScheduleProvider.ts"
 
 export type PatchAdminModelsByIdBodyOne = {
   /** @minLength 1 */
-  key?: string;
+  key?: string
   /** @minLength 1 */
-  modelId?: string;
-  isActive?: boolean;
-};
+  modelId?: string
+  isActive?: boolean
+  scheduleEnabled?: boolean
+  manualEnabled?: boolean
+  scheduleProvider?: PatchAdminModelsByIdBodyOneScheduleProvider
+  manualProvider?: PatchAdminModelsByIdBodyOneManualProvider
+}

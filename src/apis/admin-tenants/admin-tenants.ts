@@ -5,10 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -21,8 +18,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query"
 
 import type {
   GetAdminTenants200,
@@ -48,344 +45,658 @@ import type {
   PostAdminTenants500,
   PostAdminTenantsBodyOne,
   PostAdminTenantsBodyThree,
-  PostAdminTenantsBodyTwo
-} from '../model';
+  PostAdminTenantsBodyTwo,
+} from "../model"
 
-import { axiosClient } from '../../configs/axiosClient.ts';
-import type { ErrorType , BodyType } from '../../configs/axiosClient.ts';
+import { axiosClient } from "../../configs/axiosClient.ts"
+import type { ErrorType, BodyType } from "../../configs/axiosClient.ts"
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
-
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
+const withQueryKey = <T extends object, K>(
+  query: T,
+  queryKey: K
+): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K }
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
+    if (key === "queryKey") continue
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    });
+    })
   }
-  return result;
-};
+  return result
+}
 
 /**
  * Danh sách toàn bộ tenant. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary List tenants
  */
 export const getAdminTenants = (
-
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<GetAdminTenants200>(
-      {url: `/admin/tenants`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetAdminTenantsQueryKey = () => {
-    return [
-    `/admin/tenants`
-    ] as const;
-    }
-
-
-export const getGetAdminTenantsQueryOptions = <TData = Awaited<ReturnType<typeof getAdminTenants>>, TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenants>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminTenantsQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminTenants>>> = ({ signal }) => getAdminTenants(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminTenants>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return axiosClient<GetAdminTenants200>(
+    { url: `/admin/tenants`, method: "GET", signal },
+    options
+  )
 }
 
-export type GetAdminTenantsQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminTenants>>>
-export type GetAdminTenantsQueryError = ErrorType<GetAdminTenants401 | GetAdminTenants500>
+export const getGetAdminTenantsQueryKey = () => {
+  return [`/admin/tenants`] as const
+}
 
+export const getGetAdminTenantsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminTenants>>,
+  TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getAdminTenants>>, TError, TData>
+  >
+  request?: SecondParameter<typeof axiosClient>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-export function useGetAdminTenants<TData = Awaited<ReturnType<typeof getAdminTenants>>, TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenants>>, TError, TData>> & Pick<
+  const queryKey = queryOptions?.queryKey ?? getGetAdminTenantsQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminTenants>>> = ({
+    signal,
+  }) => getAdminTenants(requestOptions, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminTenants>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminTenantsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminTenants>>
+>
+export type GetAdminTenantsQueryError = ErrorType<
+  GetAdminTenants401 | GetAdminTenants500
+>
+
+export function useGetAdminTenants<
+  TData = Awaited<ReturnType<typeof getAdminTenants>>,
+  TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenants>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminTenants>>,
           TError,
           Awaited<ReturnType<typeof getAdminTenants>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminTenants<TData = Awaited<ReturnType<typeof getAdminTenants>>, TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenants>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminTenants<
+  TData = Awaited<ReturnType<typeof getAdminTenants>>,
+  TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenants>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminTenants>>,
           TError,
           Awaited<ReturnType<typeof getAdminTenants>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminTenants<TData = Awaited<ReturnType<typeof getAdminTenants>>, TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenants>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminTenants<
+  TData = Awaited<ReturnType<typeof getAdminTenants>>,
+  TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenants>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary List tenants
  */
 
-export function useGetAdminTenants<TData = Awaited<ReturnType<typeof getAdminTenants>>, TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenants>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
+export function useGetAdminTenants<
+  TData = Awaited<ReturnType<typeof getAdminTenants>>,
+  TError = ErrorType<GetAdminTenants401 | GetAdminTenants500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenants>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
   const queryOptions = getGetAdminTenantsQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  return withQueryKey(query, queryOptions.queryKey);
+  return withQueryKey(query, queryOptions.queryKey)
 }
-
-
-
-
-
 
 /**
  * Tạo tenant mới. `name` phải unique — trùng tên trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Create tenant
  */
 export const postAdminTenants = (
-    postAdminTenantsBody: BodyType<PostAdminTenantsBodyOne | PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree>| PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  postAdminTenantsBody:
+    | BodyType<
+        | PostAdminTenantsBodyOne
+        | PostAdminTenantsBodyTwo
+        | PostAdminTenantsBodyThree
+      >
+    | PostAdminTenantsBodyTwo
+    | PostAdminTenantsBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<PostAdminTenants201>(
-      {url: `/admin/tenants`, method: 'POST',
-      data: postAdminTenantsBody, signal
+  return axiosClient<PostAdminTenants201>(
+    {
+      url: `/admin/tenants`,
+      method: "POST",
+      data: postAdminTenantsBody,
+      signal,
     },
-      options);
+    options
+  )
+}
+
+export const getPostAdminTenantsMutationOptions = <
+  TError = ErrorType<
+    | PostAdminTenants400
+    | PostAdminTenants401
+    | PostAdminTenants409
+    | PostAdminTenants500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAdminTenants>>,
+    TError,
+    {
+      data: BodyType<
+        | PostAdminTenantsBodyOne
+        | PostAdminTenantsBodyTwo
+        | PostAdminTenantsBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAdminTenants>>,
+  TError,
+  {
+    data: BodyType<
+      | PostAdminTenantsBodyOne
+      | PostAdminTenantsBodyTwo
+      | PostAdminTenantsBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["postAdminTenants"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAdminTenants>>,
+    {
+      data: BodyType<
+        | PostAdminTenantsBodyOne
+        | PostAdminTenantsBodyTwo
+        | PostAdminTenantsBodyThree
+      >
     }
+  > = (props) => {
+    const { data } = props ?? {}
 
+    return postAdminTenants(data, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type PostAdminTenantsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAdminTenants>>
+>
+export type PostAdminTenantsMutationBody = BodyType<
+  PostAdminTenantsBodyOne | PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree
+>
+export type PostAdminTenantsMutationError = ErrorType<
+  | PostAdminTenants400
+  | PostAdminTenants401
+  | PostAdminTenants409
+  | PostAdminTenants500
+>
 
-export const getPostAdminTenantsMutationOptions = <TError = ErrorType<PostAdminTenants400 | PostAdminTenants401 | PostAdminTenants409 | PostAdminTenants500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminTenants>>, TError,{data: BodyType<PostAdminTenantsBodyOne | PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof postAdminTenants>>, TError,{data: BodyType<PostAdminTenantsBodyOne | PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree>}, TContext> => {
-
-const mutationKey = ['postAdminTenants'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminTenants>>, {data: BodyType<PostAdminTenantsBodyOne | PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postAdminTenants(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostAdminTenantsMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminTenants>>>
-    export type PostAdminTenantsMutationBody = BodyType<PostAdminTenantsBodyOne | PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree>
-    export type PostAdminTenantsMutationError = ErrorType<PostAdminTenants400 | PostAdminTenants401 | PostAdminTenants409 | PostAdminTenants500>
-
-    /**
+/**
  * @summary Create tenant
  */
-export const usePostAdminTenants = <TError = ErrorType<PostAdminTenants400 | PostAdminTenants401 | PostAdminTenants409 | PostAdminTenants500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminTenants>>, TError,{data: BodyType<PostAdminTenantsBodyOne | PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postAdminTenants>>,
-        TError,
-        {data: BodyType<PostAdminTenantsBodyOne | PostAdminTenantsBodyTwo | PostAdminTenantsBodyThree>},
-        TContext
-      > => {
-      return useMutation(getPostAdminTenantsMutationOptions(options), queryClient);
-    }
-    /**
+export const usePostAdminTenants = <
+  TError = ErrorType<
+    | PostAdminTenants400
+    | PostAdminTenants401
+    | PostAdminTenants409
+    | PostAdminTenants500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postAdminTenants>>,
+      TError,
+      {
+        data: BodyType<
+          | PostAdminTenantsBodyOne
+          | PostAdminTenantsBodyTwo
+          | PostAdminTenantsBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postAdminTenants>>,
+  TError,
+  {
+    data: BodyType<
+      | PostAdminTenantsBodyOne
+      | PostAdminTenantsBodyTwo
+      | PostAdminTenantsBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(getPostAdminTenantsMutationOptions(options), queryClient)
+}
+/**
  * Chi tiết 1 tenant. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Get tenant by id
  */
 export const getAdminTenantsById = (
-    id: string | number,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  id: string | number,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<GetAdminTenantsById200>(
-      {url: `/admin/tenants/${id}`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetAdminTenantsByIdQueryKey = (id: string | number,) => {
-    return [
-    `/admin/tenants/${id}`
-    ] as const;
-    }
-
-
-export const getGetAdminTenantsByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAdminTenantsById>>, TError = ErrorType<GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500>>(id: string | number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsById>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminTenantsByIdQueryKey(id);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminTenantsById>>> = ({ signal }) => getAdminTenantsById(id, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return axiosClient<GetAdminTenantsById200>(
+    { url: `/admin/tenants/${id}`, method: "GET", signal },
+    options
+  )
 }
 
-export type GetAdminTenantsByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminTenantsById>>>
-export type GetAdminTenantsByIdQueryError = ErrorType<GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500>
+export const getGetAdminTenantsByIdQueryKey = (id: string | number) => {
+  return [`/admin/tenants/${id}`] as const
+}
 
+export const getGetAdminTenantsByIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminTenantsById>>,
+  TError = ErrorType<
+    GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500
+  >,
+>(
+  id: string | number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenantsById>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-export function useGetAdminTenantsById<TData = Awaited<ReturnType<typeof getAdminTenantsById>>, TError = ErrorType<GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500>>(
- id: string | number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsById>>, TError, TData>> & Pick<
+  const queryKey = queryOptions?.queryKey ?? getGetAdminTenantsByIdQueryKey(id)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAdminTenantsById>>
+  > = ({ signal }) => getAdminTenantsById(id, requestOptions, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: id !== null && id !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminTenantsById>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminTenantsByIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminTenantsById>>
+>
+export type GetAdminTenantsByIdQueryError = ErrorType<
+  GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500
+>
+
+export function useGetAdminTenantsById<
+  TData = Awaited<ReturnType<typeof getAdminTenantsById>>,
+  TError = ErrorType<
+    GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500
+  >,
+>(
+  id: string | number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenantsById>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminTenantsById>>,
           TError,
           Awaited<ReturnType<typeof getAdminTenantsById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminTenantsById<TData = Awaited<ReturnType<typeof getAdminTenantsById>>, TError = ErrorType<GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500>>(
- id: string | number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsById>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminTenantsById<
+  TData = Awaited<ReturnType<typeof getAdminTenantsById>>,
+  TError = ErrorType<
+    GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500
+  >,
+>(
+  id: string | number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenantsById>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminTenantsById>>,
           TError,
           Awaited<ReturnType<typeof getAdminTenantsById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminTenantsById<TData = Awaited<ReturnType<typeof getAdminTenantsById>>, TError = ErrorType<GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500>>(
- id: string | number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsById>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminTenantsById<
+  TData = Awaited<ReturnType<typeof getAdminTenantsById>>,
+  TError = ErrorType<
+    GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500
+  >,
+>(
+  id: string | number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenantsById>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get tenant by id
  */
 
-export function useGetAdminTenantsById<TData = Awaited<ReturnType<typeof getAdminTenantsById>>, TError = ErrorType<GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500>>(
- id: string | number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminTenantsById>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAdminTenantsById<
+  TData = Awaited<ReturnType<typeof getAdminTenantsById>>,
+  TError = ErrorType<
+    GetAdminTenantsById401 | GetAdminTenantsById404 | GetAdminTenantsById500
+  >,
+>(
+  id: string | number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminTenantsById>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetAdminTenantsByIdQueryOptions(id, options)
 
-  const queryOptions = getGetAdminTenantsByIdQueryOptions(id,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+  return withQueryKey(query, queryOptions.queryKey)
 }
-
-
-
-
-
 
 /**
  * Partial update (name/description/allowAll*\/isActive). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `name` trùng tenant khác trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Update tenant
  */
 export const patchAdminTenantsById = (
-    id: string | number,
-    patchAdminTenantsByIdBody: BodyType<PatchAdminTenantsByIdBodyOne | PatchAdminTenantsByIdBodyTwo | PatchAdminTenantsByIdBodyThree>| PatchAdminTenantsByIdBodyTwo | PatchAdminTenantsByIdBodyThree,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  id: string | number,
+  patchAdminTenantsByIdBody:
+    | BodyType<
+        | PatchAdminTenantsByIdBodyOne
+        | PatchAdminTenantsByIdBodyTwo
+        | PatchAdminTenantsByIdBodyThree
+      >
+    | PatchAdminTenantsByIdBodyTwo
+    | PatchAdminTenantsByIdBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<PatchAdminTenantsById200>(
-      {url: `/admin/tenants/${id}`, method: 'PATCH',
-      data: patchAdminTenantsByIdBody, signal
+  return axiosClient<PatchAdminTenantsById200>(
+    {
+      url: `/admin/tenants/${id}`,
+      method: "PATCH",
+      data: patchAdminTenantsByIdBody,
+      signal,
     },
-      options);
+    options
+  )
+}
+
+export const getPatchAdminTenantsByIdMutationOptions = <
+  TError = ErrorType<
+    | PatchAdminTenantsById400
+    | PatchAdminTenantsById401
+    | PatchAdminTenantsById404
+    | PatchAdminTenantsById409
+    | PatchAdminTenantsById500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchAdminTenantsById>>,
+    TError,
+    {
+      id: string | number
+      data: BodyType<
+        | PatchAdminTenantsByIdBodyOne
+        | PatchAdminTenantsByIdBodyTwo
+        | PatchAdminTenantsByIdBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchAdminTenantsById>>,
+  TError,
+  {
+    id: string | number
+    data: BodyType<
+      | PatchAdminTenantsByIdBodyOne
+      | PatchAdminTenantsByIdBodyTwo
+      | PatchAdminTenantsByIdBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["patchAdminTenantsById"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchAdminTenantsById>>,
+    {
+      id: string | number
+      data: BodyType<
+        | PatchAdminTenantsByIdBodyOne
+        | PatchAdminTenantsByIdBodyTwo
+        | PatchAdminTenantsByIdBodyThree
+      >
     }
+  > = (props) => {
+    const { id, data } = props ?? {}
 
+    return patchAdminTenantsById(id, data, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type PatchAdminTenantsByIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchAdminTenantsById>>
+>
+export type PatchAdminTenantsByIdMutationBody = BodyType<
+  | PatchAdminTenantsByIdBodyOne
+  | PatchAdminTenantsByIdBodyTwo
+  | PatchAdminTenantsByIdBodyThree
+>
+export type PatchAdminTenantsByIdMutationError = ErrorType<
+  | PatchAdminTenantsById400
+  | PatchAdminTenantsById401
+  | PatchAdminTenantsById404
+  | PatchAdminTenantsById409
+  | PatchAdminTenantsById500
+>
 
-export const getPatchAdminTenantsByIdMutationOptions = <TError = ErrorType<PatchAdminTenantsById400 | PatchAdminTenantsById401 | PatchAdminTenantsById404 | PatchAdminTenantsById409 | PatchAdminTenantsById500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchAdminTenantsById>>, TError,{id: string | number;data: BodyType<PatchAdminTenantsByIdBodyOne | PatchAdminTenantsByIdBodyTwo | PatchAdminTenantsByIdBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof patchAdminTenantsById>>, TError,{id: string | number;data: BodyType<PatchAdminTenantsByIdBodyOne | PatchAdminTenantsByIdBodyTwo | PatchAdminTenantsByIdBodyThree>}, TContext> => {
-
-const mutationKey = ['patchAdminTenantsById'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchAdminTenantsById>>, {id: string | number;data: BodyType<PatchAdminTenantsByIdBodyOne | PatchAdminTenantsByIdBodyTwo | PatchAdminTenantsByIdBodyThree>}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  patchAdminTenantsById(id,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PatchAdminTenantsByIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchAdminTenantsById>>>
-    export type PatchAdminTenantsByIdMutationBody = BodyType<PatchAdminTenantsByIdBodyOne | PatchAdminTenantsByIdBodyTwo | PatchAdminTenantsByIdBodyThree>
-    export type PatchAdminTenantsByIdMutationError = ErrorType<PatchAdminTenantsById400 | PatchAdminTenantsById401 | PatchAdminTenantsById404 | PatchAdminTenantsById409 | PatchAdminTenantsById500>
-
-    /**
+/**
  * @summary Update tenant
  */
-export const usePatchAdminTenantsById = <TError = ErrorType<PatchAdminTenantsById400 | PatchAdminTenantsById401 | PatchAdminTenantsById404 | PatchAdminTenantsById409 | PatchAdminTenantsById500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchAdminTenantsById>>, TError,{id: string | number;data: BodyType<PatchAdminTenantsByIdBodyOne | PatchAdminTenantsByIdBodyTwo | PatchAdminTenantsByIdBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof patchAdminTenantsById>>,
-        TError,
-        {id: string | number;data: BodyType<PatchAdminTenantsByIdBodyOne | PatchAdminTenantsByIdBodyTwo | PatchAdminTenantsByIdBodyThree>},
-        TContext
-      > => {
-      return useMutation(getPatchAdminTenantsByIdMutationOptions(options), queryClient);
-    }
+export const usePatchAdminTenantsById = <
+  TError = ErrorType<
+    | PatchAdminTenantsById400
+    | PatchAdminTenantsById401
+    | PatchAdminTenantsById404
+    | PatchAdminTenantsById409
+    | PatchAdminTenantsById500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchAdminTenantsById>>,
+      TError,
+      {
+        id: string | number
+        data: BodyType<
+          | PatchAdminTenantsByIdBodyOne
+          | PatchAdminTenantsByIdBodyTwo
+          | PatchAdminTenantsByIdBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchAdminTenantsById>>,
+  TError,
+  {
+    id: string | number
+    data: BodyType<
+      | PatchAdminTenantsByIdBodyOne
+      | PatchAdminTenantsByIdBodyTwo
+      | PatchAdminTenantsByIdBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(
+    getPatchAdminTenantsByIdMutationOptions(options),
+    queryClient
+  )
+}

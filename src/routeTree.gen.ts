@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/_dashboard'
 import { Route as DashboardIndexRouteImport } from './routes/_dashboard/index'
+import { Route as DashboardAiModelsRouteImport } from './routes/_dashboard/ai-models'
 import { Route as DashboardConfigRouteImport } from './routes/_dashboard/config'
 import { Route as DashboardCronRunsRouteImport } from './routes/_dashboard/cron-runs'
 import { Route as DashboardGenerateRouteImport } from './routes/_dashboard/generate'
@@ -27,6 +28,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAiModelsRoute = DashboardAiModelsRouteImport.update({
+  id: '/ai-models',
+  path: '/ai-models',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardConfigRoute = DashboardConfigRouteImport.update({
@@ -73,6 +79,7 @@ const DashboardTenantsTenantIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof DashboardIndexRoute
+  '/ai-models': typeof DashboardAiModelsRoute
   '/config': typeof DashboardConfigRoute
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByFullPath {
   '/tenants/': typeof DashboardTenantsIndexRoute
 }
 export interface FileRoutesByTo {
+  '/ai-models': typeof DashboardAiModelsRoute
   '/config': typeof DashboardConfigRoute
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
@@ -96,6 +104,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_dashboard': typeof DashboardRouteWithChildren
+  '/_dashboard/ai-models': typeof DashboardAiModelsRoute
   '/_dashboard/config': typeof DashboardConfigRoute
   '/_dashboard/cron-runs': typeof DashboardCronRunsRoute
   '/_dashboard/generate': typeof DashboardGenerateRoute
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-models'
     | '/config'
     | '/cron-runs'
     | '/generate'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/tenants/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/ai-models'
     | '/config'
     | '/cron-runs'
     | '/generate'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_dashboard'
+    | '/_dashboard/ai-models'
     | '/_dashboard/config'
     | '/_dashboard/cron-runs'
     | '/_dashboard/generate'
@@ -161,6 +173,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/ai-models': {
+      id: '/_dashboard/ai-models'
+      path: '/ai-models'
+      fullPath: '/ai-models'
+      preLoaderRoute: typeof DashboardAiModelsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/config': {
@@ -223,6 +242,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface DashboardRouteChildren {
+  DashboardAiModelsRoute: typeof DashboardAiModelsRoute
   DashboardConfigRoute: typeof DashboardConfigRoute
   DashboardCronRunsRoute: typeof DashboardCronRunsRoute
   DashboardGenerateRoute: typeof DashboardGenerateRoute
@@ -235,6 +255,7 @@ interface DashboardRouteChildren {
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAiModelsRoute: DashboardAiModelsRoute,
   DashboardConfigRoute: DashboardConfigRoute,
   DashboardCronRunsRoute: DashboardCronRunsRoute,
   DashboardGenerateRoute: DashboardGenerateRoute,

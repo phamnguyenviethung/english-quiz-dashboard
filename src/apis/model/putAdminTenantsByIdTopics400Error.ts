@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PutAdminTenantsByIdTopics400ErrorCode } from './putAdminTenantsByIdTopics400ErrorCode.ts';
+import type { PutAdminTenantsByIdTopics400ErrorCode } from "./putAdminTenantsByIdTopics400ErrorCode.ts"
 
 export type PutAdminTenantsByIdTopics400Error = {
-  code: PutAdminTenantsByIdTopics400ErrorCode;
-  message: string;
-};
+  code: PutAdminTenantsByIdTopics400ErrorCode
+  message: string
+}

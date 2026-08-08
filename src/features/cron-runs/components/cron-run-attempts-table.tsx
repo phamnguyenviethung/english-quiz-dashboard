@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { formatNumber } from "@/lib/format.ts"
+import { formatNumber, formatUsd } from "@/lib/format.ts"
 
 import { getCronStatusMeta } from "../constants.ts"
 import type { CronRunAttempt } from "../types.ts"
@@ -27,6 +27,7 @@ export function CronRunAttemptsTable({
             <TableHead className="text-right">Lần</TableHead>
             <TableHead className="text-right">Sinh ra</TableHead>
             <TableHead className="text-right">Token</TableHead>
+            <TableHead className="text-right">Chi phí</TableHead>
             <TableHead>Lỗi</TableHead>
           </TableRow>
         </TableHeader>
@@ -50,6 +51,16 @@ export function CronRunAttemptsTable({
                 </TableCell>
                 <TableCell className="text-right tabular-nums">
                   {formatNumber(attempt.tokenIn + attempt.tokenOut)}
+                </TableCell>
+                <TableCell
+                  className="text-right tabular-nums"
+                  title={
+                    attempt.costUsd === null
+                      ? "Model chưa có giá nên không tính được chi phí"
+                      : undefined
+                  }
+                >
+                  {formatUsd(attempt.costUsd)}
                 </TableCell>
                 <TableCell className="max-w-64">
                   {attempt.errorMessage ? (

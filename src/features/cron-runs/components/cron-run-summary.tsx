@@ -2,6 +2,7 @@ import {
   IconAlertTriangle,
   IconClock,
   IconCoins,
+  IconCurrencyDollar,
   IconDatabase,
   IconStack2,
 } from "@tabler/icons-react"
@@ -10,7 +11,12 @@ import { CollapsibleJson } from "@/components/common/json-block.tsx"
 import { StatTile, StatTileGrid } from "@/components/common/stat-tile.tsx"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
-import { formatDateTime, formatDuration, formatNumber } from "@/lib/format.ts"
+import {
+  formatDateTime,
+  formatDuration,
+  formatNumber,
+  formatUsd,
+} from "@/lib/format.ts"
 
 import {
   CRON_JOB_LABELS,
@@ -40,7 +46,7 @@ export function CronRunSummary({ run }: { run: CronRun }) {
         </code>
       </div>
 
-      <StatTileGrid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-3">
+      <StatTileGrid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         <StatTile
           label="Buckets"
           value={`${formatNumber(run.succeededBuckets)}/${formatNumber(run.totalBuckets)}`}
@@ -64,6 +70,17 @@ export function CronRunSummary({ run }: { run: CronRun }) {
           value={formatNumber(run.tokenIn + run.tokenOut)}
           hint={`${formatNumber(run.tokenIn)} vào / ${formatNumber(run.tokenOut)} ra`}
           icon={IconCoins}
+        />
+        <StatTile
+          label="Chi phí"
+          value={formatUsd(run.costUsd)}
+          hint={
+            run.costUsd === null
+              ? "Model chưa có giá cache"
+              : "Tính từ token và giá model"
+          }
+          tone={run.costUsd === null ? "muted" : "default"}
+          icon={IconCurrencyDollar}
         />
         <StatTile
           label="Thời lượng"

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminTenants409Error } from './postAdminTenants409Error.ts';
+import type { PostAdminTenants409Error } from "./postAdminTenants409Error.ts"
 
 export type PostAdminTenants409 = {
-  success: false;
-  error: PostAdminTenants409Error;
-};
+  success: false
+  error: PostAdminTenants409Error
+}

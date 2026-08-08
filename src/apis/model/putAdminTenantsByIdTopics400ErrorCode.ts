@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PutAdminTenantsByIdTopics400ErrorCode = typeof PutAdminTenantsByIdTopics400ErrorCode[keyof typeof PutAdminTenantsByIdTopics400ErrorCode];
-
+export type PutAdminTenantsByIdTopics400ErrorCode =
+  (typeof PutAdminTenantsByIdTopics400ErrorCode)[keyof typeof PutAdminTenantsByIdTopics400ErrorCode]
 
 export const PutAdminTenantsByIdTopics400ErrorCode = {
-  VALIDATION: 'VALIDATION',
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  FORBIDDEN: 'FORBIDDEN',
-  NOT_FOUND: 'NOT_FOUND',
-  CONFLICT: 'CONFLICT',
-  BUSINESS_ERROR: 'BUSINESS_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-} as const;
+  VALIDATION: "VALIDATION",
+  UNAUTHORIZED: "UNAUTHORIZED",
+  FORBIDDEN: "FORBIDDEN",
+  NOT_FOUND: "NOT_FOUND",
+  CONFLICT: "CONFLICT",
+  BUSINESS_ERROR: "BUSINESS_ERROR",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+} as const

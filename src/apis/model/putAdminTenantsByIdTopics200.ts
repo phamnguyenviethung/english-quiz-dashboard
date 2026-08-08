@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PutAdminTenantsByIdTopics200Data } from './putAdminTenantsByIdTopics200Data.ts';
+import type { PutAdminTenantsByIdTopics200Data } from "./putAdminTenantsByIdTopics200Data.ts"
 
 export type PutAdminTenantsByIdTopics200 = {
-  success: true;
-  data: PutAdminTenantsByIdTopics200Data;
-};
+  success: true
+  data: PutAdminTenantsByIdTopics200Data
+}

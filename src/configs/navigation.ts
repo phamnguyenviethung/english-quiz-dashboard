@@ -2,6 +2,7 @@ import type { Icon } from "@tabler/icons-react"
 import {
   IconAdjustmentsAlt,
   IconClockBolt,
+  IconCpu,
   IconDatabase,
   IconLayoutGrid,
   IconListDetails,
@@ -17,6 +18,7 @@ export type NavPath =
   | "/generate"
   | "/metadata"
   | "/config"
+  | "/ai-models"
   | "/cron-runs"
   | "/tenants"
 
@@ -80,6 +82,12 @@ export const NAV_GROUPS: NavGroup[] = [
         label: "Cấu hình",
         icon: IconAdjustmentsAlt,
         to: "/config",
+      },
+      {
+        key: "ai-models",
+        label: "AI Model",
+        icon: IconCpu,
+        to: "/ai-models",
       },
       {
         key: "cron",

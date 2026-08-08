@@ -5,10 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -21,8 +18,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query"
 
 import type {
   GetAdminModels200,
@@ -32,6 +29,10 @@ import type {
   GetAdminModelsById401,
   GetAdminModelsById404,
   GetAdminModelsById500,
+  GetAdminModelsCatalog200,
+  GetAdminModelsCatalog401,
+  GetAdminModelsCatalog500,
+  GetAdminModelsCatalogParams,
   PatchAdminModelsById200,
   PatchAdminModelsById400,
   PatchAdminModelsById401,
@@ -48,344 +49,991 @@ import type {
   PostAdminModels500,
   PostAdminModelsBodyOne,
   PostAdminModelsBodyThree,
-  PostAdminModelsBodyTwo
-} from '../model';
+  PostAdminModelsBodyTwo,
+  PostAdminModelsByIdSync200,
+  PostAdminModelsByIdSync401,
+  PostAdminModelsByIdSync404,
+  PostAdminModelsByIdSync500,
+  PostAdminModelsSyncAll200,
+  PostAdminModelsSyncAll401,
+  PostAdminModelsSyncAll500,
+} from "../model"
 
-import { axiosClient } from '../../configs/axiosClient.ts';
-import type { ErrorType , BodyType } from '../../configs/axiosClient.ts';
+import { axiosClient } from "../../configs/axiosClient.ts"
+import type { ErrorType, BodyType } from "../../configs/axiosClient.ts"
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
-
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
+const withQueryKey = <T extends object, K>(
+  query: T,
+  queryKey: K
+): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K }
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
+    if (key === "queryKey") continue
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    });
+    })
   }
-  return result;
-};
+  return result
+}
 
 /**
  * Danh sách toàn bộ AI model (dùng bởi aiClient.getStudyModels khi chọn model sinh câu hỏi). Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary List AI models
  */
 export const getAdminModels = (
-
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<GetAdminModels200>(
-      {url: `/admin/models`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetAdminModelsQueryKey = () => {
-    return [
-    `/admin/models`
-    ] as const;
-    }
-
-
-export const getGetAdminModelsQueryOptions = <TData = Awaited<ReturnType<typeof getAdminModels>>, TError = ErrorType<GetAdminModels401 | GetAdminModels500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminModelsQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminModels>>> = ({ signal }) => getAdminModels(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return axiosClient<GetAdminModels200>(
+    { url: `/admin/models`, method: "GET", signal },
+    options
+  )
 }
 
-export type GetAdminModelsQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminModels>>>
-export type GetAdminModelsQueryError = ErrorType<GetAdminModels401 | GetAdminModels500>
+export const getGetAdminModelsQueryKey = () => {
+  return [`/admin/models`] as const
+}
 
+export const getGetAdminModelsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminModels>>,
+  TError = ErrorType<GetAdminModels401 | GetAdminModels500>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>
+  >
+  request?: SecondParameter<typeof axiosClient>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-export function useGetAdminModels<TData = Awaited<ReturnType<typeof getAdminModels>>, TError = ErrorType<GetAdminModels401 | GetAdminModels500>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>> & Pick<
+  const queryKey = queryOptions?.queryKey ?? getGetAdminModelsQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminModels>>> = ({
+    signal,
+  }) => getAdminModels(requestOptions, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminModels>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminModelsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminModels>>
+>
+export type GetAdminModelsQueryError = ErrorType<
+  GetAdminModels401 | GetAdminModels500
+>
+
+export function useGetAdminModels<
+  TData = Awaited<ReturnType<typeof getAdminModels>>,
+  TError = ErrorType<GetAdminModels401 | GetAdminModels500>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminModels>>,
           TError,
           Awaited<ReturnType<typeof getAdminModels>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminModels<TData = Awaited<ReturnType<typeof getAdminModels>>, TError = ErrorType<GetAdminModels401 | GetAdminModels500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminModels<
+  TData = Awaited<ReturnType<typeof getAdminModels>>,
+  TError = ErrorType<GetAdminModels401 | GetAdminModels500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminModels>>,
           TError,
           Awaited<ReturnType<typeof getAdminModels>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminModels<TData = Awaited<ReturnType<typeof getAdminModels>>, TError = ErrorType<GetAdminModels401 | GetAdminModels500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminModels<
+  TData = Awaited<ReturnType<typeof getAdminModels>>,
+  TError = ErrorType<GetAdminModels401 | GetAdminModels500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary List AI models
  */
 
-export function useGetAdminModels<TData = Awaited<ReturnType<typeof getAdminModels>>, TError = ErrorType<GetAdminModels401 | GetAdminModels500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
+export function useGetAdminModels<
+  TData = Awaited<ReturnType<typeof getAdminModels>>,
+  TError = ErrorType<GetAdminModels401 | GetAdminModels500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAdminModels>>, TError, TData>
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
   const queryOptions = getGetAdminModelsQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  return withQueryKey(query, queryOptions.queryKey);
+  return withQueryKey(query, queryOptions.queryKey)
 }
 
-
-
-
-
-
 /**
- * Tạo AI model mới. `key` và `modelId` đều phải unique — trùng trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Tạo AI model mới. `key` và `modelId` đều phải unique — trùng trả 409. Giá được tự động nạp từ OpenRouter catalog nếu `modelId` có trên đó (không có thì vẫn tạo, chỉ là chưa tính được cost). Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Create AI model
  */
 export const postAdminModels = (
-    postAdminModelsBody: BodyType<PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree>| PostAdminModelsBodyTwo | PostAdminModelsBodyThree,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  postAdminModelsBody:
+    | BodyType<
+        | PostAdminModelsBodyOne
+        | PostAdminModelsBodyTwo
+        | PostAdminModelsBodyThree
+      >
+    | PostAdminModelsBodyTwo
+    | PostAdminModelsBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
+  return axiosClient<PostAdminModels201>(
+    { url: `/admin/models`, method: "POST", data: postAdminModelsBody, signal },
+    options
+  )
+}
 
-
-      return axiosClient<PostAdminModels201>(
-      {url: `/admin/models`, method: 'POST',
-      data: postAdminModelsBody, signal
+export const getPostAdminModelsMutationOptions = <
+  TError = ErrorType<
+    | PostAdminModels400
+    | PostAdminModels401
+    | PostAdminModels409
+    | PostAdminModels500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAdminModels>>,
+    TError,
+    {
+      data: BodyType<
+        | PostAdminModelsBodyOne
+        | PostAdminModelsBodyTwo
+        | PostAdminModelsBodyThree
+      >
     },
-      options);
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAdminModels>>,
+  TError,
+  {
+    data: BodyType<
+      PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["postAdminModels"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAdminModels>>,
+    {
+      data: BodyType<
+        | PostAdminModelsBodyOne
+        | PostAdminModelsBodyTwo
+        | PostAdminModelsBodyThree
+      >
     }
+  > = (props) => {
+    const { data } = props ?? {}
 
+    return postAdminModels(data, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type PostAdminModelsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAdminModels>>
+>
+export type PostAdminModelsMutationBody = BodyType<
+  PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree
+>
+export type PostAdminModelsMutationError = ErrorType<
+  | PostAdminModels400
+  | PostAdminModels401
+  | PostAdminModels409
+  | PostAdminModels500
+>
 
-export const getPostAdminModelsMutationOptions = <TError = ErrorType<PostAdminModels400 | PostAdminModels401 | PostAdminModels409 | PostAdminModels500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminModels>>, TError,{data: BodyType<PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof postAdminModels>>, TError,{data: BodyType<PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree>}, TContext> => {
-
-const mutationKey = ['postAdminModels'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminModels>>, {data: BodyType<PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postAdminModels(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostAdminModelsMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminModels>>>
-    export type PostAdminModelsMutationBody = BodyType<PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree>
-    export type PostAdminModelsMutationError = ErrorType<PostAdminModels400 | PostAdminModels401 | PostAdminModels409 | PostAdminModels500>
-
-    /**
+/**
  * @summary Create AI model
  */
-export const usePostAdminModels = <TError = ErrorType<PostAdminModels400 | PostAdminModels401 | PostAdminModels409 | PostAdminModels500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminModels>>, TError,{data: BodyType<PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postAdminModels>>,
+export const usePostAdminModels = <
+  TError = ErrorType<
+    | PostAdminModels400
+    | PostAdminModels401
+    | PostAdminModels409
+    | PostAdminModels500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postAdminModels>>,
+      TError,
+      {
+        data: BodyType<
+          | PostAdminModelsBodyOne
+          | PostAdminModelsBodyTwo
+          | PostAdminModelsBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postAdminModels>>,
+  TError,
+  {
+    data: BodyType<
+      PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(getPostAdminModelsMutationOptions(options), queryClient)
+}
+/**
+ * Danh sách model công khai trên OpenRouter kèm giá thực tế (USD/token) — dùng để chọn trước khi thêm vào `ai_models`. Kết quả cache 5 phút trong process. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * @summary Browse OpenRouter model catalog
+ */
+export const getAdminModelsCatalog = (
+  params?: GetAdminModelsCatalogParams,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
+) => {
+  return axiosClient<GetAdminModelsCatalog200>(
+    { url: `/admin/models/catalog`, method: "GET", params, signal },
+    options
+  )
+}
+
+export const getGetAdminModelsCatalogQueryKey = (
+  params?: GetAdminModelsCatalogParams
+) => {
+  return [`/admin/models/catalog`, ...(params ? [params] : [])] as const
+}
+
+export const getGetAdminModelsCatalogQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+  TError = ErrorType<GetAdminModelsCatalog401 | GetAdminModelsCatalog500>,
+>(
+  params?: GetAdminModelsCatalogParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsCatalog>>,
         TError,
-        {data: BodyType<PostAdminModelsBodyOne | PostAdminModelsBodyTwo | PostAdminModelsBodyThree>},
-        TContext
-      > => {
-      return useMutation(getPostAdminModelsMutationOptions(options), queryClient);
-    }
-    /**
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAdminModelsCatalogQueryKey(params)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAdminModelsCatalog>>
+  > = ({ signal }) => getAdminModelsCatalog(params, requestOptions, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminModelsCatalogQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminModelsCatalog>>
+>
+export type GetAdminModelsCatalogQueryError = ErrorType<
+  GetAdminModelsCatalog401 | GetAdminModelsCatalog500
+>
+
+export function useGetAdminModelsCatalog<
+  TData = Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+  TError = ErrorType<GetAdminModelsCatalog401 | GetAdminModelsCatalog500>,
+>(
+  params: undefined | GetAdminModelsCatalogParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+          TError,
+          Awaited<ReturnType<typeof getAdminModelsCatalog>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminModelsCatalog<
+  TData = Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+  TError = ErrorType<GetAdminModelsCatalog401 | GetAdminModelsCatalog500>,
+>(
+  params?: GetAdminModelsCatalogParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+          TError,
+          Awaited<ReturnType<typeof getAdminModelsCatalog>>
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminModelsCatalog<
+  TData = Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+  TError = ErrorType<GetAdminModelsCatalog401 | GetAdminModelsCatalog500>,
+>(
+  params?: GetAdminModelsCatalogParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+/**
+ * @summary Browse OpenRouter model catalog
+ */
+
+export function useGetAdminModelsCatalog<
+  TData = Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+  TError = ErrorType<GetAdminModelsCatalog401 | GetAdminModelsCatalog500>,
+>(
+  params?: GetAdminModelsCatalogParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsCatalog>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetAdminModelsCatalogQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+
+  return withQueryKey(query, queryOptions.queryKey)
+}
+
+/**
  * Chi tiết 1 AI model. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Get AI model by id
  */
 export const getAdminModelsById = (
-    id: string | number,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  id: string | number,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<GetAdminModelsById200>(
-      {url: `/admin/models/${id}`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetAdminModelsByIdQueryKey = (id: string | number,) => {
-    return [
-    `/admin/models/${id}`
-    ] as const;
-    }
-
-
-export const getGetAdminModelsByIdQueryOptions = <TData = Awaited<ReturnType<typeof getAdminModelsById>>, TError = ErrorType<GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500>>(id: string | number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModelsById>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetAdminModelsByIdQueryKey(id);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminModelsById>>> = ({ signal }) => getAdminModelsById(id, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminModelsById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return axiosClient<GetAdminModelsById200>(
+    { url: `/admin/models/${id}`, method: "GET", signal },
+    options
+  )
 }
 
-export type GetAdminModelsByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminModelsById>>>
-export type GetAdminModelsByIdQueryError = ErrorType<GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500>
+export const getGetAdminModelsByIdQueryKey = (id: string | number) => {
+  return [`/admin/models/${id}`] as const
+}
 
+export const getGetAdminModelsByIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAdminModelsById>>,
+  TError = ErrorType<
+    GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500
+  >,
+>(
+  id: string | number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsById>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-export function useGetAdminModelsById<TData = Awaited<ReturnType<typeof getAdminModelsById>>, TError = ErrorType<GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500>>(
- id: string | number, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModelsById>>, TError, TData>> & Pick<
+  const queryKey = queryOptions?.queryKey ?? getGetAdminModelsByIdQueryKey(id)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAdminModelsById>>
+  > = ({ signal }) => getAdminModelsById(id, requestOptions, signal)
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: id !== null && id !== undefined,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAdminModelsById>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminModelsByIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAdminModelsById>>
+>
+export type GetAdminModelsByIdQueryError = ErrorType<
+  GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500
+>
+
+export function useGetAdminModelsById<
+  TData = Awaited<ReturnType<typeof getAdminModelsById>>,
+  TError = ErrorType<
+    GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500
+  >,
+>(
+  id: string | number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsById>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminModelsById>>,
           TError,
           Awaited<ReturnType<typeof getAdminModelsById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminModelsById<TData = Awaited<ReturnType<typeof getAdminModelsById>>, TError = ErrorType<GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500>>(
- id: string | number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModelsById>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminModelsById<
+  TData = Awaited<ReturnType<typeof getAdminModelsById>>,
+  TError = ErrorType<
+    GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500
+  >,
+>(
+  id: string | number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsById>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAdminModelsById>>,
           TError,
           Awaited<ReturnType<typeof getAdminModelsById>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAdminModelsById<TData = Awaited<ReturnType<typeof getAdminModelsById>>, TError = ErrorType<GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500>>(
- id: string | number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModelsById>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetAdminModelsById<
+  TData = Awaited<ReturnType<typeof getAdminModelsById>>,
+  TError = ErrorType<
+    GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500
+  >,
+>(
+  id: string | number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsById>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get AI model by id
  */
 
-export function useGetAdminModelsById<TData = Awaited<ReturnType<typeof getAdminModelsById>>, TError = ErrorType<GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500>>(
- id: string | number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminModelsById>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAdminModelsById<
+  TData = Awaited<ReturnType<typeof getAdminModelsById>>,
+  TError = ErrorType<
+    GetAdminModelsById401 | GetAdminModelsById404 | GetAdminModelsById500
+  >,
+>(
+  id: string | number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAdminModelsById>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetAdminModelsByIdQueryOptions(id, options)
 
-  const queryOptions = getGetAdminModelsByIdQueryOptions(id,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+  return withQueryKey(query, queryOptions.queryKey)
 }
 
-
-
-
-
-
 /**
- * Partial update (key/modelId/isActive). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `key`/`modelId` trùng model khác trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Partial update (key/modelId/isActive/scheduleEnabled/manualEnabled/*Provider). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `modelId` sẽ nạp lại giá từ catalog. Đổi `key`/`modelId` trùng model khác trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
  * @summary Update AI model
  */
 export const patchAdminModelsById = (
-    id: string | number,
-    patchAdminModelsByIdBody: BodyType<PatchAdminModelsByIdBodyOne | PatchAdminModelsByIdBodyTwo | PatchAdminModelsByIdBodyThree>| PatchAdminModelsByIdBodyTwo | PatchAdminModelsByIdBodyThree,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  id: string | number,
+  patchAdminModelsByIdBody:
+    | BodyType<
+        | PatchAdminModelsByIdBodyOne
+        | PatchAdminModelsByIdBodyTwo
+        | PatchAdminModelsByIdBodyThree
+      >
+    | PatchAdminModelsByIdBodyTwo
+    | PatchAdminModelsByIdBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<PatchAdminModelsById200>(
-      {url: `/admin/models/${id}`, method: 'PATCH',
-      data: patchAdminModelsByIdBody, signal
+  return axiosClient<PatchAdminModelsById200>(
+    {
+      url: `/admin/models/${id}`,
+      method: "PATCH",
+      data: patchAdminModelsByIdBody,
+      signal,
     },
-      options);
+    options
+  )
+}
+
+export const getPatchAdminModelsByIdMutationOptions = <
+  TError = ErrorType<
+    | PatchAdminModelsById400
+    | PatchAdminModelsById401
+    | PatchAdminModelsById404
+    | PatchAdminModelsById409
+    | PatchAdminModelsById500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchAdminModelsById>>,
+    TError,
+    {
+      id: string | number
+      data: BodyType<
+        | PatchAdminModelsByIdBodyOne
+        | PatchAdminModelsByIdBodyTwo
+        | PatchAdminModelsByIdBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchAdminModelsById>>,
+  TError,
+  {
+    id: string | number
+    data: BodyType<
+      | PatchAdminModelsByIdBodyOne
+      | PatchAdminModelsByIdBodyTwo
+      | PatchAdminModelsByIdBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["patchAdminModelsById"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchAdminModelsById>>,
+    {
+      id: string | number
+      data: BodyType<
+        | PatchAdminModelsByIdBodyOne
+        | PatchAdminModelsByIdBodyTwo
+        | PatchAdminModelsByIdBodyThree
+      >
     }
+  > = (props) => {
+    const { id, data } = props ?? {}
 
+    return patchAdminModelsById(id, data, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type PatchAdminModelsByIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchAdminModelsById>>
+>
+export type PatchAdminModelsByIdMutationBody = BodyType<
+  | PatchAdminModelsByIdBodyOne
+  | PatchAdminModelsByIdBodyTwo
+  | PatchAdminModelsByIdBodyThree
+>
+export type PatchAdminModelsByIdMutationError = ErrorType<
+  | PatchAdminModelsById400
+  | PatchAdminModelsById401
+  | PatchAdminModelsById404
+  | PatchAdminModelsById409
+  | PatchAdminModelsById500
+>
 
-export const getPatchAdminModelsByIdMutationOptions = <TError = ErrorType<PatchAdminModelsById400 | PatchAdminModelsById401 | PatchAdminModelsById404 | PatchAdminModelsById409 | PatchAdminModelsById500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchAdminModelsById>>, TError,{id: string | number;data: BodyType<PatchAdminModelsByIdBodyOne | PatchAdminModelsByIdBodyTwo | PatchAdminModelsByIdBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof patchAdminModelsById>>, TError,{id: string | number;data: BodyType<PatchAdminModelsByIdBodyOne | PatchAdminModelsByIdBodyTwo | PatchAdminModelsByIdBodyThree>}, TContext> => {
-
-const mutationKey = ['patchAdminModelsById'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchAdminModelsById>>, {id: string | number;data: BodyType<PatchAdminModelsByIdBodyOne | PatchAdminModelsByIdBodyTwo | PatchAdminModelsByIdBodyThree>}> = (props) => {
-          const {id,data} = props ?? {};
-
-          return  patchAdminModelsById(id,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PatchAdminModelsByIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchAdminModelsById>>>
-    export type PatchAdminModelsByIdMutationBody = BodyType<PatchAdminModelsByIdBodyOne | PatchAdminModelsByIdBodyTwo | PatchAdminModelsByIdBodyThree>
-    export type PatchAdminModelsByIdMutationError = ErrorType<PatchAdminModelsById400 | PatchAdminModelsById401 | PatchAdminModelsById404 | PatchAdminModelsById409 | PatchAdminModelsById500>
-
-    /**
+/**
  * @summary Update AI model
  */
-export const usePatchAdminModelsById = <TError = ErrorType<PatchAdminModelsById400 | PatchAdminModelsById401 | PatchAdminModelsById404 | PatchAdminModelsById409 | PatchAdminModelsById500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchAdminModelsById>>, TError,{id: string | number;data: BodyType<PatchAdminModelsByIdBodyOne | PatchAdminModelsByIdBodyTwo | PatchAdminModelsByIdBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof patchAdminModelsById>>,
-        TError,
-        {id: string | number;data: BodyType<PatchAdminModelsByIdBodyOne | PatchAdminModelsByIdBodyTwo | PatchAdminModelsByIdBodyThree>},
-        TContext
-      > => {
-      return useMutation(getPatchAdminModelsByIdMutationOptions(options), queryClient);
-    }
+export const usePatchAdminModelsById = <
+  TError = ErrorType<
+    | PatchAdminModelsById400
+    | PatchAdminModelsById401
+    | PatchAdminModelsById404
+    | PatchAdminModelsById409
+    | PatchAdminModelsById500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchAdminModelsById>>,
+      TError,
+      {
+        id: string | number
+        data: BodyType<
+          | PatchAdminModelsByIdBodyOne
+          | PatchAdminModelsByIdBodyTwo
+          | PatchAdminModelsByIdBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchAdminModelsById>>,
+  TError,
+  {
+    id: string | number
+    data: BodyType<
+      | PatchAdminModelsByIdBodyOne
+      | PatchAdminModelsByIdBodyTwo
+      | PatchAdminModelsByIdBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(
+    getPatchAdminModelsByIdMutationOptions(options),
+    queryClient
+  )
+}
+/**
+ * Nạp lại giá + metadata từ OpenRouter catalog cho toàn bộ model trong `ai_models`. Model không có trên catalog được liệt kê ở `notFound` và giữ nguyên giá cũ. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * @summary Sync pricing for all models
+ */
+export const postAdminModelsSyncAll = (
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
+) => {
+  return axiosClient<PostAdminModelsSyncAll200>(
+    { url: `/admin/models/sync-all`, method: "POST", signal },
+    options
+  )
+}
+
+export const getPostAdminModelsSyncAllMutationOptions = <
+  TError = ErrorType<PostAdminModelsSyncAll401 | PostAdminModelsSyncAll500>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAdminModelsSyncAll>>,
+    TError,
+    void,
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAdminModelsSyncAll>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationKey = ["postAdminModelsSyncAll"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAdminModelsSyncAll>>,
+    void
+  > = () => {
+    return postAdminModelsSyncAll(requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostAdminModelsSyncAllMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAdminModelsSyncAll>>
+>
+
+export type PostAdminModelsSyncAllMutationError = ErrorType<
+  PostAdminModelsSyncAll401 | PostAdminModelsSyncAll500
+>
+
+/**
+ * @summary Sync pricing for all models
+ */
+export const usePostAdminModelsSyncAll = <
+  TError = ErrorType<PostAdminModelsSyncAll401 | PostAdminModelsSyncAll500>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postAdminModelsSyncAll>>,
+      TError,
+      void,
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postAdminModelsSyncAll>>,
+  TError,
+  void,
+  TContext
+> => {
+  return useMutation(
+    getPostAdminModelsSyncAllMutationOptions(options),
+    queryClient
+  )
+}
+/**
+ * Nạp lại giá + metadata từ OpenRouter catalog cho 1 model. Model không tồn tại hoặc không có trên catalog trả 404. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * @summary Sync pricing for one model
+ */
+export const postAdminModelsByIdSync = (
+  id: string | number,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
+) => {
+  return axiosClient<PostAdminModelsByIdSync200>(
+    { url: `/admin/models/${id}/sync`, method: "POST", signal },
+    options
+  )
+}
+
+export const getPostAdminModelsByIdSyncMutationOptions = <
+  TError = ErrorType<
+    | PostAdminModelsByIdSync401
+    | PostAdminModelsByIdSync404
+    | PostAdminModelsByIdSync500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postAdminModelsByIdSync>>,
+    TError,
+    { id: string | number },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postAdminModelsByIdSync>>,
+  TError,
+  { id: string | number },
+  TContext
+> => {
+  const mutationKey = ["postAdminModelsByIdSync"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAdminModelsByIdSync>>,
+    { id: string | number }
+  > = (props) => {
+    const { id } = props ?? {}
+
+    return postAdminModelsByIdSync(id, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostAdminModelsByIdSyncMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAdminModelsByIdSync>>
+>
+
+export type PostAdminModelsByIdSyncMutationError = ErrorType<
+  | PostAdminModelsByIdSync401
+  | PostAdminModelsByIdSync404
+  | PostAdminModelsByIdSync500
+>
+
+/**
+ * @summary Sync pricing for one model
+ */
+export const usePostAdminModelsByIdSync = <
+  TError = ErrorType<
+    | PostAdminModelsByIdSync401
+    | PostAdminModelsByIdSync404
+    | PostAdminModelsByIdSync500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postAdminModelsByIdSync>>,
+      TError,
+      { id: string | number },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postAdminModelsByIdSync>>,
+  TError,
+  { id: string | number },
+  TContext
+> => {
+  return useMutation(
+    getPostAdminModelsByIdSyncMutationOptions(options),
+    queryClient
+  )
+}

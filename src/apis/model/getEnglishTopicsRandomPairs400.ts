@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishTopicsRandomPairs400Error } from './getEnglishTopicsRandomPairs400Error.ts';
+import type { GetEnglishTopicsRandomPairs400Error } from "./getEnglishTopicsRandomPairs400Error.ts"
 
 export type GetEnglishTopicsRandomPairs400 = {
-  success: false;
-  error: GetEnglishTopicsRandomPairs400Error;
-};
+  success: false
+  error: GetEnglishTopicsRandomPairs400Error
+}

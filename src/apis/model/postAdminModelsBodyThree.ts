@@ -5,18 +5,26 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { PostAdminModelsBodyThreeManualProvider } from "./postAdminModelsBodyThreeManualProvider.ts"
+import type { PostAdminModelsBodyThreeScheduleProvider } from "./postAdminModelsBodyThreeScheduleProvider.ts"
 
 export type PostAdminModelsBodyThree = {
   /**
-     * Nhãn ngắn gọn, unique. VD: GEMINI_FLASH_LITE
-     * @minLength 1
-     */
-  key: string;
+   * Nhãn ngắn gọn, unique. VD: GEMINI_FLASH_LITE
+   * @minLength 1
+   */
+  key: string
   /**
-     * OpenRouter model id, unique. VD: google/gemini-2.5-flash-lite:nitro
-     * @minLength 1
-     */
-  modelId: string;
+   * OpenRouter model id, unique. VD: google/gemini-2.5-flash-lite:nitro
+   * @minLength 1
+   */
+  modelId: string
   /** Mặc định true. */
-  isActive?: boolean;
-};
+  isActive?: boolean
+  /** Cho phép chọn model này ở đường tự động (cron + on-demand). Mặc định true. */
+  scheduleEnabled?: boolean
+  /** Cho phép chọn model này khi admin trigger refill. Mặc định true. */
+  manualEnabled?: boolean
+  scheduleProvider?: PostAdminModelsBodyThreeScheduleProvider
+  manualProvider?: PostAdminModelsBodyThreeManualProvider
+}

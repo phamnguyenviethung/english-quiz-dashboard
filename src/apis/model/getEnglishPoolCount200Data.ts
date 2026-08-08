@@ -5,12 +5,12 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolCount200DataEngLevel } from './getEnglishPoolCount200DataEngLevel.ts';
-import type { GetEnglishPoolCount200DataQuizType } from './getEnglishPoolCount200DataQuizType.ts';
+import type { GetEnglishPoolCount200DataEngLevel } from "./getEnglishPoolCount200DataEngLevel.ts"
+import type { GetEnglishPoolCount200DataQuizType } from "./getEnglishPoolCount200DataQuizType.ts"
 
 export type GetEnglishPoolCount200Data = {
-  engLevel: GetEnglishPoolCount200DataEngLevel;
-  quizType: GetEnglishPoolCount200DataQuizType;
-  topicId: number | null;
-  count: number;
-};
+  engLevel: GetEnglishPoolCount200DataEngLevel
+  quizType: GetEnglishPoolCount200DataQuizType
+  topicId: number | null
+  count: number
+}

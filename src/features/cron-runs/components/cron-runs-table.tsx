@@ -8,7 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { formatDateTime, formatDuration, formatNumber } from "@/lib/format.ts"
+import {
+  formatDateTime,
+  formatDuration,
+  formatNumber,
+  formatUsd,
+} from "@/lib/format.ts"
 
 import {
   CRON_JOB_LABELS,
@@ -18,7 +23,7 @@ import {
 } from "../constants.ts"
 import type { CronRun } from "../types.ts"
 
-const COLUMN_COUNT = 7
+const COLUMN_COUNT = 8
 
 export function CronRunsTable({
   runs,
@@ -41,6 +46,7 @@ export function CronRunsTable({
             <TableHead className="text-right">Buckets</TableHead>
             <TableHead className="text-right">Câu hỏi</TableHead>
             <TableHead className="text-right">Token</TableHead>
+            <TableHead className="text-right">Chi phí</TableHead>
             <TableHead className="text-right">Thời lượng</TableHead>
             <TableHead>Bắt đầu</TableHead>
           </TableRow>
@@ -93,6 +99,16 @@ export function CronRunsTable({
                   </TableCell>
                   <TableCell className="text-right tabular-nums">
                     {formatNumber(run.tokenIn + run.tokenOut)}
+                  </TableCell>
+                  <TableCell
+                    className="text-right tabular-nums"
+                    title={
+                      run.costUsd === null
+                        ? "Model chưa có giá nên không tính được chi phí"
+                        : undefined
+                    }
+                  >
+                    {formatUsd(run.costUsd)}
                   </TableCell>
                   <TableCell className="text-right tabular-nums">
                     {formatDuration(run.durationMs)}

@@ -5,15 +5,13 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation
-} from '@tanstack/react-query';
+import { useMutation } from "@tanstack/react-query"
 import type {
   MutationFunction,
   QueryClient,
   UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query';
+  UseMutationResult,
+} from "@tanstack/react-query"
 
 import type {
   PostEnglishGenerateByQuizType200,
@@ -30,143 +28,376 @@ import type {
   PostEnglishGenerateReading500,
   PostEnglishGenerateReadingBodyOne,
   PostEnglishGenerateReadingBodyThree,
-  PostEnglishGenerateReadingBodyTwo
-} from '../model';
+  PostEnglishGenerateReadingBodyTwo,
+} from "../model"
 
-import { axiosClient } from '../../configs/axiosClient.ts';
-import type { ErrorType , BodyType } from '../../configs/axiosClient.ts';
+import { axiosClient } from "../../configs/axiosClient.ts"
+import type { ErrorType, BodyType } from "../../configs/axiosClient.ts"
 
-
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
 /**
  * Sinh 1 câu hỏi bằng LLM theo `:quizType`. Shape của `question` trong response phụ thuộc quizType — xem oneOf trong response schema. quizType ngoài allow-list của tenant trả 403.
  * @summary Generate a question on-demand
  */
 export const postEnglishGenerateByQuizType = (
-    quizType: 'vocab' | 'fillblank' | 'phrase' | 'conversation' | 'description' | 'synonym' | 'slang' | 'odd-one-out' | 'paragraph' | 'idiom' | 'verb-use-match',
-    postEnglishGenerateByQuizTypeBody: BodyType<PostEnglishGenerateByQuizTypeBodyOne | PostEnglishGenerateByQuizTypeBodyTwo | PostEnglishGenerateByQuizTypeBodyThree>| PostEnglishGenerateByQuizTypeBodyTwo | PostEnglishGenerateByQuizTypeBodyThree,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  quizType:
+    | "vocab"
+    | "fillblank"
+    | "phrase"
+    | "conversation"
+    | "description"
+    | "synonym"
+    | "slang"
+    | "odd-one-out"
+    | "paragraph"
+    | "idiom"
+    | "verb-use-match",
+  postEnglishGenerateByQuizTypeBody:
+    | BodyType<
+        | PostEnglishGenerateByQuizTypeBodyOne
+        | PostEnglishGenerateByQuizTypeBodyTwo
+        | PostEnglishGenerateByQuizTypeBodyThree
+      >
+    | PostEnglishGenerateByQuizTypeBodyTwo
+    | PostEnglishGenerateByQuizTypeBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<PostEnglishGenerateByQuizType200>(
-      {url: `/english/generate/${quizType}`, method: 'POST',
-      data: postEnglishGenerateByQuizTypeBody, signal
+  return axiosClient<PostEnglishGenerateByQuizType200>(
+    {
+      url: `/english/generate/${quizType}`,
+      method: "POST",
+      data: postEnglishGenerateByQuizTypeBody,
+      signal,
     },
-      options);
+    options
+  )
+}
+
+export const getPostEnglishGenerateByQuizTypeMutationOptions = <
+  TError = ErrorType<
+    | PostEnglishGenerateByQuizType400
+    | PostEnglishGenerateByQuizType401
+    | PostEnglishGenerateByQuizType403
+    | PostEnglishGenerateByQuizType500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
+    TError,
+    {
+      quizType:
+        | "vocab"
+        | "fillblank"
+        | "phrase"
+        | "conversation"
+        | "description"
+        | "synonym"
+        | "slang"
+        | "odd-one-out"
+        | "paragraph"
+        | "idiom"
+        | "verb-use-match"
+      data: BodyType<
+        | PostEnglishGenerateByQuizTypeBodyOne
+        | PostEnglishGenerateByQuizTypeBodyTwo
+        | PostEnglishGenerateByQuizTypeBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
+  TError,
+  {
+    quizType:
+      | "vocab"
+      | "fillblank"
+      | "phrase"
+      | "conversation"
+      | "description"
+      | "synonym"
+      | "slang"
+      | "odd-one-out"
+      | "paragraph"
+      | "idiom"
+      | "verb-use-match"
+    data: BodyType<
+      | PostEnglishGenerateByQuizTypeBodyOne
+      | PostEnglishGenerateByQuizTypeBodyTwo
+      | PostEnglishGenerateByQuizTypeBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["postEnglishGenerateByQuizType"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
+    {
+      quizType:
+        | "vocab"
+        | "fillblank"
+        | "phrase"
+        | "conversation"
+        | "description"
+        | "synonym"
+        | "slang"
+        | "odd-one-out"
+        | "paragraph"
+        | "idiom"
+        | "verb-use-match"
+      data: BodyType<
+        | PostEnglishGenerateByQuizTypeBodyOne
+        | PostEnglishGenerateByQuizTypeBodyTwo
+        | PostEnglishGenerateByQuizTypeBodyThree
+      >
     }
+  > = (props) => {
+    const { quizType, data } = props ?? {}
 
+    return postEnglishGenerateByQuizType(quizType, data, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type PostEnglishGenerateByQuizTypeMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>
+>
+export type PostEnglishGenerateByQuizTypeMutationBody = BodyType<
+  | PostEnglishGenerateByQuizTypeBodyOne
+  | PostEnglishGenerateByQuizTypeBodyTwo
+  | PostEnglishGenerateByQuizTypeBodyThree
+>
+export type PostEnglishGenerateByQuizTypeMutationError = ErrorType<
+  | PostEnglishGenerateByQuizType400
+  | PostEnglishGenerateByQuizType401
+  | PostEnglishGenerateByQuizType403
+  | PostEnglishGenerateByQuizType500
+>
 
-export const getPostEnglishGenerateByQuizTypeMutationOptions = <TError = ErrorType<PostEnglishGenerateByQuizType400 | PostEnglishGenerateByQuizType401 | PostEnglishGenerateByQuizType403 | PostEnglishGenerateByQuizType500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>, TError,{quizType: 'vocab' | 'fillblank' | 'phrase' | 'conversation' | 'description' | 'synonym' | 'slang' | 'odd-one-out' | 'paragraph' | 'idiom' | 'verb-use-match';data: BodyType<PostEnglishGenerateByQuizTypeBodyOne | PostEnglishGenerateByQuizTypeBodyTwo | PostEnglishGenerateByQuizTypeBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>, TError,{quizType: 'vocab' | 'fillblank' | 'phrase' | 'conversation' | 'description' | 'synonym' | 'slang' | 'odd-one-out' | 'paragraph' | 'idiom' | 'verb-use-match';data: BodyType<PostEnglishGenerateByQuizTypeBodyOne | PostEnglishGenerateByQuizTypeBodyTwo | PostEnglishGenerateByQuizTypeBodyThree>}, TContext> => {
-
-const mutationKey = ['postEnglishGenerateByQuizType'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>, {quizType: 'vocab' | 'fillblank' | 'phrase' | 'conversation' | 'description' | 'synonym' | 'slang' | 'odd-one-out' | 'paragraph' | 'idiom' | 'verb-use-match';data: BodyType<PostEnglishGenerateByQuizTypeBodyOne | PostEnglishGenerateByQuizTypeBodyTwo | PostEnglishGenerateByQuizTypeBodyThree>}> = (props) => {
-          const {quizType,data} = props ?? {};
-
-          return  postEnglishGenerateByQuizType(quizType,data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostEnglishGenerateByQuizTypeMutationResult = NonNullable<Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>>
-    export type PostEnglishGenerateByQuizTypeMutationBody = BodyType<PostEnglishGenerateByQuizTypeBodyOne | PostEnglishGenerateByQuizTypeBodyTwo | PostEnglishGenerateByQuizTypeBodyThree>
-    export type PostEnglishGenerateByQuizTypeMutationError = ErrorType<PostEnglishGenerateByQuizType400 | PostEnglishGenerateByQuizType401 | PostEnglishGenerateByQuizType403 | PostEnglishGenerateByQuizType500>
-
-    /**
+/**
  * @summary Generate a question on-demand
  */
-export const usePostEnglishGenerateByQuizType = <TError = ErrorType<PostEnglishGenerateByQuizType400 | PostEnglishGenerateByQuizType401 | PostEnglishGenerateByQuizType403 | PostEnglishGenerateByQuizType500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>, TError,{quizType: 'vocab' | 'fillblank' | 'phrase' | 'conversation' | 'description' | 'synonym' | 'slang' | 'odd-one-out' | 'paragraph' | 'idiom' | 'verb-use-match';data: BodyType<PostEnglishGenerateByQuizTypeBodyOne | PostEnglishGenerateByQuizTypeBodyTwo | PostEnglishGenerateByQuizTypeBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
-        TError,
-        {quizType: 'vocab' | 'fillblank' | 'phrase' | 'conversation' | 'description' | 'synonym' | 'slang' | 'odd-one-out' | 'paragraph' | 'idiom' | 'verb-use-match';data: BodyType<PostEnglishGenerateByQuizTypeBodyOne | PostEnglishGenerateByQuizTypeBodyTwo | PostEnglishGenerateByQuizTypeBodyThree>},
-        TContext
-      > => {
-      return useMutation(getPostEnglishGenerateByQuizTypeMutationOptions(options), queryClient);
-    }
-    /**
+export const usePostEnglishGenerateByQuizType = <
+  TError = ErrorType<
+    | PostEnglishGenerateByQuizType400
+    | PostEnglishGenerateByQuizType401
+    | PostEnglishGenerateByQuizType403
+    | PostEnglishGenerateByQuizType500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
+      TError,
+      {
+        quizType:
+          | "vocab"
+          | "fillblank"
+          | "phrase"
+          | "conversation"
+          | "description"
+          | "synonym"
+          | "slang"
+          | "odd-one-out"
+          | "paragraph"
+          | "idiom"
+          | "verb-use-match"
+        data: BodyType<
+          | PostEnglishGenerateByQuizTypeBodyOne
+          | PostEnglishGenerateByQuizTypeBodyTwo
+          | PostEnglishGenerateByQuizTypeBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postEnglishGenerateByQuizType>>,
+  TError,
+  {
+    quizType:
+      | "vocab"
+      | "fillblank"
+      | "phrase"
+      | "conversation"
+      | "description"
+      | "synonym"
+      | "slang"
+      | "odd-one-out"
+      | "paragraph"
+      | "idiom"
+      | "verb-use-match"
+    data: BodyType<
+      | PostEnglishGenerateByQuizTypeBodyOne
+      | PostEnglishGenerateByQuizTypeBodyTwo
+      | PostEnglishGenerateByQuizTypeBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(
+    getPostEnglishGenerateByQuizTypeMutationOptions(options),
+    queryClient
+  )
+}
+/**
  * Sinh 1 câu hỏi đọc hiểu + mental math bằng LLM. Loại đặc biệt, không nằm trong quiz pool distribution.
  * @summary Generate a reading comprehension question
  */
 export const postEnglishGenerateReading = (
-    postEnglishGenerateReadingBody: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>| PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  postEnglishGenerateReadingBody:
+    | BodyType<
+        | PostEnglishGenerateReadingBodyOne
+        | PostEnglishGenerateReadingBodyTwo
+        | PostEnglishGenerateReadingBodyThree
+      >
+    | PostEnglishGenerateReadingBodyTwo
+    | PostEnglishGenerateReadingBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<PostEnglishGenerateReading200>(
-      {url: `/english/generate-reading`, method: 'POST',
-      data: postEnglishGenerateReadingBody, signal
+  return axiosClient<PostEnglishGenerateReading200>(
+    {
+      url: `/english/generate-reading`,
+      method: "POST",
+      data: postEnglishGenerateReadingBody,
+      signal,
     },
-      options);
+    options
+  )
+}
+
+export const getPostEnglishGenerateReadingMutationOptions = <
+  TError = ErrorType<
+    | PostEnglishGenerateReading400
+    | PostEnglishGenerateReading401
+    | PostEnglishGenerateReading500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postEnglishGenerateReading>>,
+    TError,
+    {
+      data: BodyType<
+        | PostEnglishGenerateReadingBodyOne
+        | PostEnglishGenerateReadingBodyTwo
+        | PostEnglishGenerateReadingBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postEnglishGenerateReading>>,
+  TError,
+  {
+    data: BodyType<
+      | PostEnglishGenerateReadingBodyOne
+      | PostEnglishGenerateReadingBodyTwo
+      | PostEnglishGenerateReadingBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["postEnglishGenerateReading"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postEnglishGenerateReading>>,
+    {
+      data: BodyType<
+        | PostEnglishGenerateReadingBodyOne
+        | PostEnglishGenerateReadingBodyTwo
+        | PostEnglishGenerateReadingBodyThree
+      >
     }
+  > = (props) => {
+    const { data } = props ?? {}
 
+    return postEnglishGenerateReading(data, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type PostEnglishGenerateReadingMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postEnglishGenerateReading>>
+>
+export type PostEnglishGenerateReadingMutationBody = BodyType<
+  | PostEnglishGenerateReadingBodyOne
+  | PostEnglishGenerateReadingBodyTwo
+  | PostEnglishGenerateReadingBodyThree
+>
+export type PostEnglishGenerateReadingMutationError = ErrorType<
+  | PostEnglishGenerateReading400
+  | PostEnglishGenerateReading401
+  | PostEnglishGenerateReading500
+>
 
-export const getPostEnglishGenerateReadingMutationOptions = <TError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateReading>>, TError,{data: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateReading>>, TError,{data: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>}, TContext> => {
-
-const mutationKey = ['postEnglishGenerateReading'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postEnglishGenerateReading>>, {data: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postEnglishGenerateReading(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostEnglishGenerateReadingMutationResult = NonNullable<Awaited<ReturnType<typeof postEnglishGenerateReading>>>
-    export type PostEnglishGenerateReadingMutationBody = BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>
-    export type PostEnglishGenerateReadingMutationError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading500>
-
-    /**
+/**
  * @summary Generate a reading comprehension question
  */
-export const usePostEnglishGenerateReading = <TError = ErrorType<PostEnglishGenerateReading400 | PostEnglishGenerateReading401 | PostEnglishGenerateReading500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishGenerateReading>>, TError,{data: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postEnglishGenerateReading>>,
-        TError,
-        {data: BodyType<PostEnglishGenerateReadingBodyOne | PostEnglishGenerateReadingBodyTwo | PostEnglishGenerateReadingBodyThree>},
-        TContext
-      > => {
-      return useMutation(getPostEnglishGenerateReadingMutationOptions(options), queryClient);
-    }
+export const usePostEnglishGenerateReading = <
+  TError = ErrorType<
+    | PostEnglishGenerateReading400
+    | PostEnglishGenerateReading401
+    | PostEnglishGenerateReading500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postEnglishGenerateReading>>,
+      TError,
+      {
+        data: BodyType<
+          | PostEnglishGenerateReadingBodyOne
+          | PostEnglishGenerateReadingBodyTwo
+          | PostEnglishGenerateReadingBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postEnglishGenerateReading>>,
+  TError,
+  {
+    data: BodyType<
+      | PostEnglishGenerateReadingBodyOne
+      | PostEnglishGenerateReadingBodyTwo
+      | PostEnglishGenerateReadingBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(
+    getPostEnglishGenerateReadingMutationOptions(options),
+    queryClient
+  )
+}

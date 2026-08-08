@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminTenantsById200Data } from './patchAdminTenantsById200Data.ts';
+import type { PatchAdminTenantsById200Data } from "./patchAdminTenantsById200Data.ts"
 
 export type PatchAdminTenantsById200 = {
-  success: true;
-  data: PatchAdminTenantsById200Data;
-};
+  success: true
+  data: PatchAdminTenantsById200Data
+}

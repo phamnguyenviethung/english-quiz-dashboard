@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetHealth200Data } from './getHealth200Data.ts';
+import type { GetHealth200Data } from "./getHealth200Data.ts"
 
 export type GetHealth200 = {
-  success: true;
-  data: GetHealth200Data;
-};
+  success: true
+  data: GetHealth200Data
+}

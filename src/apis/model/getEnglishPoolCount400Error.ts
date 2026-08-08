@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolCount400ErrorCode } from './getEnglishPoolCount400ErrorCode.ts';
+import type { GetEnglishPoolCount400ErrorCode } from "./getEnglishPoolCount400ErrorCode.ts"
 
 export type GetEnglishPoolCount400Error = {
-  code: GetEnglishPoolCount400ErrorCode;
-  message: string;
-};
+  code: GetEnglishPoolCount400ErrorCode
+  message: string
+}

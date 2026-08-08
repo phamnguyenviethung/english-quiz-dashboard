@@ -5,12 +5,25 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { GetAdminModelsById200DataManualProvider } from "./getAdminModelsById200DataManualProvider.ts"
+import type { GetAdminModelsById200DataOpenrouterMeta } from "./getAdminModelsById200DataOpenrouterMeta.ts"
+import type { GetAdminModelsById200DataPricingRaw } from "./getAdminModelsById200DataPricingRaw.ts"
+import type { GetAdminModelsById200DataScheduleProvider } from "./getAdminModelsById200DataScheduleProvider.ts"
 
 export type GetAdminModelsById200Data = {
-  id: number;
-  key: string;
-  modelId: string;
-  isActive: boolean;
-  createdAt: string | number | null;
-  updatedAt: string | number | null;
-};
+  id: number
+  key: string
+  modelId: string
+  isActive: boolean
+  scheduleEnabled: boolean
+  manualEnabled: boolean
+  scheduleProvider: GetAdminModelsById200DataScheduleProvider
+  manualProvider: GetAdminModelsById200DataManualProvider
+  pricePromptPerToken: number | null
+  priceCompletionPerToken: number | null
+  pricingRaw: GetAdminModelsById200DataPricingRaw
+  openrouterMeta: GetAdminModelsById200DataOpenrouterMeta
+  pricingSyncedAt: string | number | null
+  createdAt: string | number | null
+  updatedAt: string | number | null
+}

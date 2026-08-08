@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PatchAdminTenantsById404ErrorCode = typeof PatchAdminTenantsById404ErrorCode[keyof typeof PatchAdminTenantsById404ErrorCode];
-
+export type PatchAdminTenantsById404ErrorCode =
+  (typeof PatchAdminTenantsById404ErrorCode)[keyof typeof PatchAdminTenantsById404ErrorCode]
 
 export const PatchAdminTenantsById404ErrorCode = {
-  VALIDATION: 'VALIDATION',
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  FORBIDDEN: 'FORBIDDEN',
-  NOT_FOUND: 'NOT_FOUND',
-  CONFLICT: 'CONFLICT',
-  BUSINESS_ERROR: 'BUSINESS_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-} as const;
+  VALIDATION: "VALIDATION",
+  UNAUTHORIZED: "UNAUTHORIZED",
+  FORBIDDEN: "FORBIDDEN",
+  NOT_FOUND: "NOT_FOUND",
+  CONFLICT: "CONFLICT",
+  BUSINESS_ERROR: "BUSINESS_ERROR",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+} as const

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateReading500Error } from './postEnglishGenerateReading500Error.ts';
+import type { PostEnglishGenerateReading500Error } from "./postEnglishGenerateReading500Error.ts"
 
 export type PostEnglishGenerateReading500 = {
-  success: false;
-  error: PostEnglishGenerateReading500Error;
-};
+  success: false
+  error: PostEnglishGenerateReading500Error
+}

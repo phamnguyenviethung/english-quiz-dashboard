@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateByQuizType200Data } from './postEnglishGenerateByQuizType200Data.ts';
+import type { PostEnglishGenerateByQuizType200Data } from "./postEnglishGenerateByQuizType200Data.ts"
 
 export type PostEnglishGenerateByQuizType200 = {
-  success: true;
-  data: PostEnglishGenerateByQuizType200Data;
-};
+  success: true
+  data: PostEnglishGenerateByQuizType200Data
+}

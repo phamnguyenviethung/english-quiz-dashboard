@@ -5,16 +5,16 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolPop200DataQuizType } from './getEnglishPoolPop200DataQuizType.ts';
+import type { GetEnglishPoolPop200DataQuizType } from "./getEnglishPoolPop200DataQuizType.ts"
 
 export type GetEnglishPoolPop200Data = {
-  id: number;
-  quizType: GetEnglishPoolPop200DataQuizType;
+  id: number
+  quizType: GetEnglishPoolPop200DataQuizType
   /** JSON string chứa payload câu hỏi đã sinh. */
-  questionData: string;
-  model: string;
-  tokenIn: number;
-  tokenOut: number;
-  optionCount: number;
-  topicId: number | null;
-};
+  questionData: string
+  model: string
+  tokenIn: number
+  tokenOut: number
+  optionCount: number
+  topicId: number | null
+}

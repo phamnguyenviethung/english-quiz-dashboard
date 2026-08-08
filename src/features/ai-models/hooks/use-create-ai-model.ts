@@ -12,8 +12,11 @@ import {
 } from "@/lib/api-error.ts"
 
 import type { AiModelFormValues } from "../types.ts"
+import { toProviderPayload } from "../utils/provider-preferences.ts"
 
-export function useCreateAiModel({ onSuccess }: { onSuccess?: () => void } = {}) {
+export function useCreateAiModel({
+  onSuccess,
+}: { onSuccess?: () => void } = {}) {
   const queryClient = useQueryClient()
 
   const mutation = usePostAdminModels({
@@ -45,6 +48,10 @@ export function useCreateAiModel({ onSuccess }: { onSuccess?: () => void } = {})
         key: values.key.trim(),
         modelId: values.modelId.trim(),
         isActive: values.isActive,
+        scheduleEnabled: values.scheduleEnabled,
+        manualEnabled: values.manualEnabled,
+        scheduleProvider: toProviderPayload(values.scheduleProvider),
+        manualProvider: toProviderPayload(values.manualProvider),
       },
     })
 

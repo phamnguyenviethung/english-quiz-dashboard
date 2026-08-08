@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateReading400Error } from './postEnglishGenerateReading400Error.ts';
+import type { PostEnglishGenerateReading400Error } from "./postEnglishGenerateReading400Error.ts"
 
 export type PostEnglishGenerateReading400 = {
-  success: false;
-  error: PostEnglishGenerateReading400Error;
-};
+  success: false
+  error: PostEnglishGenerateReading400Error
+}

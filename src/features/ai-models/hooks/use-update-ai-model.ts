@@ -13,6 +13,7 @@ import {
 } from "@/lib/api-error.ts"
 
 import type { AiModelFormValues } from "../types.ts"
+import { toProviderPayload } from "../utils/provider-preferences.ts"
 
 export function useUpdateAiModel(
   modelId: number,
@@ -50,6 +51,10 @@ export function useUpdateAiModel(
       key: values.key.trim(),
       modelId: values.modelId.trim(),
       isActive: values.isActive,
+      scheduleEnabled: values.scheduleEnabled,
+      manualEnabled: values.manualEnabled,
+      scheduleProvider: toProviderPayload(values.scheduleProvider),
+      manualProvider: toProviderPayload(values.manualProvider),
     })
 
   const setActive = (isActive: boolean) => updateAiModel({ isActive })

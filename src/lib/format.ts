@@ -51,3 +51,47 @@ export function formatPercent(value: number | null | undefined): string {
     return "-"
   return percentFormatter.format(value)
 }
+
+// Chi phí AI thường rất nhỏ (1 lượt gọi ~ $0.0024) nên 2 chữ số thập phân sẽ làm
+// tròn về $0.00. Dùng en-US để ra ký hiệu "$" quen thuộc thay vì "US$" của vi-VN.
+const usdFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+const usdSmallFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 6,
+})
+
+/**
+ * null/undefined = chưa tính được chi phí (model không có giá cache) → "-".
+ * Khác hẳn 0 = có gọi thật nhưng model free, phải hiển thị "$0.00".
+ */
+export function formatUsd(value: number | null | undefined): string {
+  if (value === null || value === undefined || !Number.isFinite(value))
+    return "-"
+  return value !== 0 && Math.abs(value) < 0.01
+    ? usdSmallFormatter.format(value)
+    : usdFormatter.format(value)
+}
+
+/**
+ * Giá model lưu theo USD/token (vd 1e-7) — không đọc được trong bảng. OpenRouter
+ * cũng niêm yết theo triệu token nên quy đổi cho khớp thói quen.
+ */
+export function formatUsdPerMillion(
+  pricePerToken: number | null | undefined
+): string {
+  if (
+    pricePerToken === null ||
+    pricePerToken === undefined ||
+    !Number.isFinite(pricePerToken)
+  )
+    return "-"
+  return formatUsd(pricePerToken * 1_000_000)
+}

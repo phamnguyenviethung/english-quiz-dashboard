@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getQuizTypeLabel } from "@/features/quiz/constants.ts"
-import { formatNumber } from "@/lib/format.ts"
+import { formatNumber, formatUsd } from "@/lib/format.ts"
 
 import { getCronStatusMeta } from "../constants.ts"
 import type { CronRunAttempt, CronRunBucket } from "../types.ts"
@@ -30,6 +30,7 @@ export function CronRunBucketsTable({
             <TableHead>Bucket</TableHead>
             <TableHead className="text-right">Câu hỏi</TableHead>
             <TableHead className="text-right">Lượt thử</TableHead>
+            <TableHead className="text-right">Chi phí</TableHead>
             <TableHead>Lỗi</TableHead>
           </TableRow>
         </TableHeader>
@@ -60,6 +61,16 @@ export function CronRunBucketsTable({
                 </TableCell>
                 <TableCell className="text-right tabular-nums">
                   {formatNumber(attempts.length)}
+                </TableCell>
+                <TableCell
+                  className="text-right tabular-nums"
+                  title={
+                    bucket.costUsd === null
+                      ? "Model chưa có giá nên không tính được chi phí"
+                      : undefined
+                  }
+                >
+                  {formatUsd(bucket.costUsd)}
                 </TableCell>
                 <TableCell className="max-w-72">
                   {bucket.errorMessage ? (

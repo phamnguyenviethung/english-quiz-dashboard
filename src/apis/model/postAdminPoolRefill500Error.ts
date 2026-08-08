@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminPoolRefill500ErrorCode } from './postAdminPoolRefill500ErrorCode.ts';
+import type { PostAdminPoolRefill500ErrorCode } from "./postAdminPoolRefill500ErrorCode.ts"
 
 export type PostAdminPoolRefill500Error = {
-  code: PostAdminPoolRefill500ErrorCode;
-  message: string;
-};
+  code: PostAdminPoolRefill500ErrorCode
+  message: string
+}

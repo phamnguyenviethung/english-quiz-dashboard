@@ -6,14 +6,14 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishPoolQuestionsSort = typeof GetEnglishPoolQuestionsSort[keyof typeof GetEnglishPoolQuestionsSort];
-
+export type GetEnglishPoolQuestionsSort =
+  (typeof GetEnglishPoolQuestionsSort)[keyof typeof GetEnglishPoolQuestionsSort]
 
 export const GetEnglishPoolQuestionsSort = {
-  id_asc: 'id_asc',
-  id_desc: 'id_desc',
-  created_asc: 'created_asc',
-  created_desc: 'created_desc',
-  token_asc: 'token_asc',
-  token_desc: 'token_desc',
-} as const;
+  id_asc: "id_asc",
+  id_desc: "id_desc",
+  created_asc: "created_asc",
+  created_desc: "created_desc",
+  token_asc: "token_asc",
+  token_desc: "token_desc",
+} as const

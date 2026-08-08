@@ -49,3 +49,17 @@ export const DEFAULT_CRON_LIMIT = 20
 
 export const ALL_STATUS_VALUE = "all"
 export const ALL_STATUS_LABEL = "Tất cả trạng thái"
+
+// ─── Usage analytics ──────────────────────────────────────────────────────────
+
+export const USAGE_RANGE_OPTIONS = [7, 30, 90]
+export const DEFAULT_USAGE_RANGE_DAYS = 30
+
+export const USAGE_GROUP_BY_VALUES = ["day", "model"] as const
+export type UsageGroupBy = (typeof USAGE_GROUP_BY_VALUES)[number]
+export const DEFAULT_USAGE_GROUP_BY: UsageGroupBy = "day"
+
+export const USAGE_GROUP_BY_LABELS: Record<UsageGroupBy, string> = {
+  day: "Theo ngày",
+  model: "Theo model",
+}

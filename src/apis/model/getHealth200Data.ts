@@ -7,5 +7,5 @@
  */
 
 export type GetHealth200Data = {
-  status: 'ok';
-};
+  status: "ok"
+}
