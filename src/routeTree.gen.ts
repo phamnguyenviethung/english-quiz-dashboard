@@ -16,8 +16,9 @@ import { Route as DashboardConfigRouteImport } from './routes/_dashboard/config'
 import { Route as DashboardCronRunsRouteImport } from './routes/_dashboard/cron-runs'
 import { Route as DashboardGenerateRouteImport } from './routes/_dashboard/generate'
 import { Route as DashboardMetadataRouteImport } from './routes/_dashboard/metadata'
-import { Route as DashboardQuestionPoolRouteImport } from './routes/_dashboard/question-pool'
 import { Route as DashboardTopicsRouteImport } from './routes/_dashboard/topics'
+import { Route as DashboardQuestionPoolIndexRouteImport } from './routes/_dashboard/question-pool/index'
+import { Route as DashboardQuestionPoolRefillRouteImport } from './routes/_dashboard/question-pool/refill'
 import { Route as DashboardTenantsIndexRouteImport } from './routes/_dashboard/tenants/index'
 import { Route as DashboardTenantsTenantIdRouteImport } from './routes/_dashboard/tenants/$tenantId'
 
@@ -55,16 +56,23 @@ const DashboardMetadataRoute = DashboardMetadataRouteImport.update({
   path: '/metadata',
   getParentRoute: () => DashboardRoute,
 } as any)
-const DashboardQuestionPoolRoute = DashboardQuestionPoolRouteImport.update({
-  id: '/question-pool',
-  path: '/question-pool',
-  getParentRoute: () => DashboardRoute,
-} as any)
 const DashboardTopicsRoute = DashboardTopicsRouteImport.update({
   id: '/topics',
   path: '/topics',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardQuestionPoolIndexRoute =
+  DashboardQuestionPoolIndexRouteImport.update({
+    id: '/question-pool/',
+    path: '/question-pool/',
+    getParentRoute: () => DashboardRoute,
+  } as any)
+const DashboardQuestionPoolRefillRoute =
+  DashboardQuestionPoolRefillRouteImport.update({
+    id: '/question-pool/refill',
+    path: '/question-pool/refill',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardTenantsIndexRoute = DashboardTenantsIndexRouteImport.update({
   id: '/tenants/',
   path: '/tenants/',
@@ -84,9 +92,10 @@ export interface FileRoutesByFullPath {
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
   '/metadata': typeof DashboardMetadataRoute
-  '/question-pool': typeof DashboardQuestionPoolRoute
   '/topics': typeof DashboardTopicsRoute
+  '/question-pool/refill': typeof DashboardQuestionPoolRefillRoute
   '/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
+  '/question-pool/': typeof DashboardQuestionPoolIndexRoute
   '/tenants/': typeof DashboardTenantsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -95,10 +104,11 @@ export interface FileRoutesByTo {
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
   '/metadata': typeof DashboardMetadataRoute
-  '/question-pool': typeof DashboardQuestionPoolRoute
   '/topics': typeof DashboardTopicsRoute
   '/': typeof DashboardIndexRoute
+  '/question-pool/refill': typeof DashboardQuestionPoolRefillRoute
   '/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
+  '/question-pool': typeof DashboardQuestionPoolIndexRoute
   '/tenants': typeof DashboardTenantsIndexRoute
 }
 export interface FileRoutesById {
@@ -109,10 +119,11 @@ export interface FileRoutesById {
   '/_dashboard/cron-runs': typeof DashboardCronRunsRoute
   '/_dashboard/generate': typeof DashboardGenerateRoute
   '/_dashboard/metadata': typeof DashboardMetadataRoute
-  '/_dashboard/question-pool': typeof DashboardQuestionPoolRoute
   '/_dashboard/topics': typeof DashboardTopicsRoute
   '/_dashboard/': typeof DashboardIndexRoute
+  '/_dashboard/question-pool/refill': typeof DashboardQuestionPoolRefillRoute
   '/_dashboard/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
+  '/_dashboard/question-pool/': typeof DashboardQuestionPoolIndexRoute
   '/_dashboard/tenants/': typeof DashboardTenantsIndexRoute
 }
 export interface FileRouteTypes {
@@ -124,9 +135,10 @@ export interface FileRouteTypes {
     | '/cron-runs'
     | '/generate'
     | '/metadata'
-    | '/question-pool'
     | '/topics'
+    | '/question-pool/refill'
     | '/tenants/$tenantId'
+    | '/question-pool/'
     | '/tenants/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -135,10 +147,11 @@ export interface FileRouteTypes {
     | '/cron-runs'
     | '/generate'
     | '/metadata'
-    | '/question-pool'
     | '/topics'
     | '/'
+    | '/question-pool/refill'
     | '/tenants/$tenantId'
+    | '/question-pool'
     | '/tenants'
   id:
     | '__root__'
@@ -148,10 +161,11 @@ export interface FileRouteTypes {
     | '/_dashboard/cron-runs'
     | '/_dashboard/generate'
     | '/_dashboard/metadata'
-    | '/_dashboard/question-pool'
     | '/_dashboard/topics'
     | '/_dashboard/'
+    | '/_dashboard/question-pool/refill'
     | '/_dashboard/tenants/$tenantId'
+    | '/_dashboard/question-pool/'
     | '/_dashboard/tenants/'
   fileRoutesById: FileRoutesById
 }
@@ -210,18 +224,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardMetadataRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/_dashboard/question-pool': {
-      id: '/_dashboard/question-pool'
-      path: '/question-pool'
-      fullPath: '/question-pool'
-      preLoaderRoute: typeof DashboardQuestionPoolRouteImport
-      parentRoute: typeof DashboardRoute
-    }
     '/_dashboard/topics': {
       id: '/_dashboard/topics'
       path: '/topics'
       fullPath: '/topics'
       preLoaderRoute: typeof DashboardTopicsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/question-pool/': {
+      id: '/_dashboard/question-pool/'
+      path: '/question-pool'
+      fullPath: '/question-pool/'
+      preLoaderRoute: typeof DashboardQuestionPoolIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/question-pool/refill': {
+      id: '/_dashboard/question-pool/refill'
+      path: '/question-pool/refill'
+      fullPath: '/question-pool/refill'
+      preLoaderRoute: typeof DashboardQuestionPoolRefillRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/tenants/': {
@@ -247,10 +268,11 @@ interface DashboardRouteChildren {
   DashboardCronRunsRoute: typeof DashboardCronRunsRoute
   DashboardGenerateRoute: typeof DashboardGenerateRoute
   DashboardMetadataRoute: typeof DashboardMetadataRoute
-  DashboardQuestionPoolRoute: typeof DashboardQuestionPoolRoute
   DashboardTopicsRoute: typeof DashboardTopicsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardQuestionPoolRefillRoute: typeof DashboardQuestionPoolRefillRoute
   DashboardTenantsTenantIdRoute: typeof DashboardTenantsTenantIdRoute
+  DashboardQuestionPoolIndexRoute: typeof DashboardQuestionPoolIndexRoute
   DashboardTenantsIndexRoute: typeof DashboardTenantsIndexRoute
 }
 
@@ -260,10 +282,11 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardCronRunsRoute: DashboardCronRunsRoute,
   DashboardGenerateRoute: DashboardGenerateRoute,
   DashboardMetadataRoute: DashboardMetadataRoute,
-  DashboardQuestionPoolRoute: DashboardQuestionPoolRoute,
   DashboardTopicsRoute: DashboardTopicsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  DashboardQuestionPoolRefillRoute: DashboardQuestionPoolRefillRoute,
   DashboardTenantsTenantIdRoute: DashboardTenantsTenantIdRoute,
+  DashboardQuestionPoolIndexRoute: DashboardQuestionPoolIndexRoute,
   DashboardTenantsIndexRoute: DashboardTenantsIndexRoute,
 }
 

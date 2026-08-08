@@ -1,7 +1,7 @@
 import { useState } from "react"
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
-import { IconEye, IconSearchOff } from "@tabler/icons-react"
+import { IconEye, IconSearchOff, IconStack2 } from "@tabler/icons-react"
 
 import {
   getGetEnglishPoolQuestionsQueryKey,
@@ -22,7 +22,6 @@ import {
   OPTION_COUNTS,
   QUIZ_TYPES,
 } from "@/features/quiz/constants.ts"
-import { ManualRefillDialog } from "@/features/question-pool/components/manual-refill-dialog.tsx"
 import { PoolColumnVisibilityMenu } from "@/features/question-pool/components/pool-column-visibility-menu.tsx"
 import { PoolPreviewDialog } from "@/features/question-pool/components/pool-preview-dialog.tsx"
 import { PoolQuestionDetailSheet } from "@/features/question-pool/components/pool-question-detail-sheet.tsx"
@@ -34,7 +33,6 @@ import {
   PAGE_SIZE_OPTIONS,
   QUESTIONS_PAGE_SIZE,
 } from "@/features/question-pool/constants.ts"
-import { useManualRefill } from "@/features/question-pool/hooks/use-manual-refill.ts"
 import { usePoolColumnVisibility } from "@/features/question-pool/hooks/use-pool-column-visibility.ts"
 import {
   buildPoolQuestionsParams,
@@ -72,7 +70,7 @@ function parseIsoParam(value: unknown): string | undefined {
   return Number.isNaN(Date.parse(value)) ? undefined : value
 }
 
-export const Route = createFileRoute("/_dashboard/question-pool")({
+export const Route = createFileRoute("/_dashboard/question-pool/")({
   validateSearch: (search: Record<string, unknown>): PoolSearch => {
     const q =
       typeof search.q === "string" && search.q.trim()
@@ -157,7 +155,6 @@ function QuestionPoolPage() {
   const queryClient = useQueryClient()
   const [previewOpen, setPreviewOpen] = useState(false)
 
-  const { startRefill, isPending: isRefillPending } = useManualRefill()
   const { columnVisibility, setColumnVisibility, resetVisibility } =
     usePoolColumnVisibility()
 
@@ -257,10 +254,10 @@ function QuestionPoolPage() {
               <IconEye stroke={1.5} data-icon="inline-start" />
               Xem thử 1 câu
             </Button>
-            <ManualRefillDialog
-              isPending={isRefillPending}
-              onConfirm={startRefill}
-            />
+            <Button render={<Link to="/question-pool/refill" />}>
+              <IconStack2 stroke={1.5} data-icon="inline-start" />
+              Refill hàng loạt
+            </Button>
           </>
         }
       />

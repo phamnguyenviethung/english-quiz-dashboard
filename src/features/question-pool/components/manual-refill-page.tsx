@@ -1,22 +1,8 @@
 import { useMemo, useState } from "react"
-import { IconAlertTriangle, IconStack2 } from "@tabler/icons-react"
+import { useNavigate } from "@tanstack/react-router"
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -24,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Spinner } from "@/components/ui/spinner"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
   ENG_LEVELS,
@@ -32,19 +17,29 @@ import {
   getQuizTypeLabel,
 } from "@/features/quiz/constants.ts"
 import type { EngLevel, QuizType } from "@/features/quiz/types.ts"
-import { formatNumber } from "@/lib/format.ts"
 
 import {
   BUCKET_FILTER_ALL_HINT,
   MANUAL_REFILL_SCOPE_META,
-  REFILL_COST_WARNING_QUESTIONS,
 } from "../constants.ts"
+import { useManualRefill } from "../hooks/use-manual-refill.ts"
 import { useManualRefillModels } from "../hooks/use-manual-refill-models.ts"
 import { usePoolBuckets } from "../hooks/use-pool-buckets.ts"
-import type { ManualRefillInput, ManualRefillScope } from "../types.ts"
-import { RefillBucketPreview } from "./refill-bucket-preview.tsx"
+import type { ManualRefillScope } from "../types.ts"
+import { RefillBucketGroups } from "./refill-bucket-groups.tsx"
 import { RefillModelPicker } from "./refill-model-picker.tsx"
+import {
+  CostWarning,
+  RefillSummaryBar,
+  RefillSummaryRail,
+} from "./refill-summary.tsx"
+import type { RefillSummaryData } from "./refill-summary.tsx"
 import { RefillTopicPicker } from "./refill-topic-picker.tsx"
+
+const INITIAL_SCOPE: ManualRefillScope = "deficient"
+
+/** Toggle phải đủ lớn để chạm trên điện thoại, desktop thì về cỡ thường. */
+const TOUCH_TOGGLE = "min-h-11 lg:min-h-9"
 
 const SCOPE_ITEMS = Object.fromEntries(
   Object.entries(MANUAL_REFILL_SCOPE_META).map(([value, meta]) => [
@@ -53,26 +48,18 @@ const SCOPE_ITEMS = Object.fromEntries(
   ])
 )
 
-const INITIAL_SCOPE: ManualRefillScope = "deficient"
+export function ManualRefillPage() {
+  const navigate = useNavigate()
 
-export function ManualRefillDialog({
-  isPending,
-  onConfirm,
-}: {
-  isPending: boolean
-  onConfirm: (input: ManualRefillInput) => void
-}) {
-  const [isOpen, setIsOpen] = useState(false)
   const [scope, setScope] = useState<ManualRefillScope>(INITIAL_SCOPE)
   const [countPerBucket, setCountPerBucket] = useState("")
   const [models, setModels] = useState<string[]>([])
   const [engLevels, setEngLevels] = useState<EngLevel[]>([])
   const [quizTypes, setQuizTypes] = useState<QuizType[]>([])
   const [topicIds, setTopicIds] = useState<number[]>([])
-  // Lưu bucket bị BỎ tick, không phải bucket được tick: khi đổi filter và danh sách
+  // Lưu bucket bị BỎ tick, không phải bucket được tick: khi nới bộ lọc và danh sách
   // bucket mới về, bucket mới mặc định vẫn được chọn thay vì im lặng bị bỏ sót.
   const [deselectedKeys, setDeselectedKeys] = useState<Set<string>>(new Set())
-  const [isAcknowledged, setIsAcknowledged] = useState(false)
 
   const parsedCount =
     countPerBucket.trim() === "" ? undefined : Number(countPerBucket)
@@ -94,8 +81,16 @@ export function ManualRefillDialog({
       topicIds,
       ...(isCountInvalid ? {} : { countPerBucket: parsedCount }),
     },
-    isOpen
+    true
   )
+
+  const { startRefill, isPending } = useManualRefill({
+    onStarted: (runId) => {
+      void navigate(
+        runId ? { to: "/cron-runs", search: { runId } } : { to: "/cron-runs" }
+      )
+    },
+  })
 
   const selectedKeys = useMemo(() => {
     const keys = preview.buckets
@@ -112,34 +107,24 @@ export function ManualRefillDialog({
     .reduce((sum, bucket) => sum + bucket.plannedCount, 0)
 
   const hasNoUsableModel = !isModelsPending && availableModels.length === 0
-  const canSubmit =
-    isAcknowledged &&
-    !isCountInvalid &&
-    !isPending &&
-    !hasNoUsableModel &&
-    selectedKeys.size > 0
 
-  const reset = () => {
-    setScope(INITIAL_SCOPE)
-    setCountPerBucket("")
-    setModels([])
-    setEngLevels([])
-    setQuizTypes([])
-    setTopicIds([])
-    setDeselectedKeys(new Set())
-    setIsAcknowledged(false)
+  const summaryData: RefillSummaryData = {
+    selectedBuckets: selectedKeys.size,
+    plannedQuestions,
+    modelCount: models.length,
+    isModelPoolWideOpen: models.length === 0,
   }
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open)
-    if (!open) reset()
-  }
+  const isSubmitDisabled =
+    isPending || isCountInvalid || hasNoUsableModel || selectedKeys.size === 0
 
-  const toggleBucket = (bucketKey: string, checked: boolean) => {
+  const toggleBuckets = (bucketKeys: string[], checked: boolean) => {
     setDeselectedKeys((current) => {
       const next = new Set(current)
-      if (checked) next.delete(bucketKey)
-      else next.add(bucketKey)
+      for (const key of bucketKeys) {
+        if (checked) next.delete(key)
+        else next.add(key)
+      }
       return next
     })
   }
@@ -154,73 +139,64 @@ export function ManualRefillDialog({
 
   const handleConfirm = () => {
     const isFullSelection = preview.buckets.every(
-      (bucket) => bucket.plannedCount === 0 || selectedKeys.has(bucket.bucketKey)
+      (bucket) =>
+        bucket.plannedCount === 0 || selectedKeys.has(bucket.bucketKey)
     )
 
-    onConfirm({
+    startRefill({
       scope,
       models,
       engLevels,
       quizTypes,
       topicIds,
       ...(parsedCount === undefined ? {} : { countPerBucket: parsedCount }),
-      // Chọn hết theo filter → để API tự quét, payload gọn và không đóng băng
+      // Chọn hết theo bộ lọc thì để API tự quét: payload gọn và không đóng băng
       // danh sách bucket theo ảnh chụp preview.
       ...(isFullSelection ? {} : { bucketKeys: [...selectedKeys] }),
     })
-    handleOpenChange(false)
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger
-        render={
-          <Button variant="outline" size="sm" disabled={isPending}>
-            <IconStack2 stroke={1.5} data-icon="inline-start" />
-            Refill hàng loạt
-          </Button>
-        }
-      />
-      <DialogContent className="sm:max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>Refill pool hàng loạt</DialogTitle>
-          <DialogDescription>
-            Chọn model và phạm vi bucket cần sinh thêm câu. Job chạy nền, theo
-            dõi ở màn Lịch sử cron.
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+        <div className="flex flex-col divide-y">
+          <section className="flex flex-col gap-3 pb-6">
+            <SectionTitle
+              title="Model sinh câu"
+              description="Mỗi bucket chọn ngẫu nhiên một model trong số đã tick."
+            />
+            <RefillModelPicker
+              models={availableModels}
+              value={models}
+              isPending={isModelsPending}
+              disabled={isPending}
+              onChange={setModels}
+            />
+            <FieldDescription>
+              {isModelsError
+                ? "Không tải được danh sách model. Bỏ trống sẽ dùng mọi model đang bật chạy thủ công."
+                : "Bỏ trống = mọi model đang bật chạy thủ công."}
+            </FieldDescription>
+          </section>
 
-        <div className="-mx-6 max-h-[65vh] divide-y overflow-y-auto px-6">
-          <div className="flex flex-col gap-5 pb-5">
-            <Field>
-              <FieldLabel>Model sinh câu</FieldLabel>
-              <RefillModelPicker
-                models={availableModels}
-                value={models}
-                isPending={isModelsPending}
-                disabled={isPending}
-                onChange={setModels}
-              />
-              <FieldDescription>
-                {isModelsError
-                  ? "Không tải được danh sách model. Bỏ trống sẽ dùng mọi model đang bật chạy thủ công."
-                  : "Mỗi bucket chọn ngẫu nhiên một model trong số đã tick. Bỏ trống = mọi model đang bật chạy thủ công."}
-              </FieldDescription>
-            </Field>
-
-            <div className="grid gap-5 sm:grid-cols-2">
+          <section className="flex flex-col gap-3 py-6">
+            <SectionTitle
+              title="Phạm vi & số lượng"
+              description="Quyết định mỗi bucket được sinh thêm bao nhiêu câu."
+            />
+            <div className="grid gap-4 sm:grid-cols-2">
               <Field>
-                <FieldLabel htmlFor="manual-refill-scope">Phạm vi</FieldLabel>
+                <FieldLabel htmlFor="refill-scope">Phạm vi</FieldLabel>
                 <Select
                   items={SCOPE_ITEMS}
                   value={scope}
                   disabled={isPending}
-                  onValueChange={(value) => {
-                    setScope(value ?? INITIAL_SCOPE)
-                    setIsAcknowledged(false)
-                  }}
+                  onValueChange={(value) => setScope(value ?? INITIAL_SCOPE)}
                 >
-                  <SelectTrigger id="manual-refill-scope">
+                  <SelectTrigger
+                    id="refill-scope"
+                    className="min-h-11 lg:min-h-9"
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -239,15 +215,16 @@ export function ManualRefillDialog({
               </Field>
 
               <Field data-invalid={isCountInvalid || undefined}>
-                <FieldLabel htmlFor="manual-refill-count">
+                <FieldLabel htmlFor="refill-count">
                   Số câu mỗi bucket
                 </FieldLabel>
                 <Input
-                  id="manual-refill-count"
+                  id="refill-count"
                   type="number"
+                  inputMode="numeric"
                   min={1}
                   step={1}
-                  className="max-w-40 tabular-nums"
+                  className="min-h-11 tabular-nums lg:min-h-9"
                   placeholder="Mặc định"
                   value={countPerBucket}
                   disabled={isPending}
@@ -261,19 +238,30 @@ export function ManualRefillDialog({
                 </FieldDescription>
               </Field>
             </div>
+          </section>
+
+          <section className="flex flex-col gap-5 py-6">
+            <SectionTitle
+              title="Lọc bucket"
+              description="Thu hẹp theo từng chiều. Chiều nào bỏ trống thì không lọc."
+            />
 
             <Field>
               <FieldLabel>Cấp độ</FieldLabel>
               <ToggleGroup
                 variant="outline"
-                size="sm"
                 multiple
+                className="flex-wrap"
                 value={engLevels}
                 disabled={isPending}
                 onValueChange={(value) => setEngLevels(value as EngLevel[])}
               >
                 {ENG_LEVELS.map((level) => (
-                  <ToggleGroupItem key={level} value={level}>
+                  <ToggleGroupItem
+                    key={level}
+                    value={level}
+                    className={TOUCH_TOGGLE}
+                  >
                     {level}
                   </ToggleGroupItem>
                 ))}
@@ -285,7 +273,6 @@ export function ManualRefillDialog({
               <FieldLabel>Loại quiz</FieldLabel>
               <ToggleGroup
                 variant="outline"
-                size="sm"
                 multiple
                 className="flex-wrap"
                 value={quizTypes}
@@ -293,7 +280,11 @@ export function ManualRefillDialog({
                 onValueChange={(value) => setQuizTypes(value as QuizType[])}
               >
                 {QUIZ_TYPES.map((quizType) => (
-                  <ToggleGroupItem key={quizType} value={quizType}>
+                  <ToggleGroupItem
+                    key={quizType}
+                    value={quizType}
+                    className={TOUCH_TOGGLE}
+                  >
                     {getQuizTypeLabel(quizType)}
                   </ToggleGroupItem>
                 ))}
@@ -310,10 +301,14 @@ export function ManualRefillDialog({
               />
               <FieldDescription>{BUCKET_FILTER_ALL_HINT}</FieldDescription>
             </Field>
-          </div>
+          </section>
 
-          <div className="flex flex-col gap-4 py-5">
-            <RefillBucketPreview
+          <section className="flex flex-col gap-3 py-6">
+            <SectionTitle
+              title="Bucket sẽ refill"
+              description="Mở một chủ đề để bỏ tick từng bucket cụ thể."
+            />
+            <RefillBucketGroups
               buckets={preview.buckets}
               summary={preview.summary}
               selectedKeys={selectedKeys}
@@ -322,47 +317,49 @@ export function ManualRefillDialog({
               isError={preview.isError}
               error={preview.error}
               onRetry={() => void preview.refetch()}
-              onToggle={toggleBucket}
+              onToggleBuckets={toggleBuckets}
               onToggleAll={toggleAllBuckets}
             />
-
-            {plannedQuestions > REFILL_COST_WARNING_QUESTIONS ? (
-              <Alert variant="destructive">
-                <IconAlertTriangle stroke={1.5} />
-                <AlertTitle>Tốn chi phí AI đáng kể</AlertTitle>
-                <AlertDescription>
-                  Lần chạy này sinh khoảng {formatNumber(plannedQuestions)} câu,
-                  tương ứng chừng đó lượt gọi LLM và không bị giới hạn chi phí
-                  mỗi lần chạy. Thu hẹp bộ lọc nếu chỉ muốn thử.
-                </AlertDescription>
-              </Alert>
-            ) : null}
-
-            <Label className="flex items-start gap-3 font-normal">
-              <Checkbox
-                checked={isAcknowledged}
-                disabled={isPending}
-                onCheckedChange={(checked) =>
-                  setIsAcknowledged(checked === true)
-                }
-              />
-              <span className="text-sm text-muted-foreground">
-                Tôi hiểu thao tác này gọi LLM thật và phát sinh chi phí.
-              </span>
-            </Label>
-          </div>
+            {/* Cảnh báo chi phí nằm cạnh nút chạy ở rail desktop, còn ở mobile thanh
+              đáy quá hẹp nên đặt ngay cuối danh sách. */}
+            <div className="lg:hidden">
+              <CostWarning plannedQuestions={plannedQuestions} />
+            </div>
+          </section>
         </div>
 
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" type="button" />}>
-            Huỷ
-          </DialogClose>
-          <Button disabled={!canSubmit} onClick={handleConfirm}>
-            {isPending ? <Spinner data-icon="inline-start" /> : null}
-            Chạy refill
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <RefillSummaryRail
+          data={summaryData}
+          isPending={isPending}
+          disabled={isSubmitDisabled}
+          onConfirm={handleConfirm}
+        />
+      </div>
+
+      {/* Nằm NGOÀI grid: `sticky bottom-0` bám theo containing block, mà grid area
+          của một ô chỉ cao bằng chính nó nên đặt trong grid sẽ không dính được.
+          Là con cuối của <main> (cao hơn viewport) thì mới có khoảng để nổi lên. */}
+      <RefillSummaryBar
+        data={summaryData}
+        isPending={isPending}
+        disabled={isSubmitDisabled}
+        onConfirm={handleConfirm}
+      />
+    </>
+  )
+}
+
+function SectionTitle({
+  title,
+  description,
+}: {
+  title: string
+  description: string
+}) {
+  return (
+    <div className="space-y-1">
+      <h2 className="text-base font-semibold tracking-tight">{title}</h2>
+      <p className="text-sm text-muted-foreground">{description}</p>
+    </div>
   )
 }

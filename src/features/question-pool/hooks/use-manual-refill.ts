@@ -27,7 +27,10 @@ function buildFilter(
 
 export function useManualRefill({
   onStarted,
-}: { onStarted?: () => void } = {}) {
+}: {
+  /** Nhận runId để caller tự điều hướng tới màn tiến độ. Có truyền thì toast bỏ nút "Xem tiến độ". */
+  onStarted?: (runId: string | null) => void
+} = {}) {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const mutation = usePostAdminPoolRefill()
@@ -50,7 +53,7 @@ export function useManualRefill({
       {
         onSuccess: (response) => {
           const { runId, totalBuckets } = response.data
-          onStarted?.()
+          onStarted?.(runId)
 
           // Job chạy nền nên count chưa đổi ngay; invalidate để lần refetch kế
           // tiếp lấy số mới thay vì giữ cache cũ. Bảng câu hỏi ngay trên trang này
@@ -66,7 +69,8 @@ export function useManualRefill({
             type: "success",
             title: "Đã bắt đầu refill",
             description: `${totalBuckets} bucket đang được xử lý nền. Theo dõi tiến độ ở màn Lịch sử cron.`,
-            ...(runId
+            // Caller tự điều hướng rồi thì nút này thừa.
+            ...(runId && !onStarted
               ? {
                   actionProps: {
                     children: "Xem tiến độ",

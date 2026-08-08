@@ -71,8 +71,13 @@ export function RefillModelPicker({
     <div className="grid gap-3 rounded-2xl border p-4 sm:grid-cols-2">
       {models.map((model) => {
         const id = `refill-model-${model.id}`
+        // Cả dòng là label để vùng chạm rộng bằng thẻ, không chỉ mỗi chữ tên model.
         return (
-          <div key={model.id} className="flex items-start gap-2.5">
+          <Label
+            key={model.id}
+            htmlFor={id}
+            className="flex min-h-11 items-start gap-2.5 rounded-xl font-normal"
+          >
             <Checkbox
               id={id}
               className="mt-0.5"
@@ -81,18 +86,16 @@ export function RefillModelPicker({
               onCheckedChange={(checked) => toggle(model.modelId, checked)}
             />
             <div className="grid gap-0.5">
-              <Label htmlFor={id} className="font-normal">
-                {model.key}
-              </Label>
+              <span className="text-sm">{model.key}</span>
               <span className="font-mono text-[11px] text-muted-foreground">
                 {model.modelId}
               </span>
-              <span className="text-[11px] tabular-nums text-muted-foreground">
+              <span className="text-[11px] text-muted-foreground tabular-nums">
                 vào {formatUsdPerMillion(model.pricePromptPerToken)} · ra{" "}
                 {formatUsdPerMillion(model.priceCompletionPerToken)} / 1M token
               </span>
             </div>
-          </div>
+          </Label>
         )
       })}
     </div>
