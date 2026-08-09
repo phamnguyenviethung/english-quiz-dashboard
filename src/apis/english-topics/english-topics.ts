@@ -161,7 +161,7 @@ export function useGetEnglishTopics<TData = Awaited<ReturnType<typeof getEnglish
 
 
 /**
- * Tạo topic mới. `name` unique — trùng tên trả 409. Chỉ dùng được với ADMIN_API_KEY.
+ * Tạo topic mới. `name` unique — trùng tên trả 409. Chỉ dùng được với tài khoản admin.
  * @summary Create topic
  */
 export const postEnglishTopics = (

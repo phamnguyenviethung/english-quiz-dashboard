@@ -86,7 +86,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Danh sách toàn bộ AI model (dùng bởi aiClient.getStudyModels khi chọn model sinh câu hỏi). Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Danh sách toàn bộ AI model (dùng bởi aiClient.getStudyModels khi chọn model sinh câu hỏi). Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary List AI models
  */
 export const getAdminModels = (
@@ -179,7 +179,7 @@ export function useGetAdminModels<TData = Awaited<ReturnType<typeof getAdminMode
 
 
 /**
- * Tạo AI model mới. `key` và `modelId` đều phải unique — trùng trả 409. Giá được tự động nạp từ OpenRouter catalog nếu `modelId` có trên đó (không có thì vẫn tạo, chỉ là chưa tính được cost). Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Tạo AI model mới. `key` và `modelId` đều phải unique — trùng trả 409. Giá được tự động nạp từ OpenRouter catalog nếu `modelId` có trên đó (không có thì vẫn tạo, chỉ là chưa tính được cost). Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Create AI model
  */
 export const postAdminModels = (
@@ -243,7 +243,7 @@ export const usePostAdminModels = <TError = ErrorType<PostAdminModels400 | PostA
       return useMutation(getPostAdminModelsMutationOptions(options), queryClient);
     }
     /**
- * Danh sách model công khai trên OpenRouter kèm giá thực tế (USD/token) — dùng để chọn trước khi thêm vào `ai_models`. Kết quả cache 5 phút trong process. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Danh sách model công khai trên OpenRouter kèm giá thực tế (USD/token) — dùng để chọn trước khi thêm vào `ai_models`. Kết quả cache 5 phút trong process. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Browse OpenRouter model catalog
  */
 export const getAdminModelsCatalog = (
@@ -337,7 +337,7 @@ export function useGetAdminModelsCatalog<TData = Awaited<ReturnType<typeof getAd
 
 
 /**
- * Chi tiết 1 AI model. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Chi tiết 1 AI model. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Get AI model by id
  */
 export const getAdminModelsById = (
@@ -430,7 +430,7 @@ export function useGetAdminModelsById<TData = Awaited<ReturnType<typeof getAdmin
 
 
 /**
- * Partial update (key/modelId/isActive/scheduleEnabled/manualEnabled/*Provider). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `modelId` sẽ nạp lại giá từ catalog. Đổi `key`/`modelId` trùng model khác trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Partial update (key/modelId/isActive/scheduleEnabled/manualEnabled/*Provider). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `modelId` sẽ nạp lại giá từ catalog. Đổi `key`/`modelId` trùng model khác trả 409. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Update AI model
  */
 export const patchAdminModelsById = (
@@ -495,7 +495,7 @@ export const usePatchAdminModelsById = <TError = ErrorType<PatchAdminModelsById4
       return useMutation(getPatchAdminModelsByIdMutationOptions(options), queryClient);
     }
     /**
- * Nạp lại giá + metadata từ OpenRouter catalog cho toàn bộ model trong `ai_models`. Model không có trên catalog được liệt kê ở `notFound` và giữ nguyên giá cũ. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Nạp lại giá + metadata từ OpenRouter catalog cho toàn bộ model trong `ai_models`. Model không có trên catalog được liệt kê ở `notFound` và giữ nguyên giá cũ. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Sync pricing for all models
  */
 export const postAdminModelsSyncAll = (
@@ -558,7 +558,7 @@ export const usePostAdminModelsSyncAll = <TError = ErrorType<PostAdminModelsSync
       return useMutation(getPostAdminModelsSyncAllMutationOptions(options), queryClient);
     }
     /**
- * Nạp lại giá + metadata từ OpenRouter catalog cho 1 model. Model không tồn tại hoặc không có trên catalog trả 404. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Nạp lại giá + metadata từ OpenRouter catalog cho 1 model. Model không tồn tại hoặc không có trên catalog trả 404. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Sync pricing for one model
  */
 export const postAdminModelsByIdSync = (

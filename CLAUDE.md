@@ -4,6 +4,7 @@
 - Tanstack Query
 - ShadcnUI
 - Tabler Icon
+- Better Auth (`src/configs/authClient.ts`) — đăng nhập admin bằng email/password hoặc Google, session token gửi qua `Authorization: Bearer`. Guard ở `src/routes/_dashboard.tsx`.
  # Coding
  - Các modules được chia theo domain tại src/features: có các hooks, serivces, pure components,utils,....
  - Còn lại là các common, config, xài chung nhé

@@ -66,7 +66,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Cấp API key mới cho tenant. Response chứa `apiKey` dạng plaintext — CHỈ trả về đúng 1 lần này, client phải lưu lại ngay. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Cấp API key mới cho tenant. Response chứa `apiKey` dạng plaintext — CHỈ trả về đúng 1 lần này, client phải lưu lại ngay. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Issue API key
  */
 export const postAdminTenantsByIdKeys = (
@@ -131,7 +131,7 @@ export const usePostAdminTenantsByIdKeys = <TError = ErrorType<PostAdminTenantsB
       return useMutation(getPostAdminTenantsByIdKeysMutationOptions(options), queryClient);
     }
     /**
- * Danh sách API key của tenant (ẩn cột `key` plaintext). Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Danh sách API key của tenant (ẩn cột `key` plaintext). Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary List API keys
  */
 export const getAdminTenantsByIdKeys = (
@@ -224,7 +224,7 @@ export function useGetAdminTenantsByIdKeys<TData = Awaited<ReturnType<typeof get
 
 
 /**
- * Thu hồi key (set isActive=false). Key phải thuộc đúng tenant `:id`, không thì trả 404. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Thu hồi key (set isActive=false). Key phải thuộc đúng tenant `:id`, không thì trả 404. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Revoke API key
  */
 export const deleteAdminTenantsByIdKeysByApiKeyId = (

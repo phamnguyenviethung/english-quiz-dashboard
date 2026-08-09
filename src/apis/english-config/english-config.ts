@@ -71,7 +71,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Snapshot config runtime hiện tại (question_pool, quiz_distribution, job_flags). Chỉ dùng được với ADMIN_API_KEY.
+ * Snapshot config runtime hiện tại (question_pool, quiz_distribution, job_flags). Chỉ dùng được với tài khoản admin.
  * @summary Get current config snapshot
  */
 export const getEnglishConfig = (
@@ -164,7 +164,7 @@ export function useGetEnglishConfig<TData = Awaited<ReturnType<typeof getEnglish
 
 
 /**
- * Danh sách đầy đủ config record (kèm validation/uiSchema/value/defaultValue) để build admin UI. Chỉ dùng được với ADMIN_API_KEY.
+ * Danh sách đầy đủ config record (kèm validation/uiSchema/value/defaultValue) để build admin UI. Chỉ dùng được với tài khoản admin.
  * @summary List config records
  */
 export const getEnglishConfigRecords = (
@@ -257,7 +257,7 @@ export function useGetEnglishConfigRecords<TData = Awaited<ReturnType<typeof get
 
 
 /**
- * Cập nhật giá trị 1 config record. recordKey không tồn tại throw lỗi nội bộ (500), không phải 404. Chỉ dùng được với ADMIN_API_KEY.
+ * Cập nhật giá trị 1 config record. recordKey không tồn tại throw lỗi nội bộ (500), không phải 404. Chỉ dùng được với tài khoản admin.
  * @summary Update a config record
  */
 export const patchEnglishConfigByRecordKey = (
@@ -322,7 +322,7 @@ export const usePatchEnglishConfigByRecordKey = <TError = ErrorType<PatchEnglish
       return useMutation(getPatchEnglishConfigByRecordKeyMutationOptions(options), queryClient);
     }
     /**
- * Reset 1 config record về giá trị mặc định. Chỉ dùng được với ADMIN_API_KEY.
+ * Reset 1 config record về giá trị mặc định. Chỉ dùng được với tài khoản admin.
  * @summary Reset config record to default
  */
 export const postEnglishConfigByRecordKeyReset = (

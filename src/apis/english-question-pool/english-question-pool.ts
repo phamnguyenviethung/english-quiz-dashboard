@@ -459,7 +459,7 @@ export function useGetEnglishPoolModels<TData = Awaited<ReturnType<typeof getEng
 
 
 /**
- * Enqueue job sinh thêm câu hỏi cho bucket nếu dưới ngưỡng refill. Bất đồng bộ — response chỉ xác nhận đã enqueue, không đợi job hoàn tất. Chỉ dùng được với ADMIN_API_KEY.
+ * Enqueue job sinh thêm câu hỏi cho bucket nếu dưới ngưỡng refill. Bất đồng bộ — response chỉ xác nhận đã enqueue, không đợi job hoàn tất. Chỉ dùng được với tài khoản admin.
  * @summary Trigger pool refill
  */
 export const postEnglishPoolFill = (

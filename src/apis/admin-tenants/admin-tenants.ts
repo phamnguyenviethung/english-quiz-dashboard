@@ -75,7 +75,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Danh sách toàn bộ tenant. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Danh sách toàn bộ tenant. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary List tenants
  */
 export const getAdminTenants = (
@@ -168,7 +168,7 @@ export function useGetAdminTenants<TData = Awaited<ReturnType<typeof getAdminTen
 
 
 /**
- * Tạo tenant mới. `name` phải unique — trùng tên trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Tạo tenant mới. `name` phải unique — trùng tên trả 409. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Create tenant
  */
 export const postAdminTenants = (
@@ -232,7 +232,7 @@ export const usePostAdminTenants = <TError = ErrorType<PostAdminTenants400 | Pos
       return useMutation(getPostAdminTenantsMutationOptions(options), queryClient);
     }
     /**
- * Chi tiết 1 tenant. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Chi tiết 1 tenant. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Get tenant by id
  */
 export const getAdminTenantsById = (
@@ -325,7 +325,7 @@ export function useGetAdminTenantsById<TData = Awaited<ReturnType<typeof getAdmi
 
 
 /**
- * Partial update (name/description/allowAll*\/isActive). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `name` trùng tenant khác trả 409. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Partial update (name/description/allowAll*\/isActive). Soft-deactivate bằng { isActive: false } — không có endpoint delete riêng. Đổi `name` trùng tenant khác trả 409. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Update tenant
  */
 export const patchAdminTenantsById = (

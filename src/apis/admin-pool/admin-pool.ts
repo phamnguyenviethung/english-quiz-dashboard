@@ -63,7 +63,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Liệt kê bucket khớp filter kèm số câu đang có và số câu sẽ sinh, để admin xem trước chi phí trước khi gọi POST /admin/pool/refill. Nhận đúng bộ tham số `scope`/`countPerBucket`/filter như endpoint refill và chạy chung một hàm plan, nên `summary.plannedBuckets` bằng đúng `totalBuckets` mà refill sẽ trả về với cùng tham số. Bucket có `plannedCount = 0` là bucket đã đủ câu và sẽ bị bỏ qua ở scope hiện tại. Chỉ đọc, không sinh câu, không tốn chi phí LLM. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Liệt kê bucket khớp filter kèm số câu đang có và số câu sẽ sinh, để admin xem trước chi phí trước khi gọi POST /admin/pool/refill. Nhận đúng bộ tham số `scope`/`countPerBucket`/filter như endpoint refill và chạy chung một hàm plan, nên `summary.plannedBuckets` bằng đúng `totalBuckets` mà refill sẽ trả về với cùng tham số. Bucket có `plannedCount = 0` là bucket đã đủ câu và sẽ bị bỏ qua ở scope hiện tại. Chỉ đọc, không sinh câu, không tốn chi phí LLM. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Preview buckets for manual refill
  */
 export const getAdminPoolBuckets = (
@@ -157,7 +157,7 @@ export function useGetAdminPoolBuckets<TData = Awaited<ReturnType<typeof getAdmi
 
 
 /**
- * Fill bucket (engLevel × topic × quizType) bất kể pool đã đầy hay chưa (`scope=all`, mặc định — ép đúng `countPerBucket` câu mỗi bucket) hoặc chỉ bucket thiếu (`scope=deficient` — top-up phần còn thiếu tới `question_pool.maxPerBucket`, hoặc đúng `countPerBucket` nếu truyền). Không truyền `filter`/`bucketKeys` → chạy toàn bộ bucket như trước. Chạy in-process (không qua BullMQ), bounded concurrency theo `question_pool.manualFillConcurrency`. Bỏ qua `job_flags.poolRefillMaxQuestionsPerRun` — đây là hành động admin chủ động, không bị budget tự động giới hạn. Trả ngay `{ runId, totalBuckets }` (`totalBuckets` = số bucket thực sự được xếp lịch), theo dõi tiến độ qua GET /english/cron/runs/:runId (admin key cũng gọi được route đó). Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Fill bucket (engLevel × topic × quizType) bất kể pool đã đầy hay chưa (`scope=all`, mặc định — ép đúng `countPerBucket` câu mỗi bucket) hoặc chỉ bucket thiếu (`scope=deficient` — top-up phần còn thiếu tới `question_pool.maxPerBucket`, hoặc đúng `countPerBucket` nếu truyền). Không truyền `filter`/`bucketKeys` → chạy toàn bộ bucket như trước. Chạy in-process (không qua BullMQ), bounded concurrency theo `question_pool.manualFillConcurrency`. Bỏ qua `job_flags.poolRefillMaxQuestionsPerRun` — đây là hành động admin chủ động, không bị budget tự động giới hạn. Trả ngay `{ runId, totalBuckets }` (`totalBuckets` = số bucket thực sự được xếp lịch), theo dõi tiến độ qua GET /english/cron/runs/:runId (admin key cũng gọi được route đó). Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Trigger manual pool refill
  */
 export const postAdminPoolRefill = (

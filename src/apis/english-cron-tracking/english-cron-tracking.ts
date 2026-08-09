@@ -64,7 +64,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Danh sách các lần chạy cron gần nhất (question_gen/pool_refill/manual_fill), mặc định 8 run. Trả về FULL row (bao gồm errorStack/metadata) — không phải shape rút gọn. Chỉ dùng được với ADMIN_API_KEY.
+ * Danh sách các lần chạy cron gần nhất (question_gen/pool_refill/manual_fill), mặc định 8 run. Trả về FULL row (bao gồm errorStack/metadata) — không phải shape rút gọn. Chỉ dùng được với tài khoản admin.
  * @summary List recent cron job runs
  */
 export const getEnglishCronRuns = (
@@ -158,7 +158,7 @@ export function useGetEnglishCronRuns<TData = Awaited<ReturnType<typeof getEngli
 
 
 /**
- * Chi tiết 1 lần chạy cron kèm bucket + model attempt. runId không tồn tại trả 404. Chỉ dùng được với ADMIN_API_KEY.
+ * Chi tiết 1 lần chạy cron kèm bucket + model attempt. runId không tồn tại trả 404. Chỉ dùng được với tài khoản admin.
  * @summary Get cron run detail
  */
 export const getEnglishCronRunsByRunId = (
@@ -251,7 +251,7 @@ export function useGetEnglishCronRunsByRunId<TData = Awaited<ReturnType<typeof g
 
 
 /**
- * Tổng hợp token + chi phí USD từ các lần gọi AI (english_cron_job_model_attempts), gộp theo ngày (`groupBy=day`, mặc định) hoặc theo model (`groupBy=model`). `costUsd` chỉ cộng các lần gọi bằng model đã có giá cache — model chưa sync giá đóng góp 0. Chỉ dùng được với ADMIN_API_KEY.
+ * Tổng hợp token + chi phí USD từ các lần gọi AI (english_cron_job_model_attempts), gộp theo ngày (`groupBy=day`, mặc định) hoặc theo model (`groupBy=model`). `costUsd` chỉ cộng các lần gọi bằng model đã có giá cache — model chưa sync giá đóng góp 0. Chỉ dùng được với tài khoản admin.
  * @summary Get AI usage & cost analytics
  */
 export const getEnglishCronUsage = (

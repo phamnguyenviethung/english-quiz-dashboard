@@ -75,7 +75,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Allow-list topic hiện tại của tenant. Mảng rỗng nghĩa là chưa cấp topic cụ thể nào — quyền thực tế còn phụ thuộc cờ `allowAllTopics` trên tenant. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Allow-list topic hiện tại của tenant. Mảng rỗng nghĩa là chưa cấp topic cụ thể nào — quyền thực tế còn phụ thuộc cờ `allowAllTopics` trên tenant. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Get topic allow-list
  */
 export const getAdminTenantsByIdTopics = (
@@ -168,7 +168,7 @@ export function useGetAdminTenantsByIdTopics<TData = Awaited<ReturnType<typeof g
 
 
 /**
- * Thay thế toàn bộ allow-list topic của tenant (replace, không merge). topicId không tồn tại trả 400. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Thay thế toàn bộ allow-list topic của tenant (replace, không merge). topicId không tồn tại trả 400. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Set topic allow-list
  */
 export const putAdminTenantsByIdTopics = (
@@ -233,7 +233,7 @@ export const usePutAdminTenantsByIdTopics = <TError = ErrorType<PutAdminTenantsB
       return useMutation(getPutAdminTenantsByIdTopicsMutationOptions(options), queryClient);
     }
     /**
- * Allow-list quizType hiện tại của tenant. Mảng rỗng nghĩa là chưa cấp quizType cụ thể nào — quyền thực tế còn phụ thuộc cờ `allowAllQuizTypes` trên tenant. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Allow-list quizType hiện tại của tenant. Mảng rỗng nghĩa là chưa cấp quizType cụ thể nào — quyền thực tế còn phụ thuộc cờ `allowAllQuizTypes` trên tenant. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Get quizType allow-list
  */
 export const getAdminTenantsByIdQuizTypes = (
@@ -326,7 +326,7 @@ export function useGetAdminTenantsByIdQuizTypes<TData = Awaited<ReturnType<typeo
 
 
 /**
- * Thay thế toàn bộ allow-list quizType của tenant (replace, không merge). quizType không hợp lệ trả 400. Yêu cầu ADMIN_API_KEY qua header `x-admin-key: <ADMIN_API_KEY>` (hoặc `Authorization: Bearer <ADMIN_API_KEY>`).
+ * Thay thế toàn bộ allow-list quizType của tenant (replace, không merge). quizType không hợp lệ trả 400. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Set quizType allow-list
  */
 export const putAdminTenantsByIdQuizTypes = (

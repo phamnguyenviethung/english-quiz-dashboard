@@ -1,11 +1,27 @@
-import { Outlet, createFileRoute } from "@tanstack/react-router"
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router"
 
 import { getGetEnglishTopicsQueryOptions } from "@/apis/english-topics/english-topics.ts"
 import { AppHeader } from "@/components/layout/app-header.tsx"
 import { AppSidebar } from "@/components/layout/app-sidebar.tsx"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { isAdminSession, sessionQueryOptions } from "@/configs/authClient.ts"
 
 export const Route = createFileRoute("/_dashboard")({
+  // beforeLoad của layout chạy trước mọi loader con nên không route nào fetch
+  // được data khi chưa đăng nhập.
+  beforeLoad: async ({ context, location }) => {
+    const session =
+      await context.queryClient.ensureQueryData(sessionQueryOptions)
+
+    if (!session?.user) {
+      throw redirect({ to: "/login", search: { redirect: location.href } })
+    }
+    if (!isAdminSession(session)) {
+      throw redirect({ to: "/login", search: { error: "forbidden" } })
+    }
+
+    return { session }
+  },
   loader: ({ context }) => {
     void context.queryClient.prefetchQuery(getGetEnglishTopicsQueryOptions())
   },

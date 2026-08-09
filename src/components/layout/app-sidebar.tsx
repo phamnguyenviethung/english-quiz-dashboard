@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router"
-import { IconAlertTriangle, IconSchool } from "@tabler/icons-react"
+import { IconSchool } from "@tabler/icons-react"
+import { useQuery } from "@tanstack/react-query"
 
 import { NAV_GROUPS } from "@/configs/navigation.ts"
-import { env } from "@/configs/env.ts"
+import { sessionQueryOptions } from "@/configs/authClient.ts"
+import { SidebarUser } from "@/features/auth/components/sidebar-user.tsx"
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +19,8 @@ import {
 import { NavMain } from "./nav-main.tsx"
 
 export function AppSidebar() {
+  const { data: session } = useQuery(sessionQueryOptions)
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -46,16 +50,13 @@ export function AppSidebar() {
         <NavMain groups={NAV_GROUPS} />
       </SidebarContent>
 
-      {!env.adminApiKey ? (
+      {session?.user ? (
         <SidebarFooter>
-          <div className="flex items-start gap-2 rounded-2xl border border-destructive/40 bg-destructive/10 p-2.5 text-xs text-destructive group-data-[collapsible=icon]:hidden">
-            <IconAlertTriangle className="mt-px size-4 shrink-0" stroke={1.5} />
-            <span>
-              Chưa cấu hình{" "}
-              <code className="font-mono">VITE_ADMIN_API_KEY</code>, mọi request
-              sẽ trả 401.
-            </span>
-          </div>
+          <SidebarUser
+            name={session.user.name}
+            email={session.user.email}
+            image={session.user.image}
+          />
         </SidebarFooter>
       ) : null}
 

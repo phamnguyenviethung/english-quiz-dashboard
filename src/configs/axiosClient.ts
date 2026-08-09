@@ -1,19 +1,38 @@
 import type { AxiosError, AxiosRequestConfig } from "axios"
 import Axios from "axios"
 
+import { clearSessionToken, getSessionToken } from "./authClient.ts"
 import { env } from "./env.ts"
+
+export const LOGIN_PATH = "/login"
 
 export const AXIOS_INSTANCE = Axios.create({
   baseURL: env.apiBaseUrl,
+  withCredentials: true,
 })
 
 AXIOS_INSTANCE.interceptors.request.use((config) => {
-  if (env.adminApiKey) {
-    config.headers.set("x-admin-key", env.adminApiKey)
-    config.headers.set("Authorization", `Bearer ${env.adminApiKey}`)
-  }
+  const token = getSessionToken()
+  if (token) config.headers.set("Authorization", `Bearer ${token}`)
   return config
 })
+
+AXIOS_INSTANCE.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    const status = error.response?.status
+    if (status === 401 || status === 403) {
+      clearSessionToken()
+      if (
+        typeof window !== "undefined" &&
+        window.location.pathname !== LOGIN_PATH
+      ) {
+        window.location.href = LOGIN_PATH
+      }
+    }
+    return Promise.reject(error)
+  }
+)
 
 export const axiosClient = <T>(
   config: AxiosRequestConfig,
