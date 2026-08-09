@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { Link } from "@tanstack/react-router"
 import { IconAlertTriangle, IconBrandGoogle } from "@tabler/icons-react"
 
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -73,7 +74,15 @@ export function LoginForm({ onSuccess, initialError }: LoginFormProps) {
           </Field>
 
           <Field>
-            <FieldLabel htmlFor="login-password">Mật khẩu</FieldLabel>
+            <div className="flex items-center justify-between gap-2">
+              <FieldLabel htmlFor="login-password">Mật khẩu</FieldLabel>
+              <Link
+                to="/forgot-password"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                Quên mật khẩu?
+              </Link>
+            </div>
             <Input
               id="login-password"
               type="password"
