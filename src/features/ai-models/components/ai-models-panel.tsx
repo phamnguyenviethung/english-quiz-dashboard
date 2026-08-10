@@ -1,6 +1,9 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import {
+  IconCircleCheck,
+  IconClockBolt,
   IconCpu,
+  IconHandClick,
   IconPencil,
   IconPlus,
   IconRefresh,
@@ -8,6 +11,8 @@ import {
 } from "@tabler/icons-react"
 
 import { QueryError } from "@/components/common/query-error.tsx"
+import { StatTile, StatTileGrid } from "@/components/common/stat-tile.tsx"
+import { StatusBadge } from "@/components/common/status-badge.tsx"
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -39,8 +44,9 @@ import {
   formatNumber,
   formatUsdPerMillion,
 } from "@/lib/format.ts"
+import { cn } from "@/lib/utils"
 
-import { MODEL_CONTEXT_LABELS, MODEL_STATUS_META } from "../constants.ts"
+import { MODEL_CONTEXT_META, MODEL_STATUS_META } from "../constants.ts"
 import { useAiModels } from "../hooks/use-ai-models.ts"
 import { usePoolModelUsage } from "../hooks/use-pool-model-usage.ts"
 import {
@@ -74,8 +80,9 @@ function ModelIdCell({ modelId }: { modelId: string }) {
 }
 
 /**
- * Badge cho 2 ngữ cảnh. Chỉ badge "bật" mới nổi bật để quét bảng nhanh biết model
- * đang phục vụ đường nào; kèm số tuỳ chọn provider nếu có cấu hình riêng.
+ * Badge cho 2 ngữ cảnh. Mỗi ngữ cảnh một hue riêng khi bật (xem MODEL_CONTEXT_META)
+ * để quét bảng là biết model phục vụ đường nào; tắt thì xám mờ hẳn đi. Kèm số tuỳ
+ * chọn provider nếu có cấu hình riêng.
  */
 function ContextsCell({ model }: { model: AiModel }) {
   const entries = [
@@ -93,16 +100,33 @@ function ContextsCell({ model }: { model: AiModel }) {
 
   return (
     <div className="flex flex-wrap gap-1">
-      {entries.map((entry) => (
-        <Badge
-          key={entry.key}
-          variant={entry.enabled ? "secondary" : "outline"}
-          className={entry.enabled ? undefined : "text-muted-foreground"}
-        >
-          {MODEL_CONTEXT_LABELS[entry.key]}
-          {entry.enabled && entry.options > 0 ? ` · ${entry.options}` : ""}
-        </Badge>
-      ))}
+      {entries.map((entry) => {
+        const meta = MODEL_CONTEXT_META[entry.key]
+        const label =
+          entry.enabled && entry.options > 0
+            ? `${meta.label} · ${entry.options}`
+            : meta.label
+
+        return entry.enabled ? (
+          <StatusBadge
+            key={entry.key}
+            meta={{
+              label,
+              variant: "secondary",
+              tone: meta.tone,
+              icon: meta.icon,
+            }}
+          />
+        ) : (
+          <Badge
+            key={entry.key}
+            variant="outline"
+            className="text-muted-foreground"
+          >
+            {label}
+          </Badge>
+        )
+      })}
     </div>
   )
 }
@@ -111,11 +135,17 @@ function PriceCell({ model }: { model: AiModel }) {
   const hasPrice =
     model.pricePromptPerToken !== null || model.priceCompletionPerToken !== null
 
+  // Thiếu giá là việc cần xử lý (bấm đồng bộ) nên tô amber cho nổi, thay vì để
+  // chìm trong một rừng dấu gạch.
   if (!hasPrice) {
     return (
       <Tooltip>
         <TooltipTrigger
-          render={<span className="text-xs text-muted-foreground">-</span>}
+          render={
+            <span className="text-xs text-amber-600 dark:text-amber-400">
+              Chưa có
+            </span>
+          }
         />
         <TooltipContent>
           Chưa có giá. Bấm đồng bộ để lấy từ OpenRouter.
@@ -181,13 +211,24 @@ function AiModelsTable({
               const usage = usageByModelId.get(model.modelId)
 
               return (
-                <TableRow key={model.id}>
-                  <TableCell className="font-medium">{model.key}</TableCell>
+                // Nền mờ cho model đã tắt: tín hiệu quét mạnh hơn cả badge.
+                <TableRow
+                  key={model.id}
+                  className={model.isActive ? undefined : "bg-muted/30"}
+                >
+                  <TableCell
+                    className={cn(
+                      "font-medium",
+                      !model.isActive && "text-muted-foreground"
+                    )}
+                  >
+                    {model.key}
+                  </TableCell>
                   <TableCell>
                     <ModelIdCell modelId={model.modelId} />
                   </TableCell>
                   <TableCell>
-                    <Badge variant={status.variant}>{status.label}</Badge>
+                    <StatusBadge meta={status} />
                   </TableCell>
                   <TableCell>
                     <ContextsCell model={model} />
@@ -195,7 +236,14 @@ function AiModelsTable({
                   <TableCell className="text-right">
                     <PriceCell model={model} />
                   </TableCell>
-                  <TableCell className="text-right text-xs text-muted-foreground tabular-nums">
+                  <TableCell
+                    className={cn(
+                      "text-right text-xs tabular-nums",
+                      usage === undefined
+                        ? "text-muted-foreground"
+                        : "text-foreground"
+                    )}
+                  >
                     {usage === undefined ? "-" : formatNumber(usage)}
                   </TableCell>
                   <TableCell>
@@ -242,6 +290,50 @@ function AiModelsTable({
         </TableBody>
       </Table>
     </div>
+  )
+}
+
+/**
+ * Chỉ đếm model vừa bật vừa mở ngữ cảnh đó — model đã tắt không phục vụ đường nào.
+ * Một ngữ cảnh về 0 nghĩa là hàng đợi sinh câu hỏi của đường đó đứng.
+ */
+function AiModelsSummary({ models }: { models: AiModel[] }) {
+  const summary = useMemo(() => {
+    const active = models.filter((model) => model.isActive)
+    return {
+      total: models.length,
+      active: active.length,
+      schedule: active.filter((model) => model.scheduleEnabled).length,
+      manual: active.filter((model) => model.manualEnabled).length,
+    }
+  }, [models])
+
+  return (
+    <StatTileGrid className="mb-4 sm:grid-cols-4">
+      <StatTile label="Tổng model" value={summary.total} icon={IconCpu} />
+      <StatTile
+        label="Đang hoạt động"
+        value={summary.active}
+        icon={IconCircleCheck}
+        tone={summary.active === 0 ? "danger" : "default"}
+      />
+      <StatTile
+        label="Ngữ cảnh Tự động"
+        value={summary.schedule}
+        icon={IconClockBolt}
+        tone={summary.schedule === 0 ? "danger" : "default"}
+        hint={
+          summary.schedule === 0 ? "Cron không có model để chọn" : undefined
+        }
+      />
+      <StatTile
+        label="Ngữ cảnh Thủ công"
+        value={summary.manual}
+        icon={IconHandClick}
+        tone={summary.manual === 0 ? "danger" : "default"}
+        hint={summary.manual === 0 ? "Bổ sung kho thủ công sẽ lỗi" : undefined}
+      />
+    </StatTileGrid>
   )
 }
 
@@ -328,11 +420,14 @@ export function AiModelsPanel({ className }: { className?: string }) {
             />
           </div>
         ) : (
-          <AiModelsTable
-            models={models}
-            isPending={isPending}
-            usageByModelId={usageByModelId}
-          />
+          <>
+            {isPending ? null : <AiModelsSummary models={models} />}
+            <AiModelsTable
+              models={models}
+              isPending={isPending}
+              usageByModelId={usageByModelId}
+            />
+          </>
         )}
       </CardContent>
 

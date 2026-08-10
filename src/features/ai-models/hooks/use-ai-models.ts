@@ -9,11 +9,14 @@ export function useAiModels() {
 
   const models = useMemo<AiModel[]>(() => {
     const items = query.data?.data ?? []
-    // Model đang hoạt động lên trước, trong mỗi nhóm thì mới nhất lên trước.
-    return [...items].sort((a, b) => {
-      if (a.isActive !== b.isActive) return a.isActive ? -1 : 1
-      return b.id - a.id
-    })
+    // Sắp theo modelId tăng dần để model cùng provider nằm liền khối. `numeric`
+    // để "gpt-5" đứng trước "gpt-10" thay vì sau khi so từng ký tự.
+    return [...items].sort((a, b) =>
+      a.modelId.localeCompare(b.modelId, undefined, {
+        numeric: true,
+        sensitivity: "base",
+      })
+    )
   }, [query.data])
 
   return {
