@@ -6,4 +6,6 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetAdminModels200DataItemPricingRaw = { [key: string]: unknown } | null;
+export type GetAdminModels200DataItemPricingRaw = {
+  [key: string]: unknown
+} | null

@@ -5,14 +5,14 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolQuestions200DataItemsItem } from './getEnglishPoolQuestions200DataItemsItem.ts';
+import type { GetEnglishPoolQuestions200DataItemsItem } from "./getEnglishPoolQuestions200DataItemsItem.ts"
 
 export type GetEnglishPoolQuestions200Data = {
-  items: GetEnglishPoolQuestions200DataItemsItem[];
+  items: GetEnglishPoolQuestions200DataItemsItem[]
   /** Trang hiện tại, 1-based. */
-  page: number;
-  pageSize: number;
+  page: number
+  pageSize: number
   /** Tổng số câu khớp filter, không phụ thuộc trang. */
-  total: number;
-  totalPages: number;
-};
+  total: number
+  totalPages: number
+}

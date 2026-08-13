@@ -7,11 +7,11 @@
  */
 
 export type GetAdminTenantsByIdKeys200DataItem = {
-  id: number;
-  tenantId: number;
-  label: string | null;
-  isActive: boolean;
-  lastUsedAt: string | number | null;
-  revokedAt: string | number | null;
-  createdAt: string | number | null;
-};
+  id: number
+  tenantId: number
+  label: string | null
+  isActive: boolean
+  lastUsedAt: string | number | null
+  revokedAt: string | number | null
+  createdAt: string | number | null
+}

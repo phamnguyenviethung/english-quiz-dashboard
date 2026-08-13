@@ -13,7 +13,9 @@ import {
 
 import type { TenantFormValues } from "../types.ts"
 
-export function useCreateTenant({ onSuccess }: { onSuccess?: () => void } = {}) {
+export function useCreateTenant({
+  onSuccess,
+}: { onSuccess?: () => void } = {}) {
   const queryClient = useQueryClient()
 
   const mutation = usePostAdminTenants({

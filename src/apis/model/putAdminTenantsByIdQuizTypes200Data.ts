@@ -7,6 +7,6 @@
  */
 
 export type PutAdminTenantsByIdQuizTypes200Data = {
-  tenantId: number;
-  quizTypes: string[];
-};
+  tenantId: number
+  quizTypes: string[]
+}

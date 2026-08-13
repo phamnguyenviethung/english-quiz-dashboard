@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModelsSyncAll401Error } from './postAdminModelsSyncAll401Error.ts';
+import type { PostAdminModelsSyncAll401Error } from "./postAdminModelsSyncAll401Error.ts"
 
 export type PostAdminModelsSyncAll401 = {
-  success: false;
-  error: PostAdminModelsSyncAll401Error;
-};
+  success: false
+  error: PostAdminModelsSyncAll401Error
+}

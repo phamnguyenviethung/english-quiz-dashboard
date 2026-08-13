@@ -10,9 +10,9 @@
  * Trần giá USD trên 1 triệu token.
  */
 export type GetAdminModels200DataItemScheduleProviderMaxPrice = {
-  prompt?: string;
-  completion?: string;
-  request?: string;
-  image?: string;
-  audio?: string;
-};
+  prompt?: string
+  completion?: string
+  request?: string
+  image?: string
+  audio?: string
+}

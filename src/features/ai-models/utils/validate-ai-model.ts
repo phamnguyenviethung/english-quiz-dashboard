@@ -12,6 +12,7 @@ export interface AiModelFormErrors {
   modelId?: string
   scheduleProvider?: ProviderFormErrors
   manualProvider?: ProviderFormErrors
+  readingProvider?: ProviderFormErrors
 }
 
 const KEY_MAX = 64
@@ -71,6 +72,9 @@ export function validateAiModelForm(
 
   const manualErrors = validateProviderForm(values.manualProvider)
   if (hasProviderErrors(manualErrors)) errors.manualProvider = manualErrors
+
+  const readingErrors = validateProviderForm(values.readingProvider)
+  if (hasProviderErrors(readingErrors)) errors.readingProvider = readingErrors
 
   return errors
 }

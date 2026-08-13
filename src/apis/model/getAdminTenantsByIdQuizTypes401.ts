@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminTenantsByIdQuizTypes401Error } from './getAdminTenantsByIdQuizTypes401Error.ts';
+import type { GetAdminTenantsByIdQuizTypes401Error } from "./getAdminTenantsByIdQuizTypes401Error.ts"
 
 export type GetAdminTenantsByIdQuizTypes401 = {
-  success: false;
-  error: GetAdminTenantsByIdQuizTypes401Error;
-};
+  success: false
+  error: GetAdminTenantsByIdQuizTypes401Error
+}

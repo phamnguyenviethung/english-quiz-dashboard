@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishTopics200DataItem } from './getEnglishTopics200DataItem.ts';
+import type { GetEnglishTopics200DataItem } from "./getEnglishTopics200DataItem.ts"
 
 export type GetEnglishTopics200 = {
-  success: true;
-  data: GetEnglishTopics200DataItem[];
-};
+  success: true
+  data: GetEnglishTopics200DataItem[]
+}

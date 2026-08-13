@@ -5,17 +5,21 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminModelsByIdBodyTwoManualProvider } from './patchAdminModelsByIdBodyTwoManualProvider.ts';
-import type { PatchAdminModelsByIdBodyTwoScheduleProvider } from './patchAdminModelsByIdBodyTwoScheduleProvider.ts';
+import type { PatchAdminModelsByIdBodyTwoManualProvider } from "./patchAdminModelsByIdBodyTwoManualProvider.ts"
+import type { PatchAdminModelsByIdBodyTwoReadingProvider } from "./patchAdminModelsByIdBodyTwoReadingProvider.ts"
+import type { PatchAdminModelsByIdBodyTwoScheduleProvider } from "./patchAdminModelsByIdBodyTwoScheduleProvider.ts"
 
 export type PatchAdminModelsByIdBodyTwo = {
   /** @minLength 1 */
-  key?: string;
+  key?: string
   /** @minLength 1 */
-  modelId?: string;
-  isActive?: boolean;
-  scheduleEnabled?: boolean;
-  manualEnabled?: boolean;
-  scheduleProvider?: PatchAdminModelsByIdBodyTwoScheduleProvider;
-  manualProvider?: PatchAdminModelsByIdBodyTwoManualProvider;
-};
+  modelId?: string
+  isActive?: boolean
+  scheduleEnabled?: boolean
+  manualEnabled?: boolean
+  readingEnabled?: boolean
+  scheduleProvider?: PatchAdminModelsByIdBodyTwoScheduleProvider
+  manualProvider?: PatchAdminModelsByIdBodyTwoManualProvider
+  /** Replace toàn bộ (không merge). Gửi `null` để xoá cấu hình reading provider của model. */
+  readingProvider?: PatchAdminModelsByIdBodyTwoReadingProvider
+}

@@ -6,4 +6,6 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminModelsByIdSync200DataOpenrouterMeta = { [key: string]: unknown } | null;
+export type PostAdminModelsByIdSync200DataOpenrouterMeta = {
+  [key: string]: unknown
+} | null

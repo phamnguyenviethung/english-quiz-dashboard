@@ -5,10 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query"
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -21,8 +18,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query"
 
 import type {
   GetEnglishTopics200,
@@ -41,280 +38,519 @@ import type {
   PostEnglishTopics500,
   PostEnglishTopicsBodyOne,
   PostEnglishTopicsBodyThree,
-  PostEnglishTopicsBodyTwo
-} from '../model';
+  PostEnglishTopicsBodyTwo,
+} from "../model"
 
-import { axiosClient } from '../../configs/axiosClient.ts';
-import type { ErrorType , BodyType } from '../../configs/axiosClient.ts';
+import { axiosClient } from "../../configs/axiosClient.ts"
+import type { ErrorType, BodyType } from "../../configs/axiosClient.ts"
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
-
-const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K };
+const withQueryKey = <T extends object, K>(
+  query: T,
+  queryKey: K
+): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K }
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === 'queryKey') continue;
+    if (key === "queryKey") continue
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    });
+    })
   }
-  return result;
-};
+  return result
+}
 
 /**
  * Danh sách toàn bộ topic đang active.
  * @summary List active topics
  */
 export const getEnglishTopics = (
-
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<GetEnglishTopics200>(
-      {url: `/english/topics`, method: 'GET', signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetEnglishTopicsQueryKey = () => {
-    return [
-    `/english/topics`
-    ] as const;
-    }
-
-
-export const getGetEnglishTopicsQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishTopics>>, TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetEnglishTopicsQueryKey();
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishTopics>>> = ({ signal }) => getEnglishTopics(requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return axiosClient<GetEnglishTopics200>(
+    { url: `/english/topics`, method: "GET", signal },
+    options
+  )
 }
 
-export type GetEnglishTopicsQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishTopics>>>
-export type GetEnglishTopicsQueryError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>
+export const getGetEnglishTopicsQueryKey = () => {
+  return [`/english/topics`] as const
+}
 
+export const getGetEnglishTopicsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getEnglishTopics>>,
+  TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopics>>, TError, TData>
+  >
+  request?: SecondParameter<typeof axiosClient>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-export function useGetEnglishTopics<TData = Awaited<ReturnType<typeof getEnglishTopics>>, TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopics>>, TError, TData>> & Pick<
+  const queryKey = queryOptions?.queryKey ?? getGetEnglishTopicsQueryKey()
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getEnglishTopics>>
+  > = ({ signal }) => getEnglishTopics(requestOptions, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getEnglishTopics>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEnglishTopicsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getEnglishTopics>>
+>
+export type GetEnglishTopicsQueryError = ErrorType<
+  GetEnglishTopics401 | GetEnglishTopics500
+>
+
+export function useGetEnglishTopics<
+  TData = Awaited<ReturnType<typeof getEnglishTopics>>,
+  TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopics>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishTopics>>,
           TError,
           Awaited<ReturnType<typeof getEnglishTopics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishTopics<TData = Awaited<ReturnType<typeof getEnglishTopics>>, TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopics>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishTopics<
+  TData = Awaited<ReturnType<typeof getEnglishTopics>>,
+  TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopics>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishTopics>>,
           TError,
           Awaited<ReturnType<typeof getEnglishTopics>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishTopics<TData = Awaited<ReturnType<typeof getEnglishTopics>>, TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishTopics<
+  TData = Awaited<ReturnType<typeof getEnglishTopics>>,
+  TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopics>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary List active topics
  */
 
-export function useGetEnglishTopics<TData = Awaited<ReturnType<typeof getEnglishTopics>>, TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
+export function useGetEnglishTopics<
+  TData = Awaited<ReturnType<typeof getEnglishTopics>>,
+  TError = ErrorType<GetEnglishTopics401 | GetEnglishTopics500>,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopics>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
   const queryOptions = getGetEnglishTopicsQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  return withQueryKey(query, queryOptions.queryKey);
+  return withQueryKey(query, queryOptions.queryKey)
 }
-
-
-
-
-
 
 /**
  * Tạo topic mới. `name` unique — trùng tên trả 409. Chỉ dùng được với tài khoản admin.
  * @summary Create topic
  */
 export const postEnglishTopics = (
-    postEnglishTopicsBody: BodyType<PostEnglishTopicsBodyOne | PostEnglishTopicsBodyTwo | PostEnglishTopicsBodyThree>| PostEnglishTopicsBodyTwo | PostEnglishTopicsBodyThree,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  postEnglishTopicsBody:
+    | BodyType<
+        | PostEnglishTopicsBodyOne
+        | PostEnglishTopicsBodyTwo
+        | PostEnglishTopicsBodyThree
+      >
+    | PostEnglishTopicsBodyTwo
+    | PostEnglishTopicsBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<PostEnglishTopics201>(
-      {url: `/english/topics`, method: 'POST',
-      data: postEnglishTopicsBody, signal
+  return axiosClient<PostEnglishTopics201>(
+    {
+      url: `/english/topics`,
+      method: "POST",
+      data: postEnglishTopicsBody,
+      signal,
     },
-      options);
+    options
+  )
+}
+
+export const getPostEnglishTopicsMutationOptions = <
+  TError = ErrorType<
+    | PostEnglishTopics400
+    | PostEnglishTopics401
+    | PostEnglishTopics403
+    | PostEnglishTopics409
+    | PostEnglishTopics500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postEnglishTopics>>,
+    TError,
+    {
+      data: BodyType<
+        | PostEnglishTopicsBodyOne
+        | PostEnglishTopicsBodyTwo
+        | PostEnglishTopicsBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postEnglishTopics>>,
+  TError,
+  {
+    data: BodyType<
+      | PostEnglishTopicsBodyOne
+      | PostEnglishTopicsBodyTwo
+      | PostEnglishTopicsBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["postEnglishTopics"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postEnglishTopics>>,
+    {
+      data: BodyType<
+        | PostEnglishTopicsBodyOne
+        | PostEnglishTopicsBodyTwo
+        | PostEnglishTopicsBodyThree
+      >
     }
+  > = (props) => {
+    const { data } = props ?? {}
 
+    return postEnglishTopics(data, requestOptions)
+  }
 
+  return { mutationFn, ...mutationOptions }
+}
 
+export type PostEnglishTopicsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postEnglishTopics>>
+>
+export type PostEnglishTopicsMutationBody = BodyType<
+  | PostEnglishTopicsBodyOne
+  | PostEnglishTopicsBodyTwo
+  | PostEnglishTopicsBodyThree
+>
+export type PostEnglishTopicsMutationError = ErrorType<
+  | PostEnglishTopics400
+  | PostEnglishTopics401
+  | PostEnglishTopics403
+  | PostEnglishTopics409
+  | PostEnglishTopics500
+>
 
-export const getPostEnglishTopicsMutationOptions = <TError = ErrorType<PostEnglishTopics400 | PostEnglishTopics401 | PostEnglishTopics403 | PostEnglishTopics409 | PostEnglishTopics500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishTopics>>, TError,{data: BodyType<PostEnglishTopicsBodyOne | PostEnglishTopicsBodyTwo | PostEnglishTopicsBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
-): UseMutationOptions<Awaited<ReturnType<typeof postEnglishTopics>>, TError,{data: BodyType<PostEnglishTopicsBodyOne | PostEnglishTopicsBodyTwo | PostEnglishTopicsBodyThree>}, TContext> => {
-
-const mutationKey = ['postEnglishTopics'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postEnglishTopics>>, {data: BodyType<PostEnglishTopicsBodyOne | PostEnglishTopicsBodyTwo | PostEnglishTopicsBodyThree>}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postEnglishTopics(data,requestOptions)
-        }
-
-
-
-
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostEnglishTopicsMutationResult = NonNullable<Awaited<ReturnType<typeof postEnglishTopics>>>
-    export type PostEnglishTopicsMutationBody = BodyType<PostEnglishTopicsBodyOne | PostEnglishTopicsBodyTwo | PostEnglishTopicsBodyThree>
-    export type PostEnglishTopicsMutationError = ErrorType<PostEnglishTopics400 | PostEnglishTopics401 | PostEnglishTopics403 | PostEnglishTopics409 | PostEnglishTopics500>
-
-    /**
+/**
  * @summary Create topic
  */
-export const usePostEnglishTopics = <TError = ErrorType<PostEnglishTopics400 | PostEnglishTopics401 | PostEnglishTopics403 | PostEnglishTopics409 | PostEnglishTopics500>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishTopics>>, TError,{data: BodyType<PostEnglishTopicsBodyOne | PostEnglishTopicsBodyTwo | PostEnglishTopicsBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof postEnglishTopics>>,
-        TError,
-        {data: BodyType<PostEnglishTopicsBodyOne | PostEnglishTopicsBodyTwo | PostEnglishTopicsBodyThree>},
-        TContext
-      > => {
-      return useMutation(getPostEnglishTopicsMutationOptions(options), queryClient);
-    }
-    /**
+export const usePostEnglishTopics = <
+  TError = ErrorType<
+    | PostEnglishTopics400
+    | PostEnglishTopics401
+    | PostEnglishTopics403
+    | PostEnglishTopics409
+    | PostEnglishTopics500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postEnglishTopics>>,
+      TError,
+      {
+        data: BodyType<
+          | PostEnglishTopicsBodyOne
+          | PostEnglishTopicsBodyTwo
+          | PostEnglishTopicsBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postEnglishTopics>>,
+  TError,
+  {
+    data: BodyType<
+      | PostEnglishTopicsBodyOne
+      | PostEnglishTopicsBodyTwo
+      | PostEnglishTopicsBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(getPostEnglishTopicsMutationOptions(options), queryClient)
+}
+/**
  * Lấy `pairCount` cặp topic ngẫu nhiên (mặc định 1), không lặp topic giữa các cặp.
  * @summary Get random topic pairs
  */
 export const getEnglishTopicsRandomPairs = (
-    params?: GetEnglishTopicsRandomPairsParams,
- options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+  params?: GetEnglishTopicsRandomPairsParams,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
 ) => {
-
-
-      return axiosClient<GetEnglishTopicsRandomPairs200>(
-      {url: `/english/topics/random-pairs`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-
-
-
-
-export const getGetEnglishTopicsRandomPairsQueryKey = (params?: GetEnglishTopicsRandomPairsParams,) => {
-    return [
-    `/english/topics/random-pairs`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-
-export const getGetEnglishTopicsRandomPairsQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError = ErrorType<GetEnglishTopicsRandomPairs400 | GetEnglishTopicsRandomPairs401 | GetEnglishTopicsRandomPairs500>>(params?: GetEnglishTopicsRandomPairsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetEnglishTopicsRandomPairsQueryKey(params);
-
-
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>> = ({ signal }) => getEnglishTopicsRandomPairs(params, requestOptions, signal);
-
-
-
-
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+  return axiosClient<GetEnglishTopicsRandomPairs200>(
+    { url: `/english/topics/random-pairs`, method: "GET", params, signal },
+    options
+  )
 }
 
-export type GetEnglishTopicsRandomPairsQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>>
-export type GetEnglishTopicsRandomPairsQueryError = ErrorType<GetEnglishTopicsRandomPairs400 | GetEnglishTopicsRandomPairs401 | GetEnglishTopicsRandomPairs500>
+export const getGetEnglishTopicsRandomPairsQueryKey = (
+  params?: GetEnglishTopicsRandomPairsParams
+) => {
+  return [`/english/topics/random-pairs`, ...(params ? [params] : [])] as const
+}
 
+export const getGetEnglishTopicsRandomPairsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+  TError = ErrorType<
+    | GetEnglishTopicsRandomPairs400
+    | GetEnglishTopicsRandomPairs401
+    | GetEnglishTopicsRandomPairs500
+  >,
+>(
+  params?: GetEnglishTopicsRandomPairsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-export function useGetEnglishTopicsRandomPairs<TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError = ErrorType<GetEnglishTopicsRandomPairs400 | GetEnglishTopicsRandomPairs401 | GetEnglishTopicsRandomPairs500>>(
- params: undefined |  GetEnglishTopicsRandomPairsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError, TData>> & Pick<
+  const queryKey =
+    queryOptions?.queryKey ?? getGetEnglishTopicsRandomPairsQueryKey(params)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>
+  > = ({ signal }) =>
+    getEnglishTopicsRandomPairs(params, requestOptions, signal)
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetEnglishTopicsRandomPairsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>
+>
+export type GetEnglishTopicsRandomPairsQueryError = ErrorType<
+  | GetEnglishTopicsRandomPairs400
+  | GetEnglishTopicsRandomPairs401
+  | GetEnglishTopicsRandomPairs500
+>
+
+export function useGetEnglishTopicsRandomPairs<
+  TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+  TError = ErrorType<
+    | GetEnglishTopicsRandomPairs400
+    | GetEnglishTopicsRandomPairs401
+    | GetEnglishTopicsRandomPairs500
+  >,
+>(
+  params: undefined | GetEnglishTopicsRandomPairsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
           TError,
           Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishTopicsRandomPairs<TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError = ErrorType<GetEnglishTopicsRandomPairs400 | GetEnglishTopicsRandomPairs401 | GetEnglishTopicsRandomPairs500>>(
- params?: GetEnglishTopicsRandomPairsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishTopicsRandomPairs<
+  TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+  TError = ErrorType<
+    | GetEnglishTopicsRandomPairs400
+    | GetEnglishTopicsRandomPairs401
+    | GetEnglishTopicsRandomPairs500
+  >,
+>(
+  params?: GetEnglishTopicsRandomPairsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
           TError,
           Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishTopicsRandomPairs<TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError = ErrorType<GetEnglishTopicsRandomPairs400 | GetEnglishTopicsRandomPairs401 | GetEnglishTopicsRandomPairs500>>(
- params?: GetEnglishTopicsRandomPairsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
+export function useGetEnglishTopicsRandomPairs<
+  TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+  TError = ErrorType<
+    | GetEnglishTopicsRandomPairs400
+    | GetEnglishTopicsRandomPairs401
+    | GetEnglishTopicsRandomPairs500
+  >,
+>(
+  params?: GetEnglishTopicsRandomPairsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+}
 /**
  * @summary Get random topic pairs
  */
 
-export function useGetEnglishTopicsRandomPairs<TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError = ErrorType<GetEnglishTopicsRandomPairs400 | GetEnglishTopicsRandomPairs401 | GetEnglishTopicsRandomPairs500>>(
- params?: GetEnglishTopicsRandomPairsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
- , queryClient?: QueryClient
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetEnglishTopicsRandomPairs<
+  TData = Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+  TError = ErrorType<
+    | GetEnglishTopicsRandomPairs400
+    | GetEnglishTopicsRandomPairs401
+    | GetEnglishTopicsRandomPairs500
+  >,
+>(
+  params?: GetEnglishTopicsRandomPairsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getEnglishTopicsRandomPairs>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>
+} {
+  const queryOptions = getGetEnglishTopicsRandomPairsQueryOptions(
+    params,
+    options
+  )
 
-  const queryOptions = getGetEnglishTopicsRandomPairsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return withQueryKey(query, queryOptions.queryKey);
+  return withQueryKey(query, queryOptions.queryKey)
 }
-
-
-
-
-
-

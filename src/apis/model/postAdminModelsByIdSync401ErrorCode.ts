@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminModelsByIdSync401ErrorCode = typeof PostAdminModelsByIdSync401ErrorCode[keyof typeof PostAdminModelsByIdSync401ErrorCode];
-
+export type PostAdminModelsByIdSync401ErrorCode =
+  (typeof PostAdminModelsByIdSync401ErrorCode)[keyof typeof PostAdminModelsByIdSync401ErrorCode]
 
 export const PostAdminModelsByIdSync401ErrorCode = {
-  VALIDATION: 'VALIDATION',
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  FORBIDDEN: 'FORBIDDEN',
-  NOT_FOUND: 'NOT_FOUND',
-  CONFLICT: 'CONFLICT',
-  BUSINESS_ERROR: 'BUSINESS_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-} as const;
+  VALIDATION: "VALIDATION",
+  UNAUTHORIZED: "UNAUTHORIZED",
+  FORBIDDEN: "FORBIDDEN",
+  NOT_FOUND: "NOT_FOUND",
+  CONFLICT: "CONFLICT",
+  BUSINESS_ERROR: "BUSINESS_ERROR",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+} as const

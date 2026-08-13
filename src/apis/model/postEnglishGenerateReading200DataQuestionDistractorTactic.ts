@@ -6,16 +6,16 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishGenerateReading200DataQuestionDistractorTactic = typeof PostEnglishGenerateReading200DataQuestionDistractorTactic[keyof typeof PostEnglishGenerateReading200DataQuestionDistractorTactic];
-
+export type PostEnglishGenerateReading200DataQuestionDistractorTactic =
+  (typeof PostEnglishGenerateReading200DataQuestionDistractorTactic)[keyof typeof PostEnglishGenerateReading200DataQuestionDistractorTactic]
 
 export const PostEnglishGenerateReading200DataQuestionDistractorTactic = {
-  SUBSET_AMBIGUITY: 'SUBSET_AMBIGUITY',
-  TEMPORAL_SHIFT: 'TEMPORAL_SHIFT',
-  CONDITIONAL_EXCLUSION: 'CONDITIONAL_EXCLUSION',
-  UNIT_MISMATCH: 'UNIT_MISMATCH',
-  PARTIAL_TOTAL: 'PARTIAL_TOTAL',
-  ACCUMULATED_ACTION: 'ACCUMULATED_ACTION',
-  SEMANTIC_NEGATION: 'SEMANTIC_NEGATION',
-  PARALLEL_SELECTIVE: 'PARALLEL_SELECTIVE',
-} as const;
+  SUBSET_AMBIGUITY: "SUBSET_AMBIGUITY",
+  TEMPORAL_SHIFT: "TEMPORAL_SHIFT",
+  CONDITIONAL_EXCLUSION: "CONDITIONAL_EXCLUSION",
+  UNIT_MISMATCH: "UNIT_MISMATCH",
+  PARTIAL_TOTAL: "PARTIAL_TOTAL",
+  ACCUMULATED_ACTION: "ACCUMULATED_ACTION",
+  SEMANTIC_NEGATION: "SEMANTIC_NEGATION",
+  PARALLEL_SELECTIVE: "PARALLEL_SELECTIVE",
+} as const

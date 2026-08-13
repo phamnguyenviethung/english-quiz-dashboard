@@ -5,15 +5,15 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminModelsCatalog200DataItemPricing } from './getAdminModelsCatalog200DataItemPricing.ts';
-import type { GetAdminModelsCatalog200DataItemTopProvider } from './getAdminModelsCatalog200DataItemTopProvider.ts';
+import type { GetAdminModelsCatalog200DataItemPricing } from "./getAdminModelsCatalog200DataItemPricing.ts"
+import type { GetAdminModelsCatalog200DataItemTopProvider } from "./getAdminModelsCatalog200DataItemTopProvider.ts"
 
 export type GetAdminModelsCatalog200DataItem = {
-  id: string;
-  name: string;
-  description: string | null;
-  contextLength: number | null;
-  pricing: GetAdminModelsCatalog200DataItemPricing;
-  supportedParameters: string[];
-  topProvider: GetAdminModelsCatalog200DataItemTopProvider;
-};
+  id: string
+  name: string
+  description: string | null
+  contextLength: number | null
+  pricing: GetAdminModelsCatalog200DataItemPricing
+  supportedParameters: string[]
+  topProvider: GetAdminModelsCatalog200DataItemTopProvider
+}

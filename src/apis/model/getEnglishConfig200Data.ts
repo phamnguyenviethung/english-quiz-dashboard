@@ -5,15 +5,19 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishConfig200DataJobFlags } from './getEnglishConfig200DataJobFlags.ts';
-import type { GetEnglishConfig200DataPoolRefillScheduleItem } from './getEnglishConfig200DataPoolRefillScheduleItem.ts';
-import type { GetEnglishConfig200DataQuestionPool } from './getEnglishConfig200DataQuestionPool.ts';
-import type { GetEnglishConfig200DataQuizDistributionItem } from './getEnglishConfig200DataQuizDistributionItem.ts';
+import type { GetEnglishConfig200DataJobFlags } from "./getEnglishConfig200DataJobFlags.ts"
+import type { GetEnglishConfig200DataPoolRefillScheduleItem } from "./getEnglishConfig200DataPoolRefillScheduleItem.ts"
+import type { GetEnglishConfig200DataQuestionPool } from "./getEnglishConfig200DataQuestionPool.ts"
+import type { GetEnglishConfig200DataQuizDistributionItem } from "./getEnglishConfig200DataQuizDistributionItem.ts"
+import type { GetEnglishConfig200DataReadingPassage } from "./getEnglishConfig200DataReadingPassage.ts"
+import type { GetEnglishConfig200DataReadingRefillScheduleItem } from "./getEnglishConfig200DataReadingRefillScheduleItem.ts"
 
 export type GetEnglishConfig200Data = {
-  question_pool: GetEnglishConfig200DataQuestionPool;
+  question_pool: GetEnglishConfig200DataQuestionPool
   /** @minItems 1 */
-  quiz_distribution: GetEnglishConfig200DataQuizDistributionItem[];
-  job_flags: GetEnglishConfig200DataJobFlags;
-  pool_refill_schedule: GetEnglishConfig200DataPoolRefillScheduleItem[];
-};
+  quiz_distribution: GetEnglishConfig200DataQuizDistributionItem[]
+  job_flags: GetEnglishConfig200DataJobFlags
+  pool_refill_schedule: GetEnglishConfig200DataPoolRefillScheduleItem[]
+  reading_passage: GetEnglishConfig200DataReadingPassage
+  reading_refill_schedule: GetEnglishConfig200DataReadingRefillScheduleItem[]
+}

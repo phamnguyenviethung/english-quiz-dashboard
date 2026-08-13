@@ -3,7 +3,13 @@ import { formatDateTime } from "@/lib/format.ts"
 
 import type { Tenant } from "../types.ts"
 
-function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
+function DetailRow({
+  label,
+  value,
+}: {
+  label: string
+  value: React.ReactNode
+}) {
   return (
     <div className="grid gap-1 py-3 sm:grid-cols-[12rem_1fr] sm:gap-4">
       <dt className="text-sm text-muted-foreground">{label}</dt>
@@ -34,7 +40,9 @@ export function TenantOverviewPanel({ tenant }: { tenant: Tenant }) {
           value={
             <div className="flex flex-wrap gap-1">
               <Badge variant={tenant.allowAllTopics ? "secondary" : "outline"}>
-                {tenant.allowAllTopics ? "Mọi chủ đề" : "Chủ đề theo allow-list"}
+                {tenant.allowAllTopics
+                  ? "Mọi chủ đề"
+                  : "Chủ đề theo allow-list"}
               </Badge>
               <Badge
                 variant={tenant.allowAllQuizTypes ? "secondary" : "outline"}

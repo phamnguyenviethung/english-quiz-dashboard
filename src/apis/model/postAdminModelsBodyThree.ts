@@ -5,26 +5,31 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModelsBodyThreeManualProvider } from './postAdminModelsBodyThreeManualProvider.ts';
-import type { PostAdminModelsBodyThreeScheduleProvider } from './postAdminModelsBodyThreeScheduleProvider.ts';
+import type { PostAdminModelsBodyThreeManualProvider } from "./postAdminModelsBodyThreeManualProvider.ts"
+import type { PostAdminModelsBodyThreeReadingProvider } from "./postAdminModelsBodyThreeReadingProvider.ts"
+import type { PostAdminModelsBodyThreeScheduleProvider } from "./postAdminModelsBodyThreeScheduleProvider.ts"
 
 export type PostAdminModelsBodyThree = {
   /**
-     * Nhãn ngắn gọn, unique. VD: GEMINI_FLASH_LITE
-     * @minLength 1
-     */
-  key: string;
+   * Nhãn ngắn gọn, unique. VD: GEMINI_FLASH_LITE
+   * @minLength 1
+   */
+  key: string
   /**
-     * OpenRouter model id, unique. VD: google/gemini-2.5-flash-lite:nitro
-     * @minLength 1
-     */
-  modelId: string;
+   * OpenRouter model id, unique. VD: google/gemini-2.5-flash-lite:nitro
+   * @minLength 1
+   */
+  modelId: string
   /** Mặc định true. */
-  isActive?: boolean;
+  isActive?: boolean
   /** Cho phép chọn model này ở đường tự động (cron + on-demand). Mặc định true. */
-  scheduleEnabled?: boolean;
+  scheduleEnabled?: boolean
   /** Cho phép chọn model này khi admin trigger refill. Mặc định true. */
-  manualEnabled?: boolean;
-  scheduleProvider?: PostAdminModelsBodyThreeScheduleProvider;
-  manualProvider?: PostAdminModelsBodyThreeManualProvider;
-};
+  manualEnabled?: boolean
+  /** Cho phép chọn model này khi sinh reading passage. Mặc định true. */
+  readingEnabled?: boolean
+  scheduleProvider?: PostAdminModelsBodyThreeScheduleProvider
+  manualProvider?: PostAdminModelsBodyThreeManualProvider
+  /** Provider routing cho context reading. Lưu normalize ở bảng riêng nhưng request/response dùng cùng shape với 2 provider kia. Gửi `null` để xoá cấu hình. */
+  readingProvider?: PostAdminModelsBodyThreeReadingProvider
+}

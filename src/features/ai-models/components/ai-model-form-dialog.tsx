@@ -45,8 +45,10 @@ const EMPTY_VALUES: AiModelFormValues = {
   isActive: true,
   scheduleEnabled: true,
   manualEnabled: true,
+  readingEnabled: true,
   scheduleProvider: EMPTY_PROVIDER_FORM,
   manualProvider: EMPTY_PROVIDER_FORM,
+  readingProvider: EMPTY_PROVIDER_FORM,
 }
 
 function toFormValues(
@@ -64,8 +66,10 @@ function toFormValues(
     isActive: model.isActive,
     scheduleEnabled: model.scheduleEnabled,
     manualEnabled: model.manualEnabled,
+    readingEnabled: model.readingEnabled,
     scheduleProvider: toProviderFormValues(model.scheduleProvider),
     manualProvider: toProviderFormValues(model.manualProvider),
+    readingProvider: toProviderFormValues(model.readingProvider),
   }
 }
 
@@ -143,7 +147,7 @@ export function AiModelFormDialog({
   }
 
   const updateProvider = (
-    context: "scheduleProvider" | "manualProvider",
+    context: "scheduleProvider" | "manualProvider" | "readingProvider",
     field: keyof AiModelFormValues["scheduleProvider"],
     value: string | boolean | null
   ) => {
@@ -218,6 +222,12 @@ export function AiModelFormDialog({
               <TabsTrigger value="manual">
                 {MODEL_CONTEXT_LABELS.manual}
                 {errors.manualProvider ? (
+                  <span className="ml-1 text-destructive">*</span>
+                ) : null}
+              </TabsTrigger>
+              <TabsTrigger value="reading">
+                {MODEL_CONTEXT_LABELS.reading}
+                {errors.readingProvider ? (
                   <span className="ml-1 text-destructive">*</span>
                 ) : null}
               </TabsTrigger>
@@ -298,6 +308,16 @@ export function AiModelFormDialog({
                   updateValue("manualEnabled", checked)
                 }
               />
+
+              <ToggleRow
+                title={`Dùng cho ngữ cảnh ${MODEL_CONTEXT_LABELS.reading.toLowerCase()}`}
+                description={MODEL_CONTEXT_DESCRIPTIONS.reading}
+                checked={values.readingEnabled}
+                disabled={isPending}
+                onCheckedChange={(checked) =>
+                  updateValue("readingEnabled", checked)
+                }
+              />
             </TabsContent>
 
             <TabsContent value="schedule" className="pt-4">
@@ -328,6 +348,22 @@ export function AiModelFormDialog({
                 disabled={isPending}
                 onChange={(field, value) =>
                   updateProvider("manualProvider", field, value)
+                }
+              />
+            </TabsContent>
+
+            <TabsContent value="reading" className="pt-4">
+              <p className="mb-4 text-sm text-muted-foreground">
+                Định tuyến provider khi model được dùng để sinh bài đọc. Để
+                trống là dùng mặc định của OpenRouter.
+              </p>
+              <ProviderPreferencesFields
+                idPrefix="reading-provider"
+                values={values.readingProvider}
+                errors={errors.readingProvider}
+                disabled={isPending}
+                onChange={(field, value) =>
+                  updateProvider("readingProvider", field, value)
                 }
               />
             </TabsContent>

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminPoolRefill401ErrorCode } from './postAdminPoolRefill401ErrorCode.ts';
+import type { PostAdminPoolRefill401ErrorCode } from "./postAdminPoolRefill401ErrorCode.ts"
 
 export type PostAdminPoolRefill401Error = {
-  code: PostAdminPoolRefill401ErrorCode;
-  message: string;
-};
+  code: PostAdminPoolRefill401ErrorCode
+  message: string
+}

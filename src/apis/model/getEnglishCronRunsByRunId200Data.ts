@@ -5,13 +5,13 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishCronRunsByRunId200DataAttemptsItem } from './getEnglishCronRunsByRunId200DataAttemptsItem.ts';
-import type { GetEnglishCronRunsByRunId200DataBucketsItem } from './getEnglishCronRunsByRunId200DataBucketsItem.ts';
-import type { GetEnglishCronRunsByRunId200DataRun } from './getEnglishCronRunsByRunId200DataRun.ts';
+import type { GetEnglishCronRunsByRunId200DataAttemptsItem } from "./getEnglishCronRunsByRunId200DataAttemptsItem.ts"
+import type { GetEnglishCronRunsByRunId200DataBucketsItem } from "./getEnglishCronRunsByRunId200DataBucketsItem.ts"
+import type { GetEnglishCronRunsByRunId200DataRun } from "./getEnglishCronRunsByRunId200DataRun.ts"
 
 export type GetEnglishCronRunsByRunId200Data = {
-  run: GetEnglishCronRunsByRunId200DataRun;
-  buckets: GetEnglishCronRunsByRunId200DataBucketsItem[];
-  attempts: GetEnglishCronRunsByRunId200DataAttemptsItem[];
-  hasNextBuckets: boolean;
-};
+  run: GetEnglishCronRunsByRunId200DataRun
+  buckets: GetEnglishCronRunsByRunId200DataBucketsItem[]
+  attempts: GetEnglishCronRunsByRunId200DataAttemptsItem[]
+  hasNextBuckets: boolean
+}

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminModelsById200Data } from './getAdminModelsById200Data.ts';
+import type { GetAdminModelsById200Data } from "./getAdminModelsById200Data.ts"
 
 export type GetAdminModelsById200 = {
-  success: true;
-  data: GetAdminModelsById200Data;
-};
+  success: true
+  data: GetAdminModelsById200Data
+}

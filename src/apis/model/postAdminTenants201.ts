@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminTenants201Data } from './postAdminTenants201Data.ts';
+import type { PostAdminTenants201Data } from "./postAdminTenants201Data.ts"
 
 export type PostAdminTenants201 = {
-  success: true;
-  data: PostAdminTenants201Data;
-};
+  success: true
+  data: PostAdminTenants201Data
+}

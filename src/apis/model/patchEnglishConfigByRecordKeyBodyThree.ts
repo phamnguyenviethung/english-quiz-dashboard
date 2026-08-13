@@ -8,5 +8,5 @@
 
 export type PatchEnglishConfigByRecordKeyBodyThree = {
   /** Shape phụ thuộc recordType (str/num/boolean/arr/obj) của recordKey — xem GET /english/config/records để biết validation/uiSchema cụ thể cho record này. */
-  value: unknown;
-};
+  value: unknown
+}

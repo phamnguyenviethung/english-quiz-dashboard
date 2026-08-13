@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModelsSyncAll500ErrorCode } from './postAdminModelsSyncAll500ErrorCode.ts';
+import type { PostAdminModelsSyncAll500ErrorCode } from "./postAdminModelsSyncAll500ErrorCode.ts"
 
 export type PostAdminModelsSyncAll500Error = {
-  code: PostAdminModelsSyncAll500ErrorCode;
-  message: string;
-};
+  code: PostAdminModelsSyncAll500ErrorCode
+  message: string
+}

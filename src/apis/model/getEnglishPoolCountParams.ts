@@ -5,11 +5,11 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolCountEngLevel } from './getEnglishPoolCountEngLevel.ts';
-import type { GetEnglishPoolCountQuizType } from './getEnglishPoolCountQuizType.ts';
+import type { GetEnglishPoolCountEngLevel } from "./getEnglishPoolCountEngLevel.ts"
+import type { GetEnglishPoolCountQuizType } from "./getEnglishPoolCountQuizType.ts"
 
 export type GetEnglishPoolCountParams = {
-engLevel: GetEnglishPoolCountEngLevel;
-quizType: GetEnglishPoolCountQuizType;
-topicId?: string | number;
-};
+  engLevel: GetEnglishPoolCountEngLevel
+  quizType: GetEnglishPoolCountQuizType
+  topicId?: string | number
+}

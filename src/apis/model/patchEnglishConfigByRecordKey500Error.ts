@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchEnglishConfigByRecordKey500ErrorCode } from './patchEnglishConfigByRecordKey500ErrorCode.ts';
+import type { PatchEnglishConfigByRecordKey500ErrorCode } from "./patchEnglishConfigByRecordKey500ErrorCode.ts"
 
 export type PatchEnglishConfigByRecordKey500Error = {
-  code: PatchEnglishConfigByRecordKey500ErrorCode;
-  message: string;
-};
+  code: PatchEnglishConfigByRecordKey500ErrorCode
+  message: string
+}

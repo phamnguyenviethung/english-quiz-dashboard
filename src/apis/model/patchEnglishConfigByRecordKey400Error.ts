@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchEnglishConfigByRecordKey400ErrorCode } from './patchEnglishConfigByRecordKey400ErrorCode.ts';
+import type { PatchEnglishConfigByRecordKey400ErrorCode } from "./patchEnglishConfigByRecordKey400ErrorCode.ts"
 
 export type PatchEnglishConfigByRecordKey400Error = {
-  code: PatchEnglishConfigByRecordKey400ErrorCode;
-  message: string;
-};
+  code: PatchEnglishConfigByRecordKey400ErrorCode
+  message: string
+}

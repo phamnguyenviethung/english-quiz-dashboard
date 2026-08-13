@@ -19,7 +19,9 @@ const COLUMN_COUNT = 5
 
 function AccessCell({ tenant }: { tenant: Tenant }) {
   if (!tenant.allowAllTopics && !tenant.allowAllQuizTypes) {
-    return <span className="text-xs text-muted-foreground">Theo allow-list</span>
+    return (
+      <span className="text-xs text-muted-foreground">Theo allow-list</span>
+    )
   }
 
   return (

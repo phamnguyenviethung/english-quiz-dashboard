@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminPoolBuckets401Error } from './getAdminPoolBuckets401Error.ts';
+import type { GetAdminPoolBuckets401Error } from "./getAdminPoolBuckets401Error.ts"
 
 export type GetAdminPoolBuckets401 = {
-  success: false;
-  error: GetAdminPoolBuckets401Error;
-};
+  success: false
+  error: GetAdminPoolBuckets401Error
+}

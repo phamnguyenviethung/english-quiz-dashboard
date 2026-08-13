@@ -16,7 +16,7 @@ export type ProviderPreferences =
   NonNullable<GetAdminModels200DataItemScheduleProvider>
 
 /** Ngữ cảnh chọn model — khớp ModelContext ở backend. */
-export type ModelContext = "schedule" | "manual"
+export type ModelContext = "schedule" | "manual" | "reading"
 
 /**
  * Form state cho provider: các field hay dùng giữ dạng string để bind thẳng vào
@@ -43,6 +43,10 @@ export interface AiModelFormValues {
   isActive: boolean
   scheduleEnabled: boolean
   manualEnabled: boolean
+  readingEnabled: boolean
   scheduleProvider: ProviderFormValues
   manualProvider: ProviderFormValues
+  // Backend lưu normalize ở bảng riêng nhưng API vẫn nhận/trả cùng shape với 2 cái
+  // trên, nên form không cần biết khác biệt đó.
+  readingProvider: ProviderFormValues
 }

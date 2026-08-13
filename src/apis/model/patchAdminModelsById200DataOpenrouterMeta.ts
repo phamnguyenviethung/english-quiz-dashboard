@@ -6,4 +6,6 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PatchAdminModelsById200DataOpenrouterMeta = { [key: string]: unknown } | null;
+export type PatchAdminModelsById200DataOpenrouterMeta = {
+  [key: string]: unknown
+} | null

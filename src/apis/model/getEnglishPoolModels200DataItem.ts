@@ -7,7 +7,7 @@
  */
 
 export type GetEnglishPoolModels200DataItem = {
-  model: string;
+  model: string
   /** Số câu trong pool được sinh bởi model này. */
-  count: number;
-};
+  count: number
+}

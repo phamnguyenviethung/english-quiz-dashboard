@@ -122,7 +122,11 @@ export function TenantFormDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form className="flex flex-col gap-6" onSubmit={handleSubmit} noValidate>
+        <form
+          className="flex flex-col gap-6"
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <Field data-invalid={Boolean(errors.name)}>
             <FieldLabel htmlFor="tenant-name">Tên tenant</FieldLabel>
             <Input
@@ -154,7 +158,9 @@ export function TenantFormDialog({
             />
             <FieldError
               errors={[
-                errors.description ? { message: errors.description } : undefined,
+                errors.description
+                  ? { message: errors.description }
+                  : undefined,
               ]}
             />
           </Field>
@@ -162,8 +168,8 @@ export function TenantFormDialog({
           <Field>
             <FieldLabel>Phạm vi truy cập</FieldLabel>
             <FieldDescription>
-              Bật để bỏ qua allow-list, tenant dùng được toàn bộ chủ đề hoặc dạng
-              quiz.
+              Bật để bỏ qua allow-list, tenant dùng được toàn bộ chủ đề hoặc
+              dạng quiz.
             </FieldDescription>
             <div className="grid gap-3 rounded-2xl border p-4">
               <label className="flex items-center justify-between gap-4 text-sm">

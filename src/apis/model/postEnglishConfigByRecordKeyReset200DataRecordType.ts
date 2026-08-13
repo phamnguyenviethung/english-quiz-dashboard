@@ -6,13 +6,13 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishConfigByRecordKeyReset200DataRecordType = typeof PostEnglishConfigByRecordKeyReset200DataRecordType[keyof typeof PostEnglishConfigByRecordKeyReset200DataRecordType];
-
+export type PostEnglishConfigByRecordKeyReset200DataRecordType =
+  (typeof PostEnglishConfigByRecordKeyReset200DataRecordType)[keyof typeof PostEnglishConfigByRecordKeyReset200DataRecordType]
 
 export const PostEnglishConfigByRecordKeyReset200DataRecordType = {
-  str: 'str',
-  num: 'num',
-  boolean: 'boolean',
-  arr: 'arr',
-  obj: 'obj',
-} as const;
+  str: "str",
+  num: "num",
+  boolean: "boolean",
+  arr: "arr",
+  obj: "obj",
+} as const

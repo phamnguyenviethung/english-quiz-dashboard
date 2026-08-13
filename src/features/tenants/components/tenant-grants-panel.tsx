@@ -63,10 +63,7 @@ function TopicGrants({ tenant }: { tenant: Tenant }) {
     [topics]
   )
 
-  const value = useMemo(
-    () => grants.topicIds.map(String),
-    [grants.topicIds]
-  )
+  const value = useMemo(() => grants.topicIds.map(String), [grants.topicIds])
 
   if (grants.isError) {
     return (

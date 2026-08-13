@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolModels200DataItem } from './getEnglishPoolModels200DataItem.ts';
+import type { GetEnglishPoolModels200DataItem } from "./getEnglishPoolModels200DataItem.ts"
 
 export type GetEnglishPoolModels200 = {
-  success: true;
-  data: GetEnglishPoolModels200DataItem[];
-};
+  success: true
+  data: GetEnglishPoolModels200DataItem[]
+}

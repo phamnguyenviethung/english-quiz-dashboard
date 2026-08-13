@@ -8,16 +8,16 @@
 
 export type GetAdminPoolBuckets200DataBucketsItem = {
   /** `{engLevel}:{topicId|null}:{quizType}` — id ổn định để chọn/bỏ chọn bucket. */
-  bucketKey: string;
-  engLevel: string;
-  quizType: string;
-  optionCount: number;
-  topicId: number | null;
-  topicName: string | null;
+  bucketKey: string
+  engLevel: string
+  quizType: string
+  optionCount: number
+  topicId: number | null
+  topicName: string | null
   /** Số câu đang có trong bucket. */
-  currentCount: number;
+  currentCount: number
   /** question_pool.maxPerBucket - currentCount (có thể âm nếu đang dư). */
-  deficiency: number;
+  deficiency: number
   /** Số câu sẽ sinh cho bucket này. 0 = bị scope bỏ qua. */
-  plannedCount: number;
-};
+  plannedCount: number
+}

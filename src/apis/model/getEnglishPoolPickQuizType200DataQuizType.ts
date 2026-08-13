@@ -6,19 +6,19 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishPoolPickQuizType200DataQuizType = typeof GetEnglishPoolPickQuizType200DataQuizType[keyof typeof GetEnglishPoolPickQuizType200DataQuizType];
-
+export type GetEnglishPoolPickQuizType200DataQuizType =
+  (typeof GetEnglishPoolPickQuizType200DataQuizType)[keyof typeof GetEnglishPoolPickQuizType200DataQuizType]
 
 export const GetEnglishPoolPickQuizType200DataQuizType = {
-  vocab: 'vocab',
-  fillblank: 'fillblank',
-  phrase: 'phrase',
-  conversation: 'conversation',
-  description: 'description',
-  synonym: 'synonym',
-  slang: 'slang',
-  'odd-one-out': 'odd-one-out',
-  paragraph: 'paragraph',
-  idiom: 'idiom',
-  'verb-use-match': 'verb-use-match',
-} as const;
+  vocab: "vocab",
+  fillblank: "fillblank",
+  phrase: "phrase",
+  conversation: "conversation",
+  description: "description",
+  synonym: "synonym",
+  slang: "slang",
+  "odd-one-out": "odd-one-out",
+  paragraph: "paragraph",
+  idiom: "idiom",
+  "verb-use-match": "verb-use-match",
+} as const

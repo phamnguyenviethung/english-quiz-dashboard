@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostEnglishGenerateByQuizType400ErrorCode = typeof PostEnglishGenerateByQuizType400ErrorCode[keyof typeof PostEnglishGenerateByQuizType400ErrorCode];
-
+export type PostEnglishGenerateByQuizType400ErrorCode =
+  (typeof PostEnglishGenerateByQuizType400ErrorCode)[keyof typeof PostEnglishGenerateByQuizType400ErrorCode]
 
 export const PostEnglishGenerateByQuizType400ErrorCode = {
-  VALIDATION: 'VALIDATION',
-  UNAUTHORIZED: 'UNAUTHORIZED',
-  FORBIDDEN: 'FORBIDDEN',
-  NOT_FOUND: 'NOT_FOUND',
-  CONFLICT: 'CONFLICT',
-  BUSINESS_ERROR: 'BUSINESS_ERROR',
-  INTERNAL_ERROR: 'INTERNAL_ERROR',
-} as const;
+  VALIDATION: "VALIDATION",
+  UNAUTHORIZED: "UNAUTHORIZED",
+  FORBIDDEN: "FORBIDDEN",
+  NOT_FOUND: "NOT_FOUND",
+  CONFLICT: "CONFLICT",
+  BUSINESS_ERROR: "BUSINESS_ERROR",
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+} as const

@@ -7,14 +7,14 @@
  */
 
 export type GetEnglishCronRunsByRunId200DataAttemptsItem = {
-  id: number;
-  bucketRefId: number;
-  model: string;
-  attemptOrder: number;
-  status: string;
-  generatedCount: number;
-  tokenIn: number;
-  tokenOut: number;
-  costUsd: number | null;
-  errorMessage: string | null;
-};
+  id: number
+  bucketRefId: number
+  model: string
+  attemptOrder: number
+  status: string
+  generatedCount: number
+  tokenIn: number
+  tokenOut: number
+  costUsd: number | null
+  errorMessage: string | null
+}

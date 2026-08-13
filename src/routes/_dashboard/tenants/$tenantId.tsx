@@ -113,7 +113,9 @@ function TenantDetailPage() {
         value={activeTab}
         onValueChange={(value) =>
           void navigate({
-            search: { tab: value === "overview" ? undefined : (value as TenantTab) },
+            search: {
+              tab: value === "overview" ? undefined : (value as TenantTab),
+            },
             replace: true,
           })
         }

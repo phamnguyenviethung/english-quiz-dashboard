@@ -7,6 +7,6 @@
  */
 
 export type PostAdminModelsSyncAll200Data = {
-  synced: number;
-  notFound: string[];
-};
+  synced: number
+  notFound: string[]
+}

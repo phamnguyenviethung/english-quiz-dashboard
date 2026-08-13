@@ -1,6 +1,7 @@
 import type { Icon } from "@tabler/icons-react"
 import {
   IconAdjustmentsAlt,
+  IconBook,
   IconClockBolt,
   IconCpu,
   IconDatabase,
@@ -15,6 +16,7 @@ export type NavPath =
   | "/"
   | "/topics"
   | "/question-pool"
+  | "/readings"
   | "/generate"
   | "/metadata"
   | "/config"
@@ -58,6 +60,12 @@ export const NAV_GROUPS: NavGroup[] = [
         label: "Kho câu hỏi",
         icon: IconDatabase,
         to: "/question-pool",
+      },
+      {
+        key: "readings",
+        label: "Bài đọc",
+        icon: IconBook,
+        to: "/readings",
       },
       {
         key: "generation",

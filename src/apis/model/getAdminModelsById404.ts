@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminModelsById404Error } from './getAdminModelsById404Error.ts';
+import type { GetAdminModelsById404Error } from "./getAdminModelsById404Error.ts"
 
 export type GetAdminModelsById404 = {
-  success: false;
-  error: GetAdminModelsById404Error;
-};
+  success: false
+  error: GetAdminModelsById404Error
+}

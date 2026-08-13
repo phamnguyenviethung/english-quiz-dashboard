@@ -5,25 +5,28 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminModels200DataItemManualProvider } from './getAdminModels200DataItemManualProvider.ts';
-import type { GetAdminModels200DataItemOpenrouterMeta } from './getAdminModels200DataItemOpenrouterMeta.ts';
-import type { GetAdminModels200DataItemPricingRaw } from './getAdminModels200DataItemPricingRaw.ts';
-import type { GetAdminModels200DataItemScheduleProvider } from './getAdminModels200DataItemScheduleProvider.ts';
+import type { GetAdminModels200DataItemManualProvider } from "./getAdminModels200DataItemManualProvider.ts"
+import type { GetAdminModels200DataItemOpenrouterMeta } from "./getAdminModels200DataItemOpenrouterMeta.ts"
+import type { GetAdminModels200DataItemPricingRaw } from "./getAdminModels200DataItemPricingRaw.ts"
+import type { GetAdminModels200DataItemReadingProvider } from "./getAdminModels200DataItemReadingProvider.ts"
+import type { GetAdminModels200DataItemScheduleProvider } from "./getAdminModels200DataItemScheduleProvider.ts"
 
 export type GetAdminModels200DataItem = {
-  id: number;
-  key: string;
-  modelId: string;
-  isActive: boolean;
-  scheduleEnabled: boolean;
-  manualEnabled: boolean;
-  scheduleProvider: GetAdminModels200DataItemScheduleProvider;
-  manualProvider: GetAdminModels200DataItemManualProvider;
-  pricePromptPerToken: number | null;
-  priceCompletionPerToken: number | null;
-  pricingRaw: GetAdminModels200DataItemPricingRaw;
-  openrouterMeta: GetAdminModels200DataItemOpenrouterMeta;
-  pricingSyncedAt: string | number | null;
-  createdAt: string | number | null;
-  updatedAt: string | number | null;
-};
+  id: number
+  key: string
+  modelId: string
+  isActive: boolean
+  scheduleEnabled: boolean
+  manualEnabled: boolean
+  readingEnabled: boolean
+  scheduleProvider: GetAdminModels200DataItemScheduleProvider
+  manualProvider: GetAdminModels200DataItemManualProvider
+  readingProvider?: GetAdminModels200DataItemReadingProvider
+  pricePromptPerToken: number | null
+  priceCompletionPerToken: number | null
+  pricingRaw: GetAdminModels200DataItemPricingRaw
+  openrouterMeta: GetAdminModels200DataItemOpenrouterMeta
+  pricingSyncedAt: string | number | null
+  createdAt: string | number | null
+  updatedAt: string | number | null
+}

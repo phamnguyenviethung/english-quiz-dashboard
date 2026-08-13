@@ -53,8 +53,10 @@ export function useUpdateAiModel(
       isActive: values.isActive,
       scheduleEnabled: values.scheduleEnabled,
       manualEnabled: values.manualEnabled,
+      readingEnabled: values.readingEnabled,
       scheduleProvider: toProviderPayload(values.scheduleProvider),
       manualProvider: toProviderPayload(values.manualProvider),
+      readingProvider: toProviderPayload(values.readingProvider),
     })
 
   const setActive = (isActive: boolean) => updateAiModel({ isActive })

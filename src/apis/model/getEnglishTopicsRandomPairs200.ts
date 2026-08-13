@@ -5,14 +5,17 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishTopicsRandomPairs200DataItemItem0 } from './getEnglishTopicsRandomPairs200DataItemItem0.ts';
-import type { GetEnglishTopicsRandomPairs200DataItemItem1 } from './getEnglishTopicsRandomPairs200DataItemItem1.ts';
+import type { GetEnglishTopicsRandomPairs200DataItemItem0 } from "./getEnglishTopicsRandomPairs200DataItemItem0.ts"
+import type { GetEnglishTopicsRandomPairs200DataItemItem1 } from "./getEnglishTopicsRandomPairs200DataItemItem1.ts"
 
 export type GetEnglishTopicsRandomPairs200 = {
-  success: true;
+  success: true
   /**
-     * @items.minItems 2
-     * @items.maxItems 2
-     */
-  data: [GetEnglishTopicsRandomPairs200DataItemItem0, GetEnglishTopicsRandomPairs200DataItemItem1][];
-};
+   * @items.minItems 2
+   * @items.maxItems 2
+   */
+  data: [
+    GetEnglishTopicsRandomPairs200DataItemItem0,
+    GetEnglishTopicsRandomPairs200DataItemItem1,
+  ][]
+}

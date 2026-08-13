@@ -1,5 +1,6 @@
 import type { Icon } from "@tabler/icons-react"
 import {
+  IconBook,
   IconCircleCheck,
   IconCircleOff,
   IconClockBolt,
@@ -34,16 +35,19 @@ export const MODEL_CONTEXT_META: Record<
 > = {
   schedule: { label: "Tự động", tone: "info", icon: IconClockBolt },
   manual: { label: "Thủ công", tone: "warning", icon: IconHandClick },
+  reading: { label: "Bài đọc", tone: "neutral", icon: IconBook },
 }
 
 export const MODEL_CONTEXT_LABELS: Record<ModelContext, string> = {
   schedule: MODEL_CONTEXT_META.schedule.label,
   manual: MODEL_CONTEXT_META.manual.label,
+  reading: MODEL_CONTEXT_META.reading.label,
 }
 
 export const MODEL_CONTEXT_DESCRIPTIONS: Record<ModelContext, string> = {
   schedule: "Cron bổ sung kho câu hỏi và các lượt sinh tự động khác.",
   manual: "Khi admin bấm bổ sung kho câu hỏi thủ công.",
+  reading: "Sinh bài đọc (cả cron lẫn khi admin bấm sinh hàng loạt).",
 }
 
 /**

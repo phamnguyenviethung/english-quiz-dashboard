@@ -7,8 +7,8 @@
  */
 
 export type GetAdminModelsCatalogParams = {
-/**
- * Lọc substring theo model id hoặc tên (không phân biệt hoa thường).
- */
-search?: string;
-};
+  /**
+   * Lọc substring theo model id hoặc tên (không phân biệt hoa thường).
+   */
+  search?: string
+}

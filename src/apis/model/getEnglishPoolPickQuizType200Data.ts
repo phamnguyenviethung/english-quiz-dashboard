@@ -5,8 +5,8 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolPickQuizType200DataQuizType } from './getEnglishPoolPickQuizType200DataQuizType.ts';
+import type { GetEnglishPoolPickQuizType200DataQuizType } from "./getEnglishPoolPickQuizType200DataQuizType.ts"
 
 export type GetEnglishPoolPickQuizType200Data = {
-  quizType: GetEnglishPoolPickQuizType200DataQuizType;
-};
+  quizType: GetEnglishPoolPickQuizType200DataQuizType
+}
