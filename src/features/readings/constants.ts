@@ -1,33 +1,16 @@
-import type { EngLevel } from "@/features/quiz/types.ts"
-
 import type { ReadingRefillScope } from "./types.ts"
 
-export interface WordBand {
-  min: number
-  max: number
-}
-
 /**
- * Band độ dài theo CEFR — phải khớp CEFR_WORD_BANDS ở backend
+ * Band độ dài dùng chung cho mọi CEFR level — phải khớp READING_WORD_BAND ở backend
  * (src/core/services/english/prompt/reading-passage-prompt.ts). Dùng để gắn nhãn
  * "đúng band / lệch band" cho từng bài trong bảng.
  */
-export const CEFR_WORD_BANDS: Record<EngLevel, WordBand> = {
-  A1: { min: 70, max: 100 },
-  A2: { min: 90, max: 130 },
-  B1: { min: 120, max: 170 },
-  B2: { min: 140, max: 190 },
-}
+export const READING_WORD_BAND = { min: 150, max: 220 } as const
 
-/** `cefrLevel` từ API là string tự do nên band có thể không tra được — trả undefined. */
-export function getWordBand(cefrLevel: string): WordBand | undefined {
-  return (CEFR_WORD_BANDS as Record<string, WordBand | undefined>)[cefrLevel]
-}
-
-export function isWordCountInBand(cefrLevel: string, wordCount: number) {
-  const band = getWordBand(cefrLevel)
-  if (!band) return true
-  return wordCount >= band.min && wordCount <= band.max
+export function isWordCountInBand(wordCount: number) {
+  return (
+    wordCount >= READING_WORD_BAND.min && wordCount <= READING_WORD_BAND.max
+  )
 }
 
 export const READINGS_PAGE_SIZE = 20

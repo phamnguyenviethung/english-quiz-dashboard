@@ -31,7 +31,7 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { formatDateTime, formatNumber } from "@/lib/format.ts"
 
-import { getWordBand } from "../constants.ts"
+import { READING_WORD_BAND } from "../constants.ts"
 import {
   useDeleteReading,
   useUpdateReading,
@@ -94,7 +94,6 @@ function ReadingDetailContent({
 
   const draftParagraphs = fromDraft(bodyDraft)
   const draftWordCount = countWords(draftParagraphs)
-  const band = getWordBand(passage.cefrLevel)
   const isDraftInvalid =
     titleDraft.trim().length === 0 || draftParagraphs.length < 2
 
@@ -108,10 +107,7 @@ function ReadingDetailContent({
     <div className="space-y-6 px-4 pb-6">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="outline">{passage.cefrLevel}</Badge>
-        <WordCountBadge
-          cefrLevel={passage.cefrLevel}
-          wordCount={passage.wordCount}
-        />
+        <WordCountBadge wordCount={passage.wordCount} />
         <span className="text-sm text-muted-foreground">
           {passage.topicName ?? "Không có chủ đề"}
         </span>
@@ -198,11 +194,9 @@ function ReadingDetailContent({
             />
             <FieldDescription>
               Ngăn cách các đoạn bằng một dòng trống. Hiện có{" "}
-              {draftParagraphs.length} đoạn, {draftWordCount} từ
-              {band
-                ? ` (band ${passage.cefrLevel}: ${band.min}-${band.max})`
-                : ""}
-              .{draftParagraphs.length < 2 ? " Cần ít nhất 2 đoạn." : ""}
+              {draftParagraphs.length} đoạn, {draftWordCount} từ (band{" "}
+              {READING_WORD_BAND.min}-{READING_WORD_BAND.max}).
+              {draftParagraphs.length < 2 ? " Cần ít nhất 2 đoạn." : ""}
             </FieldDescription>
           </Field>
         </div>

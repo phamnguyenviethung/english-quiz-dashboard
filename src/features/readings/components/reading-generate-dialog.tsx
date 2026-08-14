@@ -25,7 +25,7 @@ import type { EngLevel } from "@/features/quiz/types.ts"
 import { useTopics } from "@/features/topics/hooks/use-topics.ts"
 import { formatNumber } from "@/lib/format.ts"
 
-import { ALL_VALUE, getWordBand } from "../constants.ts"
+import { ALL_VALUE, READING_WORD_BAND } from "../constants.ts"
 import { useGenerateReading } from "../hooks/use-generate-reading.ts"
 import { useReadingGenerationModels } from "../hooks/use-reading-models.ts"
 import { WordCountBadge } from "./word-count-badge.tsx"
@@ -51,7 +51,6 @@ export function ReadingGenerateDialog({
   const [cefrLevel, setCefrLevel] = useState<EngLevel>(DEFAULT_LEVEL)
   const [model, setModel] = useState<string>(ALL_VALUE)
 
-  const band = getWordBand(cefrLevel)
   const isSubmitDisabled = isPending || topicName.trim().length === 0
 
   const handleSubmit = () => {
@@ -120,7 +119,7 @@ export function ReadingGenerateDialog({
               </SelectContent>
             </Select>
             <FieldDescription>
-              {band ? `Độ dài mục tiêu ${band.min}-${band.max} từ.` : ""}
+              {`Độ dài mục tiêu ${READING_WORD_BAND.min}-${READING_WORD_BAND.max} từ (mọi level).`}
             </FieldDescription>
           </Field>
 
@@ -164,10 +163,7 @@ export function ReadingGenerateDialog({
           <div className="space-y-4 rounded-2xl border p-4">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="outline">{passage.cefrLevel}</Badge>
-              <WordCountBadge
-                cefrLevel={passage.cefrLevel}
-                wordCount={passage.wordCount}
-              />
+              <WordCountBadge wordCount={passage.wordCount} />
               <span className="text-sm text-muted-foreground">
                 {passage.topic}
               </span>

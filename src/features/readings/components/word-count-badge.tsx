@@ -6,27 +6,20 @@ import {
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
-import { getWordBand, isWordCountInBand } from "../constants.ts"
+import { isWordCountInBand, READING_WORD_BAND } from "../constants.ts"
 
 /**
- * Số từ kèm cảnh báo lệch band CEFR. Guideline đặt độ dài theo từng level, nên bài
+ * Số từ kèm cảnh báo lệch band. Guideline dùng chung một band cho mọi level, nên bài
  * lệch band là tín hiệu chất lượng cần thấy ngay trong bảng chứ không phải đi tìm.
  */
 export function WordCountBadge({
-  cefrLevel,
   wordCount,
   className,
 }: {
-  cefrLevel: string
   wordCount: number
   className?: string
 }) {
-  const band = getWordBand(cefrLevel)
-  const inBand = isWordCountInBand(cefrLevel, wordCount)
-
-  if (!band) {
-    return <span className={cn("tabular-nums", className)}>{wordCount} từ</span>
-  }
+  const inBand = isWordCountInBand(wordCount)
 
   return (
     <Tooltip>
@@ -47,8 +40,8 @@ export function WordCountBadge({
       />
       <TooltipContent>
         {inBand
-          ? `Đúng band ${cefrLevel}: ${band.min}-${band.max} từ`
-          : `Lệch band ${cefrLevel} (${band.min}-${band.max} từ)`}
+          ? `Đúng band: ${READING_WORD_BAND.min}-${READING_WORD_BAND.max} từ`
+          : `Lệch band (${READING_WORD_BAND.min}-${READING_WORD_BAND.max} từ)`}
       </TooltipContent>
     </Tooltip>
   )

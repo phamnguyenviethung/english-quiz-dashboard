@@ -155,10 +155,7 @@ export function ReadingsTable({
                   <Badge variant="outline">{item.cefrLevel}</Badge>
                 </TableCell>
                 <TableCell>
-                  <WordCountBadge
-                    cefrLevel={item.cefrLevel}
-                    wordCount={item.wordCount}
-                  />
+                  <WordCountBadge wordCount={item.wordCount} />
                 </TableCell>
                 <TableCell className="font-mono text-xs text-muted-foreground">
                   {item.model}
