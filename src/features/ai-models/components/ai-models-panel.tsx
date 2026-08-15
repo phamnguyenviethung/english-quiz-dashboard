@@ -4,7 +4,6 @@ import {
   IconClockBolt,
   IconCpu,
   IconHandClick,
-  IconPencil,
   IconPlus,
   IconRefresh,
   IconSearch,
@@ -13,6 +12,11 @@ import {
 import { QueryError } from "@/components/common/query-error.tsx"
 import { StatTile, StatTileGrid } from "@/components/common/stat-tile.tsx"
 import { StatusBadge } from "@/components/common/status-badge.tsx"
+import {
+  STICKY_CELL_LEFT,
+  STICKY_CELL_RIGHT,
+  StickyTable,
+} from "@/components/common/sticky-table.tsx"
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -26,7 +30,6 @@ import {
 } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
 import {
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -56,10 +59,29 @@ import {
 import type { AiModel } from "../types.ts"
 import { countProviderOptions } from "../utils/provider-preferences.ts"
 import { AiModelFormDialog } from "./ai-model-form-dialog.tsx"
-import { AiModelStatusToggle } from "./ai-model-status-toggle.tsx"
+import { AiModelRowActions } from "./ai-model-row-actions.tsx"
 import { ModelCatalogDialog } from "./model-catalog-dialog.tsx"
 
 const COLUMN_COUNT = 7
+
+/**
+ * Nền hàng phải đặc thì cột ghim (`bg-inherit`) mới che được nội dung cuộn phía
+ * dưới — nền trong suốt bị ô ghim vẽ chồng thêm một lớp nữa nên cột đó đậm hơn
+ * hẳn. Vì vậy model đã tắt dùng `bg-muted` đặc, và bỏ luôn hover: bảng không có
+ * hành động ở cấp hàng, mà tô hover cũng sẽ trùng đúng màu của hàng đã tắt.
+ */
+const ROW_ACTIVE = "bg-card hover:bg-card"
+const ROW_INACTIVE = "bg-muted hover:bg-muted"
+
+const SKELETON_COLUMN_CLASSES = [
+  STICKY_CELL_LEFT,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  cn(STICKY_CELL_RIGHT, "p-1 md:p-3"),
+]
 
 function ModelIdCell({ modelId }: { modelId: string }) {
   const { provider, name, suffix } = formatModelName(modelId)
@@ -80,7 +102,7 @@ function ModelIdCell({ modelId }: { modelId: string }) {
 }
 
 /**
- * Badge cho 2 ngữ cảnh. Mỗi ngữ cảnh một hue riêng khi bật (xem MODEL_CONTEXT_META)
+ * Badge cho 3 ngữ cảnh. Mỗi ngữ cảnh một hue riêng khi bật (xem MODEL_CONTEXT_META)
  * để quét bảng là biết model phục vụ đường nào; tắt thì xám mờ hẳn đi. Kèm số tuỳ
  * chọn provider nếu có cấu hình riêng.
  */
@@ -95,6 +117,11 @@ function ContextsCell({ model }: { model: AiModel }) {
       key: "manual" as const,
       enabled: model.manualEnabled,
       options: countProviderOptions(model.manualProvider),
+    },
+    {
+      key: "reading" as const,
+      enabled: model.readingEnabled,
+      options: countProviderOptions(model.readingProvider),
     },
   ]
 
@@ -188,108 +215,86 @@ function AiModelsTable({
   const { syncModelPricing, pendingId } = useSyncModelPricing()
 
   return (
-    <div className="overflow-x-auto rounded-2xl border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Key</TableHead>
-            <TableHead>Model ID</TableHead>
-            <TableHead className="w-32">Trạng thái</TableHead>
-            <TableHead className="w-44">Ngữ cảnh</TableHead>
-            <TableHead className="w-28 text-right">Giá /1M</TableHead>
-            <TableHead className="w-24 text-right">Đã sinh</TableHead>
-            <TableHead className="w-48" />
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isPending ? (
-            <TableSkeletonRows columns={COLUMN_COUNT} />
-          ) : (
-            models.map((model) => {
-              const status =
-                MODEL_STATUS_META[model.isActive ? "active" : "inactive"]
-              const usage = usageByModelId.get(model.modelId)
+    <StickyTable>
+      <TableHeader>
+        <TableRow className="bg-card hover:bg-card">
+          <TableHead className={cn(STICKY_CELL_LEFT, "w-28")}>Key</TableHead>
+          <TableHead>Model ID</TableHead>
+          <TableHead className="w-32">Trạng thái</TableHead>
+          <TableHead className="w-52">Ngữ cảnh</TableHead>
+          <TableHead className="w-28 text-right">Giá /1M</TableHead>
+          <TableHead className="w-24 text-right">Đã sinh</TableHead>
+          <TableHead className={cn(STICKY_CELL_RIGHT, "w-12 md:w-48")} />
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {isPending ? (
+          <TableSkeletonRows
+            columns={COLUMN_COUNT}
+            rowClassName={ROW_ACTIVE}
+            columnClassNames={SKELETON_COLUMN_CLASSES}
+          />
+        ) : (
+          models.map((model) => {
+            const status =
+              MODEL_STATUS_META[model.isActive ? "active" : "inactive"]
+            const usage = usageByModelId.get(model.modelId)
 
-              return (
-                // Nền mờ cho model đã tắt: tín hiệu quét mạnh hơn cả badge.
-                <TableRow
-                  key={model.id}
-                  className={model.isActive ? undefined : "bg-muted/30"}
+            return (
+              // Nền xám cho model đã tắt: tín hiệu quét mạnh hơn cả badge.
+              <TableRow
+                key={model.id}
+                className={model.isActive ? ROW_ACTIVE : ROW_INACTIVE}
+              >
+                {/*
+                  TableCell mặc định whitespace-nowrap nên key dài sẽ kéo cột ghim
+                  rộng ra và nuốt gần hết khung cuộn ở 375px. Cho xuống dòng ở
+                  mobile để cột giữ đúng w-28.
+                */}
+                <TableCell
+                  className={cn(
+                    STICKY_CELL_LEFT,
+                    "font-medium break-all whitespace-normal md:break-normal md:whitespace-nowrap",
+                    !model.isActive && "text-muted-foreground"
+                  )}
                 >
-                  <TableCell
-                    className={cn(
-                      "font-medium",
-                      !model.isActive && "text-muted-foreground"
-                    )}
-                  >
-                    {model.key}
-                  </TableCell>
-                  <TableCell>
-                    <ModelIdCell modelId={model.modelId} />
-                  </TableCell>
-                  <TableCell>
-                    <StatusBadge meta={status} />
-                  </TableCell>
-                  <TableCell>
-                    <ContextsCell model={model} />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <PriceCell model={model} />
-                  </TableCell>
-                  <TableCell
-                    className={cn(
-                      "text-right text-xs tabular-nums",
-                      usage === undefined
-                        ? "text-muted-foreground"
-                        : "text-foreground"
-                    )}
-                  >
-                    {usage === undefined ? "-" : formatNumber(usage)}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex justify-end gap-2">
-                      <Tooltip>
-                        <TooltipTrigger
-                          render={
-                            <Button
-                              variant="outline"
-                              size="icon-sm"
-                              aria-label={`Đồng bộ giá model ${model.key}`}
-                              disabled={pendingId === model.id}
-                              onClick={() => void syncModelPricing(model.id)}
-                            >
-                              {pendingId === model.id ? (
-                                <Spinner />
-                              ) : (
-                                <IconRefresh stroke={1.5} />
-                              )}
-                            </Button>
-                          }
-                        />
-                        <TooltipContent>Đồng bộ giá</TooltipContent>
-                      </Tooltip>
-                      <AiModelFormDialog
-                        model={model}
-                        trigger={
-                          <Button
-                            variant="outline"
-                            size="icon-sm"
-                            aria-label={`Sửa model ${model.key}`}
-                          >
-                            <IconPencil stroke={1.5} />
-                          </Button>
-                        }
-                      />
-                      <AiModelStatusToggle model={model} />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )
-            })
-          )}
-        </TableBody>
-      </Table>
-    </div>
+                  {model.key}
+                </TableCell>
+                <TableCell>
+                  <ModelIdCell modelId={model.modelId} />
+                </TableCell>
+                <TableCell>
+                  <StatusBadge meta={status} />
+                </TableCell>
+                <TableCell>
+                  <ContextsCell model={model} />
+                </TableCell>
+                <TableCell className="text-right">
+                  <PriceCell model={model} />
+                </TableCell>
+                <TableCell
+                  className={cn(
+                    "text-right text-xs tabular-nums",
+                    usage === undefined
+                      ? "text-muted-foreground"
+                      : "text-foreground"
+                  )}
+                >
+                  {usage === undefined ? "-" : formatNumber(usage)}
+                </TableCell>
+                <TableCell className={cn(STICKY_CELL_RIGHT, "p-1 md:p-3")}>
+                  <AiModelRowActions
+                    model={model}
+                    isSyncing={pendingId === model.id}
+                    onSyncPricing={() => void syncModelPricing(model.id)}
+                  />
+                </TableCell>
+              </TableRow>
+            )
+          })
+        )}
+      </TableBody>
+    </StickyTable>
   )
 }
 
@@ -309,7 +314,7 @@ function AiModelsSummary({ models }: { models: AiModel[] }) {
   }, [models])
 
   return (
-    <StatTileGrid className="mb-4 sm:grid-cols-4">
+    <StatTileGrid className="mb-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatTile label="Tổng model" value={summary.total} icon={IconCpu} />
       <StatTile
         label="Đang hoạt động"
@@ -348,7 +353,11 @@ export function AiModelsPanel({ className }: { className?: string }) {
 
   return (
     <Card className={className}>
-      <CardHeader>
+      {/*
+        CardHeader ép grid-cols-[1fr_auto] khi có CardAction nên ở điện thoại ba
+        nút bị nhồi vào cột phải hẹp. Dưới sm cho nó rơi hẳn xuống hàng riêng.
+      */}
+      <CardHeader className="max-sm:grid-cols-1">
         <div className="flex items-center gap-2">
           <IconCpu className="size-4 text-muted-foreground" stroke={1.5} />
           <CardTitle>Danh sách model</CardTitle>
@@ -357,11 +366,20 @@ export function AiModelsPanel({ className }: { className?: string }) {
           Model được chọn ngẫu nhiên trong số các model đang bật của từng ngữ
           cảnh. Tắt một model để loại nó khỏi vòng chọn mà không mất lịch sử.
         </CardDescription>
-        <CardAction>
-          <div className="flex flex-wrap gap-2">
+        <CardAction className="max-sm:col-start-1 max-sm:row-start-3 max-sm:mt-2 max-sm:justify-self-stretch">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+            <AiModelFormDialog
+              trigger={
+                <Button size="sm" className="col-span-2 h-11 sm:order-3 sm:h-8">
+                  <IconPlus stroke={1.5} data-icon="inline-start" />
+                  Thêm model
+                </Button>
+              }
+            />
             <Button
               variant="outline"
               size="sm"
+              className="h-11 sm:order-1 sm:h-8"
               onClick={() => void syncAllModelsPricing()}
               disabled={isSyncingAll || models.length === 0}
             >
@@ -376,17 +394,13 @@ export function AiModelsPanel({ className }: { className?: string }) {
               existingModels={models}
               onPick={setPresetModelId}
               trigger={
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-11 sm:order-2 sm:h-8"
+                >
                   <IconSearch stroke={1.5} data-icon="inline-start" />
                   Duyệt catalog
-                </Button>
-              }
-            />
-            <AiModelFormDialog
-              trigger={
-                <Button size="sm">
-                  <IconPlus stroke={1.5} data-icon="inline-start" />
-                  Thêm model
                 </Button>
               }
             />
@@ -412,7 +426,7 @@ export function AiModelsPanel({ className }: { className?: string }) {
             </div>
             <AiModelFormDialog
               trigger={
-                <Button size="sm">
+                <Button size="sm" className="h-11 sm:h-8">
                   <IconPlus stroke={1.5} data-icon="inline-start" />
                   Thêm model
                 </Button>

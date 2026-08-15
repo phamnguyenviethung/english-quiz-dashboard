@@ -1,5 +1,3 @@
-import { IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react"
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,48 +7,38 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 
 import { useUpdateAiModel } from "../hooks/use-update-ai-model.ts"
 import type { AiModel } from "../types.ts"
 
-export function AiModelStatusToggle({ model }: { model: AiModel }) {
-  const { setActive, isPending } = useUpdateAiModel(model.id, {
-    successTitle: model.isActive ? "Đã tắt model" : "Đã bật lại model",
+/**
+ * Xác nhận tắt model, dạng controlled không kèm trigger để menu hành động ở mobile
+ * mở được nó: AlertDialogTrigger lồng trong DropdownMenuItem sẽ bị unmount ngay
+ * khi menu đóng.
+ */
+export function AiModelDeactivateDialog({
+  model,
+  open,
+  onOpenChange,
+}: {
+  model: AiModel
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  const { setActive } = useUpdateAiModel(model.id, {
+    successTitle: "Đã tắt model",
   })
 
-  const toggle = (isActive: boolean) => {
-    void setActive(isActive).catch(() => {
+  const deactivate = () => {
+    void setActive(false).catch(() => {
       // toast đã bắn từ hook
     })
   }
 
-  if (!model.isActive) {
-    return (
-      <Button
-        variant="outline"
-        size="sm"
-        disabled={isPending}
-        onClick={() => toggle(true)}
-      >
-        <IconPlayerPlay stroke={1.5} data-icon="inline-start" />
-        Bật lại
-      </Button>
-    )
-  }
-
   return (
-    <AlertDialog>
-      <AlertDialogTrigger
-        render={
-          <Button variant="outline" size="sm" disabled={isPending}>
-            <IconPlayerPause stroke={1.5} data-icon="inline-start" />
-            Tắt
-          </Button>
-        }
-      />
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Tắt model "{model.key}"?</AlertDialogTitle>
@@ -64,9 +52,7 @@ export function AiModelStatusToggle({ model }: { model: AiModel }) {
             Huỷ
           </AlertDialogCancel>
           <AlertDialogAction
-            render={
-              <Button variant="destructive" onClick={() => toggle(false)} />
-            }
+            render={<Button variant="destructive" onClick={deactivate} />}
           >
             Tắt model
           </AlertDialogAction>

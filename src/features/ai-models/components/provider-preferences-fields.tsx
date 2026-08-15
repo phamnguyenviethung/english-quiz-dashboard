@@ -135,7 +135,7 @@ export function ProviderPreferencesFields({
           onChange={(event) => onChange("order", event.target.value)}
           disabled={disabled}
           autoComplete="off"
-          className="font-mono text-sm"
+          className="font-mono text-base md:text-sm"
         />
         <FieldDescription>
           Danh sách slug cách nhau bởi dấu phẩy. Gọi lần lượt từ trái sang phải.
@@ -152,7 +152,7 @@ export function ProviderPreferencesFields({
             onChange={(event) => onChange("only", event.target.value)}
             disabled={disabled}
             autoComplete="off"
-            className="font-mono text-sm"
+            className="font-mono text-base md:text-sm"
           />
           <FieldDescription>Chỉ cho phép các provider này.</FieldDescription>
         </Field>
@@ -166,7 +166,7 @@ export function ProviderPreferencesFields({
             onChange={(event) => onChange("ignore", event.target.value)}
             disabled={disabled}
             autoComplete="off"
-            className="font-mono text-sm"
+            className="font-mono text-base md:text-sm"
           />
           <FieldDescription>Loại các provider này ra.</FieldDescription>
         </Field>
@@ -336,7 +336,7 @@ export function ProviderPreferencesFields({
               onChange={(event) => onChange("advancedJson", event.target.value)}
               aria-invalid={Boolean(errors?.advancedJson)}
               disabled={disabled}
-              className="font-mono text-xs"
+              className="font-mono text-sm md:text-xs"
             />
             <FieldDescription>
               Các key chưa có ô riêng, vd `quantizations`. Ô phía trên sẽ ghi đè

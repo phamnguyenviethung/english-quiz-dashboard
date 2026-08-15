@@ -1,17 +1,18 @@
 import type { ReactElement } from "react"
 import { useState } from "react"
 
-import { Button } from "@/components/ui/button"
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  ResponsiveDialog,
+  ResponsiveDialogBody,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from "@/components/common/responsive-dialog.tsx"
+import { Button } from "@/components/ui/button"
 import {
   Field,
   FieldDescription,
@@ -187,199 +188,205 @@ export function AiModelFormDialog({
   const hasBasicErrors = Boolean(errors.key ?? errors.modelId)
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      {trigger ? <DialogTrigger render={trigger} /> : null}
-      <DialogContent className="sm:max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>
+    <ResponsiveDialog open={open} onOpenChange={handleOpenChange}>
+      {trigger ? <ResponsiveDialogTrigger render={trigger} /> : null}
+      <ResponsiveDialogContent className="sm:max-w-2xl">
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>
             {isEdit ? `Sửa model "${model.key}"` : "Thêm AI model"}
-          </DialogTitle>
-          <DialogDescription>
+          </ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>
             Model được chọn ngẫu nhiên trong số các model đang bật của từng ngữ
             cảnh. Giá lấy tự động từ OpenRouter, không nhập tay.
-          </DialogDescription>
-        </DialogHeader>
+          </ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
 
         <form
-          className="flex flex-col gap-6"
+          className="flex min-h-0 flex-1 flex-col gap-6"
           onSubmit={handleSubmit}
           noValidate
         >
-          <Tabs defaultValue="basic">
-            <TabsList>
-              <TabsTrigger value="basic">
-                Cơ bản
-                {hasBasicErrors ? (
-                  <span className="ml-1 text-destructive">*</span>
-                ) : null}
-              </TabsTrigger>
-              <TabsTrigger value="schedule">
-                {MODEL_CONTEXT_LABELS.schedule}
-                {errors.scheduleProvider ? (
-                  <span className="ml-1 text-destructive">*</span>
-                ) : null}
-              </TabsTrigger>
-              <TabsTrigger value="manual">
-                {MODEL_CONTEXT_LABELS.manual}
-                {errors.manualProvider ? (
-                  <span className="ml-1 text-destructive">*</span>
-                ) : null}
-              </TabsTrigger>
-              <TabsTrigger value="reading">
-                {MODEL_CONTEXT_LABELS.reading}
-                {errors.readingProvider ? (
-                  <span className="ml-1 text-destructive">*</span>
-                ) : null}
-              </TabsTrigger>
-            </TabsList>
+          <ResponsiveDialogBody>
+            <Tabs defaultValue="basic">
+              {/* 4 tab không đủ chỗ ở 375px nên cho cuộn ngang thay vì tràn. */}
+              <TabsList className="w-full justify-start overflow-x-auto *:flex-none md:w-fit md:*:flex-1">
+                <TabsTrigger value="basic">
+                  Cơ bản
+                  {hasBasicErrors ? (
+                    <span className="ml-1 text-destructive">*</span>
+                  ) : null}
+                </TabsTrigger>
+                <TabsTrigger value="schedule">
+                  {MODEL_CONTEXT_LABELS.schedule}
+                  {errors.scheduleProvider ? (
+                    <span className="ml-1 text-destructive">*</span>
+                  ) : null}
+                </TabsTrigger>
+                <TabsTrigger value="manual">
+                  {MODEL_CONTEXT_LABELS.manual}
+                  {errors.manualProvider ? (
+                    <span className="ml-1 text-destructive">*</span>
+                  ) : null}
+                </TabsTrigger>
+                <TabsTrigger value="reading">
+                  {MODEL_CONTEXT_LABELS.reading}
+                  {errors.readingProvider ? (
+                    <span className="ml-1 text-destructive">*</span>
+                  ) : null}
+                </TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="basic" className="flex flex-col gap-6 pt-4">
-              <Field data-invalid={Boolean(errors.key)}>
-                <FieldLabel htmlFor="model-key">Key</FieldLabel>
-                <Input
-                  id="model-key"
-                  placeholder="vd: GEMINI_FLASH_LITE"
-                  value={values.key}
-                  onChange={(event) => updateValue("key", event.target.value)}
-                  aria-invalid={Boolean(errors.key)}
-                  autoComplete="off"
-                  disabled={isPending}
-                />
-                <FieldDescription>
-                  Nhãn ngắn gọn, duy nhất, để tra cứu trong code/log.
-                </FieldDescription>
-                <FieldError
-                  errors={[errors.key ? { message: errors.key } : undefined]}
-                />
-              </Field>
+              <TabsContent value="basic" className="flex flex-col gap-6 pt-4">
+                <Field data-invalid={Boolean(errors.key)}>
+                  <FieldLabel htmlFor="model-key">Key</FieldLabel>
+                  <Input
+                    id="model-key"
+                    placeholder="vd: GEMINI_FLASH_LITE"
+                    value={values.key}
+                    onChange={(event) => updateValue("key", event.target.value)}
+                    aria-invalid={Boolean(errors.key)}
+                    autoComplete="off"
+                    disabled={isPending}
+                  />
+                  <FieldDescription>
+                    Nhãn ngắn gọn, duy nhất, để tra cứu trong code/log.
+                  </FieldDescription>
+                  <FieldError
+                    errors={[errors.key ? { message: errors.key } : undefined]}
+                  />
+                </Field>
 
-              <Field data-invalid={Boolean(errors.modelId)}>
-                <FieldLabel htmlFor="model-modelId">Model ID</FieldLabel>
-                <Input
-                  id="model-modelId"
-                  placeholder="vd: google/gemini-2.5-flash-lite:nitro"
-                  value={values.modelId}
-                  onChange={(event) =>
-                    updateValue("modelId", event.target.value)
-                  }
-                  aria-invalid={Boolean(errors.modelId)}
-                  autoComplete="off"
-                  disabled={isPending}
-                  className="font-mono text-sm"
-                />
-                <FieldDescription>
-                  Model ID trên OpenRouter, dùng trực tiếp khi gọi sinh câu hỏi.
-                </FieldDescription>
-                <FieldError
-                  errors={[
-                    errors.modelId ? { message: errors.modelId } : undefined,
-                  ]}
-                />
-              </Field>
+                <Field data-invalid={Boolean(errors.modelId)}>
+                  <FieldLabel htmlFor="model-modelId">Model ID</FieldLabel>
+                  <Input
+                    id="model-modelId"
+                    placeholder="vd: google/gemini-2.5-flash-lite:nitro"
+                    value={values.modelId}
+                    onChange={(event) =>
+                      updateValue("modelId", event.target.value)
+                    }
+                    aria-invalid={Boolean(errors.modelId)}
+                    autoComplete="off"
+                    disabled={isPending}
+                    className="font-mono text-base md:text-sm"
+                  />
+                  <FieldDescription>
+                    Model ID trên OpenRouter, dùng trực tiếp khi gọi sinh câu
+                    hỏi.
+                  </FieldDescription>
+                  <FieldError
+                    errors={[
+                      errors.modelId ? { message: errors.modelId } : undefined,
+                    ]}
+                  />
+                </Field>
 
-              {isEdit ? (
+                {isEdit ? (
+                  <ToggleRow
+                    title="Đang hoạt động"
+                    description="Tắt để loại model khỏi mọi vòng chọn, không xoá dữ liệu."
+                    checked={values.isActive}
+                    disabled={isPending}
+                    onCheckedChange={(checked) =>
+                      updateValue("isActive", checked)
+                    }
+                  />
+                ) : null}
+
                 <ToggleRow
-                  title="Đang hoạt động"
-                  description="Tắt để loại model khỏi mọi vòng chọn, không xoá dữ liệu."
-                  checked={values.isActive}
+                  title={`Dùng cho ngữ cảnh ${MODEL_CONTEXT_LABELS.schedule.toLowerCase()}`}
+                  description={MODEL_CONTEXT_DESCRIPTIONS.schedule}
+                  checked={values.scheduleEnabled}
                   disabled={isPending}
                   onCheckedChange={(checked) =>
-                    updateValue("isActive", checked)
+                    updateValue("scheduleEnabled", checked)
                   }
                 />
-              ) : null}
 
-              <ToggleRow
-                title={`Dùng cho ngữ cảnh ${MODEL_CONTEXT_LABELS.schedule.toLowerCase()}`}
-                description={MODEL_CONTEXT_DESCRIPTIONS.schedule}
-                checked={values.scheduleEnabled}
-                disabled={isPending}
-                onCheckedChange={(checked) =>
-                  updateValue("scheduleEnabled", checked)
-                }
-              />
+                <ToggleRow
+                  title={`Dùng cho ngữ cảnh ${MODEL_CONTEXT_LABELS.manual.toLowerCase()}`}
+                  description={MODEL_CONTEXT_DESCRIPTIONS.manual}
+                  checked={values.manualEnabled}
+                  disabled={isPending}
+                  onCheckedChange={(checked) =>
+                    updateValue("manualEnabled", checked)
+                  }
+                />
 
-              <ToggleRow
-                title={`Dùng cho ngữ cảnh ${MODEL_CONTEXT_LABELS.manual.toLowerCase()}`}
-                description={MODEL_CONTEXT_DESCRIPTIONS.manual}
-                checked={values.manualEnabled}
-                disabled={isPending}
-                onCheckedChange={(checked) =>
-                  updateValue("manualEnabled", checked)
-                }
-              />
+                <ToggleRow
+                  title={`Dùng cho ngữ cảnh ${MODEL_CONTEXT_LABELS.reading.toLowerCase()}`}
+                  description={MODEL_CONTEXT_DESCRIPTIONS.reading}
+                  checked={values.readingEnabled}
+                  disabled={isPending}
+                  onCheckedChange={(checked) =>
+                    updateValue("readingEnabled", checked)
+                  }
+                />
+              </TabsContent>
 
-              <ToggleRow
-                title={`Dùng cho ngữ cảnh ${MODEL_CONTEXT_LABELS.reading.toLowerCase()}`}
-                description={MODEL_CONTEXT_DESCRIPTIONS.reading}
-                checked={values.readingEnabled}
-                disabled={isPending}
-                onCheckedChange={(checked) =>
-                  updateValue("readingEnabled", checked)
-                }
-              />
-            </TabsContent>
+              <TabsContent value="schedule" className="pt-4">
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Định tuyến provider khi model được dùng ở ngữ cảnh tự động. Để
+                  trống là dùng mặc định của OpenRouter.
+                </p>
+                <ProviderPreferencesFields
+                  idPrefix="schedule-provider"
+                  values={values.scheduleProvider}
+                  errors={errors.scheduleProvider}
+                  disabled={isPending}
+                  onChange={(field, value) =>
+                    updateProvider("scheduleProvider", field, value)
+                  }
+                />
+              </TabsContent>
 
-            <TabsContent value="schedule" className="pt-4">
-              <p className="mb-4 text-sm text-muted-foreground">
-                Định tuyến provider khi model được dùng ở ngữ cảnh tự động. Để
-                trống là dùng mặc định của OpenRouter.
-              </p>
-              <ProviderPreferencesFields
-                idPrefix="schedule-provider"
-                values={values.scheduleProvider}
-                errors={errors.scheduleProvider}
-                disabled={isPending}
-                onChange={(field, value) =>
-                  updateProvider("scheduleProvider", field, value)
-                }
-              />
-            </TabsContent>
+              <TabsContent value="manual" className="pt-4">
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Định tuyến provider khi admin bổ sung kho câu hỏi thủ công. Để
+                  trống là dùng mặc định của OpenRouter.
+                </p>
+                <ProviderPreferencesFields
+                  idPrefix="manual-provider"
+                  values={values.manualProvider}
+                  errors={errors.manualProvider}
+                  disabled={isPending}
+                  onChange={(field, value) =>
+                    updateProvider("manualProvider", field, value)
+                  }
+                />
+              </TabsContent>
 
-            <TabsContent value="manual" className="pt-4">
-              <p className="mb-4 text-sm text-muted-foreground">
-                Định tuyến provider khi admin bổ sung kho câu hỏi thủ công. Để
-                trống là dùng mặc định của OpenRouter.
-              </p>
-              <ProviderPreferencesFields
-                idPrefix="manual-provider"
-                values={values.manualProvider}
-                errors={errors.manualProvider}
-                disabled={isPending}
-                onChange={(field, value) =>
-                  updateProvider("manualProvider", field, value)
-                }
-              />
-            </TabsContent>
+              <TabsContent value="reading" className="pt-4">
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Định tuyến provider khi model được dùng để sinh bài đọc. Để
+                  trống là dùng mặc định của OpenRouter.
+                </p>
+                <ProviderPreferencesFields
+                  idPrefix="reading-provider"
+                  values={values.readingProvider}
+                  errors={errors.readingProvider}
+                  disabled={isPending}
+                  onChange={(field, value) =>
+                    updateProvider("readingProvider", field, value)
+                  }
+                />
+              </TabsContent>
+            </Tabs>
+          </ResponsiveDialogBody>
 
-            <TabsContent value="reading" className="pt-4">
-              <p className="mb-4 text-sm text-muted-foreground">
-                Định tuyến provider khi model được dùng để sinh bài đọc. Để
-                trống là dùng mặc định của OpenRouter.
-              </p>
-              <ProviderPreferencesFields
-                idPrefix="reading-provider"
-                values={values.readingProvider}
-                errors={errors.readingProvider}
-                disabled={isPending}
-                onChange={(field, value) =>
-                  updateProvider("readingProvider", field, value)
-                }
-              />
-            </TabsContent>
-          </Tabs>
-
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline" type="button" />}>
+          <ResponsiveDialogFooter>
+            <ResponsiveDialogClose
+              render={<Button variant="outline" type="button" />}
+            >
               Huỷ
-            </DialogClose>
+            </ResponsiveDialogClose>
             <Button type="submit" disabled={isPending}>
               {isPending ? <Spinner data-icon="inline-start" /> : null}
               {isEdit ? "Lưu thay đổi" : "Thêm model"}
             </Button>
-          </DialogFooter>
+          </ResponsiveDialogFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   )
 }
