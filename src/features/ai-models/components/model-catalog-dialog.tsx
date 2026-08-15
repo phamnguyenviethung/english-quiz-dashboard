@@ -11,8 +11,6 @@ import {
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from "@/components/common/responsive-dialog.tsx"
-import { StickyTable } from "@/components/common/sticky-table.tsx"
-import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -27,32 +25,36 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group"
 import {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item"
+import { Skeleton } from "@/components/ui/skeleton"
 import { formatNumber, formatUsdPerMillion } from "@/lib/format.ts"
-import { cn } from "@/lib/utils"
 
 import type { AiModel } from "../types.ts"
 import { useModelCatalog } from "../hooks/use-model-catalog.ts"
 
-const COLUMN_COUNT = 4
 const MAX_VISIBLE = 50
+const SKELETON_COUNT = 5
 
-/**
- * Ở điện thoại bảng chỉ giữ tên model và nút chọn; context với giá gộp vào dòng
- * phụ dưới tên nên không phải cuộn ngang chút nào.
- */
-const HIDE_UNDER_MD = "hidden text-right md:table-cell"
-const SKELETON_COLUMN_CLASSES = [
-  undefined,
-  HIDE_UNDER_MD,
-  HIDE_UNDER_MD,
-  undefined,
-]
+function CatalogItemSkeleton() {
+  return (
+    <Item variant="outline" className="items-start">
+      <ItemContent className="gap-2">
+        <Skeleton className="h-4 w-44 max-w-full" />
+        <Skeleton className="h-3 w-56 max-w-full" />
+        <Skeleton className="h-3 w-32" />
+      </ItemContent>
+      <ItemActions>
+        <Skeleton className="h-11 w-28 rounded-4xl md:h-8" />
+      </ItemActions>
+    </Item>
+  )
+}
 
 /** Danh sách catalog ~400 model, gõ tới đâu lọc tới đó nên cần debounce nhẹ. */
 function useDebounced(value: string, delayMs: number): string {
@@ -140,83 +142,58 @@ export function ModelCatalogDialog({
             </Empty>
           ) : (
             <>
-              <StickyTable className="min-h-0 flex-1 overflow-y-auto md:max-h-96 md:flex-none">
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Model</TableHead>
-                    <TableHead className={HIDE_UNDER_MD}>Context</TableHead>
-                    <TableHead className={HIDE_UNDER_MD}>Giá /1M</TableHead>
-                    <TableHead className="w-28" />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {isPending || isFetching ? (
-                    <TableSkeletonRows
-                      columns={COLUMN_COUNT}
-                      columnClassNames={SKELETON_COLUMN_CLASSES}
-                    />
-                  ) : (
-                    visible.map((catalogModel) => {
-                      const alreadyAdded = existingIds.has(catalogModel.id)
+              <div className="min-h-0 flex-1 overflow-y-auto md:max-h-96">
+                <ItemGroup>
+                  {isPending || isFetching
+                    ? Array.from({ length: SKELETON_COUNT }, (_item, index) => (
+                        <CatalogItemSkeleton key={index} />
+                      ))
+                    : visible.map((catalogModel) => {
+                        const alreadyAdded = existingIds.has(catalogModel.id)
 
-                      return (
-                        <TableRow key={catalogModel.id}>
-                          <TableCell>
-                            <p className="font-medium">{catalogModel.name}</p>
-                            <p className="font-mono text-xs text-muted-foreground">
-                              {catalogModel.id}
-                            </p>
-                            {/* Context và giá gộp vào đây khi hai cột kia bị ẩn. */}
-                            <p className="mt-1 text-xs text-muted-foreground tabular-nums md:hidden">
-                              {formatNumber(catalogModel.contextLength)} ctx
-                              {" · "}
-                              {formatUsdPerMillion(catalogModel.pricing.prompt)}
-                              {" / "}
-                              {formatUsdPerMillion(
-                                catalogModel.pricing.completion
-                              )}
-                            </p>
-                          </TableCell>
-                          <TableCell
-                            className={cn(HIDE_UNDER_MD, "tabular-nums")}
+                        return (
+                          <Item
+                            key={catalogModel.id}
+                            role="listitem"
+                            variant="outline"
+                            className="items-start"
                           >
-                            {formatNumber(catalogModel.contextLength)}
-                          </TableCell>
-                          <TableCell
-                            className={cn(
-                              HIDE_UNDER_MD,
-                              "text-xs tabular-nums"
-                            )}
-                          >
-                            <p>
-                              {formatUsdPerMillion(catalogModel.pricing.prompt)}
-                            </p>
-                            <p className="text-muted-foreground">
-                              {formatUsdPerMillion(
-                                catalogModel.pricing.completion
-                              )}
-                            </p>
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="h-11 w-full md:h-8 md:w-auto"
-                              disabled={alreadyAdded}
-                              onClick={() => {
-                                onPick(catalogModel.id)
-                                handleOpenChange(false)
-                              }}
-                            >
-                              {alreadyAdded ? "Đã thêm" : "Dùng model"}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })
-                  )}
-                </TableBody>
-              </StickyTable>
+                            <ItemContent>
+                              <ItemTitle>{catalogModel.name}</ItemTitle>
+                              <ItemDescription className="line-clamp-none font-mono text-xs break-all">
+                                {catalogModel.id}
+                              </ItemDescription>
+                              <p className="text-xs text-muted-foreground tabular-nums">
+                                {formatNumber(catalogModel.contextLength)} ctx
+                                {" · "}
+                                {formatUsdPerMillion(
+                                  catalogModel.pricing.prompt
+                                )}
+                                {" / "}
+                                {formatUsdPerMillion(
+                                  catalogModel.pricing.completion
+                                )}
+                              </p>
+                            </ItemContent>
+                            <ItemActions>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-11 shrink-0 md:h-8"
+                                disabled={alreadyAdded}
+                                onClick={() => {
+                                  onPick(catalogModel.id)
+                                  handleOpenChange(false)
+                                }}
+                              >
+                                {alreadyAdded ? "Đã thêm" : "Dùng model"}
+                              </Button>
+                            </ItemActions>
+                          </Item>
+                        )
+                      })}
+                </ItemGroup>
+              </div>
 
               {models.length > MAX_VISIBLE ? (
                 <p className="text-xs text-muted-foreground">
