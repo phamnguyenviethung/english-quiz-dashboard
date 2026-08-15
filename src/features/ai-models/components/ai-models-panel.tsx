@@ -22,7 +22,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -353,11 +352,7 @@ export function AiModelsPanel({ className }: { className?: string }) {
 
   return (
     <Card className={className}>
-      {/*
-        CardHeader ép grid-cols-[1fr_auto] khi có CardAction nên ở điện thoại ba
-        nút bị nhồi vào cột phải hẹp. Dưới sm cho nó rơi hẳn xuống hàng riêng.
-      */}
-      <CardHeader className="max-sm:grid-cols-1">
+      <CardHeader>
         <div className="flex items-center gap-2">
           <IconCpu className="size-4 text-muted-foreground" stroke={1.5} />
           <CardTitle>Danh sách model</CardTitle>
@@ -366,46 +361,58 @@ export function AiModelsPanel({ className }: { className?: string }) {
           Model được chọn ngẫu nhiên trong số các model đang bật của từng ngữ
           cảnh. Tắt một model để loại nó khỏi vòng chọn mà không mất lịch sử.
         </CardDescription>
-        <CardAction className="max-sm:col-start-1 max-sm:row-start-3 max-sm:mt-2 max-sm:justify-self-stretch">
-          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-            <AiModelFormDialog
-              trigger={
-                <Button size="sm" className="col-span-2 h-11 sm:order-3 sm:h-8">
-                  <IconPlus stroke={1.5} data-icon="inline-start" />
-                  Thêm model
-                </Button>
-              }
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-11 sm:order-1 sm:h-8"
-              onClick={() => void syncAllModelsPricing()}
-              disabled={isSyncingAll || models.length === 0}
-            >
-              {isSyncingAll ? (
-                <Spinner data-icon="inline-start" />
-              ) : (
-                <IconRefresh stroke={1.5} data-icon="inline-start" />
-              )}
-              Đồng bộ giá
-            </Button>
-            <ModelCatalogDialog
-              existingModels={models}
-              onPick={setPresetModelId}
-              trigger={
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-11 sm:order-2 sm:h-8"
-                >
-                  <IconSearch stroke={1.5} data-icon="inline-start" />
-                  Duyệt catalog
-                </Button>
-              }
-            />
-          </div>
-        </CardAction>
+
+        {/*
+          Cố tình không dùng CardAction: slot đó ép CardHeader sang
+          grid-cols-[1fr_auto], ba nút bị nhồi vào cột phải và wrap răng cưa ở
+          khoảng 640-900px trong khi description bị bóp thành dải mỏng. Cho hàng
+          action xuống một dòng riêng rộng bằng card thì mọi breakpoint dùng
+          chung một quy tắc wrap, và thứ tự DOM trùng thứ tự nhìn thấy nên tab
+          order không còn nhảy cóc như lúc dùng order-*.
+        */}
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          {/*
+            Không thêm min-w-0: Button có whitespace-nowrap nên giữ
+            min-width:auto để ở ~320px nút thứ hai tự rơi xuống dòng riêng thay
+            vì tràn chữ ra ngoài.
+          */}
+          <Button
+            variant="outline"
+            className="h-11 flex-1 sm:h-9 sm:flex-none"
+            onClick={() => void syncAllModelsPricing()}
+            disabled={isSyncingAll || models.length === 0}
+          >
+            {isSyncingAll ? (
+              <Spinner data-icon="inline-start" />
+            ) : (
+              <IconRefresh stroke={1.5} data-icon="inline-start" />
+            )}
+            Đồng bộ giá
+          </Button>
+
+          <ModelCatalogDialog
+            existingModels={models}
+            onPick={setPresetModelId}
+            trigger={
+              <Button
+                variant="outline"
+                className="h-11 flex-1 sm:h-9 sm:flex-none"
+              >
+                <IconSearch stroke={1.5} data-icon="inline-start" />
+                Duyệt catalog
+              </Button>
+            }
+          />
+
+          <AiModelFormDialog
+            trigger={
+              <Button className="h-11 w-full sm:ml-auto sm:h-9 sm:w-auto">
+                <IconPlus stroke={1.5} data-icon="inline-start" />
+                Thêm model
+              </Button>
+            }
+          />
+        </div>
       </CardHeader>
 
       <CardContent>
