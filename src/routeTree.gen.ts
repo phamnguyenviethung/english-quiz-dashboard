@@ -19,6 +19,7 @@ import { Route as DashboardConfigRouteImport } from './routes/_dashboard/config'
 import { Route as DashboardCronRunsRouteImport } from './routes/_dashboard/cron-runs'
 import { Route as DashboardGenerateRouteImport } from './routes/_dashboard/generate'
 import { Route as DashboardMetadataRouteImport } from './routes/_dashboard/metadata'
+import { Route as DashboardRefillRouteImport } from './routes/_dashboard/refill'
 import { Route as DashboardTopicsRouteImport } from './routes/_dashboard/topics'
 import { Route as DashboardQuestionPoolIndexRouteImport } from './routes/_dashboard/question-pool/index'
 import { Route as DashboardQuestionPoolRefillRouteImport } from './routes/_dashboard/question-pool/refill'
@@ -76,6 +77,11 @@ const DashboardMetadataRoute = DashboardMetadataRouteImport.update({
   path: '/metadata',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardRefillRoute = DashboardRefillRouteImport.update({
+  id: '/refill',
+  path: '/refill',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardTopicsRoute = DashboardTopicsRouteImport.update({
   id: '/topics',
   path: '/topics',
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
   '/metadata': typeof DashboardMetadataRoute
+  '/refill': typeof DashboardRefillRoute
   '/topics': typeof DashboardTopicsRoute
   '/question-pool/refill': typeof DashboardQuestionPoolRefillRoute
   '/readings/refill': typeof DashboardReadingsRefillRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
   '/metadata': typeof DashboardMetadataRoute
+  '/refill': typeof DashboardRefillRoute
   '/topics': typeof DashboardTopicsRoute
   '/': typeof DashboardIndexRoute
   '/question-pool/refill': typeof DashboardQuestionPoolRefillRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/_dashboard/cron-runs': typeof DashboardCronRunsRoute
   '/_dashboard/generate': typeof DashboardGenerateRoute
   '/_dashboard/metadata': typeof DashboardMetadataRoute
+  '/_dashboard/refill': typeof DashboardRefillRoute
   '/_dashboard/topics': typeof DashboardTopicsRoute
   '/_dashboard/': typeof DashboardIndexRoute
   '/_dashboard/question-pool/refill': typeof DashboardQuestionPoolRefillRoute
@@ -183,6 +192,7 @@ export interface FileRouteTypes {
     | '/cron-runs'
     | '/generate'
     | '/metadata'
+    | '/refill'
     | '/topics'
     | '/question-pool/refill'
     | '/readings/refill'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/cron-runs'
     | '/generate'
     | '/metadata'
+    | '/refill'
     | '/topics'
     | '/'
     | '/question-pool/refill'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/_dashboard/cron-runs'
     | '/_dashboard/generate'
     | '/_dashboard/metadata'
+    | '/_dashboard/refill'
     | '/_dashboard/topics'
     | '/_dashboard/'
     | '/_dashboard/question-pool/refill'
@@ -308,6 +320,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardMetadataRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/refill': {
+      id: '/_dashboard/refill'
+      path: '/refill'
+      fullPath: '/refill'
+      preLoaderRoute: typeof DashboardRefillRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/topics': {
       id: '/_dashboard/topics'
       path: '/topics'
@@ -366,6 +385,7 @@ interface DashboardRouteChildren {
   DashboardCronRunsRoute: typeof DashboardCronRunsRoute
   DashboardGenerateRoute: typeof DashboardGenerateRoute
   DashboardMetadataRoute: typeof DashboardMetadataRoute
+  DashboardRefillRoute: typeof DashboardRefillRoute
   DashboardTopicsRoute: typeof DashboardTopicsRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   DashboardQuestionPoolRefillRoute: typeof DashboardQuestionPoolRefillRoute
@@ -382,6 +402,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardCronRunsRoute: DashboardCronRunsRoute,
   DashboardGenerateRoute: DashboardGenerateRoute,
   DashboardMetadataRoute: DashboardMetadataRoute,
+  DashboardRefillRoute: DashboardRefillRoute,
   DashboardTopicsRoute: DashboardTopicsRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   DashboardQuestionPoolRefillRoute: DashboardQuestionPoolRefillRoute,

@@ -3,9 +3,9 @@ import { keepPreviousData } from "@tanstack/react-query"
 
 import { useGetAdminReadingsBuckets } from "@/apis/admin-readings/admin-readings.ts"
 import type { GetAdminReadingsBucketsParams } from "@/apis/model"
+import { BUCKET_PREVIEW_DEBOUNCE_MS } from "@/features/refill/constants.ts"
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts"
 
-import { BUCKET_PREVIEW_DEBOUNCE_MS } from "../constants.ts"
 import type {
   ReadingBucket,
   ReadingBucketFilter,

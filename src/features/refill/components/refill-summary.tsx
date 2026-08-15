@@ -17,17 +17,11 @@ import { Spinner } from "@/components/ui/spinner"
 import { formatNumber } from "@/lib/format.ts"
 import { cn } from "@/lib/utils"
 
-import { REFILL_COST_WARNING_QUESTIONS } from "../constants.ts"
-
-export interface RefillSummaryData {
-  selectedBuckets: number
-  plannedQuestions: number
-  modelCount: number
-  isModelPoolWideOpen: boolean
-}
+import type { RefillCopy, RefillSummaryData } from "../types.ts"
 
 function ConfirmButton({
   data,
+  copy,
   isPending,
   disabled,
   className,
@@ -35,6 +29,7 @@ function ConfirmButton({
   onConfirm,
 }: {
   data: RefillSummaryData
+  copy: RefillCopy
   isPending: boolean
   disabled: boolean
   className?: string
@@ -51,18 +46,18 @@ function ConfirmButton({
             ) : (
               <IconPlayerPlay stroke={1.5} data-icon="inline-start" />
             )}
-            Chạy refill
+            {copy.confirmAction}
           </Button>
         }
       />
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Chạy refill?</AlertDialogTitle>
+          <AlertDialogTitle>{copy.confirmTitle}</AlertDialogTitle>
           <AlertDialogDescription>
-            Sẽ sinh khoảng {formatNumber(data.plannedQuestions)} câu cho{" "}
+            Sẽ sinh khoảng {formatNumber(data.plannedItems)} {copy.unit} cho{" "}
             {formatNumber(data.selectedBuckets)} bucket, dùng{" "}
             {data.isModelPoolWideOpen
-              ? "mọi model đang bật chạy thủ công"
+              ? copy.wideOpenModelLabel
               : `${formatNumber(data.modelCount)} model đã chọn`}
             . Thao tác gọi LLM thật và phát sinh chi phí, không huỷ được giữa
             chừng.
@@ -70,23 +65,31 @@ function ConfirmButton({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Huỷ</AlertDialogCancel>
-          <AlertDialogAction onClick={onConfirm}>Chạy refill</AlertDialogAction>
+          <AlertDialogAction onClick={onConfirm}>
+            {copy.confirmAction}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   )
 }
 
-function CostWarning({ plannedQuestions }: { plannedQuestions: number }) {
-  if (plannedQuestions <= REFILL_COST_WARNING_QUESTIONS) return null
+function CostWarning({
+  plannedItems,
+  copy,
+}: {
+  plannedItems: number
+  copy: RefillCopy
+}) {
+  if (plannedItems <= copy.costWarningThreshold) return null
 
   return (
     <Alert variant="destructive">
       <IconAlertTriangle stroke={1.5} />
       <AlertTitle>Tốn chi phí AI đáng kể</AlertTitle>
       <AlertDescription>
-        Lần chạy này sinh khoảng {formatNumber(plannedQuestions)} câu, tương ứng
-        chừng đó lượt gọi LLM. Thu hẹp bộ lọc nếu chỉ muốn thử.
+        Lần chạy này sinh khoảng {formatNumber(plannedItems)} {copy.unit}, tương
+        ứng chừng đó lượt gọi LLM. Thu hẹp bộ lọc nếu chỉ muốn thử.
       </AlertDescription>
     </Alert>
   )
@@ -99,11 +102,13 @@ function CostWarning({ plannedQuestions }: { plannedQuestions: number }) {
  */
 export function RefillSummaryRail({
   data,
+  copy,
   isPending,
   disabled,
   onConfirm,
 }: {
   data: RefillSummaryData
+  copy: RefillCopy
   isPending: boolean
   disabled: boolean
   onConfirm: () => void
@@ -117,8 +122,8 @@ export function RefillSummaryRail({
             value={formatNumber(data.selectedBuckets)}
           />
           <SummaryStat
-            label="Câu sẽ sinh"
-            value={formatNumber(data.plannedQuestions)}
+            label={copy.plannedStatLabel}
+            value={formatNumber(data.plannedItems)}
             emphasis
           />
           <SummaryStat
@@ -133,6 +138,7 @@ export function RefillSummaryRail({
 
         <ConfirmButton
           data={data}
+          copy={copy}
           isPending={isPending}
           disabled={disabled}
           size="lg"
@@ -141,7 +147,7 @@ export function RefillSummaryRail({
         />
       </div>
 
-      <CostWarning plannedQuestions={data.plannedQuestions} />
+      <CostWarning plannedItems={data.plannedItems} copy={copy} />
     </aside>
   )
 }
@@ -178,11 +184,13 @@ function SummaryStat({
  */
 export function RefillSummaryBar({
   data,
+  copy,
   isPending,
   disabled,
   onConfirm,
 }: {
   data: RefillSummaryData
+  copy: RefillCopy
   isPending: boolean
   disabled: boolean
   onConfirm: () => void
@@ -197,11 +205,12 @@ export function RefillSummaryBar({
           bucket
           <span className="text-muted-foreground">
             {" · "}
-            {formatNumber(data.plannedQuestions)} câu
+            {formatNumber(data.plannedItems)} {copy.unit}
           </span>
         </p>
         <ConfirmButton
           data={data}
+          copy={copy}
           isPending={isPending}
           disabled={disabled}
           size="lg"

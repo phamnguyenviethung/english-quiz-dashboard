@@ -8,6 +8,7 @@ import {
   IconLayoutGrid,
   IconListDetails,
   IconSparkles,
+  IconStack2,
   IconTags,
   IconUsersGroup,
 } from "@tabler/icons-react"
@@ -17,6 +18,7 @@ export type NavPath =
   | "/topics"
   | "/question-pool"
   | "/readings"
+  | "/refill"
   | "/generate"
   | "/metadata"
   | "/config"
@@ -66,6 +68,14 @@ export const NAV_GROUPS: NavGroup[] = [
         label: "Bài đọc",
         icon: IconBook,
         to: "/readings",
+      },
+      // Sinh hàng loạt phục vụ cả kho câu hỏi lẫn kho bài đọc (2 tab) nên đứng
+      // riêng thay vì nằm dưới một trong hai kho.
+      {
+        key: "refill",
+        label: "Sinh hàng loạt",
+        icon: IconStack2,
+        to: "/refill",
       },
       {
         key: "generation",

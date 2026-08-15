@@ -53,14 +53,8 @@ export const MANUAL_REFILL_SCOPE_META: Record<
   },
 }
 
-/** Bộ lọc để trống nghĩa là không lọc chiều đó, nên hint này lặp ở cả 3 khối filter. */
-export const BUCKET_FILTER_ALL_HINT = "Bỏ trống = tất cả"
-
 /**
  * Ngưỡng bật cảnh báo chi phí trong dialog refill. Preview đã cho biết số câu thật
  * nên cảnh báo bám theo con số đó, không bám theo scope như bản cũ.
  */
 export const REFILL_COST_WARNING_QUESTIONS = 200
-
-/** Preview chạy lại mỗi lần đổi filter — debounce để không bắn request theo từng click. */
-export const BUCKET_PREVIEW_DEBOUNCE_MS = 350

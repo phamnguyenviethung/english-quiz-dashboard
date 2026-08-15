@@ -218,7 +218,7 @@ function ReadingsPage() {
               <IconSparkles stroke={1.5} data-icon="inline-start" />
               Tạo thử 1 bài
             </Button>
-            <Button render={<Link to="/readings/refill" />}>
+            <Button render={<Link to="/refill" search={{ tab: "readings" }} />}>
               <IconStack2 stroke={1.5} data-icon="inline-start" />
               Sinh hàng loạt
             </Button>

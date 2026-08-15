@@ -254,7 +254,7 @@ function QuestionPoolPage() {
               <IconEye stroke={1.5} data-icon="inline-start" />
               Xem thử 1 câu
             </Button>
-            <Button render={<Link to="/question-pool/refill" />}>
+            <Button render={<Link to="/refill" />}>
               <IconStack2 stroke={1.5} data-icon="inline-start" />
               Refill hàng loạt
             </Button>

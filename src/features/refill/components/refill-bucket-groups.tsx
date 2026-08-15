@@ -1,5 +1,9 @@
 import { useMemo, useState } from "react"
-import { IconChevronRight, IconFilterOff } from "@tabler/icons-react"
+import {
+  IconAlertTriangle,
+  IconChevronRight,
+  IconFilterOff,
+} from "@tabler/icons-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -19,50 +23,52 @@ import {
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
 import { QueryError } from "@/components/common/query-error.tsx"
-import {
-  ENG_LEVEL_BADGE_CLASS,
-  getQuizTypeLabel,
-} from "@/features/quiz/constants.ts"
+import { ENG_LEVEL_BADGE_CLASS } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
 import { formatNumber } from "@/lib/format.ts"
 import { cn } from "@/lib/utils"
 
-import { NO_TOPIC_LABEL } from "../constants.ts"
-import type { PoolBucket, PoolBucketSummary } from "../types.ts"
+import { NO_TOPIC_LABEL, TOUCH_ROW } from "../constants.ts"
+import type {
+  RefillBucketSummaryView,
+  RefillBucketView,
+  RefillCopy,
+} from "../types.ts"
 import { TriStateCheckbox } from "./tri-state-checkbox.tsx"
 
 interface BucketGroup {
   key: string
   topicName: string
-  buckets: PoolBucket[]
-  /** Bucket còn sinh được câu. Bucket đã đủ không tick được nên không tính vào đây. */
+  buckets: RefillBucketView[]
+  /** Bucket còn sinh được. Bucket đã đủ không tick được nên không tính vào đây. */
   selectableKeys: string[]
   selectedCount: number
-  plannedQuestions: number
+  plannedItems: number
 }
-
-/** Vùng chạm tối thiểu 44px theo Apple HIG, áp cho mọi dòng tick được. */
-const TOUCH_ROW = "min-h-11"
 
 export function RefillBucketGroups({
   buckets,
   summary,
+  copy,
   selectedKeys,
   isPending,
   isStale,
   isError,
   error,
+  emptyDescription,
   onRetry,
   onToggleBuckets,
   onToggleAll,
 }: {
-  buckets: PoolBucket[]
-  summary: PoolBucketSummary
+  buckets: RefillBucketView[]
+  summary: RefillBucketSummaryView
+  copy: RefillCopy
   selectedKeys: Set<string>
   isPending: boolean
   isStale: boolean
   isError: boolean
   error: unknown
+  emptyDescription: string
   onRetry: () => void
   onToggleBuckets: (bucketKeys: string[], checked: boolean) => void
   onToggleAll: (checked: boolean) => void
@@ -82,7 +88,7 @@ export function RefillBucketGroups({
           buckets: [],
           selectableKeys: [],
           selectedCount: 0,
-          plannedQuestions: 0,
+          plannedItems: 0,
         }
         byTopic.set(key, group)
       }
@@ -92,15 +98,15 @@ export function RefillBucketGroups({
         group.selectableKeys.push(bucket.bucketKey)
         if (selectedKeys.has(bucket.bucketKey)) {
           group.selectedCount++
-          group.plannedQuestions += bucket.plannedCount
+          group.plannedItems += bucket.plannedCount
         }
       }
     }
 
-    // Chủ đề còn việc lên trước. Với scope='deficient' và pool gần đầy, phần lớn chủ đề
-    // không sinh thêm câu nào; để nguyên thứ tự thì người dùng phải dò tìm vài chủ đề
-    // thật sự có việc giữa hàng chục chủ đề đã đủ. Trong mỗi nhóm vẫn giữ thứ tự API
-    // trả về (đã sắp theo deficiency).
+    // Chủ đề còn việc lên trước. Với scope='deficient' và kho gần đầy, phần lớn chủ đề
+    // không sinh thêm gì; để nguyên thứ tự thì người dùng phải dò tìm vài chủ đề thật sự
+    // có việc giữa hàng chục chủ đề đã đủ. Trong mỗi nhóm vẫn giữ thứ tự API trả về
+    // (đã sắp theo deficiency).
     const all = [...byTopic.values()]
     return [
       ...all.filter((group) => group.selectableKeys.length > 0),
@@ -139,9 +145,7 @@ export function RefillBucketGroups({
             <IconFilterOff stroke={1.5} />
           </EmptyMedia>
           <EmptyTitle>Không có bucket nào khớp</EmptyTitle>
-          <EmptyDescription>
-            Nới bộ lọc cấp độ, chủ đề hoặc loại quiz để chọn được bucket.
-          </EmptyDescription>
+          <EmptyDescription>{emptyDescription}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     )
@@ -161,7 +165,7 @@ export function RefillBucketGroups({
         <p className="text-sm text-muted-foreground tabular-nums">
           {formatNumber(groups.length)} chủ đề
           {skippedCount > 0
-            ? `, ${formatNumber(skippedCount)} bucket đã đủ câu`
+            ? `, ${formatNumber(skippedCount)} bucket đã đủ ${copy.unit}`
             : null}
         </p>
         <Button
@@ -176,7 +180,7 @@ export function RefillBucketGroups({
 
       {/* Mobile cuộn theo trang (không lồng scroll). Chỉ desktop mới cắt chiều cao
           vì cột tóm tắt bên phải đã sticky nên nút chạy vẫn luôn thấy. */}
-      <div className="flex flex-col rounded-2xl border p-1.5 lg:max-h-[32rem] lg:overflow-y-auto lg:overscroll-contain">
+      <div className="flex flex-col rounded-2xl border p-1.5 lg:max-h-128 lg:overflow-y-auto lg:overscroll-contain">
         {groups.map((group) => {
           const isOpen = openGroups.has(group.key)
           const isGroupSelected =
@@ -231,12 +235,12 @@ export function RefillBucketGroups({
                   </span>
                   <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
                     {group.selectableKeys.length === 0
-                      ? "đã đủ câu"
+                      ? `đã đủ ${copy.unit}`
                       : `${
                           group.selectedCount === group.selectableKeys.length
                             ? formatNumber(group.selectableKeys.length)
                             : `${formatNumber(group.selectedCount)}/${formatNumber(group.selectableKeys.length)}`
-                        } bucket · +${formatNumber(group.plannedQuestions)} câu`}
+                        } bucket · +${formatNumber(group.plannedItems)} ${copy.unit}`}
                   </span>
                   <IconChevronRight
                     stroke={1.5}
@@ -277,13 +281,15 @@ export function RefillBucketGroups({
                         <Badge
                           variant="secondary"
                           className={
-                            ENG_LEVEL_BADGE_CLASS[bucket.engLevel as EngLevel]
+                            ENG_LEVEL_BADGE_CLASS[bucket.level as EngLevel]
                           }
                         >
-                          {bucket.engLevel}
+                          {bucket.level}
                         </Badge>
+                        {/* Reading chỉ có 1 chiều nên không có nhãn phụ; vẫn giữ ô rỗng
+                            để cột số bên phải thẳng hàng giữa hai loại. */}
                         <span className="min-w-0 flex-1 truncate text-sm">
-                          {getQuizTypeLabel(bucket.quizType)}
+                          {bucket.variantLabel}
                         </span>
                         <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
                           {isSkipped
@@ -299,6 +305,14 @@ export function RefillBucketGroups({
           )
         })}
       </div>
+
+      {summary.plannedBuckets === 0 ? (
+        <p className="flex items-start gap-2 text-sm text-muted-foreground">
+          <IconAlertTriangle stroke={1.5} className="mt-0.5 size-4 shrink-0" />
+          Mọi bucket khớp bộ lọc đều đã đủ {copy.unit}. Đổi phạm vi sang "Toàn
+          bộ bucket" nếu vẫn muốn sinh thêm.
+        </p>
+      ) : null}
     </div>
   )
 }

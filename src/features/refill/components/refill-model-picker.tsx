@@ -10,20 +10,23 @@ import type { AiModel } from "@/features/ai-models/types.ts"
 import { formatUsdPerMillion } from "@/lib/format.ts"
 
 /**
- * Chọn model sinh câu. Số model ít (thường 3-8) và mỗi dòng cần hiện thêm modelId +
- * giá, nên bày thẳng ra checkbox thay vì giấu trong dropdown.
+ * Chọn model sinh nội dung. Số model ít (thường 3-8) và mỗi dòng cần hiện thêm
+ * modelId + giá, nên bày thẳng ra checkbox thay vì giấu trong dropdown.
  */
 export function RefillModelPicker({
   models,
   value,
   isPending,
   disabled,
+  emptyDescription,
   onChange,
 }: {
   models: AiModel[]
   value: string[]
   isPending: boolean
   disabled?: boolean
+  /** Điều kiện model backend chấp nhận khác nhau giữa pool và reading. */
+  emptyDescription: string
   onChange: (modelIds: string[]) => void
 }) {
   if (isPending) {
@@ -42,8 +45,7 @@ export function RefillModelPicker({
         <IconAlertTriangle stroke={1.5} />
         <AlertTitle>Chưa có model nào dùng được</AlertTitle>
         <AlertDescription>
-          Refill thủ công cần ít nhất một model đang bật và cho phép chạy thủ
-          công.
+          {emptyDescription}
           <Button
             variant="outline"
             size="sm"

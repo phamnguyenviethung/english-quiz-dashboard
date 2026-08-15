@@ -54,9 +54,5 @@ export const READING_REFILL_SCOPE_META: Record<
   },
 }
 
-export const BUCKET_FILTER_ALL_HINT = "Bỏ trống = tất cả"
-
 /** Bài đọc tốn nhiều token hơn 1 câu quiz nên ngưỡng cảnh báo thấp hơn bên pool. */
 export const REFILL_COST_WARNING_PASSAGES = 60
-
-export const BUCKET_PREVIEW_DEBOUNCE_MS = 350
