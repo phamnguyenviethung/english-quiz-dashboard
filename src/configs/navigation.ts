@@ -5,6 +5,7 @@ import {
   IconClockBolt,
   IconCpu,
   IconDatabase,
+  IconHelpCircle,
   IconLayoutGrid,
   IconListDetails,
   IconSparkles,
@@ -18,6 +19,7 @@ export type NavPath =
   | "/topics"
   | "/question-pool"
   | "/readings"
+  | "/reading-questions"
   | "/refill"
   | "/generate"
   | "/metadata"
@@ -68,6 +70,12 @@ export const NAV_GROUPS: NavGroup[] = [
         label: "Bài đọc",
         icon: IconBook,
         to: "/readings",
+      },
+      {
+        key: "reading-questions",
+        label: "Câu hỏi đọc hiểu",
+        icon: IconHelpCircle,
+        to: "/reading-questions",
       },
       // Sinh hàng loạt phục vụ cả kho câu hỏi lẫn kho bài đọc (2 tab) nên đứng
       // riêng thay vì nằm dưới một trong hai kho.

@@ -5,14 +5,26 @@ import {
   useDeleteAdminReadingsById,
   usePatchAdminReadingsById,
 } from "@/apis/admin-readings/admin-readings.ts"
+import { getGetAdminReadingQuestionsQueryKey } from "@/apis/admin-reading-questions/admin-reading-questions.ts"
 import type { PatchAdminReadingsByIdBodyOne } from "@/apis/model"
 import { toast } from "@/components/ui/toast"
 import { getApiErrorMessage } from "@/lib/api-error.ts"
 
+/**
+ * Sửa `paragraphs` làm backend tắt toàn bộ câu hỏi của bài trong cùng transaction,
+ * còn xoá bài thì xoá luôn câu hỏi (cascade). Không invalidate kèm thì tab câu hỏi
+ * vẫn hiện dữ liệu cũ.
+ */
 function useInvalidateReadings() {
   const queryClient = useQueryClient()
-  return () =>
-    queryClient.invalidateQueries({ queryKey: getGetAdminReadingsQueryKey() })
+  return async () => {
+    await queryClient.invalidateQueries({
+      queryKey: getGetAdminReadingsQueryKey(),
+    })
+    await queryClient.invalidateQueries({
+      queryKey: getGetAdminReadingQuestionsQueryKey(),
+    })
+  }
 }
 
 export function useUpdateReading({

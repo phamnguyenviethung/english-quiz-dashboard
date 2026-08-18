@@ -20,4 +20,10 @@ export type GetEnglishConfig200DataJobFlags = {
    * @exclusiveMinimum 0
    */
   readingRefillMaxPerRun: number
+  readingQuestionRefillEnabled: boolean
+  /**
+   * @maximum 9007199254740991
+   * @exclusiveMinimum 0
+   */
+  readingQuestionRefillMaxPerRun: number
 }

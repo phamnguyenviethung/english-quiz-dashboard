@@ -16,7 +16,7 @@ export interface RefillScopeMeta {
 }
 
 /**
- * Cặp "phạm vi" + "số lượng mỗi bucket". Hai loại nội dung dùng chung layout,
+ * Cặp "phạm vi" + "số lượng mỗi bucket". Các loại nội dung dùng chung layout,
  * chỉ khác tập scope và nhãn đơn vị nên bơm vào qua props.
  */
 export function RefillScopeFields({
@@ -27,6 +27,7 @@ export function RefillScopeFields({
   count,
   isCountInvalid,
   disabled,
+  showCount = true,
   onScopeChange,
   onCountChange,
 }: {
@@ -34,12 +35,17 @@ export function RefillScopeFields({
   idPrefix: string
   scopeMeta: Record<string, RefillScopeMeta>
   scope: string
-  countLabel: string
-  count: string
-  isCountInvalid: boolean
+  countLabel?: string
+  count?: string
+  isCountInvalid?: boolean
   disabled?: boolean
+  /**
+   * Câu hỏi đọc hiểu không cho chọn số lượng: số câu mỗi bài là hằng số nghiệp vụ
+   * (`reading_question.questionsPerPassage`), API refill không nhận countPerBucket.
+   */
+  showCount?: boolean
   onScopeChange: (scope: string) => void
-  onCountChange: (count: string) => void
+  onCountChange?: (count: string) => void
 }) {
   // `items` để `SelectValue` hiện nhãn ngay từ render đầu, không phải chờ mở popup.
   const items = useMemo(
@@ -51,7 +57,7 @@ export function RefillScopeFields({
   )
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    <div className={showCount ? "grid gap-4 sm:grid-cols-2" : "grid gap-4"}>
       <Field>
         <FieldLabel htmlFor={`${idPrefix}-scope`}>Phạm vi</FieldLabel>
         <Select
@@ -77,27 +83,29 @@ export function RefillScopeFields({
         <FieldDescription>{scopeMeta[scope].description}</FieldDescription>
       </Field>
 
-      <Field data-invalid={isCountInvalid || undefined}>
-        <FieldLabel htmlFor={`${idPrefix}-count`}>{countLabel}</FieldLabel>
-        <Input
-          id={`${idPrefix}-count`}
-          type="number"
-          inputMode="numeric"
-          min={1}
-          step={1}
-          className="min-h-11 tabular-nums lg:min-h-9"
-          placeholder="Mặc định"
-          value={count}
-          disabled={disabled}
-          aria-invalid={isCountInvalid}
-          onChange={(event) => onCountChange(event.target.value)}
-        />
-        <FieldDescription>
-          {isCountInvalid
-            ? "Nhập số nguyên từ 1 trở lên."
-            : "Bỏ trống để dùng cấu hình mặc định của hệ thống."}
-        </FieldDescription>
-      </Field>
+      {showCount ? (
+        <Field data-invalid={isCountInvalid || undefined}>
+          <FieldLabel htmlFor={`${idPrefix}-count`}>{countLabel}</FieldLabel>
+          <Input
+            id={`${idPrefix}-count`}
+            type="number"
+            inputMode="numeric"
+            min={1}
+            step={1}
+            className="min-h-11 tabular-nums lg:min-h-9"
+            placeholder="Mặc định"
+            value={count}
+            disabled={disabled}
+            aria-invalid={isCountInvalid}
+            onChange={(event) => onCountChange?.(event.target.value)}
+          />
+          <FieldDescription>
+            {isCountInvalid
+              ? "Nhập số nguyên từ 1 trở lên."
+              : "Bỏ trống để dùng cấu hình mặc định của hệ thống."}
+          </FieldDescription>
+        </Field>
+      ) : null}
     </div>
   )
 }

@@ -23,6 +23,7 @@ import { Route as DashboardRefillRouteImport } from './routes/_dashboard/refill'
 import { Route as DashboardTopicsRouteImport } from './routes/_dashboard/topics'
 import { Route as DashboardQuestionPoolIndexRouteImport } from './routes/_dashboard/question-pool/index'
 import { Route as DashboardQuestionPoolRefillRouteImport } from './routes/_dashboard/question-pool/refill'
+import { Route as DashboardReadingQuestionsIndexRouteImport } from './routes/_dashboard/reading-questions/index'
 import { Route as DashboardReadingsIndexRouteImport } from './routes/_dashboard/readings/index'
 import { Route as DashboardReadingsRefillRouteImport } from './routes/_dashboard/readings/refill'
 import { Route as DashboardTenantsIndexRouteImport } from './routes/_dashboard/tenants/index'
@@ -99,6 +100,12 @@ const DashboardQuestionPoolRefillRoute =
     path: '/question-pool/refill',
     getParentRoute: () => DashboardRoute,
   } as any)
+const DashboardReadingQuestionsIndexRoute =
+  DashboardReadingQuestionsIndexRouteImport.update({
+    id: '/reading-questions/',
+    path: '/reading-questions/',
+    getParentRoute: () => DashboardRoute,
+  } as any)
 const DashboardReadingsIndexRoute = DashboardReadingsIndexRouteImport.update({
   id: '/readings/',
   path: '/readings/',
@@ -137,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/readings/refill': typeof DashboardReadingsRefillRoute
   '/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
   '/question-pool/': typeof DashboardQuestionPoolIndexRoute
+  '/reading-questions/': typeof DashboardReadingQuestionsIndexRoute
   '/readings/': typeof DashboardReadingsIndexRoute
   '/tenants/': typeof DashboardTenantsIndexRoute
 }
@@ -156,6 +164,7 @@ export interface FileRoutesByTo {
   '/readings/refill': typeof DashboardReadingsRefillRoute
   '/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
   '/question-pool': typeof DashboardQuestionPoolIndexRoute
+  '/reading-questions': typeof DashboardReadingQuestionsIndexRoute
   '/readings': typeof DashboardReadingsIndexRoute
   '/tenants': typeof DashboardTenantsIndexRoute
 }
@@ -177,6 +186,7 @@ export interface FileRoutesById {
   '/_dashboard/readings/refill': typeof DashboardReadingsRefillRoute
   '/_dashboard/tenants/$tenantId': typeof DashboardTenantsTenantIdRoute
   '/_dashboard/question-pool/': typeof DashboardQuestionPoolIndexRoute
+  '/_dashboard/reading-questions/': typeof DashboardReadingQuestionsIndexRoute
   '/_dashboard/readings/': typeof DashboardReadingsIndexRoute
   '/_dashboard/tenants/': typeof DashboardTenantsIndexRoute
 }
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/readings/refill'
     | '/tenants/$tenantId'
     | '/question-pool/'
+    | '/reading-questions/'
     | '/readings/'
     | '/tenants/'
   fileRoutesByTo: FileRoutesByTo
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/readings/refill'
     | '/tenants/$tenantId'
     | '/question-pool'
+    | '/reading-questions'
     | '/readings'
     | '/tenants'
   id:
@@ -237,6 +249,7 @@ export interface FileRouteTypes {
     | '/_dashboard/readings/refill'
     | '/_dashboard/tenants/$tenantId'
     | '/_dashboard/question-pool/'
+    | '/_dashboard/reading-questions/'
     | '/_dashboard/readings/'
     | '/_dashboard/tenants/'
   fileRoutesById: FileRoutesById
@@ -348,6 +361,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardQuestionPoolRefillRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/_dashboard/reading-questions/': {
+      id: '/_dashboard/reading-questions/'
+      path: '/reading-questions'
+      fullPath: '/reading-questions/'
+      preLoaderRoute: typeof DashboardReadingQuestionsIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/_dashboard/readings/': {
       id: '/_dashboard/readings/'
       path: '/readings'
@@ -392,6 +412,7 @@ interface DashboardRouteChildren {
   DashboardReadingsRefillRoute: typeof DashboardReadingsRefillRoute
   DashboardTenantsTenantIdRoute: typeof DashboardTenantsTenantIdRoute
   DashboardQuestionPoolIndexRoute: typeof DashboardQuestionPoolIndexRoute
+  DashboardReadingQuestionsIndexRoute: typeof DashboardReadingQuestionsIndexRoute
   DashboardReadingsIndexRoute: typeof DashboardReadingsIndexRoute
   DashboardTenantsIndexRoute: typeof DashboardTenantsIndexRoute
 }
@@ -409,6 +430,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardReadingsRefillRoute: DashboardReadingsRefillRoute,
   DashboardTenantsTenantIdRoute: DashboardTenantsTenantIdRoute,
   DashboardQuestionPoolIndexRoute: DashboardQuestionPoolIndexRoute,
+  DashboardReadingQuestionsIndexRoute: DashboardReadingQuestionsIndexRoute,
   DashboardReadingsIndexRoute: DashboardReadingsIndexRoute,
   DashboardTenantsIndexRoute: DashboardTenantsIndexRoute,
 }

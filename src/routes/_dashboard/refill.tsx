@@ -1,13 +1,14 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { IconBook, IconDatabase } from "@tabler/icons-react"
+import { IconBook, IconDatabase, IconHelpCircle } from "@tabler/icons-react"
 
 import { getGetAdminModelsQueryOptions } from "@/apis/admin-models/admin-models.ts"
 import { PageHeader } from "@/components/common/page-header.tsx"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ManualRefillPage } from "@/features/question-pool/components/manual-refill-page.tsx"
+import { ReadingQuestionRefillPage } from "@/features/reading-questions/components/reading-question-refill-page.tsx"
 import { ReadingRefillPage } from "@/features/readings/components/reading-refill-page.tsx"
 
-const TABS = ["questions", "readings"] as const
+const TABS = ["questions", "readings", "reading-questions"] as const
 type RefillTab = (typeof TABS)[number]
 
 const DEFAULT_TAB: RefillTab = "questions"
@@ -36,7 +37,7 @@ function RefillPage() {
     <>
       <PageHeader
         title="Sinh hàng loạt"
-        description="Sinh thêm câu hỏi hoặc bài đọc cho nhiều bucket cùng lúc. Job chạy nền, theo dõi ở màn Lịch sử cron."
+        description="Sinh thêm câu hỏi, bài đọc hoặc câu hỏi đọc hiểu cho nhiều bucket cùng lúc. Job chạy nền, theo dõi ở màn Lịch sử cron."
       />
 
       <Tabs
@@ -59,6 +60,10 @@ function RefillPage() {
             <IconBook stroke={1.5} data-icon="inline-start" />
             Bài đọc
           </TabsTrigger>
+          <TabsTrigger value="reading-questions">
+            <IconHelpCircle stroke={1.5} data-icon="inline-start" />
+            Câu hỏi đọc hiểu
+          </TabsTrigger>
         </TabsList>
 
         {/* Không đặt `keepMounted`: mỗi panel có một query preview bucket luôn bật,
@@ -68,6 +73,9 @@ function RefillPage() {
         </TabsContent>
         <TabsContent value="readings" className="pt-4">
           <ReadingRefillPage />
+        </TabsContent>
+        <TabsContent value="reading-questions" className="pt-4">
+          <ReadingQuestionRefillPage />
         </TabsContent>
       </Tabs>
     </>
