@@ -121,8 +121,8 @@ function GeneratePage() {
   return (
     <>
       <PageHeader
-        title="Tạo câu hỏi"
-        description="Thử nghiệm prompt và model. Câu hỏi tạo ra ở đây không được lưu vào kho."
+        title="Tạo thử"
+        description="Thử prompt và model cho một câu hỏi. Kết quả ở đây không được lưu vào kho, cần sinh thật thì dùng Sinh hàng loạt."
       />
 
       <div className="grid gap-6 lg:grid-cols-[360px_1fr] lg:items-start">

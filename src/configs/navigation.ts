@@ -32,19 +32,24 @@ export interface NavItem {
   key: string
   label: string
   icon: Icon
-  to?: NavPath
+  to: NavPath
 }
 
 export interface NavGroup {
   key: string
-  label: string
+  /** Bỏ trống để group render không có label (dùng cho item đứng riêng đầu sidebar). */
+  label?: string
   items: NavItem[]
+}
+
+export interface NavLocation {
+  group: NavGroup
+  item: NavItem
 }
 
 export const NAV_GROUPS: NavGroup[] = [
   {
     key: "overview",
-    label: "Tổng quan",
     items: [
       {
         key: "dashboard",
@@ -77,8 +82,14 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: IconHelpCircle,
         to: "/reading-questions",
       },
-      // Sinh hàng loạt phục vụ cả kho câu hỏi lẫn kho bài đọc (2 tab) nên đứng
-      // riêng thay vì nằm dưới một trong hai kho.
+    ],
+  },
+  {
+    key: "generation",
+    label: "Sinh nội dung",
+    items: [
+      // Sinh hàng loạt phục vụ cả kho câu hỏi lẫn kho bài đọc (3 tab) nên đứng
+      // riêng thay vì nằm dưới một trong các kho.
       {
         key: "refill",
         label: "Sinh hàng loạt",
@@ -86,10 +97,22 @@ export const NAV_GROUPS: NavGroup[] = [
         to: "/refill",
       },
       {
-        key: "generation",
-        label: "Tạo câu hỏi",
+        key: "generate",
+        label: "Tạo thử",
         icon: IconSparkles,
         to: "/generate",
+      },
+    ],
+  },
+  {
+    key: "operations",
+    label: "Vận hành",
+    items: [
+      {
+        key: "cron",
+        label: "Lịch sử cron",
+        icon: IconClockBolt,
+        to: "/cron-runs",
       },
       {
         key: "meta",
@@ -115,18 +138,6 @@ export const NAV_GROUPS: NavGroup[] = [
         icon: IconCpu,
         to: "/ai-models",
       },
-      {
-        key: "cron",
-        label: "Lịch sử cron",
-        icon: IconClockBolt,
-        to: "/cron-runs",
-      },
-    ],
-  },
-  {
-    key: "admin",
-    label: "Quản trị",
-    items: [
       // API key và phân quyền đều nested dưới 1 tenant nên nằm trong tab của
       // trang chi tiết, không tách nav item riêng.
       { key: "tenants", label: "Tenant", icon: IconUsersGroup, to: "/tenants" },
@@ -134,23 +145,28 @@ export const NAV_GROUPS: NavGroup[] = [
   },
 ]
 
-export const NAV_ITEMS_BY_PATH = new Map<NavPath, NavItem>(
-  NAV_GROUPS.flatMap((group) => group.items)
-    .filter((item): item is NavItem & { to: NavPath } => item.to !== undefined)
-    .map((item) => [item.to, item])
+export const NAV_LOCATIONS_BY_PATH = new Map<NavPath, NavLocation>(
+  NAV_GROUPS.flatMap((group) =>
+    group.items.map((item) => [item.to, { group, item }] as const)
+  )
 )
 
+/** Dấu `/` ở cuối prefix để `/readings` không nuốt `/reading-questions`. */
+export function isNavItemActive(pathname: string, to: NavPath): boolean {
+  return pathname === to || (to !== "/" && pathname.startsWith(`${to}/`))
+}
+
 /** Khớp cả route con (vd `/tenants/3` → nav item `/tenants`) để breadcrumb không rơi về fallback. */
-export function findNavItemByPathname(pathname: string): NavItem | undefined {
-  const exact = NAV_ITEMS_BY_PATH.get(pathname as NavPath)
+export function findNavLocation(pathname: string): NavLocation | undefined {
+  const exact = NAV_LOCATIONS_BY_PATH.get(pathname as NavPath)
   if (exact) return exact
 
-  let matched: NavItem | undefined
+  let matched: NavLocation | undefined
   let matchedLength = 0
-  for (const [path, item] of NAV_ITEMS_BY_PATH) {
-    if (path === "/") continue
-    if (pathname.startsWith(`${path}/`) && path.length > matchedLength) {
-      matched = item
+  for (const [path, location] of NAV_LOCATIONS_BY_PATH) {
+    if (!isNavItemActive(pathname, path)) continue
+    if (path.length > matchedLength) {
+      matched = location
       matchedLength = path.length
     }
   }

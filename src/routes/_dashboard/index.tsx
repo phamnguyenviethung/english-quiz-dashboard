@@ -33,7 +33,7 @@ const SHORTCUTS: {
 }[] = [
   {
     to: "/generate",
-    title: "Tạo câu hỏi",
+    title: "Tạo thử",
     description:
       "Thử prompt và model cho từng loại câu hỏi, xem trước kết quả trước khi đưa vào kho.",
     icon: IconSparkles,
