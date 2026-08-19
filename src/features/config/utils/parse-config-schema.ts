@@ -93,6 +93,9 @@ export function parseConfigFieldSchema(
     multiline: pickBoolean(value, ["multiline", "textarea"]),
     placeholder: pickString(value, ["placeholder"]),
     options: pickStringArray(value, ["options", "enum"]),
+    unit: pickString(value, ["unit"]),
+    display:
+      pickString(value, ["display"]) === "percent" ? "percent" : undefined,
   }
 
   const rawItemFields = value.itemFields ?? value.items

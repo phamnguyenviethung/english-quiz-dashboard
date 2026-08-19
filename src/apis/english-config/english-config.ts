@@ -38,6 +38,14 @@ import type {
   PatchEnglishConfigByRecordKeyBodyOne,
   PatchEnglishConfigByRecordKeyBodyThree,
   PatchEnglishConfigByRecordKeyBodyTwo,
+  PatchEnglishConfigRecords200,
+  PatchEnglishConfigRecords400,
+  PatchEnglishConfigRecords401,
+  PatchEnglishConfigRecords403,
+  PatchEnglishConfigRecords500,
+  PatchEnglishConfigRecordsBodyOne,
+  PatchEnglishConfigRecordsBodyThree,
+  PatchEnglishConfigRecordsBodyTwo,
   PostEnglishConfigByRecordKeyReset200,
   PostEnglishConfigByRecordKeyReset401,
   PostEnglishConfigByRecordKeyReset403,
@@ -406,6 +414,154 @@ export function useGetEnglishConfigRecords<
   return withQueryKey(query, queryOptions.queryKey)
 }
 
+/**
+ * Cập nhật nhiều config record trong 1 transaction: áp hết thay đổi rồi mới validate snapshot một lần. Dùng khi sửa các field ràng buộc lẫn nhau (vd manualFillMinCount + manualFillDefaultCount) — gọi PATCH lần lượt sẽ fail ở request đầu. Sai 1 record thì rollback toàn bộ. Chỉ dùng được với tài khoản admin.
+ * @summary Update multiple config records
+ */
+export const patchEnglishConfigRecords = (
+  patchEnglishConfigRecordsBody:
+    | BodyType<
+        | PatchEnglishConfigRecordsBodyOne
+        | PatchEnglishConfigRecordsBodyTwo
+        | PatchEnglishConfigRecordsBodyThree
+      >
+    | PatchEnglishConfigRecordsBodyTwo
+    | PatchEnglishConfigRecordsBodyThree,
+  options?: SecondParameter<typeof axiosClient>,
+  signal?: AbortSignal
+) => {
+  return axiosClient<PatchEnglishConfigRecords200>(
+    {
+      url: `/english/config/records`,
+      method: "PATCH",
+      data: patchEnglishConfigRecordsBody,
+      signal,
+    },
+    options
+  )
+}
+
+export const getPatchEnglishConfigRecordsMutationOptions = <
+  TError = ErrorType<
+    | PatchEnglishConfigRecords400
+    | PatchEnglishConfigRecords401
+    | PatchEnglishConfigRecords403
+    | PatchEnglishConfigRecords500
+  >,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
+    TError,
+    {
+      data: BodyType<
+        | PatchEnglishConfigRecordsBodyOne
+        | PatchEnglishConfigRecordsBodyTwo
+        | PatchEnglishConfigRecordsBodyThree
+      >
+    },
+    TContext
+  >
+  request?: SecondParameter<typeof axiosClient>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
+  TError,
+  {
+    data: BodyType<
+      | PatchEnglishConfigRecordsBodyOne
+      | PatchEnglishConfigRecordsBodyTwo
+      | PatchEnglishConfigRecordsBodyThree
+    >
+  },
+  TContext
+> => {
+  const mutationKey = ["patchEnglishConfigRecords"]
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
+    {
+      data: BodyType<
+        | PatchEnglishConfigRecordsBodyOne
+        | PatchEnglishConfigRecordsBodyTwo
+        | PatchEnglishConfigRecordsBodyThree
+      >
+    }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return patchEnglishConfigRecords(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PatchEnglishConfigRecordsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchEnglishConfigRecords>>
+>
+export type PatchEnglishConfigRecordsMutationBody = BodyType<
+  | PatchEnglishConfigRecordsBodyOne
+  | PatchEnglishConfigRecordsBodyTwo
+  | PatchEnglishConfigRecordsBodyThree
+>
+export type PatchEnglishConfigRecordsMutationError = ErrorType<
+  | PatchEnglishConfigRecords400
+  | PatchEnglishConfigRecords401
+  | PatchEnglishConfigRecords403
+  | PatchEnglishConfigRecords500
+>
+
+/**
+ * @summary Update multiple config records
+ */
+export const usePatchEnglishConfigRecords = <
+  TError = ErrorType<
+    | PatchEnglishConfigRecords400
+    | PatchEnglishConfigRecords401
+    | PatchEnglishConfigRecords403
+    | PatchEnglishConfigRecords500
+  >,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
+      TError,
+      {
+        data: BodyType<
+          | PatchEnglishConfigRecordsBodyOne
+          | PatchEnglishConfigRecordsBodyTwo
+          | PatchEnglishConfigRecordsBodyThree
+        >
+      },
+      TContext
+    >
+    request?: SecondParameter<typeof axiosClient>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
+  TError,
+  {
+    data: BodyType<
+      | PatchEnglishConfigRecordsBodyOne
+      | PatchEnglishConfigRecordsBodyTwo
+      | PatchEnglishConfigRecordsBodyThree
+    >
+  },
+  TContext
+> => {
+  return useMutation(
+    getPatchEnglishConfigRecordsMutationOptions(options),
+    queryClient
+  )
+}
 /**
  * Cập nhật giá trị 1 config record. recordKey không tồn tại throw lỗi nội bộ (500), không phải 404. Chỉ dùng được với tài khoản admin.
  * @summary Update a config record

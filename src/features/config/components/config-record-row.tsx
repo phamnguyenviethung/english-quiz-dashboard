@@ -1,4 +1,4 @@
-import { IconDeviceFloppy } from "@tabler/icons-react"
+import { IconArrowBackUp } from "@tabler/icons-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -8,7 +8,11 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field"
-import { Spinner } from "@/components/ui/spinner"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 import type { ConfigDraft, ConfigRecord } from "../types.ts"
 import { fromDraft, isDraftEqual, toDraft } from "../utils/config-value-io.ts"
@@ -27,6 +31,7 @@ function rangeHint(min?: number, max?: number): string | undefined {
 export function ConfigRecordRow({
   record,
   draft,
+  groupError,
   isSaving,
   isResetting,
   onDraftChange,
@@ -36,6 +41,7 @@ export function ConfigRecordRow({
 }: {
   record: ConfigRecord
   draft: ConfigDraft
+  groupError?: string
   isSaving: boolean
   isResetting: boolean
   onDraftChange: (draft: ConfigDraft) => void
@@ -47,81 +53,96 @@ export function ConfigRecordRow({
   const label = record.label || record.recordKey
   const original = toDraft(record, schema)
   const isDirty = !isDraftEqual(draft, original)
-  const error = validateConfigValue(record, schema, draft)
+  const fieldError = validateConfigValue(record, schema, draft)
+  const error = fieldError ?? groupError
   const isBusy = isSaving || isResetting
   const isChangedFromDefault =
     JSON.stringify(record.value) !== JSON.stringify(record.defaultValue)
 
-  const save = (next: ConfigDraft) => {
-    if (validateConfigValue(record, schema, next)) return
-    onSave(fromDraft(record, next))
-  }
-
+  // Switch tự lưu ngay: job flag là kill switch, bấm là phải ăn liền chứ không
+  // chờ bấm "Lưu tất cả". Vì vậy switch cũng không bao giờ ở trạng thái dirty.
   const handleChange = (next: ConfigDraft) => {
     onDraftChange(next)
-    if (record.recordType === "boolean") save(next)
+    if (record.recordType === "boolean") {
+      if (validateConfigValue(record, schema, next)) return
+      onSave(fromDraft(record, next))
+    }
   }
 
   const hint =
     record.recordType === "num" ? rangeHint(schema.min, schema.max) : undefined
   const description = record.description ?? schema.description
+  const isWide = record.recordType === "arr" || record.recordType === "obj"
 
   return (
-    <Field data-invalid={Boolean(error)} className="gap-2">
-      <div className="flex flex-wrap items-center gap-2">
-        <FieldLabel htmlFor={`config-${record.recordKey}`}>{label}</FieldLabel>
-        {isChangedFromDefault ? <Badge variant="outline">Đã đổi</Badge> : null}
-        <code className="ml-auto font-mono text-xs text-muted-foreground">
-          {record.recordKey}
-        </code>
-      </div>
+    <Field
+      data-invalid={Boolean(error)}
+      data-dirty={isDirty || undefined}
+      className={
+        isWide
+          ? "gap-3"
+          : "gap-3 sm:grid sm:grid-cols-[minmax(0,20rem)_1fr] sm:items-start sm:gap-6"
+      }
+    >
+      <div className="flex flex-col gap-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <FieldLabel htmlFor={`config-${record.recordKey}`}>
+            {label}
+          </FieldLabel>
+          {isDirty ? <Badge variant="outline">Chưa lưu</Badge> : null}
+        </div>
 
-      {description ? <FieldDescription>{description}</FieldDescription> : null}
-
-      <ConfigValueEditor
-        record={record}
-        schema={schema}
-        draft={draft}
-        isInvalid={Boolean(error)}
-        disabled={isBusy}
-        onChange={handleChange}
-      />
-
-      {hint && !error ? <FieldDescription>{hint}</FieldDescription> : null}
-      <FieldError errors={[error ? { message: error } : undefined]} />
-
-      <div className="flex flex-wrap items-center gap-2">
-        {isDirty && record.recordType !== "boolean" ? (
-          <>
-            <Button
-              size="sm"
-              disabled={Boolean(error) || isBusy}
-              onClick={() => save(draft)}
-            >
-              {isSaving ? (
-                <Spinner data-icon="inline-start" />
-              ) : (
-                <IconDeviceFloppy stroke={1.5} data-icon="inline-start" />
-              )}
-              Lưu
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              disabled={isBusy}
-              onClick={onRevert}
-            >
-              Hoàn tác
-            </Button>
-          </>
+        {description ? (
+          <FieldDescription>{description}</FieldDescription>
         ) : null}
 
-        {isChangedFromDefault ? (
-          <ResetConfigDialog
-            label={label}
-            disabled={isBusy}
-            onConfirm={onReset}
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <code className="w-fit font-mono text-[11px] text-muted-foreground">
+                {record.recordKey}
+              </code>
+            }
           />
+          <TooltipContent>Record key dùng khi gọi API</TooltipContent>
+        </Tooltip>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <ConfigValueEditor
+          record={record}
+          schema={schema}
+          draft={draft}
+          isInvalid={Boolean(error)}
+          disabled={isBusy}
+          onChange={handleChange}
+        />
+
+        {hint && !error ? <FieldDescription>{hint}</FieldDescription> : null}
+        <FieldError errors={[error ? { message: error } : undefined]} />
+
+        {isDirty || isChangedFromDefault ? (
+          <div className="flex flex-wrap items-center gap-1">
+            {isDirty ? (
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={isBusy}
+                onClick={onRevert}
+              >
+                <IconArrowBackUp stroke={1.5} data-icon="inline-start" />
+                Hoàn tác
+              </Button>
+            ) : null}
+
+            {isChangedFromDefault ? (
+              <ResetConfigDialog
+                label={label}
+                disabled={isBusy}
+                onConfirm={onReset}
+              />
+            ) : null}
+          </div>
         ) : null}
       </div>
     </Field>

@@ -10,6 +10,8 @@ import type { GetEnglishConfig200DataPoolRefillScheduleItem } from "./getEnglish
 import type { GetEnglishConfig200DataQuestionPool } from "./getEnglishConfig200DataQuestionPool.ts"
 import type { GetEnglishConfig200DataQuizDistributionItem } from "./getEnglishConfig200DataQuizDistributionItem.ts"
 import type { GetEnglishConfig200DataReadingPassage } from "./getEnglishConfig200DataReadingPassage.ts"
+import type { GetEnglishConfig200DataReadingQuestion } from "./getEnglishConfig200DataReadingQuestion.ts"
+import type { GetEnglishConfig200DataReadingQuestionRefillScheduleItem } from "./getEnglishConfig200DataReadingQuestionRefillScheduleItem.ts"
 import type { GetEnglishConfig200DataReadingRefillScheduleItem } from "./getEnglishConfig200DataReadingRefillScheduleItem.ts"
 
 export type GetEnglishConfig200Data = {
@@ -20,4 +22,6 @@ export type GetEnglishConfig200Data = {
   pool_refill_schedule: GetEnglishConfig200DataPoolRefillScheduleItem[]
   reading_passage: GetEnglishConfig200DataReadingPassage
   reading_refill_schedule: GetEnglishConfig200DataReadingRefillScheduleItem[]
+  reading_question: GetEnglishConfig200DataReadingQuestion
+  reading_question_refill_schedule: GetEnglishConfig200DataReadingQuestionRefillScheduleItem[]
 }

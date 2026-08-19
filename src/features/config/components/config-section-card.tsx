@@ -7,17 +7,14 @@ import {
 } from "@/components/ui/card"
 import { FieldSeparator } from "@/components/ui/field"
 
-import { getCategoryMeta } from "../constants.ts"
-import type {
-  ConfigCategoryGroup,
-  ConfigDraft,
-  ConfigRecord,
-} from "../types.ts"
+import { CONFIG_SECTION_META } from "../constants.ts"
+import type { ConfigDraft, ConfigRecord, ConfigSectionGroup } from "../types.ts"
 import { ConfigRecordRow } from "./config-record-row.tsx"
 
-export function ConfigCategorySection({
+export function ConfigSectionCard({
   group,
   getDraft,
+  groupErrors,
   savingKey,
   resettingKey,
   onDraftChange,
@@ -25,8 +22,9 @@ export function ConfigCategorySection({
   onRevert,
   onReset,
 }: {
-  group: ConfigCategoryGroup
+  group: ConfigSectionGroup
   getDraft: (record: ConfigRecord) => ConfigDraft
+  groupErrors: Record<string, string>
   savingKey: string | undefined
   resettingKey: string | undefined
   onDraftChange: (record: ConfigRecord, draft: ConfigDraft) => void
@@ -34,19 +32,17 @@ export function ConfigCategorySection({
   onRevert: (record: ConfigRecord) => void
   onReset: (record: ConfigRecord) => void
 }) {
-  const meta = getCategoryMeta(group.category)
-  const CategoryIcon = meta.icon
+  const meta = CONFIG_SECTION_META[group.section]
+  const SectionIcon = meta.icon
 
   return (
     <Card>
       <CardHeader>
         <div className="flex items-center gap-2">
-          <CategoryIcon className="size-4 text-muted-foreground" stroke={1.5} />
+          <SectionIcon className="size-4 text-muted-foreground" stroke={1.5} />
           <CardTitle>{meta.label}</CardTitle>
         </div>
-        {meta.description ? (
-          <CardDescription>{meta.description}</CardDescription>
-        ) : null}
+        <CardDescription>{meta.description}</CardDescription>
       </CardHeader>
 
       <CardContent className="space-y-6">
@@ -56,6 +52,7 @@ export function ConfigCategorySection({
             <ConfigRecordRow
               record={record}
               draft={getDraft(record)}
+              groupError={groupErrors[record.recordKey]}
               isSaving={savingKey === record.recordKey}
               isResetting={resettingKey === record.recordKey}
               onDraftChange={(draft) => onDraftChange(record, draft)}

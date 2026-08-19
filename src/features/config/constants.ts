@@ -1,36 +1,83 @@
 import type { Icon } from "@tabler/icons-react"
 import {
-  IconAdjustmentsAlt,
+  IconBook,
+  IconChartPie,
+  IconClockPlay,
   IconDatabase,
-  IconPlayerPlay,
+  IconHelpCircle,
+  IconWand,
 } from "@tabler/icons-react"
 
-import type { ConfigRecordType } from "./types.ts"
+import type {
+  ConfigRecordType,
+  ConfigSectionKey,
+  ConfigTabKey,
+} from "./types.ts"
 
-export const CONFIG_CATEGORY_META: Record<
-  string,
+/** Nhóm cấp 1 — mỗi tab là một pipeline, khớp với `category` phía API. */
+export const CONFIG_TABS = ["questions", "reading", "reading_question"] as const
+
+export const DEFAULT_CONFIG_TAB: ConfigTabKey = "questions"
+
+export const CONFIG_TAB_META: Record<
+  ConfigTabKey,
   { label: string; description: string; icon: Icon }
 > = {
-  pool: {
-    label: "Kho câu hỏi",
-    description: "Ngưỡng tồn kho và giới hạn khi tạo câu hỏi thủ công.",
+  questions: {
+    label: "Câu hỏi",
+    description:
+      "Kho câu hỏi trắc nghiệm: ngưỡng tồn kho, phân bổ loại câu hỏi và job refill.",
     icon: IconDatabase,
   },
-  jobs: {
-    label: "Job nền",
-    description: "Bật/tắt và giới hạn khối lượng cho các job chạy tự động.",
-    icon: IconPlayerPlay,
+  reading: {
+    label: "Bài đọc",
+    description:
+      "Kho bài đọc: ngưỡng tồn kho, giới hạn sinh thủ công và job refill theo lịch.",
+    icon: IconBook,
+  },
+  reading_question: {
+    label: "Câu hỏi đọc hiểu",
+    description:
+      "Câu hỏi gắn với bài đọc: số câu mỗi bài, số lần thử và job refill theo lịch.",
+    icon: IconHelpCircle,
   },
 }
 
-export function getCategoryMeta(category: string) {
-  return (
-    CONFIG_CATEGORY_META[category] ?? {
-      label: category,
-      description: "",
-      icon: IconAdjustmentsAlt,
-    }
-  )
+/** Nhóm cấp 2 — thứ tự khai báo cũng là thứ tự render trong mỗi tab. */
+export const CONFIG_SECTIONS = [
+  "threshold",
+  "distribution",
+  "manual",
+  "automation",
+] as const
+
+export const CONFIG_SECTION_META: Record<
+  ConfigSectionKey,
+  { label: string; description: string; icon: Icon }
+> = {
+  threshold: {
+    label: "Kho & ngưỡng",
+    description:
+      "Mức tồn kho giữ sẵn cho mỗi bucket và thời điểm job bắt đầu sinh bù.",
+    icon: IconDatabase,
+  },
+  distribution: {
+    label: "Phân bổ loại câu hỏi",
+    description:
+      "Trọng số bốc từng loại câu hỏi, dùng chung cho cả pool lẫn sinh realtime.",
+    icon: IconChartPie,
+  },
+  manual: {
+    label: "Sinh thủ công",
+    description: "Giới hạn cho ô số lượng ở màn Sinh hàng loạt.",
+    icon: IconWand,
+  },
+  automation: {
+    label: "Tự động & lịch chạy",
+    description:
+      "Cờ bật/tắt job nền, trần khối lượng mỗi lần chạy và lịch cron.",
+    icon: IconClockPlay,
+  },
 }
 
 export const CONFIG_TYPE_LABELS: Record<ConfigRecordType, string> = {

@@ -13,6 +13,7 @@ import type { ConfigDraft, ConfigFieldSchema, ConfigRecord } from "../types.ts"
 import { canUseRowEditor } from "../utils/parse-config-schema.ts"
 import { ConfigArrayEditor } from "./config-array-editor.tsx"
 import { ConfigJsonEditor } from "./config-json-editor.tsx"
+import { ConfigNumberInput } from "./config-number-input.tsx"
 
 export function ConfigValueEditor({
   record,
@@ -44,17 +45,13 @@ export function ConfigValueEditor({
 
   if (record.recordType === "num") {
     return (
-      <Input
+      <ConfigNumberInput
         id={id}
-        type="number"
-        value={String(draft)}
-        min={schema.min}
-        max={schema.max}
-        step={schema.step ?? (schema.integer ? 1 : "any")}
-        className="max-w-48 tabular-nums"
-        onChange={(event) => onChange(event.target.value)}
-        aria-invalid={isInvalid}
+        schema={schema}
+        draft={String(draft)}
+        isInvalid={isInvalid}
         disabled={disabled}
+        onChange={onChange}
       />
     )
   }
