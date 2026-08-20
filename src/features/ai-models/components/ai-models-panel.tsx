@@ -12,11 +12,7 @@ import {
 import { QueryError } from "@/components/common/query-error.tsx"
 import { StatTile, StatTileGrid } from "@/components/common/stat-tile.tsx"
 import { StatusBadge } from "@/components/common/status-badge.tsx"
-import {
-  STICKY_CELL_LEFT,
-  STICKY_CELL_RIGHT,
-  StickyTable,
-} from "@/components/common/sticky-table.tsx"
+import { StickyTable } from "@/components/common/sticky-table.tsx"
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -63,59 +59,78 @@ import { ModelCatalogDialog } from "./model-catalog-dialog.tsx"
 
 const COLUMN_COUNT = 6
 
-/**
- * Nền hàng phải đặc thì cột ghim (`bg-inherit`) mới che được nội dung cuộn phía
- * dưới — nền trong suốt bị ô ghim vẽ chồng thêm một lớp nữa nên cột đó đậm hơn
- * hẳn. Vì vậy model đã tắt dùng `bg-muted` đặc, và bỏ luôn hover: bảng không có
- * hành động ở cấp hàng, mà tô hover cũng sẽ trùng đúng màu của hàng đã tắt.
- */
+// Model đã tắt dùng nền `bg-muted` mờ hơn hẳn `bg-card` để quét bảng nhận ra
+// ngay, không cần chờ đọc badge trạng thái.
 const ROW_ACTIVE = "bg-card hover:bg-card"
 const ROW_INACTIVE = "bg-muted hover:bg-muted"
 
+/**
+ * Ở điện thoại chỉ giữ cột Model và Actions; Trạng thái/Ngữ cảnh/Giá/Đã sinh ẩn
+ * đi và gộp thành dòng phụ trong ModelIdentityCell nên bảng không cuộn ngang.
+ */
+const HIDE_UNDER_MD = "hidden md:table-cell"
+
 const SKELETON_COLUMN_CLASSES = [
-  STICKY_CELL_LEFT,
   undefined,
-  undefined,
-  undefined,
-  undefined,
-  cn(STICKY_CELL_RIGHT, "p-1 md:p-3"),
+  HIDE_UNDER_MD,
+  HIDE_UNDER_MD,
+  HIDE_UNDER_MD,
+  HIDE_UNDER_MD,
+  "p-1 md:p-3",
 ]
 
-/**
- * Key + Model ID gộp một cột, bề rộng cố định (w-40/w-56) để text dài không kéo
- * bảng tràn ngang — mỗi dòng `truncate` trong bề rộng đó, xem đầy đủ qua tooltip.
- */
-function ModelIdentityCell({ model }: { model: AiModel }) {
+function ModelIdentityCell({
+  model,
+  usage,
+}: {
+  model: AiModel
+  usage: number | undefined
+}) {
   const { provider, name, suffix } = formatModelName(model.modelId)
+  const status = MODEL_STATUS_META[model.isActive ? "active" : "inactive"]
 
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <div className="flex min-w-0 flex-col gap-0.5">
-            <span
-              className={cn(
-                "truncate text-sm font-medium",
-                !model.isActive && "text-muted-foreground"
-              )}
-            >
-              {model.key}
-            </span>
-            <span className="truncate font-mono text-xs text-muted-foreground">
-              {provider ? `${provider}/` : ""}
-              {name}
-              {suffix ? `:${suffix}` : ""}
-            </span>
+    <div className="flex flex-col gap-1.5">
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <div className="flex max-w-52 min-w-0 flex-col gap-0.5 sm:max-w-64 md:max-w-sm">
+              <span
+                className={cn(
+                  "truncate text-sm font-medium",
+                  !model.isActive && "text-muted-foreground"
+                )}
+              >
+                {model.key}
+              </span>
+              <span className="truncate font-mono text-xs text-muted-foreground">
+                {provider ? `${provider}/` : ""}
+                {name}
+                {suffix ? `:${suffix}` : ""}
+              </span>
+            </div>
+          }
+        />
+        <TooltipContent className="max-w-xs">
+          <div className="flex flex-col gap-0.5 break-all">
+            <span className="font-medium">{model.key}</span>
+            <span className="font-mono">{model.modelId}</span>
           </div>
-        }
-      />
-      <TooltipContent className="max-w-xs">
-        <div className="flex flex-col gap-0.5 break-all">
-          <span className="font-medium">{model.key}</span>
-          <span className="font-mono">{model.modelId}</span>
-        </div>
-      </TooltipContent>
-    </Tooltip>
+        </TooltipContent>
+      </Tooltip>
+
+      {/* Bù lại 4 cột bị ẩn ở điện thoại (xem HIDE_UNDER_MD). */}
+      <div className="flex flex-wrap items-center gap-1.5 md:hidden">
+        <StatusBadge meta={status} />
+        <ContextsCell model={model} />
+      </div>
+      <div className="flex items-center gap-3 md:hidden">
+        <PriceCell model={model} />
+        <span className="text-xs text-muted-foreground tabular-nums">
+          {usage === undefined ? "Chưa sinh" : `${formatNumber(usage)} đã sinh`}
+        </span>
+      </div>
+    </div>
   )
 }
 
@@ -236,14 +251,16 @@ function AiModelsTable({
     <StickyTable>
       <TableHeader>
         <TableRow className="bg-card hover:bg-card">
-          <TableHead className={cn(STICKY_CELL_LEFT, "w-40 sm:w-56")}>
-            Model
+          <TableHead>Model</TableHead>
+          <TableHead className={HIDE_UNDER_MD}>Trạng thái</TableHead>
+          <TableHead className={cn(HIDE_UNDER_MD, "w-52")}>Ngữ cảnh</TableHead>
+          <TableHead className={cn(HIDE_UNDER_MD, "w-28 text-right")}>
+            Giá /1M
           </TableHead>
-          <TableHead className="w-32">Trạng thái</TableHead>
-          <TableHead className="w-52">Ngữ cảnh</TableHead>
-          <TableHead className="w-28 text-right">Giá /1M</TableHead>
-          <TableHead className="w-24 text-right">Đã sinh</TableHead>
-          <TableHead className={cn(STICKY_CELL_RIGHT, "w-12 md:w-48")} />
+          <TableHead className={cn(HIDE_UNDER_MD, "w-24 text-right")}>
+            Đã sinh
+          </TableHead>
+          <TableHead className="w-12 md:w-48" />
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -260,25 +277,25 @@ function AiModelsTable({
             const usage = usageByModelId.get(model.modelId)
 
             return (
-              // Nền xám cho model đã tắt: tín hiệu quét mạnh hơn cả badge.
               <TableRow
                 key={model.id}
                 className={model.isActive ? ROW_ACTIVE : ROW_INACTIVE}
               >
-                <TableCell className={cn(STICKY_CELL_LEFT, "align-top")}>
-                  <ModelIdentityCell model={model} />
+                <TableCell className="align-top">
+                  <ModelIdentityCell model={model} usage={usage} />
                 </TableCell>
-                <TableCell>
+                <TableCell className={HIDE_UNDER_MD}>
                   <StatusBadge meta={status} />
                 </TableCell>
-                <TableCell>
+                <TableCell className={HIDE_UNDER_MD}>
                   <ContextsCell model={model} />
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell className={cn(HIDE_UNDER_MD, "text-right")}>
                   <PriceCell model={model} />
                 </TableCell>
                 <TableCell
                   className={cn(
+                    HIDE_UNDER_MD,
                     "text-right text-xs tabular-nums",
                     usage === undefined
                       ? "text-muted-foreground"
@@ -287,7 +304,7 @@ function AiModelsTable({
                 >
                   {usage === undefined ? "-" : formatNumber(usage)}
                 </TableCell>
-                <TableCell className={cn(STICKY_CELL_RIGHT, "p-1 md:p-3")}>
+                <TableCell className="p-1 md:p-3">
                   <AiModelRowActions
                     model={model}
                     isSyncing={pendingId === model.id}
