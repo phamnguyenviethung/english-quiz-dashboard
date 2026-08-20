@@ -4,7 +4,7 @@ import { IconInfoCircle } from "@tabler/icons-react"
 import { QueryError } from "@/components/common/query-error.tsx"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { QUIZ_TYPES, getQuizTypeLabel } from "@/features/quiz/constants.ts"
-import { useTopics } from "@/features/topics/hooks/use-topics.ts"
+import { formatTopicLabel, useTopics } from "@/features/topics/hooks/use-topics.ts"
 
 import {
   useTenantQuizTypeGrants,
@@ -57,7 +57,7 @@ function TopicGrants({ tenant }: { tenant: Tenant }) {
     () =>
       topics.map((topic) => ({
         value: String(topic.id),
-        label: topic.displayName ?? topic.name,
+        label: formatTopicLabel(topic),
         hint: topic.name,
       })),
     [topics]

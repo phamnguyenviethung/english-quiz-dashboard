@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select"
 import { ENG_LEVELS } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
-import { useTopics } from "@/features/topics/hooks/use-topics.ts"
+import { formatTopicLabel, useTopics } from "@/features/topics/hooks/use-topics.ts"
 
 import {
   ACTIVE_VALUE,
@@ -116,7 +116,7 @@ export function ReadingsToolbar({
           <SelectItem value={ALL_VALUE}>Chủ đề: {ALL_LABEL}</SelectItem>
           {topics.map((topic) => (
             <SelectItem key={topic.id} value={String(topic.id)}>
-              {topic.displayName ?? topic.name}
+              {formatTopicLabel(topic)}
             </SelectItem>
           ))}
         </SelectContent>

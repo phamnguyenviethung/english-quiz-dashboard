@@ -30,7 +30,10 @@ import {
   QUIZ_TYPES,
 } from "@/features/quiz/constants.ts"
 import type { EngLevel, OptionCount, QuizType } from "@/features/quiz/types.ts"
-import { useTopicOptions } from "@/features/topics/hooks/use-topics.ts"
+import {
+  formatTopicLabel,
+  useTopicOptions,
+} from "@/features/topics/hooks/use-topics.ts"
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts"
 import { cn } from "@/lib/utils"
 
@@ -281,7 +284,7 @@ export function PoolQuestionsToolbar({
             </SelectItem>
             {topics.map((topic) => (
               <SelectItem key={topic.id} value={String(topic.id)}>
-                {topic.displayName ?? topic.name}
+                {formatTopicLabel(topic)}
               </SelectItem>
             ))}
           </SelectContent>

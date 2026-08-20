@@ -13,7 +13,7 @@ import {
   useComboboxAnchor,
 } from "@/components/ui/combobox"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useTopics } from "@/features/topics/hooks/use-topics.ts"
+import { formatTopicLabel, useTopics } from "@/features/topics/hooks/use-topics.ts"
 
 interface TopicOption {
   id: number
@@ -41,7 +41,7 @@ export function RefillTopicPicker({
     () =>
       topics.map((topic) => ({
         id: topic.id,
-        label: topic.displayName ?? topic.name,
+        label: formatTopicLabel(topic),
       })),
     [topics]
   )

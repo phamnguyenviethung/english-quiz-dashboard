@@ -19,7 +19,10 @@ import {
   formatOptionCountLabel,
 } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
-import { useTopicNameOptions } from "@/features/topics/hooks/use-topics.ts"
+import {
+  formatTopicLabel,
+  useTopicNameOptions,
+} from "@/features/topics/hooks/use-topics.ts"
 
 import {
   GENERATE_OPTION_COUNTS,
@@ -165,7 +168,7 @@ export function GenerateForm({
               <SelectItem value={NO_TOPIC_VALUE}>{NO_TOPIC_LABEL}</SelectItem>
               {topics.map((topic) => (
                 <SelectItem key={topic.id} value={topic.name}>
-                  {topic.displayName ?? topic.name}
+                  {formatTopicLabel(topic)}
                 </SelectItem>
               ))}
             </SelectContent>
