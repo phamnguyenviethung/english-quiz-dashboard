@@ -61,7 +61,7 @@ import { AiModelFormDialog } from "./ai-model-form-dialog.tsx"
 import { AiModelRowActions } from "./ai-model-row-actions.tsx"
 import { ModelCatalogDialog } from "./model-catalog-dialog.tsx"
 
-const COLUMN_COUNT = 7
+const COLUMN_COUNT = 6
 
 /**
  * Nền hàng phải đặc thì cột ghim (`bg-inherit`) mới che được nội dung cuộn phía
@@ -78,25 +78,44 @@ const SKELETON_COLUMN_CLASSES = [
   undefined,
   undefined,
   undefined,
-  undefined,
   cn(STICKY_CELL_RIGHT, "p-1 md:p-3"),
 ]
 
-function ModelIdCell({ modelId }: { modelId: string }) {
-  const { provider, name, suffix } = formatModelName(modelId)
+/**
+ * Key + Model ID gộp một cột, bề rộng cố định (w-40/w-56) để text dài không kéo
+ * bảng tràn ngang — mỗi dòng `truncate` trong bề rộng đó, xem đầy đủ qua tooltip.
+ */
+function ModelIdentityCell({ model }: { model: AiModel }) {
+  const { provider, name, suffix } = formatModelName(model.modelId)
 
   return (
-    <div className="flex flex-col gap-0.5 font-mono text-xs">
-      <span className="text-foreground">
-        {provider ? (
-          <span className="text-muted-foreground">{provider}/</span>
-        ) : null}
-        {name}
-        {suffix ? (
-          <span className="text-muted-foreground">:{suffix}</span>
-        ) : null}
-      </span>
-    </div>
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span
+              className={cn(
+                "truncate text-sm font-medium",
+                !model.isActive && "text-muted-foreground"
+              )}
+            >
+              {model.key}
+            </span>
+            <span className="truncate font-mono text-xs text-muted-foreground">
+              {provider ? `${provider}/` : ""}
+              {name}
+              {suffix ? `:${suffix}` : ""}
+            </span>
+          </div>
+        }
+      />
+      <TooltipContent className="max-w-xs">
+        <div className="flex flex-col gap-0.5 break-all">
+          <span className="font-medium">{model.key}</span>
+          <span className="font-mono">{model.modelId}</span>
+        </div>
+      </TooltipContent>
+    </Tooltip>
   )
 }
 
@@ -217,8 +236,9 @@ function AiModelsTable({
     <StickyTable>
       <TableHeader>
         <TableRow className="bg-card hover:bg-card">
-          <TableHead className={cn(STICKY_CELL_LEFT, "w-28")}>Key</TableHead>
-          <TableHead>Model ID</TableHead>
+          <TableHead className={cn(STICKY_CELL_LEFT, "w-40 sm:w-56")}>
+            Model
+          </TableHead>
           <TableHead className="w-32">Trạng thái</TableHead>
           <TableHead className="w-52">Ngữ cảnh</TableHead>
           <TableHead className="w-28 text-right">Giá /1M</TableHead>
@@ -245,22 +265,8 @@ function AiModelsTable({
                 key={model.id}
                 className={model.isActive ? ROW_ACTIVE : ROW_INACTIVE}
               >
-                {/*
-                  TableCell mặc định whitespace-nowrap nên key dài sẽ kéo cột ghim
-                  rộng ra và nuốt gần hết khung cuộn ở 375px. Cho xuống dòng ở
-                  mobile để cột giữ đúng w-28.
-                */}
-                <TableCell
-                  className={cn(
-                    STICKY_CELL_LEFT,
-                    "font-medium break-all whitespace-normal md:break-normal md:whitespace-nowrap",
-                    !model.isActive && "text-muted-foreground"
-                  )}
-                >
-                  {model.key}
-                </TableCell>
-                <TableCell>
-                  <ModelIdCell modelId={model.modelId} />
+                <TableCell className={cn(STICKY_CELL_LEFT, "align-top")}>
+                  <ModelIdentityCell model={model} />
                 </TableCell>
                 <TableCell>
                   <StatusBadge meta={status} />
