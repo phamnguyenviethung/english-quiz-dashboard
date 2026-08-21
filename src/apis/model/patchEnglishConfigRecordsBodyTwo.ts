@@ -5,12 +5,12 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchEnglishConfigRecordsBodyTwoChangesItem } from "./patchEnglishConfigRecordsBodyTwoChangesItem.ts"
+import type { PatchEnglishConfigRecordsBodyTwoChangesItem } from './patchEnglishConfigRecordsBodyTwoChangesItem.ts';
 
 export type PatchEnglishConfigRecordsBodyTwo = {
   /**
-   * Danh sách thay đổi, không được trùng recordKey.
-   * @minItems 1
-   */
-  changes: PatchEnglishConfigRecordsBodyTwoChangesItem[]
-}
+     * Danh sách thay đổi, không được trùng recordKey.
+     * @minItems 1
+     */
+  changes: PatchEnglishConfigRecordsBodyTwoChangesItem[];
+};

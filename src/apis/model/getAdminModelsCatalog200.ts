@@ -5,10 +5,10 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminModelsCatalog200DataItem } from "./getAdminModelsCatalog200DataItem.ts"
+import type { GetAdminModelsCatalog200DataItem } from './getAdminModelsCatalog200DataItem.ts';
 
 export type GetAdminModelsCatalog200 = {
-  success: true
-  data: GetAdminModelsCatalog200DataItem[]
-  total: number
-}
+  success: true;
+  data: GetAdminModelsCatalog200DataItem[];
+  total: number;
+};

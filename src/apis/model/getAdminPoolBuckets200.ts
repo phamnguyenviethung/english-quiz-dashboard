@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminPoolBuckets200Data } from "./getAdminPoolBuckets200Data.ts"
+import type { GetAdminPoolBuckets200Data } from './getAdminPoolBuckets200Data.ts';
 
 export type GetAdminPoolBuckets200 = {
-  success: true
-  data: GetAdminPoolBuckets200Data
-}
+  success: true;
+  data: GetAdminPoolBuckets200Data;
+};

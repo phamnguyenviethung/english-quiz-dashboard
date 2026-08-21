@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminTenantsByIdTopics404ErrorCode } from "./getAdminTenantsByIdTopics404ErrorCode.ts"
+import type { GetAdminTenantsByIdTopics404ErrorCode } from './getAdminTenantsByIdTopics404ErrorCode.ts';
 
 export type GetAdminTenantsByIdTopics404Error = {
-  code: GetAdminTenantsByIdTopics404ErrorCode
-  message: string
-}
+  code: GetAdminTenantsByIdTopics404ErrorCode;
+  message: string;
+};

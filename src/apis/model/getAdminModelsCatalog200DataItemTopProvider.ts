@@ -7,7 +7,7 @@
  */
 
 export type GetAdminModelsCatalog200DataItemTopProvider = {
-  contextLength: number | null
-  maxCompletionTokens: number | null
-  isModerated: boolean
-} | null
+  contextLength: number | null;
+  maxCompletionTokens: number | null;
+  isModerated: boolean;
+} | null;

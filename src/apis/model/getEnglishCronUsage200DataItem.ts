@@ -7,9 +7,9 @@
  */
 
 export type GetEnglishCronUsage200DataItem = {
-  bucket: string
-  costUsd: number
-  tokenIn: number
-  tokenOut: number
-  requestCount: number
-}
+  bucket: string;
+  costUsd: number;
+  tokenIn: number;
+  tokenOut: number;
+  requestCount: number;
+};

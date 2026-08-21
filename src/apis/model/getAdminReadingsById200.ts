@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingsById200Data } from "./getAdminReadingsById200Data.ts"
+import type { GetAdminReadingsById200Data } from './getAdminReadingsById200Data.ts';
 
 export type GetAdminReadingsById200 = {
-  success: true
-  data: GetAdminReadingsById200Data
-}
+  success: true;
+  data: GetAdminReadingsById200Data;
+};

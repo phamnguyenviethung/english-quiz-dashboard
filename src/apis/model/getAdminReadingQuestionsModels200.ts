@@ -5,10 +5,10 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingQuestionsModels200DataItem } from "./getAdminReadingQuestionsModels200DataItem.ts"
+import type { GetAdminReadingQuestionsModels200DataItem } from './getAdminReadingQuestionsModels200DataItem.ts';
 
 export type GetAdminReadingQuestionsModels200 = {
-  success: true
-  data: GetAdminReadingQuestionsModels200DataItem[]
-  total: number
-}
+  success: true;
+  data: GetAdminReadingQuestionsModels200DataItem[];
+  total: number;
+};

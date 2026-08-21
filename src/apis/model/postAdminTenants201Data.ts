@@ -7,12 +7,12 @@
  */
 
 export type PostAdminTenants201Data = {
-  id: number
-  name: string
-  description: string | null
-  isActive: boolean
-  allowAllTopics: boolean
-  allowAllQuizTypes: boolean
-  createdAt: string | number | null
-  updatedAt: string | number | null
-}
+  id: number;
+  name: string;
+  description: string | null;
+  isActive: boolean;
+  allowAllTopics: boolean;
+  allowAllQuizTypes: boolean;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+};

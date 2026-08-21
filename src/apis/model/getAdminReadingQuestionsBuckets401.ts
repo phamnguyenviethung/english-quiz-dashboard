@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingQuestionsBuckets401Error } from "./getAdminReadingQuestionsBuckets401Error.ts"
+import type { GetAdminReadingQuestionsBuckets401Error } from './getAdminReadingQuestionsBuckets401Error.ts';
 
 export type GetAdminReadingQuestionsBuckets401 = {
-  success: false
-  error: GetAdminReadingQuestionsBuckets401Error
-}
+  success: false;
+  error: GetAdminReadingQuestionsBuckets401Error;
+};

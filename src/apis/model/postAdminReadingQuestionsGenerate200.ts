@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingQuestionsGenerate200Data } from "./postAdminReadingQuestionsGenerate200Data.ts"
+import type { PostAdminReadingQuestionsGenerate200Data } from './postAdminReadingQuestionsGenerate200Data.ts';
 
 export type PostAdminReadingQuestionsGenerate200 = {
-  success: true
-  data: PostAdminReadingQuestionsGenerate200Data
-}
+  success: true;
+  data: PostAdminReadingQuestionsGenerate200Data;
+};

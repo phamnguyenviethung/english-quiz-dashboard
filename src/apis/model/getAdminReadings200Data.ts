@@ -5,14 +5,14 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadings200DataItemsItem } from "./getAdminReadings200DataItemsItem.ts"
+import type { GetAdminReadings200DataItemsItem } from './getAdminReadings200DataItemsItem.ts';
 
 export type GetAdminReadings200Data = {
-  items: GetAdminReadings200DataItemsItem[]
+  items: GetAdminReadings200DataItemsItem[];
   /** Trang hiện tại, 1-based. */
-  page: number
-  pageSize: number
+  page: number;
+  pageSize: number;
   /** Tổng số bài khớp filter, không phụ thuộc trang. */
-  total: number
-  totalPages: number
-}
+  total: number;
+  totalPages: number;
+};

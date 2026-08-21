@@ -6,12 +6,12 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminReadingsGenerateBodyTwoCefrLevel =
-  (typeof PostAdminReadingsGenerateBodyTwoCefrLevel)[keyof typeof PostAdminReadingsGenerateBodyTwoCefrLevel]
+export type PostAdminReadingsGenerateBodyTwoCefrLevel = typeof PostAdminReadingsGenerateBodyTwoCefrLevel[keyof typeof PostAdminReadingsGenerateBodyTwoCefrLevel];
+
 
 export const PostAdminReadingsGenerateBodyTwoCefrLevel = {
-  A1: "A1",
-  A2: "A2",
-  B1: "B1",
-  B2: "B2",
-} as const
+  A1: 'A1',
+  A2: 'A2',
+  B1: 'B1',
+  B2: 'B2',
+} as const;

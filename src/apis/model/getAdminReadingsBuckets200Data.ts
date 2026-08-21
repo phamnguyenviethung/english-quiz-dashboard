@@ -5,10 +5,10 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingsBuckets200DataBucketsItem } from "./getAdminReadingsBuckets200DataBucketsItem.ts"
-import type { GetAdminReadingsBuckets200DataSummary } from "./getAdminReadingsBuckets200DataSummary.ts"
+import type { GetAdminReadingsBuckets200DataBucketsItem } from './getAdminReadingsBuckets200DataBucketsItem.ts';
+import type { GetAdminReadingsBuckets200DataSummary } from './getAdminReadingsBuckets200DataSummary.ts';
 
 export type GetAdminReadingsBuckets200Data = {
-  buckets: GetAdminReadingsBuckets200DataBucketsItem[]
-  summary: GetAdminReadingsBuckets200DataSummary
-}
+  buckets: GetAdminReadingsBuckets200DataBucketsItem[];
+  summary: GetAdminReadingsBuckets200DataSummary;
+};

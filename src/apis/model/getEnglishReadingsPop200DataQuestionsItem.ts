@@ -7,25 +7,25 @@
  */
 
 export type GetEnglishReadingsPop200DataQuestionsItem = {
-  id: number
+  id: number;
   /** Bài đọc mà câu hỏi này thuộc về. */
-  passageRefId: number
+  passageRefId: number;
   /** detail / inference / vocabulary_context / ... (theo CEFR level). */
-  quizType: string
-  question: string
+  quizType: string;
+  question: string;
   /** Đúng 4 đáp án. */
-  options: string[]
+  options: string[];
   /** Index 0-based vào options. */
-  correctAnswer: number
+  correctAnswer: number;
   /** Một câu tiếng Việt, trỏ tới đoạn chứa evidence. */
-  explanation: string
-  cefrLevel: string
-  topicId: number | null
-  topicName: string | null
-  model: string
-  tokenIn: number
-  tokenOut: number
-  isActive: boolean
-  createdAt: string | number | null
-  updatedAt: string | number | null
-}
+  explanation: string;
+  cefrLevel: string;
+  topicId: number | null;
+  topicName: string | null;
+  model: string;
+  tokenIn: number;
+  tokenOut: number;
+  isActive: boolean;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+};

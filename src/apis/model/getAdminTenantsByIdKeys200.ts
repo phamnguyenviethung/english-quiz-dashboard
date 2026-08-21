@@ -5,10 +5,10 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminTenantsByIdKeys200DataItem } from "./getAdminTenantsByIdKeys200DataItem.ts"
+import type { GetAdminTenantsByIdKeys200DataItem } from './getAdminTenantsByIdKeys200DataItem.ts';
 
 export type GetAdminTenantsByIdKeys200 = {
-  success: true
-  data: GetAdminTenantsByIdKeys200DataItem[]
-  total: number
-}
+  success: true;
+  data: GetAdminTenantsByIdKeys200DataItem[];
+  total: number;
+};

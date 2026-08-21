@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingsById404ErrorCode } from "./getAdminReadingsById404ErrorCode.ts"
+import type { GetAdminReadingsById404ErrorCode } from './getAdminReadingsById404ErrorCode.ts';
 
 export type GetAdminReadingsById404Error = {
-  code: GetAdminReadingsById404ErrorCode
-  message: string
-}
+  code: GetAdminReadingsById404ErrorCode;
+  message: string;
+};

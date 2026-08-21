@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishReadingsPop500ErrorCode } from "./getEnglishReadingsPop500ErrorCode.ts"
+import type { GetEnglishReadingsPop500ErrorCode } from './getEnglishReadingsPop500ErrorCode.ts';
 
 export type GetEnglishReadingsPop500Error = {
-  code: GetEnglishReadingsPop500ErrorCode
-  message: string
-}
+  code: GetEnglishReadingsPop500ErrorCode;
+  message: string;
+};

@@ -7,7 +7,7 @@
  */
 
 export type PatchEnglishConfigRecordsBodyThreeChangesItem = {
-  recordKey: string
+  recordKey: string;
   /** Shape phụ thuộc recordType của recordKey tương ứng. */
-  value: unknown
-}
+  value: unknown;
+};

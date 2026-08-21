@@ -6,6 +6,4 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminModels201DataOpenrouterMeta = {
-  [key: string]: unknown
-} | null
+export type PostAdminModels201DataOpenrouterMeta = { [key: string]: unknown } | null;

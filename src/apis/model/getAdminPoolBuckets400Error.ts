@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminPoolBuckets400ErrorCode } from "./getAdminPoolBuckets400ErrorCode.ts"
+import type { GetAdminPoolBuckets400ErrorCode } from './getAdminPoolBuckets400ErrorCode.ts';
 
 export type GetAdminPoolBuckets400Error = {
-  code: GetAdminPoolBuckets400ErrorCode
-  message: string
-}
+  code: GetAdminPoolBuckets400ErrorCode;
+  message: string;
+};

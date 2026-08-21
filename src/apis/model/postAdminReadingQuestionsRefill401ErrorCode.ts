@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminReadingQuestionsRefill401ErrorCode =
-  (typeof PostAdminReadingQuestionsRefill401ErrorCode)[keyof typeof PostAdminReadingQuestionsRefill401ErrorCode]
+export type PostAdminReadingQuestionsRefill401ErrorCode = typeof PostAdminReadingQuestionsRefill401ErrorCode[keyof typeof PostAdminReadingQuestionsRefill401ErrorCode];
+
 
 export const PostAdminReadingQuestionsRefill401ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

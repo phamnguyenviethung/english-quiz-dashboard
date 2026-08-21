@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingQuestionsRefill401Error } from "./postAdminReadingQuestionsRefill401Error.ts"
+import type { PostAdminReadingQuestionsRefill401Error } from './postAdminReadingQuestionsRefill401Error.ts';
 
 export type PostAdminReadingQuestionsRefill401 = {
-  success: false
-  error: PostAdminReadingQuestionsRefill401Error
-}
+  success: false;
+  error: PostAdminReadingQuestionsRefill401Error;
+};

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchEnglishConfigRecords400Error } from "./patchEnglishConfigRecords400Error.ts"
+import type { PatchEnglishConfigRecords400Error } from './patchEnglishConfigRecords400Error.ts';
 
 export type PatchEnglishConfigRecords400 = {
-  success: false
-  error: PatchEnglishConfigRecords400Error
-}
+  success: false;
+  error: PatchEnglishConfigRecords400Error;
+};

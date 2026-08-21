@@ -1,6 +1,6 @@
 import type { EngLevel } from "@/features/quiz/types.ts"
 
-import type { ReadingQuestionRefillScope } from "./types.ts"
+import type { ReadingQuestionRefillMode } from "./types.ts"
 
 /**
  * 19 quiz type của câu hỏi đọc hiểu. API trả `quizType` dạng `string` (response
@@ -145,8 +145,8 @@ export const READING_QUESTION_STATUS_META = {
   [INACTIVE_VALUE]: { label: "Đã tắt" },
 } as const
 
-export const READING_QUESTION_REFILL_SCOPE_META: Record<
-  ReadingQuestionRefillScope,
+export const READING_QUESTION_REFILL_MODE_META: Record<
+  ReadingQuestionRefillMode,
   { label: string; description: string }
 > = {
   deficient: {

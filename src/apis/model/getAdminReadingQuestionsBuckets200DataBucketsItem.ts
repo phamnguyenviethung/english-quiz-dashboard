@@ -8,16 +8,16 @@
 
 export type GetAdminReadingQuestionsBuckets200DataBucketsItem = {
   /** `rq:{passageId}` — bucket của pipeline này là 1 bài đọc. */
-  bucketKey: string
-  passageId: number
-  title: string
-  cefrLevel: string
-  topicId: number | null
-  topicName: string | null
+  bucketKey: string;
+  passageId: number;
+  title: string;
+  cefrLevel: string;
+  topicId: number | null;
+  topicName: string | null;
   /** Số câu đang active của bài này. */
-  currentCount: number
+  currentCount: number;
   /** reading_question.questionsPerPassage - currentCount. */
-  deficiency: number
-  /** Số câu sẽ sinh cho bài này. 0 = bị scope bỏ qua. */
-  plannedCount: number
-}
+  deficiency: number;
+  /** Số câu sẽ sinh cho bài này. 0 = bị mode bỏ qua. */
+  plannedCount: number;
+};

@@ -5,12 +5,12 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingQuestionsGenerate200DataPassage } from "./postAdminReadingQuestionsGenerate200DataPassage.ts"
-import type { PostAdminReadingQuestionsGenerate200DataQuestionsItem } from "./postAdminReadingQuestionsGenerate200DataQuestionsItem.ts"
-import type { PostAdminReadingQuestionsGenerate200DataUsage } from "./postAdminReadingQuestionsGenerate200DataUsage.ts"
+import type { PostAdminReadingQuestionsGenerate200DataPassage } from './postAdminReadingQuestionsGenerate200DataPassage.ts';
+import type { PostAdminReadingQuestionsGenerate200DataQuestionsItem } from './postAdminReadingQuestionsGenerate200DataQuestionsItem.ts';
+import type { PostAdminReadingQuestionsGenerate200DataUsage } from './postAdminReadingQuestionsGenerate200DataUsage.ts';
 
 export type PostAdminReadingQuestionsGenerate200Data = {
-  passage: PostAdminReadingQuestionsGenerate200DataPassage
-  questions: PostAdminReadingQuestionsGenerate200DataQuestionsItem[]
-  usage?: PostAdminReadingQuestionsGenerate200DataUsage
-}
+  passage: PostAdminReadingQuestionsGenerate200DataPassage;
+  questions: PostAdminReadingQuestionsGenerate200DataQuestionsItem[];
+  usage?: PostAdminReadingQuestionsGenerate200DataUsage;
+};

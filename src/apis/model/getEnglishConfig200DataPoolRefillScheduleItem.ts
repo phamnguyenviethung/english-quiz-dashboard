@@ -8,7 +8,7 @@
 
 export type GetEnglishConfig200DataPoolRefillScheduleItem = {
   /** @minLength 1 */
-  name: string
+  name: string;
   /** @minLength 1 */
-  cron: string
-}
+  cron: string;
+};

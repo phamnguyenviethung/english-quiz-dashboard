@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetAdminPoolBucketsScope =
-  (typeof GetAdminPoolBucketsScope)[keyof typeof GetAdminPoolBucketsScope]
+export type GetAdminPoolBucketsScope = typeof GetAdminPoolBucketsScope[keyof typeof GetAdminPoolBucketsScope];
+
 
 export const GetAdminPoolBucketsScope = {
-  all: "all",
-  deficient: "deficient",
-} as const
+  all: 'all',
+  deficient: 'deficient',
+} as const;

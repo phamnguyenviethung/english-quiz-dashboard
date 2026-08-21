@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { DeleteAdminTenantsByIdKeysByApiKeyId500ErrorCode } from "./deleteAdminTenantsByIdKeysByApiKeyId500ErrorCode.ts"
+import type { DeleteAdminTenantsByIdKeysByApiKeyId500ErrorCode } from './deleteAdminTenantsByIdKeysByApiKeyId500ErrorCode.ts';
 
 export type DeleteAdminTenantsByIdKeysByApiKeyId500Error = {
-  code: DeleteAdminTenantsByIdKeysByApiKeyId500ErrorCode
-  message: string
-}
+  code: DeleteAdminTenantsByIdKeysByApiKeyId500ErrorCode;
+  message: string;
+};

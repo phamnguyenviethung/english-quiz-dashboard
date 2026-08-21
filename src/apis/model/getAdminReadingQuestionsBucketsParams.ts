@@ -5,20 +5,20 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingQuestionsBucketsScope } from "./getAdminReadingQuestionsBucketsScope.ts"
+import type { GetAdminReadingQuestionsBucketsMode } from './getAdminReadingQuestionsBucketsMode.ts';
 
 export type GetAdminReadingQuestionsBucketsParams = {
-  /**
-   * CSV, vd `A1,B2`.
-   */
-  cefrLevels?: string
-  /**
-   * CSV topic id, vd `3,7,12`.
-   */
-  topicIds?: string
-  /**
-   * CSV passage id — chốt đúng vài bài cụ thể.
-   */
-  passageIds?: string
-  scope?: GetAdminReadingQuestionsBucketsScope
-}
+/**
+ * CSV, vd `A1,B2`.
+ */
+cefrLevels?: string;
+/**
+ * CSV topic id, vd `3,7,12`.
+ */
+topicIds?: string;
+/**
+ * CSV passage id — chốt đúng vài bài cụ thể.
+ */
+passageIds?: string;
+mode?: GetAdminReadingQuestionsBucketsMode;
+};

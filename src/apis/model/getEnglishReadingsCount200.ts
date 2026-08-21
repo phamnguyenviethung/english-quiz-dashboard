@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishReadingsCount200Data } from "./getEnglishReadingsCount200Data.ts"
+import type { GetEnglishReadingsCount200Data } from './getEnglishReadingsCount200Data.ts';
 
 export type GetEnglishReadingsCount200 = {
-  success: true
-  data: GetEnglishReadingsCount200Data
-}
+  success: true;
+  data: GetEnglishReadingsCount200Data;
+};

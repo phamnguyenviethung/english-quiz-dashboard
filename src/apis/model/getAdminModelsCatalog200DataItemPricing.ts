@@ -7,8 +7,8 @@
  */
 
 export type GetAdminModelsCatalog200DataItemPricing = {
-  prompt: number | null
-  completion: number | null
-  request: number | null
-  image: number | null
-}
+  prompt: number | null;
+  completion: number | null;
+  request: number | null;
+  image: number | null;
+};

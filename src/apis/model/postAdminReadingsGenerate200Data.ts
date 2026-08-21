@@ -5,10 +5,10 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingsGenerate200DataPassage } from "./postAdminReadingsGenerate200DataPassage.ts"
-import type { PostAdminReadingsGenerate200DataUsage } from "./postAdminReadingsGenerate200DataUsage.ts"
+import type { PostAdminReadingsGenerate200DataPassage } from './postAdminReadingsGenerate200DataPassage.ts';
+import type { PostAdminReadingsGenerate200DataUsage } from './postAdminReadingsGenerate200DataUsage.ts';
 
 export type PostAdminReadingsGenerate200Data = {
-  passage: PostAdminReadingsGenerate200DataPassage
-  usage?: PostAdminReadingsGenerate200DataUsage
-}
+  passage: PostAdminReadingsGenerate200DataPassage;
+  usage?: PostAdminReadingsGenerate200DataUsage;
+};

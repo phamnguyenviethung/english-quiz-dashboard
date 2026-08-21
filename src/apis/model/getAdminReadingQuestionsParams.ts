@@ -5,41 +5,41 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingQuestionsCefrLevel } from "./getAdminReadingQuestionsCefrLevel.ts"
-import type { GetAdminReadingQuestionsSort } from "./getAdminReadingQuestionsSort.ts"
+import type { GetAdminReadingQuestionsCefrLevel } from './getAdminReadingQuestionsCefrLevel.ts';
+import type { GetAdminReadingQuestionsSort } from './getAdminReadingQuestionsSort.ts';
 
 export type GetAdminReadingQuestionsParams = {
-  /**
-   * Chỉ lấy câu hỏi của 1 bài đọc.
-   */
-  passageId?: string | number
-  cefrLevel?: GetAdminReadingQuestionsCefrLevel
-  topicId?: string | number
-  /**
-   * true = chỉ câu không gắn topic. Thắng `topicId`.
-   */
-  withoutTopic?: boolean | string
-  /**
-   * detail / inference / vocabulary_context / ...
-   */
-  quizType?: string
-  model?: string
-  isActive?: boolean | string
-  createdFrom?: string
-  createdTo?: string
-  /**
-   * ILIKE trên question, options, explanation, model.
-   * @maxLength 100
-   */
-  q?: string
-  sort?: GetAdminReadingQuestionsSort
-  /**
-   * @minimum 1
-   */
-  page?: string | number
-  /**
-   * @minimum 1
-   * @maximum 100
-   */
-  pageSize?: string | number
-}
+/**
+ * Chỉ lấy câu hỏi của 1 bài đọc.
+ */
+passageId?: string | number;
+cefrLevel?: GetAdminReadingQuestionsCefrLevel;
+topicId?: string | number;
+/**
+ * true = chỉ câu không gắn topic. Thắng `topicId`.
+ */
+withoutTopic?: boolean | string;
+/**
+ * detail / inference / vocabulary_context / ...
+ */
+quizType?: string;
+model?: string;
+isActive?: boolean | string;
+createdFrom?: string;
+createdTo?: string;
+/**
+ * ILIKE trên question, options, explanation, model.
+ * @maxLength 100
+ */
+q?: string;
+sort?: GetAdminReadingQuestionsSort;
+/**
+ * @minimum 1
+ */
+page?: string | number;
+/**
+ * @minimum 1
+ * @maximum 100
+ */
+pageSize?: string | number;
+};

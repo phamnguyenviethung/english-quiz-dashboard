@@ -5,28 +5,28 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminModelsByIdSync200DataManualProvider } from "./postAdminModelsByIdSync200DataManualProvider.ts"
-import type { PostAdminModelsByIdSync200DataOpenrouterMeta } from "./postAdminModelsByIdSync200DataOpenrouterMeta.ts"
-import type { PostAdminModelsByIdSync200DataPricingRaw } from "./postAdminModelsByIdSync200DataPricingRaw.ts"
-import type { PostAdminModelsByIdSync200DataReadingProvider } from "./postAdminModelsByIdSync200DataReadingProvider.ts"
-import type { PostAdminModelsByIdSync200DataScheduleProvider } from "./postAdminModelsByIdSync200DataScheduleProvider.ts"
+import type { PostAdminModelsByIdSync200DataManualProvider } from './postAdminModelsByIdSync200DataManualProvider.ts';
+import type { PostAdminModelsByIdSync200DataOpenrouterMeta } from './postAdminModelsByIdSync200DataOpenrouterMeta.ts';
+import type { PostAdminModelsByIdSync200DataPricingRaw } from './postAdminModelsByIdSync200DataPricingRaw.ts';
+import type { PostAdminModelsByIdSync200DataReadingProvider } from './postAdminModelsByIdSync200DataReadingProvider.ts';
+import type { PostAdminModelsByIdSync200DataScheduleProvider } from './postAdminModelsByIdSync200DataScheduleProvider.ts';
 
 export type PostAdminModelsByIdSync200Data = {
-  id: number
-  key: string
-  modelId: string
-  isActive: boolean
-  scheduleEnabled: boolean
-  manualEnabled: boolean
-  readingEnabled: boolean
-  scheduleProvider: PostAdminModelsByIdSync200DataScheduleProvider
-  manualProvider: PostAdminModelsByIdSync200DataManualProvider
-  readingProvider?: PostAdminModelsByIdSync200DataReadingProvider
-  pricePromptPerToken: number | null
-  priceCompletionPerToken: number | null
-  pricingRaw: PostAdminModelsByIdSync200DataPricingRaw
-  openrouterMeta: PostAdminModelsByIdSync200DataOpenrouterMeta
-  pricingSyncedAt: string | number | null
-  createdAt: string | number | null
-  updatedAt: string | number | null
-}
+  id: number;
+  key: string;
+  modelId: string;
+  isActive: boolean;
+  scheduleEnabled: boolean;
+  manualEnabled: boolean;
+  readingEnabled: boolean;
+  scheduleProvider: PostAdminModelsByIdSync200DataScheduleProvider;
+  manualProvider: PostAdminModelsByIdSync200DataManualProvider;
+  readingProvider?: PostAdminModelsByIdSync200DataReadingProvider;
+  pricePromptPerToken: number | null;
+  priceCompletionPerToken: number | null;
+  pricingRaw: PostAdminModelsByIdSync200DataPricingRaw;
+  openrouterMeta: PostAdminModelsByIdSync200DataOpenrouterMeta;
+  pricingSyncedAt: string | number | null;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+};

@@ -5,14 +5,14 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingQuestions200DataItemsItem } from "./getAdminReadingQuestions200DataItemsItem.ts"
+import type { GetAdminReadingQuestions200DataItemsItem } from './getAdminReadingQuestions200DataItemsItem.ts';
 
 export type GetAdminReadingQuestions200Data = {
-  items: GetAdminReadingQuestions200DataItemsItem[]
+  items: GetAdminReadingQuestions200DataItemsItem[];
   /** Trang hiện tại, 1-based. */
-  page: number
-  pageSize: number
+  page: number;
+  pageSize: number;
   /** Tổng số câu khớp filter, không phụ thuộc trang. */
-  total: number
-  totalPages: number
-}
+  total: number;
+  totalPages: number;
+};

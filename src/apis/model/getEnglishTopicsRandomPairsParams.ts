@@ -7,8 +7,8 @@
  */
 
 export type GetEnglishTopicsRandomPairsParams = {
-  /**
-   * @minimum 1
-   */
-  pairCount?: string | number
-}
+/**
+ * @minimum 1
+ */
+pairCount?: string | number;
+};

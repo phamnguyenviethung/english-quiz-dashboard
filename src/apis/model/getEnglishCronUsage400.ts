@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishCronUsage400Error } from "./getEnglishCronUsage400Error.ts"
+import type { GetEnglishCronUsage400Error } from './getEnglishCronUsage400Error.ts';
 
 export type GetEnglishCronUsage400 = {
-  success: false
-  error: GetEnglishCronUsage400Error
-}
+  success: false;
+  error: GetEnglishCronUsage400Error;
+};

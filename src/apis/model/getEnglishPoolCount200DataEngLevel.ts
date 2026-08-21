@@ -6,12 +6,12 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishPoolCount200DataEngLevel =
-  (typeof GetEnglishPoolCount200DataEngLevel)[keyof typeof GetEnglishPoolCount200DataEngLevel]
+export type GetEnglishPoolCount200DataEngLevel = typeof GetEnglishPoolCount200DataEngLevel[keyof typeof GetEnglishPoolCount200DataEngLevel];
+
 
 export const GetEnglishPoolCount200DataEngLevel = {
-  A1: "A1",
-  A2: "A2",
-  B1: "B1",
-  B2: "B2",
-} as const
+  A1: 'A1',
+  A2: 'A2',
+  B1: 'B1',
+  B2: 'B2',
+} as const;

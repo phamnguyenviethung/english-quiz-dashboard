@@ -5,13 +5,13 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolPopEngLevel } from "./getEnglishPoolPopEngLevel.ts"
+import type { GetEnglishPoolPopEngLevel } from './getEnglishPoolPopEngLevel.ts';
 
 export type GetEnglishPoolPopParams = {
-  engLevel: GetEnglishPoolPopEngLevel
-  topicId?: string | number
-  /**
-   * CSV id câu hỏi cần loại, vd "12,88,301". Tối đa 200 id (dư bị cắt), phần tử không phải số nguyên dương bị bỏ qua. Dùng để client tự chống lặp câu theo từng end-user.
-   */
-  excludeIds?: string
-}
+engLevel: GetEnglishPoolPopEngLevel;
+topicId?: string | number;
+/**
+ * CSV id câu hỏi cần loại, vd "12,88,301". Tối đa 200 id (dư bị cắt), phần tử không phải số nguyên dương bị bỏ qua. Dùng để client tự chống lặp câu theo từng end-user.
+ */
+excludeIds?: string;
+};

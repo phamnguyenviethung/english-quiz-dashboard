@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { DeleteAdminReadingQuestionsById200Data } from "./deleteAdminReadingQuestionsById200Data.ts"
+import type { DeleteAdminReadingQuestionsById200Data } from './deleteAdminReadingQuestionsById200Data.ts';
 
 export type DeleteAdminReadingQuestionsById200 = {
-  success: true
-  data: DeleteAdminReadingQuestionsById200Data
-}
+  success: true;
+  data: DeleteAdminReadingQuestionsById200Data;
+};

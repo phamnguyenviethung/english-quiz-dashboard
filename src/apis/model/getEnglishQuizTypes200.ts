@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishQuizTypes200DataItem } from "./getEnglishQuizTypes200DataItem.ts"
+import type { GetEnglishQuizTypes200DataItem } from './getEnglishQuizTypes200DataItem.ts';
 
 export type GetEnglishQuizTypes200 = {
-  success: true
-  data: GetEnglishQuizTypes200DataItem[]
-}
+  success: true;
+  data: GetEnglishQuizTypes200DataItem[];
+};

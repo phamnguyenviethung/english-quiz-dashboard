@@ -7,11 +7,11 @@
  */
 
 export type GetEnglishReadingsPop200DataPassage = {
-  id: number
-  title: string
-  paragraphs: string[]
-  wordCount: number
-  cefrLevel: string
-  topicId: number | null
-  topicName: string | null
-}
+  id: number;
+  title: string;
+  paragraphs: string[];
+  wordCount: number;
+  cefrLevel: string;
+  topicId: number | null;
+  topicName: string | null;
+};

@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetAdminReadingsBucketsScope =
-  (typeof GetAdminReadingsBucketsScope)[keyof typeof GetAdminReadingsBucketsScope]
+export type GetAdminReadingsBucketsScope = typeof GetAdminReadingsBucketsScope[keyof typeof GetAdminReadingsBucketsScope];
+
 
 export const GetAdminReadingsBucketsScope = {
-  all: "all",
-  deficient: "deficient",
-} as const
+  all: 'all',
+  deficient: 'deficient',
+} as const;

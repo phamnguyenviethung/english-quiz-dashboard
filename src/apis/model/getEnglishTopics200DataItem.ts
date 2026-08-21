@@ -7,11 +7,11 @@
  */
 
 export type GetEnglishTopics200DataItem = {
-  id: number
-  name: string
-  displayName: string | null
-  description: string | null
-  isActive: boolean
-  createdAt: string | number | null
-  updatedAt: string | number | null
-}
+  id: number;
+  name: string;
+  displayName: string | null;
+  description: string | null;
+  isActive: boolean;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+};

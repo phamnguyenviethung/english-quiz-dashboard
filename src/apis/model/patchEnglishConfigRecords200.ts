@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchEnglishConfigRecords200DataItem } from "./patchEnglishConfigRecords200DataItem.ts"
+import type { PatchEnglishConfigRecords200DataItem } from './patchEnglishConfigRecords200DataItem.ts';
 
 export type PatchEnglishConfigRecords200 = {
-  success: true
-  data: PatchEnglishConfigRecords200DataItem[]
-}
+  success: true;
+  data: PatchEnglishConfigRecords200DataItem[];
+};

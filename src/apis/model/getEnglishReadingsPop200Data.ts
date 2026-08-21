@@ -5,10 +5,10 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishReadingsPop200DataPassage } from "./getEnglishReadingsPop200DataPassage.ts"
-import type { GetEnglishReadingsPop200DataQuestionsItem } from "./getEnglishReadingsPop200DataQuestionsItem.ts"
+import type { GetEnglishReadingsPop200DataPassage } from './getEnglishReadingsPop200DataPassage.ts';
+import type { GetEnglishReadingsPop200DataQuestionsItem } from './getEnglishReadingsPop200DataQuestionsItem.ts';
 
 export type GetEnglishReadingsPop200Data = {
-  passage: GetEnglishReadingsPop200DataPassage
-  questions: GetEnglishReadingsPop200DataQuestionsItem[]
-}
+  passage: GetEnglishReadingsPop200DataPassage;
+  questions: GetEnglishReadingsPop200DataQuestionsItem[];
+};

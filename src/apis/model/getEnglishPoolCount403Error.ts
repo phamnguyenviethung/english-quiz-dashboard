@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolCount403ErrorCode } from "./getEnglishPoolCount403ErrorCode.ts"
+import type { GetEnglishPoolCount403ErrorCode } from './getEnglishPoolCount403ErrorCode.ts';
 
 export type GetEnglishPoolCount403Error = {
-  code: GetEnglishPoolCount403ErrorCode
-  message: string
-}
+  code: GetEnglishPoolCount403ErrorCode;
+  message: string;
+};

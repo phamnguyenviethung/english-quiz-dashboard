@@ -5,35 +5,25 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminModelsByIdBodyOneReadingProviderMaxPrice } from "./patchAdminModelsByIdBodyOneReadingProviderMaxPrice.ts"
+import type { PatchAdminModelsByIdBodyOneReadingProviderMaxPrice } from './patchAdminModelsByIdBodyOneReadingProviderMaxPrice.ts';
 
 /**
  * Replace toàn bộ (không merge). Gửi `null` để xoá cấu hình reading provider của model.
  */
 export type PatchAdminModelsByIdBodyOneReadingProvider = {
   /** Thứ tự ưu tiên provider slug, vd ["google-vertex"]. */
-  order?: string[]
+  order?: string[];
   /** false = chỉ dùng provider trong order, lỗi thì fail luôn. */
-  allowFallbacks?: boolean
-  requireParameters?: boolean
-  dataCollection?: "allow" | "deny"
-  ignore?: string[]
-  only?: string[]
-  quantizations?: (
-    | "int4"
-    | "int8"
-    | "fp4"
-    | "fp6"
-    | "fp8"
-    | "fp16"
-    | "bf16"
-    | "fp32"
-    | "unknown"
-  )[]
+  allowFallbacks?: boolean;
+  requireParameters?: boolean;
+  dataCollection?: 'allow' | 'deny';
+  ignore?: string[];
+  only?: string[];
+  quantizations?: ('int4' | 'int8' | 'fp4' | 'fp6' | 'fp8' | 'fp16' | 'bf16' | 'fp32' | 'unknown')[];
   /** Chiến lược sort khi không set order, vd "price" | "throughput". */
-  sort?: string
+  sort?: string;
   /** Trần giá USD trên 1 triệu token. */
-  maxPrice?: PatchAdminModelsByIdBodyOneReadingProviderMaxPrice
+  maxPrice?: PatchAdminModelsByIdBodyOneReadingProviderMaxPrice;
   /** true = chỉ dùng endpoint Zero Data Retention. */
-  zdr?: boolean
-} | null
+  zdr?: boolean;
+} | null;

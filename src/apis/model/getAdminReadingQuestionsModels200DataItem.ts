@@ -7,7 +7,7 @@
  */
 
 export type GetAdminReadingQuestionsModels200DataItem = {
-  model: string
+  model: string;
   /** Số câu hỏi trong kho được sinh bởi model này. */
-  count: number
-}
+  count: number;
+};

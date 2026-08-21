@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishReadingsPop400Error } from "./getEnglishReadingsPop400Error.ts"
+import type { GetEnglishReadingsPop400Error } from './getEnglishReadingsPop400Error.ts';
 
 export type GetEnglishReadingsPop400 = {
-  success: false
-  error: GetEnglishReadingsPop400Error
-}
+  success: false;
+  error: GetEnglishReadingsPop400Error;
+};

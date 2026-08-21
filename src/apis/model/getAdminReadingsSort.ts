@@ -6,14 +6,14 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetAdminReadingsSort =
-  (typeof GetAdminReadingsSort)[keyof typeof GetAdminReadingsSort]
+export type GetAdminReadingsSort = typeof GetAdminReadingsSort[keyof typeof GetAdminReadingsSort];
+
 
 export const GetAdminReadingsSort = {
-  id_asc: "id_asc",
-  id_desc: "id_desc",
-  created_asc: "created_asc",
-  created_desc: "created_desc",
-  words_asc: "words_asc",
-  words_desc: "words_desc",
-} as const
+  id_asc: 'id_asc',
+  id_desc: 'id_desc',
+  created_asc: 'created_asc',
+  created_desc: 'created_desc',
+  words_asc: 'words_asc',
+  words_desc: 'words_desc',
+} as const;

@@ -5,15 +5,15 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingsGenerateBodyOneCefrLevel } from "./postAdminReadingsGenerateBodyOneCefrLevel.ts"
+import type { PostAdminReadingsGenerateBodyOneCefrLevel } from './postAdminReadingsGenerateBodyOneCefrLevel.ts';
 
 export type PostAdminReadingsGenerateBodyOne = {
   /**
-   * Chủ đề bài đọc, đưa thẳng vào TOPIC LOCK của prompt.
-   * @minLength 1
-   */
-  topicName: string
-  cefrLevel: PostAdminReadingsGenerateBodyOneCefrLevel
+     * Chủ đề bài đọc, đưa thẳng vào TOPIC LOCK của prompt.
+     * @minLength 1
+     */
+  topicName: string;
+  cefrLevel: PostAdminReadingsGenerateBodyOneCefrLevel;
   /** OpenRouter model id. Bỏ trống → random trong pool `readingEnabled`. */
-  model?: string
-}
+  model?: string;
+};

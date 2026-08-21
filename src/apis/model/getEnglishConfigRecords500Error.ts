@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishConfigRecords500ErrorCode } from "./getEnglishConfigRecords500ErrorCode.ts"
+import type { GetEnglishConfigRecords500ErrorCode } from './getEnglishConfigRecords500ErrorCode.ts';
 
 export type GetEnglishConfigRecords500Error = {
-  code: GetEnglishConfigRecords500ErrorCode
-  message: string
-}
+  code: GetEnglishConfigRecords500ErrorCode;
+  message: string;
+};

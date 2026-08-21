@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetAdminReadingQuestionsBuckets500ErrorCode =
-  (typeof GetAdminReadingQuestionsBuckets500ErrorCode)[keyof typeof GetAdminReadingQuestionsBuckets500ErrorCode]
+export type GetAdminReadingQuestionsBuckets500ErrorCode = typeof GetAdminReadingQuestionsBuckets500ErrorCode[keyof typeof GetAdminReadingQuestionsBuckets500ErrorCode];
+
 
 export const GetAdminReadingQuestionsBuckets500ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

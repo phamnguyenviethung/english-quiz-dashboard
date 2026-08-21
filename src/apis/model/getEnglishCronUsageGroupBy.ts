@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishCronUsageGroupBy =
-  (typeof GetEnglishCronUsageGroupBy)[keyof typeof GetEnglishCronUsageGroupBy]
+export type GetEnglishCronUsageGroupBy = typeof GetEnglishCronUsageGroupBy[keyof typeof GetEnglishCronUsageGroupBy];
+
 
 export const GetEnglishCronUsageGroupBy = {
-  day: "day",
-  model: "model",
-} as const
+  day: 'day',
+  model: 'model',
+} as const;

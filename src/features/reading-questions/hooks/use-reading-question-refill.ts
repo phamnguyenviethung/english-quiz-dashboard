@@ -39,7 +39,7 @@ export function useReadingQuestionRefill({
     mutation.mutate(
       {
         data: {
-          scope: input.scope,
+          mode: input.mode,
           ...(input.models.length > 0 ? { models: input.models } : {}),
           ...(filter ? { filter } : {}),
           ...(input.bucketKeys ? { bucketKeys: input.bucketKeys } : {}),

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishCronUsage403ErrorCode } from "./getEnglishCronUsage403ErrorCode.ts"
+import type { GetEnglishCronUsage403ErrorCode } from './getEnglishCronUsage403ErrorCode.ts';
 
 export type GetEnglishCronUsage403Error = {
-  code: GetEnglishCronUsage403ErrorCode
-  message: string
-}
+  code: GetEnglishCronUsage403ErrorCode;
+  message: string;
+};

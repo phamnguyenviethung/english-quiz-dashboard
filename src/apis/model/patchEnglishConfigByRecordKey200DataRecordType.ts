@@ -6,13 +6,13 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PatchEnglishConfigByRecordKey200DataRecordType =
-  (typeof PatchEnglishConfigByRecordKey200DataRecordType)[keyof typeof PatchEnglishConfigByRecordKey200DataRecordType]
+export type PatchEnglishConfigByRecordKey200DataRecordType = typeof PatchEnglishConfigByRecordKey200DataRecordType[keyof typeof PatchEnglishConfigByRecordKey200DataRecordType];
+
 
 export const PatchEnglishConfigByRecordKey200DataRecordType = {
-  str: "str",
-  num: "num",
-  boolean: "boolean",
-  arr: "arr",
-  obj: "obj",
-} as const
+  str: 'str',
+  num: 'num',
+  boolean: 'boolean',
+  arr: 'arr',
+  obj: 'obj',
+} as const;

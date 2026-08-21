@@ -8,14 +8,14 @@
 
 export type GetAdminReadingsBuckets200DataBucketsItem = {
   /** `{cefrLevel}:{topicId|null}` — id ổn định để chọn/bỏ chọn bucket. */
-  bucketKey: string
-  cefrLevel: string
-  topicId: number | null
-  topicName: string | null
+  bucketKey: string;
+  cefrLevel: string;
+  topicId: number | null;
+  topicName: string | null;
   /** Số bài đang active trong bucket. */
-  currentCount: number
+  currentCount: number;
   /** reading_passage.maxPerBucket - currentCount (có thể âm nếu đang dư). */
-  deficiency: number
+  deficiency: number;
   /** Số bài sẽ sinh cho bucket này. 0 = bị scope bỏ qua. */
-  plannedCount: number
-}
+  plannedCount: number;
+};

@@ -7,6 +7,6 @@
  */
 
 export type DeleteAdminReadingQuestionsById200Data = {
-  id: number
-  deleted: boolean
-}
+  id: number;
+  deleted: boolean;
+};

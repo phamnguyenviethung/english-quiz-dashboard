@@ -6,15 +6,15 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminReadingQuestionsGenerate400ErrorCode =
-  (typeof PostAdminReadingQuestionsGenerate400ErrorCode)[keyof typeof PostAdminReadingQuestionsGenerate400ErrorCode]
+export type PostAdminReadingQuestionsGenerate400ErrorCode = typeof PostAdminReadingQuestionsGenerate400ErrorCode[keyof typeof PostAdminReadingQuestionsGenerate400ErrorCode];
+
 
 export const PostAdminReadingQuestionsGenerate400ErrorCode = {
-  VALIDATION: "VALIDATION",
-  UNAUTHORIZED: "UNAUTHORIZED",
-  FORBIDDEN: "FORBIDDEN",
-  NOT_FOUND: "NOT_FOUND",
-  CONFLICT: "CONFLICT",
-  BUSINESS_ERROR: "BUSINESS_ERROR",
-  INTERNAL_ERROR: "INTERNAL_ERROR",
-} as const
+  VALIDATION: 'VALIDATION',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  CONFLICT: 'CONFLICT',
+  BUSINESS_ERROR: 'BUSINESS_ERROR',
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+} as const;

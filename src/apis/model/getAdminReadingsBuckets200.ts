@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingsBuckets200Data } from "./getAdminReadingsBuckets200Data.ts"
+import type { GetAdminReadingsBuckets200Data } from './getAdminReadingsBuckets200Data.ts';
 
 export type GetAdminReadingsBuckets200 = {
-  success: true
-  data: GetAdminReadingsBuckets200Data
-}
+  success: true;
+  data: GetAdminReadingsBuckets200Data;
+};

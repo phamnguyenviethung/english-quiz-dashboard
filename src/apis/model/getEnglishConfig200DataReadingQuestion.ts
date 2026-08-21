@@ -8,38 +8,38 @@
 
 export type GetEnglishConfig200DataReadingQuestion = {
   /**
-   * @minimum 1
-   * @maximum 5
-   */
-  questionsPerPassage: number
+     * @minimum 1
+     * @maximum 5
+     */
+  questionsPerPassage: number;
   /**
-   * @minimum 1
-   * @maximum 5
-   */
-  perPassageGenerationCap: number
+     * @minimum 1
+     * @maximum 5
+     */
+  perPassageGenerationCap: number;
   /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  maxGenerationAttempts: number
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+  maxGenerationAttempts: number;
   /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  manualFillMinCount: number
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+  manualFillMinCount: number;
   /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  manualFillMaxCount: number
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+  manualFillMaxCount: number;
   /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  manualFillDefaultCount: number
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+  manualFillDefaultCount: number;
   /**
-   * @maximum 9007199254740991
-   * @exclusiveMinimum 0
-   */
-  manualFillConcurrency: number
-}
+     * @maximum 9007199254740991
+     * @exclusiveMinimum 0
+     */
+  manualFillConcurrency: number;
+};

@@ -5,20 +5,20 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingsBucketsScope } from "./getAdminReadingsBucketsScope.ts"
+import type { GetAdminReadingsBucketsScope } from './getAdminReadingsBucketsScope.ts';
 
 export type GetAdminReadingsBucketsParams = {
-  /**
-   * CSV, vd `A1,B2`. Bỏ trống = mọi trình độ.
-   */
-  cefrLevels?: string
-  /**
-   * CSV topic id, vd `3,7,12`. Bỏ trống = mọi topic đang bật.
-   */
-  topicIds?: string
-  scope?: GetAdminReadingsBucketsScope
-  /**
-   * @minimum 1
-   */
-  countPerBucket?: string | number
-}
+/**
+ * CSV, vd `A1,B2`. Bỏ trống = mọi trình độ.
+ */
+cefrLevels?: string;
+/**
+ * CSV topic id, vd `3,7,12`. Bỏ trống = mọi topic đang bật.
+ */
+topicIds?: string;
+scope?: GetAdminReadingsBucketsScope;
+/**
+ * @minimum 1
+ */
+countPerBucket?: string | number;
+};

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { DeleteAdminReadingsById401Error } from "./deleteAdminReadingsById401Error.ts"
+import type { DeleteAdminReadingsById401Error } from './deleteAdminReadingsById401Error.ts';
 
 export type DeleteAdminReadingsById401 = {
-  success: false
-  error: DeleteAdminReadingsById401Error
-}
+  success: false;
+  error: DeleteAdminReadingsById401Error;
+};

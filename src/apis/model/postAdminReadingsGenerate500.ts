@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingsGenerate500Error } from "./postAdminReadingsGenerate500Error.ts"
+import type { PostAdminReadingsGenerate500Error } from './postAdminReadingsGenerate500Error.ts';
 
 export type PostAdminReadingsGenerate500 = {
-  success: false
-  error: PostAdminReadingsGenerate500Error
-}
+  success: false;
+  error: PostAdminReadingsGenerate500Error;
+};

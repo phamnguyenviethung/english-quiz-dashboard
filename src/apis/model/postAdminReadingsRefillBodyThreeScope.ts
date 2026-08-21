@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminReadingsRefillBodyThreeScope =
-  (typeof PostAdminReadingsRefillBodyThreeScope)[keyof typeof PostAdminReadingsRefillBodyThreeScope]
+export type PostAdminReadingsRefillBodyThreeScope = typeof PostAdminReadingsRefillBodyThreeScope[keyof typeof PostAdminReadingsRefillBodyThreeScope];
+
 
 export const PostAdminReadingsRefillBodyThreeScope = {
-  all: "all",
-  deficient: "deficient",
-} as const
+  all: 'all',
+  deficient: 'deficient',
+} as const;

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishReadingsCountCefrLevel } from "./getEnglishReadingsCountCefrLevel.ts"
+import type { GetEnglishReadingsCountCefrLevel } from './getEnglishReadingsCountCefrLevel.ts';
 
 export type GetEnglishReadingsCountParams = {
-  cefrLevel?: GetEnglishReadingsCountCefrLevel
-  topicId?: string | number
-}
+cefrLevel?: GetEnglishReadingsCountCefrLevel;
+topicId?: string | number;
+};

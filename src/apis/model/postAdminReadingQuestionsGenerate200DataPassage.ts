@@ -7,8 +7,8 @@
  */
 
 export type PostAdminReadingQuestionsGenerate200DataPassage = {
-  id: number
-  title: string
-  cefrLevel: string
-  topicName: string | null
-}
+  id: number;
+  title: string;
+  cefrLevel: string;
+  topicName: string | null;
+};

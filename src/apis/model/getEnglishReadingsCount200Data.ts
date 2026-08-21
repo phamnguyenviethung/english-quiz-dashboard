@@ -7,7 +7,7 @@
  */
 
 export type GetEnglishReadingsCount200Data = {
-  cefrLevel: string | null
-  topicId: number | null
-  count: number
-}
+  cefrLevel: string | null;
+  topicId: number | null;
+  count: number;
+};

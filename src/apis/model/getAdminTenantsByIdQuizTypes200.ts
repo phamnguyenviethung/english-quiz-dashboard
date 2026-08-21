@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminTenantsByIdQuizTypes200Data } from "./getAdminTenantsByIdQuizTypes200Data.ts"
+import type { GetAdminTenantsByIdQuizTypes200Data } from './getAdminTenantsByIdQuizTypes200Data.ts';
 
 export type GetAdminTenantsByIdQuizTypes200 = {
-  success: true
-  data: GetAdminTenantsByIdQuizTypes200Data
-}
+  success: true;
+  data: GetAdminTenantsByIdQuizTypes200Data;
+};

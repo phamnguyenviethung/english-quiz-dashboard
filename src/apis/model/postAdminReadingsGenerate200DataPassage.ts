@@ -7,9 +7,9 @@
  */
 
 export type PostAdminReadingsGenerate200DataPassage = {
-  title: string
-  paragraphs: string[]
-  wordCount: number
-  topic: string
-  cefrLevel: string
-}
+  title: string;
+  paragraphs: string[];
+  wordCount: number;
+  topic: string;
+  cefrLevel: string;
+};

@@ -5,7 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import { useQuery } from "@tanstack/react-query"
+import {
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -15,8 +17,8 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query"
+  UseQueryResult
+} from '@tanstack/react-query';
 
 import type {
   GetEnglishReadingsCount200,
@@ -31,422 +33,217 @@ import type {
   GetEnglishReadingsPop403,
   GetEnglishReadingsPop404,
   GetEnglishReadingsPop500,
-  GetEnglishReadingsPopParams,
-} from "../model"
+  GetEnglishReadingsPopParams
+} from '../model';
 
-import { axiosClient } from "../../configs/axiosClient.ts"
-import type { ErrorType } from "../../configs/axiosClient.ts"
+import { axiosClient } from '../../configs/axiosClient.ts';
+import type { ErrorType } from '../../configs/axiosClient.ts';
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-const withQueryKey = <T extends object, K>(
-  query: T,
-  queryKey: K
-): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K }
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === "queryKey") continue
+    if (key === 'queryKey') continue;
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    })
+    });
   }
-  return result
-}
+  return result;
+};
 
 /**
  * Lấy 1 bài đọc random kèm trọn bộ câu hỏi đọc hiểu. Chỉ trả bài đã **đủ** `reading_question.questionsPerPassage` câu đang active — bài nửa vời không bao giờ được phục vụ. Bài KHÔNG bị xoá, kho dùng lại được. Bỏ trống `topicId` = mọi topic tenant được cấp (bài đọc luôn gắn topic nên tenant bị giới hạn sẽ chỉ thấy topic trong allow-list). `topicId` ngoài allow-list trả 403. Không có bài nào sẵn sàng trả 404.
  * @summary Pop a reading passage with its questions
  */
 export const getEnglishReadingsPop = (
-  params?: GetEnglishReadingsPopParams,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    params?: GetEnglishReadingsPopParams,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetEnglishReadingsPop200>(
-    { url: `/english/readings/pop`, method: "GET", params, signal },
-    options
-  )
+
+
+      return axiosClient<GetEnglishReadingsPop200>(
+      {url: `/english/readings/pop`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetEnglishReadingsPopQueryKey = (params?: GetEnglishReadingsPopParams,) => {
+    return [
+    `/english/readings/pop`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetEnglishReadingsPopQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError = ErrorType<GetEnglishReadingsPop400 | GetEnglishReadingsPop401 | GetEnglishReadingsPop403 | GetEnglishReadingsPop404 | GetEnglishReadingsPop500>>(params?: GetEnglishReadingsPopParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishReadingsPopQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishReadingsPop>>> = ({ signal }) => getEnglishReadingsPop(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetEnglishReadingsPopQueryKey = (
-  params?: GetEnglishReadingsPopParams
-) => {
-  return [`/english/readings/pop`, ...(params ? [params] : [])] as const
-}
+export type GetEnglishReadingsPopQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishReadingsPop>>>
+export type GetEnglishReadingsPopQueryError = ErrorType<GetEnglishReadingsPop400 | GetEnglishReadingsPop401 | GetEnglishReadingsPop403 | GetEnglishReadingsPop404 | GetEnglishReadingsPop500>
 
-export const getGetEnglishReadingsPopQueryOptions = <
-  TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-  TError = ErrorType<
-    | GetEnglishReadingsPop400
-    | GetEnglishReadingsPop401
-    | GetEnglishReadingsPop403
-    | GetEnglishReadingsPop404
-    | GetEnglishReadingsPop500
-  >,
->(
-  params?: GetEnglishReadingsPopParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  }
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetEnglishReadingsPopQueryKey(params)
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getEnglishReadingsPop>>
-  > = ({ signal }) => getEnglishReadingsPop(params, requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnglishReadingsPopQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getEnglishReadingsPop>>
->
-export type GetEnglishReadingsPopQueryError = ErrorType<
-  | GetEnglishReadingsPop400
-  | GetEnglishReadingsPop401
-  | GetEnglishReadingsPop403
-  | GetEnglishReadingsPop404
-  | GetEnglishReadingsPop500
->
-
-export function useGetEnglishReadingsPop<
-  TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-  TError = ErrorType<
-    | GetEnglishReadingsPop400
-    | GetEnglishReadingsPop401
-    | GetEnglishReadingsPop403
-    | GetEnglishReadingsPop404
-    | GetEnglishReadingsPop500
-  >,
->(
-  params: undefined | GetEnglishReadingsPopParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+export function useGetEnglishReadingsPop<TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError = ErrorType<GetEnglishReadingsPop400 | GetEnglishReadingsPop401 | GetEnglishReadingsPop403 | GetEnglishReadingsPop404 | GetEnglishReadingsPop500>>(
+ params: undefined |  GetEnglishReadingsPopParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishReadingsPop>>,
           TError,
           Awaited<ReturnType<typeof getEnglishReadingsPop>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishReadingsPop<
-  TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-  TError = ErrorType<
-    | GetEnglishReadingsPop400
-    | GetEnglishReadingsPop401
-    | GetEnglishReadingsPop403
-    | GetEnglishReadingsPop404
-    | GetEnglishReadingsPop500
-  >,
->(
-  params?: GetEnglishReadingsPopParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishReadingsPop<TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError = ErrorType<GetEnglishReadingsPop400 | GetEnglishReadingsPop401 | GetEnglishReadingsPop403 | GetEnglishReadingsPop404 | GetEnglishReadingsPop500>>(
+ params?: GetEnglishReadingsPopParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishReadingsPop>>,
           TError,
           Awaited<ReturnType<typeof getEnglishReadingsPop>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishReadingsPop<
-  TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-  TError = ErrorType<
-    | GetEnglishReadingsPop400
-    | GetEnglishReadingsPop401
-    | GetEnglishReadingsPop403
-    | GetEnglishReadingsPop404
-    | GetEnglishReadingsPop500
-  >,
->(
-  params?: GetEnglishReadingsPopParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishReadingsPop<TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError = ErrorType<GetEnglishReadingsPop400 | GetEnglishReadingsPop401 | GetEnglishReadingsPop403 | GetEnglishReadingsPop404 | GetEnglishReadingsPop500>>(
+ params?: GetEnglishReadingsPopParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Pop a reading passage with its questions
  */
 
-export function useGetEnglishReadingsPop<
-  TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-  TError = ErrorType<
-    | GetEnglishReadingsPop400
-    | GetEnglishReadingsPop401
-    | GetEnglishReadingsPop403
-    | GetEnglishReadingsPop404
-    | GetEnglishReadingsPop500
-  >,
->(
-  params?: GetEnglishReadingsPopParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsPop>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getGetEnglishReadingsPopQueryOptions(params, options)
+export function useGetEnglishReadingsPop<TData = Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError = ErrorType<GetEnglishReadingsPop400 | GetEnglishReadingsPop401 | GetEnglishReadingsPop403 | GetEnglishReadingsPop404 | GetEnglishReadingsPop500>>(
+ params?: GetEnglishReadingsPopParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsPop>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const queryOptions = getGetEnglishReadingsPopQueryOptions(params,options)
 
-  return withQueryKey(query, queryOptions.queryKey)
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
 
 /**
  * Số bài đọc đã sẵn sàng phục vụ (active và đủ câu hỏi) trong phạm vi filter. Áp dụng cùng allow-list topic như /readings/pop.
  * @summary Count ready reading passages
  */
 export const getEnglishReadingsCount = (
-  params?: GetEnglishReadingsCountParams,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    params?: GetEnglishReadingsCountParams,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetEnglishReadingsCount200>(
-    { url: `/english/readings/count`, method: "GET", params, signal },
-    options
-  )
+
+
+      return axiosClient<GetEnglishReadingsCount200>(
+      {url: `/english/readings/count`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetEnglishReadingsCountQueryKey = (params?: GetEnglishReadingsCountParams,) => {
+    return [
+    `/english/readings/count`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetEnglishReadingsCountQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError = ErrorType<GetEnglishReadingsCount400 | GetEnglishReadingsCount401 | GetEnglishReadingsCount403 | GetEnglishReadingsCount500>>(params?: GetEnglishReadingsCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishReadingsCountQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishReadingsCount>>> = ({ signal }) => getEnglishReadingsCount(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetEnglishReadingsCountQueryKey = (
-  params?: GetEnglishReadingsCountParams
-) => {
-  return [`/english/readings/count`, ...(params ? [params] : [])] as const
-}
+export type GetEnglishReadingsCountQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishReadingsCount>>>
+export type GetEnglishReadingsCountQueryError = ErrorType<GetEnglishReadingsCount400 | GetEnglishReadingsCount401 | GetEnglishReadingsCount403 | GetEnglishReadingsCount500>
 
-export const getGetEnglishReadingsCountQueryOptions = <
-  TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-  TError = ErrorType<
-    | GetEnglishReadingsCount400
-    | GetEnglishReadingsCount401
-    | GetEnglishReadingsCount403
-    | GetEnglishReadingsCount500
-  >,
->(
-  params?: GetEnglishReadingsCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  }
-) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetEnglishReadingsCountQueryKey(params)
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getEnglishReadingsCount>>
-  > = ({ signal }) => getEnglishReadingsCount(params, requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnglishReadingsCountQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getEnglishReadingsCount>>
->
-export type GetEnglishReadingsCountQueryError = ErrorType<
-  | GetEnglishReadingsCount400
-  | GetEnglishReadingsCount401
-  | GetEnglishReadingsCount403
-  | GetEnglishReadingsCount500
->
-
-export function useGetEnglishReadingsCount<
-  TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-  TError = ErrorType<
-    | GetEnglishReadingsCount400
-    | GetEnglishReadingsCount401
-    | GetEnglishReadingsCount403
-    | GetEnglishReadingsCount500
-  >,
->(
-  params: undefined | GetEnglishReadingsCountParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+export function useGetEnglishReadingsCount<TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError = ErrorType<GetEnglishReadingsCount400 | GetEnglishReadingsCount401 | GetEnglishReadingsCount403 | GetEnglishReadingsCount500>>(
+ params: undefined |  GetEnglishReadingsCountParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishReadingsCount>>,
           TError,
           Awaited<ReturnType<typeof getEnglishReadingsCount>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishReadingsCount<
-  TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-  TError = ErrorType<
-    | GetEnglishReadingsCount400
-    | GetEnglishReadingsCount401
-    | GetEnglishReadingsCount403
-    | GetEnglishReadingsCount500
-  >,
->(
-  params?: GetEnglishReadingsCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishReadingsCount<TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError = ErrorType<GetEnglishReadingsCount400 | GetEnglishReadingsCount401 | GetEnglishReadingsCount403 | GetEnglishReadingsCount500>>(
+ params?: GetEnglishReadingsCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishReadingsCount>>,
           TError,
           Awaited<ReturnType<typeof getEnglishReadingsCount>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishReadingsCount<
-  TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-  TError = ErrorType<
-    | GetEnglishReadingsCount400
-    | GetEnglishReadingsCount401
-    | GetEnglishReadingsCount403
-    | GetEnglishReadingsCount500
-  >,
->(
-  params?: GetEnglishReadingsCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishReadingsCount<TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError = ErrorType<GetEnglishReadingsCount400 | GetEnglishReadingsCount401 | GetEnglishReadingsCount403 | GetEnglishReadingsCount500>>(
+ params?: GetEnglishReadingsCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Count ready reading passages
  */
 
-export function useGetEnglishReadingsCount<
-  TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-  TError = ErrorType<
-    | GetEnglishReadingsCount400
-    | GetEnglishReadingsCount401
-    | GetEnglishReadingsCount403
-    | GetEnglishReadingsCount500
-  >,
->(
-  params?: GetEnglishReadingsCountParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishReadingsCount>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
-  const queryOptions = getGetEnglishReadingsCountQueryOptions(params, options)
+export function useGetEnglishReadingsCount<TData = Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError = ErrorType<GetEnglishReadingsCount400 | GetEnglishReadingsCount401 | GetEnglishReadingsCount403 | GetEnglishReadingsCount500>>(
+ params?: GetEnglishReadingsCountParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishReadingsCount>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const queryOptions = getGetEnglishReadingsCountQueryOptions(params,options)
 
-  return withQueryKey(query, queryOptions.queryKey)
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
+

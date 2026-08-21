@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetHealth500Error } from "./getHealth500Error.ts"
+import type { GetHealth500Error } from './getHealth500Error.ts';
 
 export type GetHealth500 = {
-  success: false
-  error: GetHealth500Error
-}
+  success: false;
+  error: GetHealth500Error;
+};

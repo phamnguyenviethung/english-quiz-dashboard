@@ -6,7 +6,7 @@ import type {
   GetAdminReadingQuestionsSort,
   PostAdminReadingQuestionsGenerate200DataQuestionsItem,
   PostAdminReadingQuestionsGenerate200DataUsage,
-  PostAdminReadingQuestionsRefillBodyOneScope,
+  PostAdminReadingQuestionsRefillBodyOneMode,
 } from "@/apis/model"
 
 import type { EngLevel } from "@/features/quiz/types.ts"
@@ -14,8 +14,8 @@ import type { EngLevel } from "@/features/quiz/types.ts"
 export type ReadingQuestion = GetAdminReadingQuestions200DataItemsItem
 export type ReadingQuestionsSort = GetAdminReadingQuestionsSort
 export type ReadingQuestionModelStat = GetAdminReadingQuestionsModels200DataItem
-export type ReadingQuestionRefillScope =
-  PostAdminReadingQuestionsRefillBodyOneScope
+export type ReadingQuestionRefillMode =
+  PostAdminReadingQuestionsRefillBodyOneMode
 
 export type GeneratedReadingQuestion =
   PostAdminReadingQuestionsGenerate200DataQuestionsItem
@@ -36,7 +36,7 @@ export interface ReadingQuestionBucketFilter {
 
 export interface ReadingQuestionRefillInput extends ReadingQuestionBucketFilter {
   models: string[]
-  scope: ReadingQuestionRefillScope
+  mode: ReadingQuestionRefillMode
   /** Chỉ gửi khi admin bỏ tick bài trong preview; undefined = lấy hết theo filter. */
   bucketKeys?: string[]
 }

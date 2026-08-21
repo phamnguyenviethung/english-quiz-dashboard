@@ -7,19 +7,19 @@
  */
 
 export type PatchAdminReadingsById200Data = {
-  id: number
-  title: string
+  id: number;
+  title: string;
   /** Các đoạn văn theo đúng thứ tự đọc. */
-  paragraphs: string[]
+  paragraphs: string[];
   /** Đếm server-side từ paragraphs, không lấy số model trả về. */
-  wordCount: number
-  cefrLevel: string
-  topicId: number | null
-  topicName: string | null
-  model: string
-  tokenIn: number
-  tokenOut: number
-  isActive: boolean
-  createdAt: string | number | null
-  updatedAt: string | number | null
-}
+  wordCount: number;
+  cefrLevel: string;
+  topicId: number | null;
+  topicName: string | null;
+  model: string;
+  tokenIn: number;
+  tokenOut: number;
+  isActive: boolean;
+  createdAt: string | number | null;
+  updatedAt: string | number | null;
+};

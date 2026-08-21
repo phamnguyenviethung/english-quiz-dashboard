@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishConfigRecords401ErrorCode } from "./getEnglishConfigRecords401ErrorCode.ts"
+import type { GetEnglishConfigRecords401ErrorCode } from './getEnglishConfigRecords401ErrorCode.ts';
 
 export type GetEnglishConfigRecords401Error = {
-  code: GetEnglishConfigRecords401ErrorCode
-  message: string
-}
+  code: GetEnglishConfigRecords401ErrorCode;
+  message: string;
+};

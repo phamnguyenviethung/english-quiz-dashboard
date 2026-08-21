@@ -6,12 +6,12 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type GetEnglishReadingsPopCefrLevel =
-  (typeof GetEnglishReadingsPopCefrLevel)[keyof typeof GetEnglishReadingsPopCefrLevel]
+export type GetEnglishReadingsPopCefrLevel = typeof GetEnglishReadingsPopCefrLevel[keyof typeof GetEnglishReadingsPopCefrLevel];
+
 
 export const GetEnglishReadingsPopCefrLevel = {
-  A1: "A1",
-  A2: "A2",
-  B1: "B1",
-  B2: "B2",
-} as const
+  A1: 'A1',
+  A2: 'A2',
+  B1: 'B1',
+  B2: 'B2',
+} as const;

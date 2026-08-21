@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishConfigByRecordKeyReset200Data } from "./postEnglishConfigByRecordKeyReset200Data.ts"
+import type { PostEnglishConfigByRecordKeyReset200Data } from './postEnglishConfigByRecordKeyReset200Data.ts';
 
 export type PostEnglishConfigByRecordKeyReset200 = {
-  success: true
-  data: PostEnglishConfigByRecordKeyReset200Data
-}
+  success: true;
+  data: PostEnglishConfigByRecordKeyReset200Data;
+};

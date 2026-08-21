@@ -28,14 +28,14 @@ import type { EngLevel } from "@/features/quiz/types.ts"
 import { useReadingGenerationModels } from "@/features/readings/hooks/use-reading-models.ts"
 
 import {
-  READING_QUESTION_REFILL_SCOPE_META,
+  READING_QUESTION_REFILL_MODE_META,
   REFILL_COST_WARNING_QUESTIONS,
 } from "../constants.ts"
 import { useReadingQuestionBuckets } from "../hooks/use-reading-question-buckets.ts"
 import { useReadingQuestionRefill } from "../hooks/use-reading-question-refill.ts"
-import type { ReadingQuestionRefillScope } from "../types.ts"
+import type { ReadingQuestionRefillMode } from "../types.ts"
 
-const INITIAL_SCOPE: ReadingQuestionRefillScope = "deficient"
+const INITIAL_MODE: ReadingQuestionRefillMode = "deficient"
 
 const COPY: RefillCopy = {
   unit: "câu",
@@ -49,7 +49,7 @@ const COPY: RefillCopy = {
 export function ReadingQuestionRefillPage() {
   const navigate = useNavigate()
 
-  const [scope, setScope] = useState<ReadingQuestionRefillScope>(INITIAL_SCOPE)
+  const [mode, setMode] = useState<ReadingQuestionRefillMode>(INITIAL_MODE)
   const [models, setModels] = useState<string[]>([])
   const [cefrLevels, setCefrLevels] = useState<EngLevel[]>([])
   const [topicIds, setTopicIds] = useState<number[]>([])
@@ -64,7 +64,7 @@ export function ReadingQuestionRefillPage() {
   } = useReadingGenerationModels()
 
   const preview = useReadingQuestionBuckets(
-    { scope, cefrLevels, topicIds, passageIds: [] },
+    { mode, cefrLevels, topicIds, passageIds: [] },
     true
   )
 
@@ -154,7 +154,7 @@ export function ReadingQuestionRefillPage() {
     )
 
     startRefill({
-      scope,
+      mode,
       models,
       cefrLevels,
       topicIds,
@@ -194,12 +194,12 @@ export function ReadingQuestionRefillPage() {
           >
             <RefillScopeFields
               idPrefix="reading-question-refill"
-              scopeMeta={READING_QUESTION_REFILL_SCOPE_META}
-              scope={scope}
+              scopeMeta={READING_QUESTION_REFILL_MODE_META}
+              scope={mode}
               showCount={false}
               disabled={isPending}
               onScopeChange={(value) =>
-                setScope(value as ReadingQuestionRefillScope)
+                setMode(value as ReadingQuestionRefillMode)
               }
             />
             <FieldDescription>

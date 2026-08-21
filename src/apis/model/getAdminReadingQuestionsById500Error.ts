@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingQuestionsById500ErrorCode } from "./getAdminReadingQuestionsById500ErrorCode.ts"
+import type { GetAdminReadingQuestionsById500ErrorCode } from './getAdminReadingQuestionsById500ErrorCode.ts';
 
 export type GetAdminReadingQuestionsById500Error = {
-  code: GetAdminReadingQuestionsById500ErrorCode
-  message: string
-}
+  code: GetAdminReadingQuestionsById500ErrorCode;
+  message: string;
+};

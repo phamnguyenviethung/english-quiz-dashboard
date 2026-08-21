@@ -8,8 +8,8 @@
 
 export type GetAdminReadingQuestionsBuckets200DataSummary = {
   /** Số bài khớp filter (kể cả bài sẽ bị bỏ qua). */
-  matchedPassages: number
-  plannedPassages: number
-  plannedQuestions: number
-  questionsPerPassage: number
-}
+  matchedPassages: number;
+  plannedPassages: number;
+  plannedQuestions: number;
+  questionsPerPassage: number;
+};

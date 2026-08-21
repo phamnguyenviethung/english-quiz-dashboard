@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingsGenerate401ErrorCode } from "./postAdminReadingsGenerate401ErrorCode.ts"
+import type { PostAdminReadingsGenerate401ErrorCode } from './postAdminReadingsGenerate401ErrorCode.ts';
 
 export type PostAdminReadingsGenerate401Error = {
-  code: PostAdminReadingsGenerate401ErrorCode
-  message: string
-}
+  code: PostAdminReadingsGenerate401ErrorCode;
+  message: string;
+};

@@ -5,14 +5,14 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishConfig200DataQuizDistributionItemQuizType } from "./getEnglishConfig200DataQuizDistributionItemQuizType.ts"
+import type { GetEnglishConfig200DataQuizDistributionItemQuizType } from './getEnglishConfig200DataQuizDistributionItemQuizType.ts';
 
 export type GetEnglishConfig200DataQuizDistributionItem = {
-  quizType: GetEnglishConfig200DataQuizDistributionItemQuizType
+  quizType: GetEnglishConfig200DataQuizDistributionItemQuizType;
   /**
-   * @minimum 0
-   * @maximum 9007199254740991
-   */
-  weight: number
-  enabled: boolean
-}
+     * @minimum 0
+     * @maximum 9007199254740991
+     */
+  weight: number;
+  enabled: boolean;
+};

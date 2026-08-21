@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingsModels401ErrorCode } from "./getAdminReadingsModels401ErrorCode.ts"
+import type { GetAdminReadingsModels401ErrorCode } from './getAdminReadingsModels401ErrorCode.ts';
 
 export type GetAdminReadingsModels401Error = {
-  code: GetAdminReadingsModels401ErrorCode
-  message: string
-}
+  code: GetAdminReadingsModels401ErrorCode;
+  message: string;
+};

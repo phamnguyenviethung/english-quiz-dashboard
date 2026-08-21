@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateByQuizType500Error } from "./postEnglishGenerateByQuizType500Error.ts"
+import type { PostEnglishGenerateByQuizType500Error } from './postEnglishGenerateByQuizType500Error.ts';
 
 export type PostEnglishGenerateByQuizType500 = {
-  success: false
-  error: PostEnglishGenerateByQuizType500Error
-}
+  success: false;
+  error: PostEnglishGenerateByQuizType500Error;
+};

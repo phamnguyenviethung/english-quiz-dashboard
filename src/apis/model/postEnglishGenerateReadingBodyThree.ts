@@ -5,11 +5,11 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishGenerateReadingBodyThreeEngLevel } from "./postEnglishGenerateReadingBodyThreeEngLevel.ts"
-import type { PostEnglishGenerateReadingBodyThreeOptionCount } from "./postEnglishGenerateReadingBodyThreeOptionCount.ts"
+import type { PostEnglishGenerateReadingBodyThreeEngLevel } from './postEnglishGenerateReadingBodyThreeEngLevel.ts';
+import type { PostEnglishGenerateReadingBodyThreeOptionCount } from './postEnglishGenerateReadingBodyThreeOptionCount.ts';
 
 export type PostEnglishGenerateReadingBodyThree = {
-  engLevel: PostEnglishGenerateReadingBodyThreeEngLevel
-  optionCount: PostEnglishGenerateReadingBodyThreeOptionCount
-  model?: string
-}
+  engLevel: PostEnglishGenerateReadingBodyThreeEngLevel;
+  optionCount: PostEnglishGenerateReadingBodyThreeOptionCount;
+  model?: string;
+};

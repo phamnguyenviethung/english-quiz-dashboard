@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingQuestionsGenerate400ErrorCode } from "./postAdminReadingQuestionsGenerate400ErrorCode.ts"
+import type { PostAdminReadingQuestionsGenerate400ErrorCode } from './postAdminReadingQuestionsGenerate400ErrorCode.ts';
 
 export type PostAdminReadingQuestionsGenerate400Error = {
-  code: PostAdminReadingQuestionsGenerate400ErrorCode
-  message: string
-}
+  code: PostAdminReadingQuestionsGenerate400ErrorCode;
+  message: string;
+};

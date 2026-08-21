@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingQuestionsRefill400ErrorCode } from "./postAdminReadingQuestionsRefill400ErrorCode.ts"
+import type { PostAdminReadingQuestionsRefill400ErrorCode } from './postAdminReadingQuestionsRefill400ErrorCode.ts';
 
 export type PostAdminReadingQuestionsRefill400Error = {
-  code: PostAdminReadingQuestionsRefill400ErrorCode
-  message: string
-}
+  code: PostAdminReadingQuestionsRefill400ErrorCode;
+  message: string;
+};

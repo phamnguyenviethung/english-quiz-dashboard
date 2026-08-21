@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminReadingQuestionsById404ErrorCode } from "./patchAdminReadingQuestionsById404ErrorCode.ts"
+import type { PatchAdminReadingQuestionsById404ErrorCode } from './patchAdminReadingQuestionsById404ErrorCode.ts';
 
 export type PatchAdminReadingQuestionsById404Error = {
-  code: PatchAdminReadingQuestionsById404ErrorCode
-  message: string
-}
+  code: PatchAdminReadingQuestionsById404ErrorCode;
+  message: string;
+};

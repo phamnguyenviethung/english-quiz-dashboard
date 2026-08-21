@@ -5,20 +5,20 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingsRefillBodyTwoFilter } from "./postAdminReadingsRefillBodyTwoFilter.ts"
-import type { PostAdminReadingsRefillBodyTwoScope } from "./postAdminReadingsRefillBodyTwoScope.ts"
+import type { PostAdminReadingsRefillBodyTwoFilter } from './postAdminReadingsRefillBodyTwoFilter.ts';
+import type { PostAdminReadingsRefillBodyTwoScope } from './postAdminReadingsRefillBodyTwoScope.ts';
 
 export type PostAdminReadingsRefillBodyTwo = {
   /** Danh sách OpenRouter model id. Mỗi bucket chọn ngẫu nhiên 1 model trong danh sách này. Bỏ trống → chọn ngẫu nhiên trong mọi model đang bật `readingEnabled`. Model không tồn tại hoặc đang tắt trả 400. Provider routing lấy theo cấu hình reading của model được dùng. */
-  models?: string[]
+  models?: string[];
   /**
-   * Số bài ép sinh cho mỗi bucket. Mặc định reading_passage.manualFillDefaultCount.
-   * @minimum 1
-   */
-  countPerBucket?: string | number
-  scope?: PostAdminReadingsRefillBodyTwoScope
+     * Số bài ép sinh cho mỗi bucket. Mặc định reading_passage.manualFillDefaultCount.
+     * @minimum 1
+     */
+  countPerBucket?: string | number;
+  scope?: PostAdminReadingsRefillBodyTwoScope;
   /** Thu hẹp không gian bucket. Chiều nào bỏ trống thì không lọc theo chiều đó. */
-  filter?: PostAdminReadingsRefillBodyTwoFilter
+  filter?: PostAdminReadingsRefillBodyTwoFilter;
   /** Chốt đúng danh sách bucketKey (lấy từ GET /admin/readings/buckets), áp dụng sau `filter`. Dùng khi admin bỏ tick một vài bucket trong preview. */
-  bucketKeys?: string[]
-}
+  bucketKeys?: string[];
+};

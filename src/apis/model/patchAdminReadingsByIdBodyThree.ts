@@ -8,9 +8,9 @@
 
 export type PatchAdminReadingsByIdBodyThree = {
   /** @minLength 1 */
-  title?: string
+  title?: string;
   /** Replace toàn bộ danh sách đoạn. Tối thiểu 2 đoạn không rỗng. */
-  paragraphs?: string[]
+  paragraphs?: string[];
   /** false = tắt bài, không tính vào bucket count nữa. */
-  isActive?: boolean
-}
+  isActive?: boolean;
+};

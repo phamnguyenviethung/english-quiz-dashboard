@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadings400Error } from "./getAdminReadings400Error.ts"
+import type { GetAdminReadings400Error } from './getAdminReadings400Error.ts';
 
 export type GetAdminReadings400 = {
-  success: false
-  error: GetAdminReadings400Error
-}
+  success: false;
+  error: GetAdminReadings400Error;
+};

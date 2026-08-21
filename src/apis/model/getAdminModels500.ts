@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminModels500Error } from "./getAdminModels500Error.ts"
+import type { GetAdminModels500Error } from './getAdminModels500Error.ts';
 
 export type GetAdminModels500 = {
-  success: false
-  error: GetAdminModels500Error
-}
+  success: false;
+  error: GetAdminModels500Error;
+};

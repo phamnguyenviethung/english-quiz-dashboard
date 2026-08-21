@@ -7,6 +7,6 @@
  */
 
 export type PostAdminPoolRefill200Data = {
-  runId: string | null
-  totalBuckets: number
-}
+  runId: string | null;
+  totalBuckets: number;
+};

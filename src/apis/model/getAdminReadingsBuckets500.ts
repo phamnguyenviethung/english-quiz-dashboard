@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminReadingsBuckets500Error } from "./getAdminReadingsBuckets500Error.ts"
+import type { GetAdminReadingsBuckets500Error } from './getAdminReadingsBuckets500Error.ts';
 
 export type GetAdminReadingsBuckets500 = {
-  success: false
-  error: GetAdminReadingsBuckets500Error
-}
+  success: false;
+  error: GetAdminReadingsBuckets500Error;
+};

@@ -5,21 +5,21 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminModelsByIdBodyThreeManualProvider } from "./patchAdminModelsByIdBodyThreeManualProvider.ts"
-import type { PatchAdminModelsByIdBodyThreeReadingProvider } from "./patchAdminModelsByIdBodyThreeReadingProvider.ts"
-import type { PatchAdminModelsByIdBodyThreeScheduleProvider } from "./patchAdminModelsByIdBodyThreeScheduleProvider.ts"
+import type { PatchAdminModelsByIdBodyThreeManualProvider } from './patchAdminModelsByIdBodyThreeManualProvider.ts';
+import type { PatchAdminModelsByIdBodyThreeReadingProvider } from './patchAdminModelsByIdBodyThreeReadingProvider.ts';
+import type { PatchAdminModelsByIdBodyThreeScheduleProvider } from './patchAdminModelsByIdBodyThreeScheduleProvider.ts';
 
 export type PatchAdminModelsByIdBodyThree = {
   /** @minLength 1 */
-  key?: string
+  key?: string;
   /** @minLength 1 */
-  modelId?: string
-  isActive?: boolean
-  scheduleEnabled?: boolean
-  manualEnabled?: boolean
-  readingEnabled?: boolean
-  scheduleProvider?: PatchAdminModelsByIdBodyThreeScheduleProvider
-  manualProvider?: PatchAdminModelsByIdBodyThreeManualProvider
+  modelId?: string;
+  isActive?: boolean;
+  scheduleEnabled?: boolean;
+  manualEnabled?: boolean;
+  readingEnabled?: boolean;
+  scheduleProvider?: PatchAdminModelsByIdBodyThreeScheduleProvider;
+  manualProvider?: PatchAdminModelsByIdBodyThreeManualProvider;
   /** Replace toàn bộ (không merge). Gửi `null` để xoá cấu hình reading provider của model. */
-  readingProvider?: PatchAdminModelsByIdBodyThreeReadingProvider
-}
+  readingProvider?: PatchAdminModelsByIdBodyThreeReadingProvider;
+};

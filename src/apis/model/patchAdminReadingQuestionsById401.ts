@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminReadingQuestionsById401Error } from "./patchAdminReadingQuestionsById401Error.ts"
+import type { PatchAdminReadingQuestionsById401Error } from './patchAdminReadingQuestionsById401Error.ts';
 
 export type PatchAdminReadingQuestionsById401 = {
-  success: false
-  error: PatchAdminReadingQuestionsById401Error
-}
+  success: false;
+  error: PatchAdminReadingQuestionsById401Error;
+};

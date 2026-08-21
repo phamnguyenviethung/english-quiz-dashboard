@@ -5,14 +5,14 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminPoolRefillBodyOneFilterEngLevelsItem } from "./postAdminPoolRefillBodyOneFilterEngLevelsItem.ts"
-import type { PostAdminPoolRefillBodyOneFilterQuizTypesItem } from "./postAdminPoolRefillBodyOneFilterQuizTypesItem.ts"
+import type { PostAdminPoolRefillBodyOneFilterEngLevelsItem } from './postAdminPoolRefillBodyOneFilterEngLevelsItem.ts';
+import type { PostAdminPoolRefillBodyOneFilterQuizTypesItem } from './postAdminPoolRefillBodyOneFilterQuizTypesItem.ts';
 
 /**
  * Thu hẹp không gian bucket. Chiều nào bỏ trống thì không lọc theo chiều đó.
  */
 export type PostAdminPoolRefillBodyOneFilter = {
-  engLevels?: PostAdminPoolRefillBodyOneFilterEngLevelsItem[]
-  topicIds?: (string | number)[]
-  quizTypes?: PostAdminPoolRefillBodyOneFilterQuizTypesItem[]
-}
+  engLevels?: PostAdminPoolRefillBodyOneFilterEngLevelsItem[];
+  topicIds?: (string | number)[];
+  quizTypes?: PostAdminPoolRefillBodyOneFilterQuizTypesItem[];
+};

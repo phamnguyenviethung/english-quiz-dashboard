@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminTenantsByIdKeys500ErrorCode } from "./postAdminTenantsByIdKeys500ErrorCode.ts"
+import type { PostAdminTenantsByIdKeys500ErrorCode } from './postAdminTenantsByIdKeys500ErrorCode.ts';
 
 export type PostAdminTenantsByIdKeys500Error = {
-  code: PostAdminTenantsByIdKeys500ErrorCode
-  message: string
-}
+  code: PostAdminTenantsByIdKeys500ErrorCode;
+  message: string;
+};

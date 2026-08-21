@@ -10,7 +10,7 @@ import type {
   ReadingQuestionBucket,
   ReadingQuestionBucketFilter,
   ReadingQuestionBucketSummary,
-  ReadingQuestionRefillScope,
+  ReadingQuestionRefillMode,
 } from "../types.ts"
 
 const EMPTY_BUCKETS: ReadingQuestionBucket[] = []
@@ -23,7 +23,7 @@ const EMPTY_SUMMARY: ReadingQuestionBucketSummary = {
 }
 
 export interface ReadingQuestionBucketsInput extends ReadingQuestionBucketFilter {
-  scope: ReadingQuestionRefillScope
+  mode: ReadingQuestionRefillMode
 }
 
 /** API nhận filter dạng CSV; chiều nào rỗng thì bỏ hẳn key khỏi query. */
@@ -31,7 +31,7 @@ export function buildReadingQuestionBucketsParams(
   input: ReadingQuestionBucketsInput
 ): GetAdminReadingQuestionsBucketsParams {
   return {
-    scope: input.scope,
+    mode: input.mode,
     ...(input.cefrLevels.length > 0
       ? { cefrLevels: input.cefrLevels.join(",") }
       : {}),

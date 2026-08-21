@@ -5,19 +5,19 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishPoolQuestions200DataItemsItemQuizType } from "./getEnglishPoolQuestions200DataItemsItemQuizType.ts"
+import type { GetEnglishPoolQuestions200DataItemsItemQuizType } from './getEnglishPoolQuestions200DataItemsItemQuizType.ts';
 
 export type GetEnglishPoolQuestions200DataItemsItem = {
-  id: number
-  quizType: GetEnglishPoolQuestions200DataItemsItemQuizType
+  id: number;
+  quizType: GetEnglishPoolQuestions200DataItemsItemQuizType;
   /** JSON string chứa payload câu hỏi đã sinh. */
-  questionData: string
-  model: string
-  tokenIn: number
-  tokenOut: number
-  optionCount: number
-  topicId: number | null
-  engLevel: string
-  topicName: string | null
-  createdAt: string | number | null
-}
+  questionData: string;
+  model: string;
+  tokenIn: number;
+  tokenOut: number;
+  optionCount: number;
+  topicId: number | null;
+  engLevel: string;
+  topicName: string | null;
+  createdAt: string | number | null;
+};

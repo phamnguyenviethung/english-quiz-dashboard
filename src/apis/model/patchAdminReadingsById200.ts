@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PatchAdminReadingsById200Data } from "./patchAdminReadingsById200Data.ts"
+import type { PatchAdminReadingsById200Data } from './patchAdminReadingsById200Data.ts';
 
 export type PatchAdminReadingsById200 = {
-  success: true
-  data: PatchAdminReadingsById200Data
-}
+  success: true;
+  data: PatchAdminReadingsById200Data;
+};

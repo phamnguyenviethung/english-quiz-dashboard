@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostEnglishTopics201Data } from "./postEnglishTopics201Data.ts"
+import type { PostEnglishTopics201Data } from './postEnglishTopics201Data.ts';
 
 export type PostEnglishTopics201 = {
-  success: true
-  data: PostEnglishTopics201Data
-}
+  success: true;
+  data: PostEnglishTopics201Data;
+};

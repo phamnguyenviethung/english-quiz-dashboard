@@ -5,15 +5,15 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingQuestionsRefillBodyTwoFilter } from "./postAdminReadingQuestionsRefillBodyTwoFilter.ts"
-import type { PostAdminReadingQuestionsRefillBodyTwoScope } from "./postAdminReadingQuestionsRefillBodyTwoScope.ts"
+import type { PostAdminReadingQuestionsRefillBodyTwoFilter } from './postAdminReadingQuestionsRefillBodyTwoFilter.ts';
+import type { PostAdminReadingQuestionsRefillBodyTwoMode } from './postAdminReadingQuestionsRefillBodyTwoMode.ts';
 
 export type PostAdminReadingQuestionsRefillBodyTwo = {
   /** Danh sách OpenRouter model id. Mỗi bài chọn ngẫu nhiên 1 model. Bỏ trống → random trong mọi model đang bật `readingEnabled`. Model không tồn tại hoặc đang tắt trả 400. */
-  models?: string[]
-  scope?: PostAdminReadingQuestionsRefillBodyTwoScope
+  models?: string[];
+  mode?: PostAdminReadingQuestionsRefillBodyTwoMode;
   /** Thu hẹp danh sách bài. Chiều nào bỏ trống thì không lọc theo chiều đó. */
-  filter?: PostAdminReadingQuestionsRefillBodyTwoFilter
+  filter?: PostAdminReadingQuestionsRefillBodyTwoFilter;
   /** Chốt đúng danh sách bucketKey `rq:{passageId}` (lấy từ GET /reading-questions/buckets). */
-  bucketKeys?: string[]
-}
+  bucketKeys?: string[];
+};

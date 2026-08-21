@@ -7,9 +7,9 @@
  */
 
 export type PostAdminReadingQuestionsGenerate200DataQuestionsItem = {
-  quizType: string
-  question: string
-  options: string[]
-  correctAnswer: number
-  explanation: string
-}
+  quizType: string;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+};

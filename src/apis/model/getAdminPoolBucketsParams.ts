@@ -5,24 +5,24 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetAdminPoolBucketsScope } from "./getAdminPoolBucketsScope.ts"
+import type { GetAdminPoolBucketsScope } from './getAdminPoolBucketsScope.ts';
 
 export type GetAdminPoolBucketsParams = {
-  /**
-   * CSV, vd `A1,B2`. Bỏ trống = mọi trình độ.
-   */
-  engLevels?: string
-  /**
-   * CSV topic id, vd `3,7,12`. Bỏ trống = mọi topic đang bật.
-   */
-  topicIds?: string
-  /**
-   * CSV quizType, vd `vocab,idiom`. Bỏ trống = mọi loại đang bật.
-   */
-  quizTypes?: string
-  scope?: GetAdminPoolBucketsScope
-  /**
-   * @minimum 1
-   */
-  countPerBucket?: string | number
-}
+/**
+ * CSV, vd `A1,B2`. Bỏ trống = mọi trình độ.
+ */
+engLevels?: string;
+/**
+ * CSV topic id, vd `3,7,12`. Bỏ trống = mọi topic đang bật.
+ */
+topicIds?: string;
+/**
+ * CSV quizType, vd `vocab,idiom`. Bỏ trống = mọi loại đang bật.
+ */
+quizTypes?: string;
+scope?: GetAdminPoolBucketsScope;
+/**
+ * @minimum 1
+ */
+countPerBucket?: string | number;
+};

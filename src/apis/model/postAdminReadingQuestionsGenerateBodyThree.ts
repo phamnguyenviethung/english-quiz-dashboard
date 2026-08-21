@@ -8,7 +8,7 @@
 
 export type PostAdminReadingQuestionsGenerateBodyThree = {
   /** Bài đọc nguồn. Phải đang tồn tại và có topicName. */
-  passageId: string | number
+  passageId: string | number;
   /** OpenRouter model id. Bỏ trống → random trong pool `readingEnabled`. */
-  model?: string
-}
+  model?: string;
+};

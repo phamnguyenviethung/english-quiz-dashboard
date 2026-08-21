@@ -8,8 +8,8 @@
 
 export type GetAdminReadingsBuckets200DataSummary = {
   /** Số bucket khớp filter (kể cả bucket sẽ bị bỏ qua). */
-  matchedBuckets: number
-  plannedBuckets: number
-  plannedPassages: number
-  maxPerBucket: number
-}
+  matchedBuckets: number;
+  plannedBuckets: number;
+  plannedPassages: number;
+  maxPerBucket: number;
+};

@@ -6,12 +6,12 @@
  * OpenAPI spec version: 0.0.0
  */
 
-export type PostAdminReadingQuestionsRefillBodyOneFilterCefrLevelsItem =
-  (typeof PostAdminReadingQuestionsRefillBodyOneFilterCefrLevelsItem)[keyof typeof PostAdminReadingQuestionsRefillBodyOneFilterCefrLevelsItem]
+export type PostAdminReadingQuestionsRefillBodyOneFilterCefrLevelsItem = typeof PostAdminReadingQuestionsRefillBodyOneFilterCefrLevelsItem[keyof typeof PostAdminReadingQuestionsRefillBodyOneFilterCefrLevelsItem];
+
 
 export const PostAdminReadingQuestionsRefillBodyOneFilterCefrLevelsItem = {
-  A1: "A1",
-  A2: "A2",
-  B1: "B1",
-  B2: "B2",
-} as const
+  A1: 'A1',
+  A2: 'A2',
+  B1: 'B1',
+  B2: 'B2',
+} as const;

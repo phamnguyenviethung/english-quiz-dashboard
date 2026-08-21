@@ -8,8 +8,8 @@
 
 export type PostAdminTenantsBodyThree = {
   /** @minLength 1 */
-  name: string
-  description?: string | null
-  allowAllTopics?: boolean
-  allowAllQuizTypes?: boolean
-}
+  name: string;
+  description?: string | null;
+  allowAllTopics?: boolean;
+  allowAllQuizTypes?: boolean;
+};

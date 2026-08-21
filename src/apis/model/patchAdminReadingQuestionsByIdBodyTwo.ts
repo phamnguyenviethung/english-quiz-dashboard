@@ -8,16 +8,16 @@
 
 export type PatchAdminReadingQuestionsByIdBodyTwo = {
   /** @minLength 1 */
-  question?: string
+  question?: string;
   /** Replace toàn bộ. Phải đúng 4 đáp án không rỗng. */
-  options?: string[]
+  options?: string[];
   /**
-   * Index 0-based, validate theo options mới.
-   * @minimum 0
-   */
-  correctAnswer?: string | number
+     * Index 0-based, validate theo options mới.
+     * @minimum 0
+     */
+  correctAnswer?: string | number;
   /** @minLength 1 */
-  explanation?: string
+  explanation?: string;
   /** false = tắt câu, bài sẽ bị coi là thiếu và được sinh lại. */
-  isActive?: boolean
-}
+  isActive?: boolean;
+};

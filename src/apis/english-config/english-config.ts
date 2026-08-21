@@ -5,7 +5,10 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query"
+import {
+  useMutation,
+  useQuery
+} from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -18,8 +21,8 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult,
-} from "@tanstack/react-query"
+  UseQueryResult
+} from '@tanstack/react-query';
 
 import type {
   GetEnglishConfig200,
@@ -49,769 +52,407 @@ import type {
   PostEnglishConfigByRecordKeyReset200,
   PostEnglishConfigByRecordKeyReset401,
   PostEnglishConfigByRecordKeyReset403,
-  PostEnglishConfigByRecordKeyReset500,
-} from "../model"
+  PostEnglishConfigByRecordKeyReset500
+} from '../model';
 
-import { axiosClient } from "../../configs/axiosClient.ts"
-import type { ErrorType, BodyType } from "../../configs/axiosClient.ts"
+import { axiosClient } from '../../configs/axiosClient.ts';
+import type { ErrorType , BodyType } from '../../configs/axiosClient.ts';
 
-type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-const withQueryKey = <T extends object, K>(
-  query: T,
-  queryKey: K
-): T & { queryKey: K } => {
-  const result = { queryKey } as T & { queryKey: K }
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKey: K } => {
+  const result = { queryKey } as T & { queryKey: K };
   for (const key of Object.keys(query)) {
     // The explicit queryKey always wins, matching the previous
     // `{ ...query, queryKey }` spread where it was set last.
-    if (key === "queryKey") continue
+    if (key === 'queryKey') continue;
     Object.defineProperty(result, key, {
       enumerable: true,
       configurable: true,
       get: () => (query as Record<string, unknown>)[key],
-    })
+    });
   }
-  return result
-}
+  return result;
+};
 
 /**
  * Snapshot config runtime hiện tại (question_pool, quiz_distribution, job_flags). Chỉ dùng được với tài khoản admin.
  * @summary Get current config snapshot
  */
 export const getEnglishConfig = (
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetEnglishConfig200>(
-    { url: `/english/config`, method: "GET", signal },
-    options
-  )
-}
+
+
+      return axiosClient<GetEnglishConfig200>(
+      {url: `/english/config`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getGetEnglishConfigQueryKey = () => {
-  return [`/english/config`] as const
+    return [
+    `/english/config`
+    ] as const;
+    }
+
+
+export const getGetEnglishConfigQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishConfig>>, TError = ErrorType<GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfig>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishConfigQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishConfig>>> = ({ signal }) => getEnglishConfig(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfig>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetEnglishConfigQueryOptions = <
-  TData = Awaited<ReturnType<typeof getEnglishConfig>>,
-  TError = ErrorType<
-    GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
-  >,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfig>>, TError, TData>
-  >
-  request?: SecondParameter<typeof axiosClient>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+export type GetEnglishConfigQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishConfig>>>
+export type GetEnglishConfigQueryError = ErrorType<GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500>
 
-  const queryKey = queryOptions?.queryKey ?? getGetEnglishConfigQueryKey()
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getEnglishConfig>>
-  > = ({ signal }) => getEnglishConfig(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishConfig>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnglishConfigQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getEnglishConfig>>
->
-export type GetEnglishConfigQueryError = ErrorType<
-  GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
->
-
-export function useGetEnglishConfig<
-  TData = Awaited<ReturnType<typeof getEnglishConfig>>,
-  TError = ErrorType<
-    GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
-  >,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishConfig>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+export function useGetEnglishConfig<TData = Awaited<ReturnType<typeof getEnglishConfig>>, TError = ErrorType<GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfig>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishConfig>>,
           TError,
           Awaited<ReturnType<typeof getEnglishConfig>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishConfig<
-  TData = Awaited<ReturnType<typeof getEnglishConfig>>,
-  TError = ErrorType<
-    GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishConfig>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishConfig<TData = Awaited<ReturnType<typeof getEnglishConfig>>, TError = ErrorType<GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfig>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishConfig>>,
           TError,
           Awaited<ReturnType<typeof getEnglishConfig>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishConfig<
-  TData = Awaited<ReturnType<typeof getEnglishConfig>>,
-  TError = ErrorType<
-    GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishConfig>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishConfig<TData = Awaited<ReturnType<typeof getEnglishConfig>>, TError = ErrorType<GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfig>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get current config snapshot
  */
 
-export function useGetEnglishConfig<
-  TData = Awaited<ReturnType<typeof getEnglishConfig>>,
-  TError = ErrorType<
-    GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishConfig>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function useGetEnglishConfig<TData = Awaited<ReturnType<typeof getEnglishConfig>>, TError = ErrorType<GetEnglishConfig401 | GetEnglishConfig403 | GetEnglishConfig500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfig>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetEnglishConfigQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return withQueryKey(query, queryOptions.queryKey)
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
 
 /**
  * Danh sách đầy đủ config record (kèm validation/uiSchema/value/defaultValue) để build admin UI. Chỉ dùng được với tài khoản admin.
  * @summary List config records
  */
 export const getEnglishConfigRecords = (
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<GetEnglishConfigRecords200>(
-    { url: `/english/config/records`, method: "GET", signal },
-    options
-  )
-}
+
+
+      return axiosClient<GetEnglishConfigRecords200>(
+      {url: `/english/config/records`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
 
 export const getGetEnglishConfigRecordsQueryKey = () => {
-  return [`/english/config/records`] as const
+    return [
+    `/english/config/records`
+    ] as const;
+    }
+
+
+export const getGetEnglishConfigRecordsQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError = ErrorType<GetEnglishConfigRecords401 | GetEnglishConfigRecords403 | GetEnglishConfigRecords500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishConfigRecordsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishConfigRecords>>> = ({ signal }) => getEnglishConfigRecords(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export const getGetEnglishConfigRecordsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-  TError = ErrorType<
-    | GetEnglishConfigRecords401
-    | GetEnglishConfigRecords403
-    | GetEnglishConfigRecords500
-  >,
->(options?: {
-  query?: Partial<
-    UseQueryOptions<
-      Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-      TError,
-      TData
-    >
-  >
-  request?: SecondParameter<typeof axiosClient>
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {}
+export type GetEnglishConfigRecordsQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishConfigRecords>>>
+export type GetEnglishConfigRecordsQueryError = ErrorType<GetEnglishConfigRecords401 | GetEnglishConfigRecords403 | GetEnglishConfigRecords500>
 
-  const queryKey =
-    queryOptions?.queryKey ?? getGetEnglishConfigRecordsQueryKey()
 
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getEnglishConfigRecords>>
-  > = ({ signal }) => getEnglishConfigRecords(requestOptions, signal)
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetEnglishConfigRecordsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getEnglishConfigRecords>>
->
-export type GetEnglishConfigRecordsQueryError = ErrorType<
-  | GetEnglishConfigRecords401
-  | GetEnglishConfigRecords403
-  | GetEnglishConfigRecords500
->
-
-export function useGetEnglishConfigRecords<
-  TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-  TError = ErrorType<
-    | GetEnglishConfigRecords401
-    | GetEnglishConfigRecords403
-    | GetEnglishConfigRecords500
-  >,
->(
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+export function useGetEnglishConfigRecords<TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError = ErrorType<GetEnglishConfigRecords401 | GetEnglishConfigRecords403 | GetEnglishConfigRecords500>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishConfigRecords>>,
           TError,
           Awaited<ReturnType<typeof getEnglishConfigRecords>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishConfigRecords<
-  TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-  TError = ErrorType<
-    | GetEnglishConfigRecords401
-    | GetEnglishConfigRecords403
-    | GetEnglishConfigRecords500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishConfigRecords<TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError = ErrorType<GetEnglishConfigRecords401 | GetEnglishConfigRecords403 | GetEnglishConfigRecords500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishConfigRecords>>,
           TError,
           Awaited<ReturnType<typeof getEnglishConfigRecords>>
-        >,
-        "initialData"
-      >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
-export function useGetEnglishConfigRecords<
-  TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-  TError = ErrorType<
-    | GetEnglishConfigRecords401
-    | GetEnglishConfigRecords403
-    | GetEnglishConfigRecords500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-}
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetEnglishConfigRecords<TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError = ErrorType<GetEnglishConfigRecords401 | GetEnglishConfigRecords403 | GetEnglishConfigRecords500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary List config records
  */
 
-export function useGetEnglishConfigRecords<
-  TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-  TError = ErrorType<
-    | GetEnglishConfigRecords401
-    | GetEnglishConfigRecords403
-    | GetEnglishConfigRecords500
-  >,
->(
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getEnglishConfigRecords>>,
-        TError,
-        TData
-      >
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>
-} {
+export function useGetEnglishConfigRecords<TData = Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError = ErrorType<GetEnglishConfigRecords401 | GetEnglishConfigRecords403 | GetEnglishConfigRecords500>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishConfigRecords>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
   const queryOptions = getGetEnglishConfigRecordsQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> }
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  return withQueryKey(query, queryOptions.queryKey)
+  return withQueryKey(query, queryOptions.queryKey);
 }
+
+
+
+
+
 
 /**
  * Cập nhật nhiều config record trong 1 transaction: áp hết thay đổi rồi mới validate snapshot một lần. Dùng khi sửa các field ràng buộc lẫn nhau (vd manualFillMinCount + manualFillDefaultCount) — gọi PATCH lần lượt sẽ fail ở request đầu. Sai 1 record thì rollback toàn bộ. Chỉ dùng được với tài khoản admin.
  * @summary Update multiple config records
  */
 export const patchEnglishConfigRecords = (
-  patchEnglishConfigRecordsBody:
-    | BodyType<
-        | PatchEnglishConfigRecordsBodyOne
-        | PatchEnglishConfigRecordsBodyTwo
-        | PatchEnglishConfigRecordsBodyThree
-      >
-    | PatchEnglishConfigRecordsBodyTwo
-    | PatchEnglishConfigRecordsBodyThree,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    patchEnglishConfigRecordsBody: BodyType<PatchEnglishConfigRecordsBodyOne | PatchEnglishConfigRecordsBodyTwo | PatchEnglishConfigRecordsBodyThree>| PatchEnglishConfigRecordsBodyTwo | PatchEnglishConfigRecordsBodyThree,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<PatchEnglishConfigRecords200>(
-    {
-      url: `/english/config/records`,
-      method: "PATCH",
-      data: patchEnglishConfigRecordsBody,
-      signal,
-    },
-    options
-  )
-}
 
-export const getPatchEnglishConfigRecordsMutationOptions = <
-  TError = ErrorType<
-    | PatchEnglishConfigRecords400
-    | PatchEnglishConfigRecords401
-    | PatchEnglishConfigRecords403
-    | PatchEnglishConfigRecords500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
-    TError,
-    {
-      data: BodyType<
-        | PatchEnglishConfigRecordsBodyOne
-        | PatchEnglishConfigRecordsBodyTwo
-        | PatchEnglishConfigRecordsBodyThree
-      >
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
-  TError,
-  {
-    data: BodyType<
-      | PatchEnglishConfigRecordsBodyOne
-      | PatchEnglishConfigRecordsBodyTwo
-      | PatchEnglishConfigRecordsBodyThree
-    >
-  },
-  TContext
-> => {
-  const mutationKey = ["patchEnglishConfigRecords"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
-    {
-      data: BodyType<
-        | PatchEnglishConfigRecordsBodyOne
-        | PatchEnglishConfigRecordsBodyTwo
-        | PatchEnglishConfigRecordsBodyThree
-      >
+      return axiosClient<PatchEnglishConfigRecords200>(
+      {url: `/english/config/records`, method: 'PATCH',
+      data: patchEnglishConfigRecordsBody, signal
+    },
+      options);
     }
-  > = (props) => {
-    const { data } = props ?? {}
 
-    return patchEnglishConfigRecords(data, requestOptions)
-  }
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PatchEnglishConfigRecordsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchEnglishConfigRecords>>
->
-export type PatchEnglishConfigRecordsMutationBody = BodyType<
-  | PatchEnglishConfigRecordsBodyOne
-  | PatchEnglishConfigRecordsBodyTwo
-  | PatchEnglishConfigRecordsBodyThree
->
-export type PatchEnglishConfigRecordsMutationError = ErrorType<
-  | PatchEnglishConfigRecords400
-  | PatchEnglishConfigRecords401
-  | PatchEnglishConfigRecords403
-  | PatchEnglishConfigRecords500
->
 
-/**
+export const getPatchEnglishConfigRecordsMutationOptions = <TError = ErrorType<PatchEnglishConfigRecords400 | PatchEnglishConfigRecords401 | PatchEnglishConfigRecords403 | PatchEnglishConfigRecords500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchEnglishConfigRecords>>, TError,{data: BodyType<PatchEnglishConfigRecordsBodyOne | PatchEnglishConfigRecordsBodyTwo | PatchEnglishConfigRecordsBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof patchEnglishConfigRecords>>, TError,{data: BodyType<PatchEnglishConfigRecordsBodyOne | PatchEnglishConfigRecordsBodyTwo | PatchEnglishConfigRecordsBodyThree>}, TContext> => {
+
+const mutationKey = ['patchEnglishConfigRecords'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchEnglishConfigRecords>>, {data: BodyType<PatchEnglishConfigRecordsBodyOne | PatchEnglishConfigRecordsBodyTwo | PatchEnglishConfigRecordsBodyThree>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  patchEnglishConfigRecords(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatchEnglishConfigRecordsMutationResult = NonNullable<Awaited<ReturnType<typeof patchEnglishConfigRecords>>>
+    export type PatchEnglishConfigRecordsMutationBody = BodyType<PatchEnglishConfigRecordsBodyOne | PatchEnglishConfigRecordsBodyTwo | PatchEnglishConfigRecordsBodyThree>
+    export type PatchEnglishConfigRecordsMutationError = ErrorType<PatchEnglishConfigRecords400 | PatchEnglishConfigRecords401 | PatchEnglishConfigRecords403 | PatchEnglishConfigRecords500>
+
+    /**
  * @summary Update multiple config records
  */
-export const usePatchEnglishConfigRecords = <
-  TError = ErrorType<
-    | PatchEnglishConfigRecords400
-    | PatchEnglishConfigRecords401
-    | PatchEnglishConfigRecords403
-    | PatchEnglishConfigRecords500
-  >,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
-      TError,
-      {
-        data: BodyType<
-          | PatchEnglishConfigRecordsBodyOne
-          | PatchEnglishConfigRecordsBodyTwo
-          | PatchEnglishConfigRecordsBodyThree
-        >
-      },
-      TContext
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
-  TError,
-  {
-    data: BodyType<
-      | PatchEnglishConfigRecordsBodyOne
-      | PatchEnglishConfigRecordsBodyTwo
-      | PatchEnglishConfigRecordsBodyThree
-    >
-  },
-  TContext
-> => {
-  return useMutation(
-    getPatchEnglishConfigRecordsMutationOptions(options),
-    queryClient
-  )
-}
-/**
+export const usePatchEnglishConfigRecords = <TError = ErrorType<PatchEnglishConfigRecords400 | PatchEnglishConfigRecords401 | PatchEnglishConfigRecords403 | PatchEnglishConfigRecords500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchEnglishConfigRecords>>, TError,{data: BodyType<PatchEnglishConfigRecordsBodyOne | PatchEnglishConfigRecordsBodyTwo | PatchEnglishConfigRecordsBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof patchEnglishConfigRecords>>,
+        TError,
+        {data: BodyType<PatchEnglishConfigRecordsBodyOne | PatchEnglishConfigRecordsBodyTwo | PatchEnglishConfigRecordsBodyThree>},
+        TContext
+      > => {
+      return useMutation(getPatchEnglishConfigRecordsMutationOptions(options), queryClient);
+    }
+    /**
  * Cập nhật giá trị 1 config record. recordKey không tồn tại throw lỗi nội bộ (500), không phải 404. Chỉ dùng được với tài khoản admin.
  * @summary Update a config record
  */
 export const patchEnglishConfigByRecordKey = (
-  recordKey: string,
-  patchEnglishConfigByRecordKeyBody:
-    | BodyType<
-        | PatchEnglishConfigByRecordKeyBodyOne
-        | PatchEnglishConfigByRecordKeyBodyTwo
-        | PatchEnglishConfigByRecordKeyBodyThree
-      >
-    | PatchEnglishConfigByRecordKeyBodyTwo
-    | PatchEnglishConfigByRecordKeyBodyThree,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    recordKey: string,
+    patchEnglishConfigByRecordKeyBody: BodyType<PatchEnglishConfigByRecordKeyBodyOne | PatchEnglishConfigByRecordKeyBodyTwo | PatchEnglishConfigByRecordKeyBodyThree>| PatchEnglishConfigByRecordKeyBodyTwo | PatchEnglishConfigByRecordKeyBodyThree,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<PatchEnglishConfigByRecordKey200>(
-    {
-      url: `/english/config/${recordKey}`,
-      method: "PATCH",
-      data: patchEnglishConfigByRecordKeyBody,
-      signal,
-    },
-    options
-  )
-}
 
-export const getPatchEnglishConfigByRecordKeyMutationOptions = <
-  TError = ErrorType<
-    | PatchEnglishConfigByRecordKey400
-    | PatchEnglishConfigByRecordKey401
-    | PatchEnglishConfigByRecordKey403
-    | PatchEnglishConfigByRecordKey500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
-    TError,
-    {
-      recordKey: string
-      data: BodyType<
-        | PatchEnglishConfigByRecordKeyBodyOne
-        | PatchEnglishConfigByRecordKeyBodyTwo
-        | PatchEnglishConfigByRecordKeyBodyThree
-      >
-    },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
-  TError,
-  {
-    recordKey: string
-    data: BodyType<
-      | PatchEnglishConfigByRecordKeyBodyOne
-      | PatchEnglishConfigByRecordKeyBodyTwo
-      | PatchEnglishConfigByRecordKeyBodyThree
-    >
-  },
-  TContext
-> => {
-  const mutationKey = ["patchEnglishConfigByRecordKey"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
-    {
-      recordKey: string
-      data: BodyType<
-        | PatchEnglishConfigByRecordKeyBodyOne
-        | PatchEnglishConfigByRecordKeyBodyTwo
-        | PatchEnglishConfigByRecordKeyBodyThree
-      >
+      return axiosClient<PatchEnglishConfigByRecordKey200>(
+      {url: `/english/config/${recordKey}`, method: 'PATCH',
+      data: patchEnglishConfigByRecordKeyBody, signal
+    },
+      options);
     }
-  > = (props) => {
-    const { recordKey, data } = props ?? {}
 
-    return patchEnglishConfigByRecordKey(recordKey, data, requestOptions)
-  }
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PatchEnglishConfigByRecordKeyMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>
->
-export type PatchEnglishConfigByRecordKeyMutationBody = BodyType<
-  | PatchEnglishConfigByRecordKeyBodyOne
-  | PatchEnglishConfigByRecordKeyBodyTwo
-  | PatchEnglishConfigByRecordKeyBodyThree
->
-export type PatchEnglishConfigByRecordKeyMutationError = ErrorType<
-  | PatchEnglishConfigByRecordKey400
-  | PatchEnglishConfigByRecordKey401
-  | PatchEnglishConfigByRecordKey403
-  | PatchEnglishConfigByRecordKey500
->
 
-/**
+export const getPatchEnglishConfigByRecordKeyMutationOptions = <TError = ErrorType<PatchEnglishConfigByRecordKey400 | PatchEnglishConfigByRecordKey401 | PatchEnglishConfigByRecordKey403 | PatchEnglishConfigByRecordKey500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>, TError,{recordKey: string;data: BodyType<PatchEnglishConfigByRecordKeyBodyOne | PatchEnglishConfigByRecordKeyBodyTwo | PatchEnglishConfigByRecordKeyBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>, TError,{recordKey: string;data: BodyType<PatchEnglishConfigByRecordKeyBodyOne | PatchEnglishConfigByRecordKeyBodyTwo | PatchEnglishConfigByRecordKeyBodyThree>}, TContext> => {
+
+const mutationKey = ['patchEnglishConfigByRecordKey'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>, {recordKey: string;data: BodyType<PatchEnglishConfigByRecordKeyBodyOne | PatchEnglishConfigByRecordKeyBodyTwo | PatchEnglishConfigByRecordKeyBodyThree>}> = (props) => {
+          const {recordKey,data} = props ?? {};
+
+          return  patchEnglishConfigByRecordKey(recordKey,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatchEnglishConfigByRecordKeyMutationResult = NonNullable<Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>>
+    export type PatchEnglishConfigByRecordKeyMutationBody = BodyType<PatchEnglishConfigByRecordKeyBodyOne | PatchEnglishConfigByRecordKeyBodyTwo | PatchEnglishConfigByRecordKeyBodyThree>
+    export type PatchEnglishConfigByRecordKeyMutationError = ErrorType<PatchEnglishConfigByRecordKey400 | PatchEnglishConfigByRecordKey401 | PatchEnglishConfigByRecordKey403 | PatchEnglishConfigByRecordKey500>
+
+    /**
  * @summary Update a config record
  */
-export const usePatchEnglishConfigByRecordKey = <
-  TError = ErrorType<
-    | PatchEnglishConfigByRecordKey400
-    | PatchEnglishConfigByRecordKey401
-    | PatchEnglishConfigByRecordKey403
-    | PatchEnglishConfigByRecordKey500
-  >,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
-      TError,
-      {
-        recordKey: string
-        data: BodyType<
-          | PatchEnglishConfigByRecordKeyBodyOne
-          | PatchEnglishConfigByRecordKeyBodyTwo
-          | PatchEnglishConfigByRecordKeyBodyThree
-        >
-      },
-      TContext
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
-  TError,
-  {
-    recordKey: string
-    data: BodyType<
-      | PatchEnglishConfigByRecordKeyBodyOne
-      | PatchEnglishConfigByRecordKeyBodyTwo
-      | PatchEnglishConfigByRecordKeyBodyThree
-    >
-  },
-  TContext
-> => {
-  return useMutation(
-    getPatchEnglishConfigByRecordKeyMutationOptions(options),
-    queryClient
-  )
-}
-/**
+export const usePatchEnglishConfigByRecordKey = <TError = ErrorType<PatchEnglishConfigByRecordKey400 | PatchEnglishConfigByRecordKey401 | PatchEnglishConfigByRecordKey403 | PatchEnglishConfigByRecordKey500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>, TError,{recordKey: string;data: BodyType<PatchEnglishConfigByRecordKeyBodyOne | PatchEnglishConfigByRecordKeyBodyTwo | PatchEnglishConfigByRecordKeyBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof patchEnglishConfigByRecordKey>>,
+        TError,
+        {recordKey: string;data: BodyType<PatchEnglishConfigByRecordKeyBodyOne | PatchEnglishConfigByRecordKeyBodyTwo | PatchEnglishConfigByRecordKeyBodyThree>},
+        TContext
+      > => {
+      return useMutation(getPatchEnglishConfigByRecordKeyMutationOptions(options), queryClient);
+    }
+    /**
  * Reset 1 config record về giá trị mặc định. Chỉ dùng được với tài khoản admin.
  * @summary Reset config record to default
  */
 export const postEnglishConfigByRecordKeyReset = (
-  recordKey: string,
-  options?: SecondParameter<typeof axiosClient>,
-  signal?: AbortSignal
+    recordKey: string,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
-  return axiosClient<PostEnglishConfigByRecordKeyReset200>(
-    { url: `/english/config/${recordKey}/reset`, method: "POST", signal },
-    options
-  )
-}
 
-export const getPostEnglishConfigByRecordKeyResetMutationOptions = <
-  TError = ErrorType<
-    | PostEnglishConfigByRecordKeyReset401
-    | PostEnglishConfigByRecordKeyReset403
-    | PostEnglishConfigByRecordKeyReset500
-  >,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
-    TError,
-    { recordKey: string },
-    TContext
-  >
-  request?: SecondParameter<typeof axiosClient>
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
-  TError,
-  { recordKey: string },
-  TContext
-> => {
-  const mutationKey = ["postEnglishConfigByRecordKeyReset"]
-  const { mutation: mutationOptions, request: requestOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
-    { recordKey: string }
-  > = (props) => {
-    const { recordKey } = props ?? {}
+      return axiosClient<PostEnglishConfigByRecordKeyReset200>(
+      {url: `/english/config/${recordKey}/reset`, method: 'POST', signal
+    },
+      options);
+    }
 
-    return postEnglishConfigByRecordKeyReset(recordKey, requestOptions)
-  }
 
-  return { mutationFn, ...mutationOptions }
-}
 
-export type PostEnglishConfigByRecordKeyResetMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>
->
 
-export type PostEnglishConfigByRecordKeyResetMutationError = ErrorType<
-  | PostEnglishConfigByRecordKeyReset401
-  | PostEnglishConfigByRecordKeyReset403
-  | PostEnglishConfigByRecordKeyReset500
->
+export const getPostEnglishConfigByRecordKeyResetMutationOptions = <TError = ErrorType<PostEnglishConfigByRecordKeyReset401 | PostEnglishConfigByRecordKeyReset403 | PostEnglishConfigByRecordKeyReset500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>, TError,{recordKey: string}, TContext>, request?: SecondParameter<typeof axiosClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>, TError,{recordKey: string}, TContext> => {
 
-/**
+const mutationKey = ['postEnglishConfigByRecordKeyReset'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>, {recordKey: string}> = (props) => {
+          const {recordKey} = props ?? {};
+
+          return  postEnglishConfigByRecordKeyReset(recordKey,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostEnglishConfigByRecordKeyResetMutationResult = NonNullable<Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>>
+
+    export type PostEnglishConfigByRecordKeyResetMutationError = ErrorType<PostEnglishConfigByRecordKeyReset401 | PostEnglishConfigByRecordKeyReset403 | PostEnglishConfigByRecordKeyReset500>
+
+    /**
  * @summary Reset config record to default
  */
-export const usePostEnglishConfigByRecordKeyReset = <
-  TError = ErrorType<
-    | PostEnglishConfigByRecordKeyReset401
-    | PostEnglishConfigByRecordKeyReset403
-    | PostEnglishConfigByRecordKeyReset500
-  >,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
-      TError,
-      { recordKey: string },
-      TContext
-    >
-    request?: SecondParameter<typeof axiosClient>
-  },
-  queryClient?: QueryClient
-): UseMutationResult<
-  Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
-  TError,
-  { recordKey: string },
-  TContext
-> => {
-  return useMutation(
-    getPostEnglishConfigByRecordKeyResetMutationOptions(options),
-    queryClient
-  )
-}
+export const usePostEnglishConfigByRecordKeyReset = <TError = ErrorType<PostEnglishConfigByRecordKeyReset401 | PostEnglishConfigByRecordKeyReset403 | PostEnglishConfigByRecordKeyReset500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>, TError,{recordKey: string}, TContext>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postEnglishConfigByRecordKeyReset>>,
+        TError,
+        {recordKey: string},
+        TContext
+      > => {
+      return useMutation(getPostEnglishConfigByRecordKeyResetMutationOptions(options), queryClient);
+    }

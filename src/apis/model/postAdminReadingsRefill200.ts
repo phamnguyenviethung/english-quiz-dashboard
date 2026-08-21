@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { PostAdminReadingsRefill200Data } from "./postAdminReadingsRefill200Data.ts"
+import type { PostAdminReadingsRefill200Data } from './postAdminReadingsRefill200Data.ts';
 
 export type PostAdminReadingsRefill200 = {
-  success: true
-  data: PostAdminReadingsRefill200Data
-}
+  success: true;
+  data: PostAdminReadingsRefill200Data;
+};

@@ -5,9 +5,9 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
-import type { GetEnglishReadingsPop200Data } from "./getEnglishReadingsPop200Data.ts"
+import type { GetEnglishReadingsPop200Data } from './getEnglishReadingsPop200Data.ts';
 
 export type GetEnglishReadingsPop200 = {
-  success: true
-  data: GetEnglishReadingsPop200Data
-}
+  success: true;
+  data: GetEnglishReadingsPop200Data;
+};
