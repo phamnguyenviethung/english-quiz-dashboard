@@ -31,7 +31,12 @@ export function getCronStatusMeta(status: string | null | undefined) {
 
 export const CRON_JOB_LABELS: Record<string, string> = {
   pool_refill: "Bổ sung kho câu hỏi",
+  manual_fill: "Bổ sung kho câu hỏi (thủ công)",
   question_gen: "Sinh câu hỏi",
+  reading_refill: "Bổ sung bài đọc",
+  reading_manual_fill: "Bổ sung bài đọc (thủ công)",
+  reading_question_refill: "Bổ sung câu hỏi bài đọc",
+  reading_question_manual_fill: "Bổ sung câu hỏi bài đọc (thủ công)",
 }
 
 export const CRON_TRIGGER_LABELS: Record<string, string> = {

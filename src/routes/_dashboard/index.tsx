@@ -1,169 +1,73 @@
-import { Link, createFileRoute } from "@tanstack/react-router"
-import {
-  IconAdjustmentsAlt,
-  IconArrowRight,
-  IconClockBolt,
-  IconDatabase,
-  IconListDetails,
-  IconSparkles,
-  IconTags,
-} from "@tabler/icons-react"
+import { createFileRoute } from "@tanstack/react-router"
+import { IconDatabase } from "@tabler/icons-react"
 
+import { getGetEnglishCronUsageQueryOptions } from "@/apis/english-cron-tracking/english-cron-tracking.ts"
 import { PageHeader } from "@/components/common/page-header.tsx"
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { NavPath } from "@/configs/navigation.ts"
-import { useTopics } from "@/features/topics/hooks/use-topics.ts"
-import { formatNumber } from "@/lib/format.ts"
+import { ModelErrorRateTable } from "@/features/dashboard/components/model-error-rate-table.tsx"
+import { OverviewStatTiles } from "@/features/dashboard/components/overview-stat-tiles.tsx"
+import { DASHBOARD_USAGE_RANGE_DAYS } from "@/features/dashboard/constants.ts"
+import { useDashboardUsage } from "@/features/dashboard/hooks/use-dashboard-usage.ts"
+import { usageRangeFrom } from "@/features/cron-runs/hooks/use-cron-usage.ts"
 
 export const Route = createFileRoute("/_dashboard/")({
+  loader: ({ context }) =>
+    context.queryClient.prefetchQuery(
+      getGetEnglishCronUsageQueryOptions({
+        from: usageRangeFrom(DASHBOARD_USAGE_RANGE_DAYS).toISOString(),
+        groupBy: "model",
+      })
+    ),
   component: OverviewPage,
 })
 
-const SHORTCUTS: {
-  to: NavPath
-  title: string
-  description: string
-  icon: typeof IconSparkles
-}[] = [
-  {
-    to: "/generate",
-    title: "Tạo thử",
-    description:
-      "Thử prompt và model cho từng loại câu hỏi, xem trước kết quả trước khi đưa vào kho.",
-    icon: IconSparkles,
-  },
-  {
-    to: "/config",
-    title: "Cấu hình",
-    description:
-      "Ngưỡng tồn kho, phân bổ loại câu hỏi và cờ bật/tắt các job nền.",
-    icon: IconAdjustmentsAlt,
-  },
-  {
-    to: "/cron-runs",
-    title: "Lịch sử cron",
-    description:
-      "Theo dõi các lượt chạy job nền, số câu hỏi sinh ra và lỗi phát sinh.",
-    icon: IconClockBolt,
-  },
-  {
-    to: "/metadata",
-    title: "Metadata & Health",
-    description:
-      "Dữ liệu tham chiếu của API và tình trạng hoạt động của dịch vụ.",
-    icon: IconListDetails,
-  },
-]
-
-function ShortcutCard({
-  to,
-  title,
-  description,
-  icon: ShortcutIcon,
-}: (typeof SHORTCUTS)[number]) {
-  return (
-    <Card className="transition-colors hover:border-primary/40">
-      <CardHeader>
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <ShortcutIcon
-              className="size-4 text-muted-foreground"
-              stroke={1.5}
-            />
-            <CardTitle>{title}</CardTitle>
-          </div>
-          <Link
-            to={to}
-            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-          >
-            Xem
-            <IconArrowRight className="size-3.5" stroke={1.5} />
-          </Link>
-        </div>
-        <CardDescription className="mt-1">{description}</CardDescription>
-      </CardHeader>
-    </Card>
-  )
-}
-
 function OverviewPage() {
-  const { topics, isPending, isError } = useTopics()
+  const {
+    modelRows,
+    totals,
+    isPending: isUsagePending,
+    isError: isUsageError,
+    error: usageError,
+    refetch: refetchUsage,
+  } = useDashboardUsage()
 
   return (
     <>
       <PageHeader
         title="Bảng điều khiển"
-        description="Theo dõi chủ đề và kho câu hỏi dùng cho bot quiz tiếng Anh."
+        description="Chi phí AI, token, tỷ lệ lỗi theo model và tình trạng các cron job nền."
       />
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Card className="transition-colors hover:border-primary/40">
+      <div className="flex flex-col gap-4">
+        <OverviewStatTiles totals={totals} isPending={isUsagePending} />
+
+        <Card>
           <CardHeader>
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <IconTags
-                  className="size-4 text-muted-foreground"
-                  stroke={1.5}
-                />
-                <CardTitle>Chủ đề</CardTitle>
-              </div>
-              <Link
-                to="/topics"
-                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-              >
-                Xem
-                <IconArrowRight className="size-3.5" stroke={1.5} />
-              </Link>
-            </div>
-            {isPending ? (
-              <Skeleton className="mt-2 h-9 w-20" />
-            ) : (
-              <p className="mt-1 text-3xl font-semibold tabular-nums">
-                {isError ? "-" : formatNumber(topics.length)}
-              </p>
-            )}
+            <CardTitle>
+              <IconDatabase stroke={1.5} data-icon="inline-start" />
+              Tỷ lệ lỗi theo model
+            </CardTitle>
             <CardDescription>
-              {isError
-                ? "Không tải được danh sách chủ đề."
-                : "Chủ đề đang bật, dùng để phân loại câu hỏi."}
+              So sánh lượt gọi thành công/thất bại của từng model trong{" "}
+              {DASHBOARD_USAGE_RANGE_DAYS} ngày gần đây.
             </CardDescription>
           </CardHeader>
+          <CardContent>
+            <ModelErrorRateTable
+              rows={modelRows}
+              isPending={isUsagePending}
+              isError={isUsageError}
+              error={usageError}
+              onRetry={() => void refetchUsage()}
+            />
+          </CardContent>
         </Card>
-
-        <Card className="transition-colors hover:border-primary/40">
-          <CardHeader>
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <IconDatabase
-                  className="size-4 text-muted-foreground"
-                  stroke={1.5}
-                />
-                <CardTitle>Kho câu hỏi</CardTitle>
-              </div>
-              <Link
-                to="/question-pool"
-                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-              >
-                Xem
-                <IconArrowRight className="size-3.5" stroke={1.5} />
-              </Link>
-            </div>
-            <CardDescription className="mt-1">
-              Xem số câu hỏi còn lại theo cấp độ và loại câu hỏi, tạo job bổ
-              sung khi bucket sắp cạn.
-            </CardDescription>
-          </CardHeader>
-        </Card>
-
-        {SHORTCUTS.map((shortcut) => (
-          <ShortcutCard key={shortcut.to} {...shortcut} />
-        ))}
       </div>
     </>
   )

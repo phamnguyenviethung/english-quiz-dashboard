@@ -12,4 +12,6 @@ export type GetEnglishCronUsage200DataItem = {
   tokenIn: number;
   tokenOut: number;
   requestCount: number;
+  successCount: number;
+  failedCount: number;
 };

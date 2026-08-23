@@ -1,0 +1,1 @@
+export const DASHBOARD_USAGE_RANGE_DAYS = 30
