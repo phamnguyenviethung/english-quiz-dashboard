@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getEngLevelBadgeClass } from "@/features/quiz/constants.ts"
+import { getReadingTypeLabel } from "@/features/readings/constants.ts"
 import { cn } from "@/lib/utils"
 
 import type {
@@ -25,7 +26,7 @@ import type {
 } from "../types.ts"
 import { ReadingQuestionTypeBadge } from "./reading-question-body.tsx"
 
-const COLUMN_COUNT = 7
+const COLUMN_COUNT = 8
 
 const SORT_PAIRS: Record<
   ReadingQuestionSortableColumn,
@@ -113,6 +114,7 @@ export function ReadingQuestionsTable({
             <TableHead>Câu hỏi</TableHead>
             <TableHead className="w-44">Loại</TableHead>
             <TableHead className="w-20">Cấp độ</TableHead>
+            <TableHead className="w-28">Loại bài</TableHead>
             <SortHeader
               column="passage"
               label="Bài đọc"
@@ -150,6 +152,11 @@ export function ReadingQuestionsTable({
                     className={getEngLevelBadgeClass(item.cefrLevel)}
                   >
                     {item.cefrLevel}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline">
+                    {getReadingTypeLabel(item.type)}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-muted-foreground tabular-nums">

@@ -12,4 +12,6 @@ export type PostAdminReadingsGenerate200DataPassage = {
   wordCount: number;
   topic: string;
   cefrLevel: string;
+  /** daily | academic — type đã dùng để chọn prompt. */
+  type: string;
 };

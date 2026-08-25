@@ -12,6 +12,11 @@ import {
 } from "@/components/ui/select"
 import { ENG_LEVELS } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
+import {
+  READING_TYPES,
+  READING_TYPE_META,
+} from "@/features/readings/constants.ts"
+import type { ReadingType } from "@/features/readings/types.ts"
 
 import {
   ACTIVE_VALUE,
@@ -26,6 +31,7 @@ import { useReadingQuestionStoreModels } from "../hooks/use-reading-question-mod
 export interface ReadingQuestionsToolbarFilters {
   q: string | undefined
   cefrLevel: EngLevel | undefined
+  type: ReadingType | undefined
   quizType: string | undefined
   model: string | undefined
   isActive: boolean | undefined
@@ -95,6 +101,30 @@ export function ReadingQuestionsToolbar({
           {ENG_LEVELS.map((level) => (
             <SelectItem key={level} value={level}>
               {level}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      <Select
+        value={filters.type ?? ALL_VALUE}
+        onValueChange={(value) =>
+          onFilterChange({
+            type: value === ALL_VALUE ? undefined : (value as ReadingType),
+          })
+        }
+      >
+        <SelectTrigger
+          className={SELECT_TRIGGER}
+          aria-label="Lọc theo loại bài đọc"
+        >
+          <SelectValue placeholder="Loại bài" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={ALL_VALUE}>Loại bài: {ALL_LABEL}</SelectItem>
+          {READING_TYPES.map((type) => (
+            <SelectItem key={type} value={type}>
+              {READING_TYPE_META[type].label}
             </SelectItem>
           ))}
         </SelectContent>

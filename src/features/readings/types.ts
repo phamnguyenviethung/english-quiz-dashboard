@@ -4,6 +4,7 @@ import type {
   GetAdminReadingsBuckets200DataSummary,
   GetAdminReadingsModels200DataItem,
   GetAdminReadingsSort,
+  GetAdminReadingsType,
   PostAdminReadingsGenerate200DataPassage,
   PostAdminReadingsGenerate200DataUsage,
   PostAdminReadingsRefillBodyOneScope,
@@ -15,6 +16,7 @@ export type ReadingPassage = GetAdminReadings200DataItemsItem
 export type ReadingPassagesSort = GetAdminReadingsSort
 export type ReadingModelStat = GetAdminReadingsModels200DataItem
 export type ReadingRefillScope = PostAdminReadingsRefillBodyOneScope
+export type ReadingType = GetAdminReadingsType
 
 export type GeneratedPassage = PostAdminReadingsGenerate200DataPassage
 export type GeneratedPassageUsage = PostAdminReadingsGenerate200DataUsage
@@ -26,6 +28,7 @@ export type ReadingBucketSummary = GetAdminReadingsBuckets200DataSummary
 export interface ReadingBucketFilter {
   cefrLevels: EngLevel[]
   topicIds: number[]
+  types: ReadingType[]
 }
 
 export interface ReadingRefillInput extends ReadingBucketFilter {

@@ -14,4 +14,6 @@ export type GetEnglishReadingsPop200DataPassage = {
   cefrLevel: string;
   topicId: number | null;
   topicName: string | null;
+  /** daily | academic. */
+  type: string;
 };

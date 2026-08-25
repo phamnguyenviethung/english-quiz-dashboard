@@ -18,6 +18,7 @@ import {
 import { formatDateTime } from "@/lib/format.ts"
 import { cn } from "@/lib/utils"
 
+import { getReadingTypeLabel } from "../constants.ts"
 import type {
   ReadingPassage,
   ReadingPassagesSort,
@@ -25,7 +26,7 @@ import type {
 } from "../types.ts"
 import { WordCountBadge } from "./word-count-badge.tsx"
 
-const COLUMN_COUNT = 8
+const COLUMN_COUNT = 9
 
 const SORT_PAIRS: Record<
   ReadingSortableColumn,
@@ -113,6 +114,7 @@ export function ReadingsTable({
             <TableHead>Tiêu đề</TableHead>
             <TableHead>Chủ đề</TableHead>
             <TableHead className="w-20">Cấp độ</TableHead>
+            <TableHead className="w-28">Loại</TableHead>
             <SortHeader
               column="wordCount"
               label="Độ dài"
@@ -153,6 +155,11 @@ export function ReadingsTable({
                 </TableCell>
                 <TableCell>
                   <Badge variant="outline">{item.cefrLevel}</Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline">
+                    {getReadingTypeLabel(item.type)}
+                  </Badge>
                 </TableCell>
                 <TableCell>
                   <WordCountBadge wordCount={item.wordCount} />

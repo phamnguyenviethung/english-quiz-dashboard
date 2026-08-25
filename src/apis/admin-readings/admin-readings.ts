@@ -94,7 +94,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Danh sách bài đọc trong kho, có filter + phân trang (mặc định pageSize 20, tối đa 100, sort id_desc). Mọi filter đều optional. `withoutTopic=true` lọc riêng bucket không topic và thắng `topicId` nếu truyền cả hai. `q` tìm ILIKE trên title, nội dung các đoạn và tên model; `q` toàn số thì thêm điều kiện khớp chính xác `id`. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
+ * Danh sách bài đọc trong kho, có filter + phân trang (mặc định pageSize 20, tối đa 100, sort id_desc). Mọi filter đều optional. `withoutTopic=true` lọc riêng bucket không topic và thắng `topicId` nếu truyền cả hai. `type` lọc daily/academic. `q` tìm ILIKE trên title, nội dung các đoạn và tên model; `q` toàn số thì thêm điều kiện khớp chính xác `id`. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary List reading passages
  */
 export const getAdminReadings = (
@@ -375,7 +375,7 @@ export function useGetAdminReadingsBuckets<TData = Awaited<ReturnType<typeof get
 
 
 /**
- * Sinh thử 1 bài đọc để kiểm tra prompt/model. **KHÔNG lưu vào kho** — dùng POST /admin/readings/refill nếu muốn sinh và lưu. Độ dài bám theo band CEFR trong reading-prompt-guideline.md; model trả bài không hợp lệ (sai độ dài, thiếu đoạn) trả 400. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
+ * Sinh thử 1 bài đọc để kiểm tra prompt/model. **KHÔNG lưu vào kho** — dùng POST /admin/readings/refill nếu muốn sinh và lưu. `type` chọn prompt daily (narrative) hay academic (expository) — xem reading-prompt-guideline.md. Độ dài bám theo band CEFR; model trả bài không hợp lệ (sai độ dài, thiếu đoạn) trả 400. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Generate a reading passage (preview only)
  */
 export const postAdminReadingsGenerate = (

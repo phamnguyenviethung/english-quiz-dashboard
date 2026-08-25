@@ -22,6 +22,7 @@ import {
   PAGE_SIZE_OPTIONS,
   READINGS_PAGE_SIZE,
   READING_SORTS,
+  READING_TYPES,
 } from "@/features/readings/constants.ts"
 import { ReadingDetailSheet } from "@/features/readings/components/reading-detail-sheet.tsx"
 import { ReadingGenerateDialog } from "@/features/readings/components/reading-generate-dialog.tsx"
@@ -33,7 +34,10 @@ import {
   buildReadingsParams,
   useReadings,
 } from "@/features/readings/hooks/use-readings.ts"
-import type { ReadingPassagesSort } from "@/features/readings/types.ts"
+import type {
+  ReadingPassagesSort,
+  ReadingType,
+} from "@/features/readings/types.ts"
 import { ENG_LEVELS } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
 import { formatNumber } from "@/lib/format.ts"
@@ -42,6 +46,7 @@ interface ReadingsSearch {
   q?: string
   cefrLevel?: EngLevel
   topicId?: number
+  type?: ReadingType
   model?: string
   isActive?: boolean
   createdFrom?: string
@@ -69,6 +74,7 @@ export const Route = createFileRoute("/_dashboard/readings/")({
         ? search.q.trim().slice(0, 100)
         : undefined
     const cefrLevel = ENG_LEVELS.find((level) => level === search.cefrLevel)
+    const type = READING_TYPES.find((value) => value === search.type)
     const model =
       typeof search.model === "string" && search.model.trim()
         ? search.model.trim()
@@ -96,6 +102,7 @@ export const Route = createFileRoute("/_dashboard/readings/")({
       ...(q ? { q } : {}),
       ...(cefrLevel ? { cefrLevel } : {}),
       ...(topicId ? { topicId } : {}),
+      ...(type ? { type } : {}),
       ...(model ? { model } : {}),
       ...(isActive === undefined ? {} : { isActive }),
       ...(createdFrom ? { createdFrom } : {}),
@@ -112,6 +119,7 @@ export const Route = createFileRoute("/_dashboard/readings/")({
       cefrLevel: search.cefrLevel,
       topicId: search.topicId,
       noTopic: false,
+      type: search.type,
       model: search.model,
       isActive: search.isActive,
       createdFrom: search.createdFrom,
@@ -145,6 +153,7 @@ function ReadingsPage() {
     cefrLevel: search.cefrLevel,
     topicId: search.topicId,
     noTopic: false,
+    type: search.type,
     model: search.model,
     isActive: search.isActive,
     createdFrom: search.createdFrom,
@@ -178,20 +187,26 @@ function ReadingsPage() {
     q: search.q,
     cefrLevel: search.cefrLevel,
     topicId: search.topicId,
+    type: search.type,
     model: search.model,
     isActive: search.isActive,
   }
 
   const hasActiveFilter =
-    [filters.q, filters.cefrLevel, filters.topicId, filters.model].some(
-      Boolean
-    ) || filters.isActive !== undefined
+    [
+      filters.q,
+      filters.cefrLevel,
+      filters.topicId,
+      filters.type,
+      filters.model,
+    ].some(Boolean) || filters.isActive !== undefined
 
   const clearAllFilters = () =>
     applyFilter({
       q: undefined,
       cefrLevel: undefined,
       topicId: undefined,
+      type: undefined,
       model: undefined,
       isActive: undefined,
       createdFrom: undefined,

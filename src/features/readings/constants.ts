@@ -1,4 +1,33 @@
-import type { ReadingRefillScope } from "./types.ts"
+import { GetAdminReadingsType } from "@/apis/model"
+
+import type { ReadingRefillScope, ReadingType } from "./types.ts"
+
+export const READING_TYPES: ReadingType[] = [
+  GetAdminReadingsType.daily,
+  GetAdminReadingsType.academic,
+]
+
+export const READING_TYPE_META: Record<
+  ReadingType,
+  { label: string; description: string }
+> = {
+  daily: {
+    label: "Đời thường",
+    description: "Narrative, micro-reading tình huống đời thường.",
+  },
+  academic: {
+    label: "Học thuật",
+    description:
+      "Expository, văn phong trang trọng, khuyến khích từ vựng học thuật.",
+  },
+}
+
+/** API trả `type` dạng `string`, nên tra cứu phải có fallback. */
+export function getReadingTypeLabel(type: string): string {
+  return Object.hasOwn(READING_TYPE_META, type)
+    ? READING_TYPE_META[type as ReadingType].label
+    : type
+}
 
 /**
  * Band độ dài dùng chung cho mọi CEFR level — phải khớp READING_WORD_BAND ở backend

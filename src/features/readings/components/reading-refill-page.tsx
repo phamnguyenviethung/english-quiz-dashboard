@@ -27,12 +27,15 @@ import type { EngLevel } from "@/features/quiz/types.ts"
 
 import {
   READING_REFILL_SCOPE_META,
+  READING_TYPES,
+  READING_TYPE_META,
   REFILL_COST_WARNING_PASSAGES,
+  getReadingTypeLabel,
 } from "../constants.ts"
 import { useReadingBuckets } from "../hooks/use-reading-buckets.ts"
 import { useReadingGenerationModels } from "../hooks/use-reading-models.ts"
 import { useReadingRefill } from "../hooks/use-reading-refill.ts"
-import type { ReadingRefillScope } from "../types.ts"
+import type { ReadingRefillScope, ReadingType } from "../types.ts"
 
 const INITIAL_SCOPE: ReadingRefillScope = "deficient"
 
@@ -53,6 +56,7 @@ export function ReadingRefillPage() {
   const [models, setModels] = useState<string[]>([])
   const [cefrLevels, setCefrLevels] = useState<EngLevel[]>([])
   const [topicIds, setTopicIds] = useState<number[]>([])
+  const [types, setTypes] = useState<ReadingType[]>([])
   // Lưu bucket bị BỎ tick chứ không phải bucket được tick: khi nới bộ lọc, bucket mới
   // về mặc định vẫn được chọn thay vì im lặng bị bỏ sót.
   const [deselectedKeys, setDeselectedKeys] = useState<Set<string>>(new Set())
@@ -74,6 +78,7 @@ export function ReadingRefillPage() {
       scope,
       cefrLevels,
       topicIds,
+      types,
       ...(isCountInvalid ? {} : { countPerBucket: parsedCount }),
     },
     true
@@ -87,7 +92,6 @@ export function ReadingRefillPage() {
     },
   })
 
-  // Reading chỉ có 1 chiều (cefrLevel) nên không có `variantLabel`.
   const bucketViews = useMemo<RefillBucketView[]>(
     () =>
       preview.buckets.map((bucket) => ({
@@ -97,6 +101,7 @@ export function ReadingRefillPage() {
         level: bucket.cefrLevel,
         currentCount: bucket.currentCount,
         plannedCount: bucket.plannedCount,
+        variantLabel: getReadingTypeLabel(bucket.type),
       })),
     [preview.buckets]
   )
@@ -157,6 +162,7 @@ export function ReadingRefillPage() {
       models,
       cefrLevels,
       topicIds,
+      types,
       ...(parsedCount === undefined ? {} : { countPerBucket: parsedCount }),
       // Chọn hết theo bộ lọc thì để API tự quét: payload gọn và không đóng băng
       // danh sách bucket theo ảnh chụp preview.
@@ -241,6 +247,29 @@ export function ReadingRefillPage() {
                 disabled={isPending}
                 onChange={setTopicIds}
               />
+              <FieldDescription>{BUCKET_FILTER_ALL_HINT}</FieldDescription>
+            </Field>
+
+            <Field>
+              <FieldLabel>Loại</FieldLabel>
+              <ToggleGroup
+                variant="outline"
+                multiple
+                className="flex-wrap"
+                value={types}
+                disabled={isPending}
+                onValueChange={(value) => setTypes(value as ReadingType[])}
+              >
+                {READING_TYPES.map((type) => (
+                  <ToggleGroupItem
+                    key={type}
+                    value={type}
+                    className={TOUCH_TOGGLE}
+                  >
+                    {READING_TYPE_META[type].label}
+                  </ToggleGroupItem>
+                ))}
+              </ToggleGroup>
               <FieldDescription>{BUCKET_FILTER_ALL_HINT}</FieldDescription>
             </Field>
           </RefillSection>

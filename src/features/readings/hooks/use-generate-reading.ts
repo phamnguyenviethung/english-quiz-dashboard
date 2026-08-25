@@ -6,6 +6,7 @@ import { getApiErrorMessage } from "@/lib/api-error.ts"
 export interface GenerateReadingInput {
   topicName: string
   cefrLevel: PostAdminReadingsGenerateBodyOne["cefrLevel"]
+  type: PostAdminReadingsGenerateBodyOne["type"]
   model?: string
 }
 
@@ -31,6 +32,7 @@ export function useGenerateReading() {
       data: {
         topicName: input.topicName.trim(),
         cefrLevel: input.cefrLevel,
+        type: input.type,
         ...(input.model ? { model: input.model } : {}),
       },
     })

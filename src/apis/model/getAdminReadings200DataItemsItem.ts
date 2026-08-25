@@ -16,6 +16,8 @@ export type GetAdminReadings200DataItemsItem = {
   cefrLevel: string;
   topicId: number | null;
   topicName: string | null;
+  /** daily | academic — xem READING_PASSAGE_TYPES. */
+  type: string;
   model: string;
   tokenIn: number;
   tokenOut: number;

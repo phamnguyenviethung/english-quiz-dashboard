@@ -25,12 +25,20 @@ import type { EngLevel } from "@/features/quiz/types.ts"
 import { useTopics } from "@/features/topics/hooks/use-topics.ts"
 import { formatNumber } from "@/lib/format.ts"
 
-import { ALL_VALUE, READING_WORD_BAND } from "../constants.ts"
+import {
+  ALL_VALUE,
+  READING_TYPES,
+  READING_TYPE_META,
+  READING_WORD_BAND,
+  getReadingTypeLabel,
+} from "../constants.ts"
 import { useGenerateReading } from "../hooks/use-generate-reading.ts"
 import { useReadingGenerationModels } from "../hooks/use-reading-models.ts"
+import type { ReadingType } from "../types.ts"
 import { WordCountBadge } from "./word-count-badge.tsx"
 
 const DEFAULT_LEVEL: EngLevel = "B1"
+const DEFAULT_TYPE: ReadingType = "daily"
 
 /**
  * Sinh thử 1 bài để soi prompt/model. Bài KHÔNG được lưu — nhấn mạnh trong mô tả
@@ -49,6 +57,7 @@ export function ReadingGenerateDialog({
 
   const [topicName, setTopicName] = useState("")
   const [cefrLevel, setCefrLevel] = useState<EngLevel>(DEFAULT_LEVEL)
+  const [type, setType] = useState<ReadingType>(DEFAULT_TYPE)
   const [model, setModel] = useState<string>(ALL_VALUE)
 
   const isSubmitDisabled = isPending || topicName.trim().length === 0
@@ -58,6 +67,7 @@ export function ReadingGenerateDialog({
     void generate({
       topicName,
       cefrLevel,
+      type,
       ...(model === ALL_VALUE ? {} : { model }),
     })
   }
@@ -74,8 +84,8 @@ export function ReadingGenerateDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Field className="sm:col-span-3">
+        <div className="grid gap-4 sm:grid-cols-4">
+          <Field className="sm:col-span-4">
             <FieldLabel htmlFor="generate-topic">Chủ đề</FieldLabel>
             <Input
               id="generate-topic"
@@ -123,6 +133,29 @@ export function ReadingGenerateDialog({
             </FieldDescription>
           </Field>
 
+          <Field>
+            <FieldLabel htmlFor="generate-type">Loại</FieldLabel>
+            <Select
+              value={type}
+              disabled={isPending}
+              onValueChange={(value) => setType(value as ReadingType)}
+            >
+              <SelectTrigger id="generate-type">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {READING_TYPES.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {READING_TYPE_META[value].label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FieldDescription>
+              {READING_TYPE_META[type].description}
+            </FieldDescription>
+          </Field>
+
           <Field className="sm:col-span-2">
             <FieldLabel htmlFor="generate-model">Model</FieldLabel>
             <Select
@@ -163,6 +196,9 @@ export function ReadingGenerateDialog({
           <div className="space-y-4 rounded-2xl border p-4">
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant="outline">{passage.cefrLevel}</Badge>
+              <Badge variant="outline">
+                {getReadingTypeLabel(passage.type)}
+              </Badge>
               <WordCountBadge wordCount={passage.wordCount} />
               <span className="text-sm text-muted-foreground">
                 {passage.topic}

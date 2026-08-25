@@ -22,6 +22,8 @@ export type GetAdminReadingQuestions200DataItemsItem = {
   cefrLevel: string;
   topicId: number | null;
   topicName: string | null;
+  /** daily | academic — snapshot từ passage lúc sinh câu hỏi. */
+  type: string;
   model: string;
   tokenIn: number;
   tokenOut: number;

@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.0.0
  */
 import type { PostAdminReadingsRefillBodyOneFilterCefrLevelsItem } from './postAdminReadingsRefillBodyOneFilterCefrLevelsItem.ts';
+import type { PostAdminReadingsRefillBodyOneFilterTypesItem } from './postAdminReadingsRefillBodyOneFilterTypesItem.ts';
 
 /**
  * Thu hẹp không gian bucket. Chiều nào bỏ trống thì không lọc theo chiều đó.
@@ -13,4 +14,5 @@ import type { PostAdminReadingsRefillBodyOneFilterCefrLevelsItem } from './postA
 export type PostAdminReadingsRefillBodyOneFilter = {
   cefrLevels?: PostAdminReadingsRefillBodyOneFilterCefrLevelsItem[];
   topicIds?: (string | number)[];
+  types?: PostAdminReadingsRefillBodyOneFilterTypesItem[];
 };

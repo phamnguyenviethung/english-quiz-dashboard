@@ -34,7 +34,7 @@ import { PassageQuestionsPanel } from "@/features/reading-questions/components/p
 import { useReadingQuestions } from "@/features/reading-questions/hooks/use-reading-questions.ts"
 import { formatDateTime, formatNumber } from "@/lib/format.ts"
 
-import { READING_WORD_BAND } from "../constants.ts"
+import { READING_WORD_BAND, getReadingTypeLabel } from "../constants.ts"
 import {
   useDeleteReading,
   useUpdateReading,
@@ -115,6 +115,7 @@ function ReadingDetailContent({
     <div className="space-y-6 px-4 pb-6">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="outline">{passage.cefrLevel}</Badge>
+        <Badge variant="outline">{getReadingTypeLabel(passage.type)}</Badge>
         <WordCountBadge wordCount={passage.wordCount} />
         <span className="text-sm text-muted-foreground">
           {passage.topicName ?? "Không có chủ đề"}

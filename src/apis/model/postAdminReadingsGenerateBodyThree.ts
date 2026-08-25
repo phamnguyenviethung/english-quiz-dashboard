@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.0.0
  */
 import type { PostAdminReadingsGenerateBodyThreeCefrLevel } from './postAdminReadingsGenerateBodyThreeCefrLevel.ts';
+import type { PostAdminReadingsGenerateBodyThreeType } from './postAdminReadingsGenerateBodyThreeType.ts';
 
 export type PostAdminReadingsGenerateBodyThree = {
   /**
@@ -14,6 +15,7 @@ export type PostAdminReadingsGenerateBodyThree = {
      */
   topicName: string;
   cefrLevel: PostAdminReadingsGenerateBodyThreeCefrLevel;
+  type: PostAdminReadingsGenerateBodyThreeType;
   /** OpenRouter model id. Bỏ trống → random trong pool `readingEnabled`. */
   model?: string;
 };

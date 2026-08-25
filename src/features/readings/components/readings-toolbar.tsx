@@ -12,20 +12,27 @@ import {
 } from "@/components/ui/select"
 import { ENG_LEVELS } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
-import { formatTopicLabel, useTopics } from "@/features/topics/hooks/use-topics.ts"
+import {
+  formatTopicLabel,
+  useTopics,
+} from "@/features/topics/hooks/use-topics.ts"
 
 import {
   ACTIVE_VALUE,
   ALL_LABEL,
   ALL_VALUE,
   INACTIVE_VALUE,
+  READING_TYPES,
+  READING_TYPE_META,
 } from "../constants.ts"
 import { useReadingStoreModels } from "../hooks/use-reading-models.ts"
+import type { ReadingType } from "../types.ts"
 
 export interface ReadingsToolbarFilters {
   q: string | undefined
   cefrLevel: EngLevel | undefined
   topicId: number | undefined
+  type: ReadingType | undefined
   model: string | undefined
   isActive: boolean | undefined
 }
@@ -117,6 +124,27 @@ export function ReadingsToolbar({
           {topics.map((topic) => (
             <SelectItem key={topic.id} value={String(topic.id)}>
               {formatTopicLabel(topic)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      <Select
+        value={filters.type ?? ALL_VALUE}
+        onValueChange={(value) =>
+          onFilterChange({
+            type: value === ALL_VALUE ? undefined : (value as ReadingType),
+          })
+        }
+      >
+        <SelectTrigger className={SELECT_TRIGGER} aria-label="Lọc theo loại">
+          <SelectValue placeholder="Loại" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value={ALL_VALUE}>Loại: {ALL_LABEL}</SelectItem>
+          {READING_TYPES.map((type) => (
+            <SelectItem key={type} value={type}>
+              {READING_TYPE_META[type].label}
             </SelectItem>
           ))}
         </SelectContent>

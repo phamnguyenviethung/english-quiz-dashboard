@@ -11,6 +11,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { getEngLevelBadgeClass } from "@/features/quiz/constants.ts"
+import { getReadingTypeLabel } from "@/features/readings/constants.ts"
 import { formatDateTime, formatNumber } from "@/lib/format.ts"
 
 import type { ReadingQuestion } from "../types.ts"
@@ -39,6 +40,7 @@ function ReadingQuestionDetailContent({
         >
           {question.cefrLevel}
         </Badge>
+        <Badge variant="outline">{getReadingTypeLabel(question.type)}</Badge>
         <span className="text-sm text-muted-foreground">
           {question.topicName ?? "Không có chủ đề"}
         </span>

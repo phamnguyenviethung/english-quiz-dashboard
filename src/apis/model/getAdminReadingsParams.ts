@@ -7,11 +7,13 @@
  */
 import type { GetAdminReadingsCefrLevel } from './getAdminReadingsCefrLevel.ts';
 import type { GetAdminReadingsSort } from './getAdminReadingsSort.ts';
+import type { GetAdminReadingsType } from './getAdminReadingsType.ts';
 
 export type GetAdminReadingsParams = {
 cefrLevel?: GetAdminReadingsCefrLevel;
 topicId?: string | number;
 withoutTopic?: boolean | string;
+type?: GetAdminReadingsType;
 model?: string;
 isActive?: boolean | string;
 createdFrom?: string;

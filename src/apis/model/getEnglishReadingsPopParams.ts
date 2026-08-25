@@ -6,10 +6,12 @@
  * OpenAPI spec version: 0.0.0
  */
 import type { GetEnglishReadingsPopCefrLevel } from './getEnglishReadingsPopCefrLevel.ts';
+import type { GetEnglishReadingsPopType } from './getEnglishReadingsPopType.ts';
 
 export type GetEnglishReadingsPopParams = {
 cefrLevel?: GetEnglishReadingsPopCefrLevel;
 topicId?: string | number;
+type?: GetEnglishReadingsPopType;
 /**
  * CSV id BÀI ĐỌC cần loại, vd "12,88". Tối đa 200 id. Dùng để client tự chống lặp bài theo end-user.
  */

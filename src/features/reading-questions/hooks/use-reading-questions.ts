@@ -10,6 +10,7 @@ export interface ReadingQuestionsFilterInput {
   cefrLevel: GetAdminReadingQuestionsParams["cefrLevel"]
   topicId: number | undefined
   passageId: number | undefined
+  type: GetAdminReadingQuestionsParams["type"]
   quizType: string | undefined
   model: string | undefined
   isActive: boolean | undefined
@@ -23,6 +24,7 @@ export function buildReadingQuestionsParams({
   cefrLevel,
   topicId,
   passageId,
+  type,
   quizType,
   model,
   isActive,
@@ -35,6 +37,7 @@ export function buildReadingQuestionsParams({
     ...(cefrLevel ? { cefrLevel } : {}),
     ...(topicId ? { topicId } : {}),
     ...(passageId ? { passageId } : {}),
+    ...(type ? { type } : {}),
     ...(quizType ? { quizType } : {}),
     ...(model ? { model } : {}),
     ...(isActive === undefined ? {} : { isActive }),

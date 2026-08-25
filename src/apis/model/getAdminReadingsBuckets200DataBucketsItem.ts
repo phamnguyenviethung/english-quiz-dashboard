@@ -7,11 +7,13 @@
  */
 
 export type GetAdminReadingsBuckets200DataBucketsItem = {
-  /** `{cefrLevel}:{topicId|null}` — id ổn định để chọn/bỏ chọn bucket. */
+  /** `{cefrLevel}:{topicId|null}:{type}` — id ổn định để chọn/bỏ chọn bucket. */
   bucketKey: string;
   cefrLevel: string;
   topicId: number | null;
   topicName: string | null;
+  /** daily | academic. */
+  type: string;
   /** Số bài đang active trong bucket. */
   currentCount: number;
   /** reading_passage.maxPerBucket - currentCount (có thể âm nếu đang dư). */

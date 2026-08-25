@@ -6,8 +6,10 @@
  * OpenAPI spec version: 0.0.0
  */
 import type { GetEnglishReadingsCountCefrLevel } from './getEnglishReadingsCountCefrLevel.ts';
+import type { GetEnglishReadingsCountType } from './getEnglishReadingsCountType.ts';
 
 export type GetEnglishReadingsCountParams = {
 cefrLevel?: GetEnglishReadingsCountCefrLevel;
 topicId?: string | number;
+type?: GetEnglishReadingsCountType;
 };

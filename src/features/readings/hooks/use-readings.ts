@@ -10,6 +10,7 @@ export interface ReadingsFilterInput {
   cefrLevel: GetAdminReadingsParams["cefrLevel"]
   topicId: number | undefined
   noTopic: boolean
+  type: GetAdminReadingsParams["type"]
   model: string | undefined
   isActive: boolean | undefined
   createdFrom: string | undefined
@@ -24,6 +25,7 @@ export function buildReadingsParams({
   cefrLevel,
   topicId,
   noTopic,
+  type,
   model,
   isActive,
   createdFrom,
@@ -36,6 +38,7 @@ export function buildReadingsParams({
     ...(q ? { q } : {}),
     ...(cefrLevel ? { cefrLevel } : {}),
     ...(noTopic ? { withoutTopic: true } : topicId ? { topicId } : {}),
+    ...(type ? { type } : {}),
     ...(model ? { model } : {}),
     ...(isActive === undefined ? {} : { isActive }),
     ...(createdFrom ? { createdFrom } : {}),

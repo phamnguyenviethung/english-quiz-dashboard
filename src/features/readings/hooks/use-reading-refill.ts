@@ -18,6 +18,7 @@ function buildFilter(
   const filter: PostAdminReadingsRefillBodyOneFilter = {
     ...(input.cefrLevels.length > 0 ? { cefrLevels: input.cefrLevels } : {}),
     ...(input.topicIds.length > 0 ? { topicIds: input.topicIds } : {}),
+    ...(input.types.length > 0 ? { types: input.types } : {}),
   }
 
   return Object.keys(filter).length > 0 ? filter : undefined

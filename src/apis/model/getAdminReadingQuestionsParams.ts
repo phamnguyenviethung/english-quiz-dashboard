@@ -7,6 +7,7 @@
  */
 import type { GetAdminReadingQuestionsCefrLevel } from './getAdminReadingQuestionsCefrLevel.ts';
 import type { GetAdminReadingQuestionsSort } from './getAdminReadingQuestionsSort.ts';
+import type { GetAdminReadingQuestionsType } from './getAdminReadingQuestionsType.ts';
 
 export type GetAdminReadingQuestionsParams = {
 /**
@@ -19,6 +20,7 @@ topicId?: string | number;
  * true = chỉ câu không gắn topic. Thắng `topicId`.
  */
 withoutTopic?: boolean | string;
+type?: GetAdminReadingQuestionsType;
 /**
  * detail / inference / vocabulary_context / ...
  */

@@ -60,7 +60,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Lấy 1 bài đọc random kèm trọn bộ câu hỏi đọc hiểu. Chỉ trả bài đã **đủ** `reading_question.questionsPerPassage` câu đang active — bài nửa vời không bao giờ được phục vụ. Bài KHÔNG bị xoá, kho dùng lại được. Bỏ trống `topicId` = mọi topic tenant được cấp (bài đọc luôn gắn topic nên tenant bị giới hạn sẽ chỉ thấy topic trong allow-list). `topicId` ngoài allow-list trả 403. Không có bài nào sẵn sàng trả 404.
+ * Lấy 1 bài đọc random kèm trọn bộ câu hỏi đọc hiểu. Chỉ trả bài đã **đủ** `reading_question.questionsPerPassage` câu đang active — bài nửa vời không bao giờ được phục vụ. Bài KHÔNG bị xoá, kho dùng lại được. Bỏ trống `topicId` = mọi topic tenant được cấp (bài đọc luôn gắn topic nên tenant bị giới hạn sẽ chỉ thấy topic trong allow-list). `topicId` ngoài allow-list trả 403. Bỏ trống `type` = "daily" (không đổi hành vi với client cũ). `type` là hard filter xuyên suốt fallback (topicId → cefrLevel → excludeIds) — không bao giờ trả nhầm content style. Không có bài nào sẵn sàng trả 404.
  * @summary Pop a reading passage with its questions
  */
 export const getEnglishReadingsPop = (
@@ -154,7 +154,7 @@ export function useGetEnglishReadingsPop<TData = Awaited<ReturnType<typeof getEn
 
 
 /**
- * Số bài đọc đã sẵn sàng phục vụ (active và đủ câu hỏi) trong phạm vi filter. Áp dụng cùng allow-list topic như /readings/pop.
+ * Số bài đọc đã sẵn sàng phục vụ (active và đủ câu hỏi) trong phạm vi filter. Áp dụng cùng allow-list topic như /readings/pop. Bỏ trống `type` = "daily".
  * @summary Count ready reading passages
  */
 export const getEnglishReadingsCount = (

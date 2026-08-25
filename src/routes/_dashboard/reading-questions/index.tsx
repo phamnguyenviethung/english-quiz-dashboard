@@ -35,6 +35,8 @@ import {
 import type { ReadingQuestionsSort } from "@/features/reading-questions/types.ts"
 import { ENG_LEVELS } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
+import { READING_TYPES } from "@/features/readings/constants.ts"
+import type { ReadingType } from "@/features/readings/types.ts"
 import { formatNumber } from "@/lib/format.ts"
 
 interface ReadingQuestionsSearch {
@@ -42,6 +44,7 @@ interface ReadingQuestionsSearch {
   cefrLevel?: EngLevel
   topicId?: number
   passageId?: number
+  type?: ReadingType
   quizType?: string
   model?: string
   isActive?: boolean
@@ -63,8 +66,9 @@ export const Route = createFileRoute("/_dashboard/reading-questions/")({
         ? search.q.trim().slice(0, 100)
         : undefined
     const cefrLevel = ENG_LEVELS.find((level) => level === search.cefrLevel)
+    const type = READING_TYPES.find((value) => value === search.type)
     const quizType = READING_QUESTION_TYPES.find(
-      (type) => type === search.quizType
+      (value) => value === search.quizType
     )
     const model =
       typeof search.model === "string" && search.model.trim()
@@ -93,6 +97,7 @@ export const Route = createFileRoute("/_dashboard/reading-questions/")({
       ...(cefrLevel ? { cefrLevel } : {}),
       ...(topicId ? { topicId } : {}),
       ...(passageId ? { passageId } : {}),
+      ...(type ? { type } : {}),
       ...(quizType ? { quizType } : {}),
       ...(model ? { model } : {}),
       ...(isActive === undefined ? {} : { isActive }),
@@ -108,6 +113,7 @@ export const Route = createFileRoute("/_dashboard/reading-questions/")({
       cefrLevel: search.cefrLevel,
       topicId: search.topicId,
       passageId: search.passageId,
+      type: search.type,
       quizType: search.quizType,
       model: search.model,
       isActive: search.isActive,
@@ -139,6 +145,7 @@ function ReadingQuestionsPage() {
     cefrLevel: search.cefrLevel,
     topicId: search.topicId,
     passageId: search.passageId,
+    type: search.type,
     quizType: search.quizType,
     model: search.model,
     isActive: search.isActive,
@@ -170,6 +177,7 @@ function ReadingQuestionsPage() {
   const filters: ReadingQuestionsToolbarFilters = {
     q: search.q,
     cefrLevel: search.cefrLevel,
+    type: search.type,
     quizType: search.quizType,
     model: search.model,
     isActive: search.isActive,
@@ -180,6 +188,7 @@ function ReadingQuestionsPage() {
     [
       filters.q,
       filters.cefrLevel,
+      filters.type,
       filters.quizType,
       filters.model,
       filters.passageId,
@@ -191,6 +200,7 @@ function ReadingQuestionsPage() {
       cefrLevel: undefined,
       topicId: undefined,
       passageId: undefined,
+      type: undefined,
       quizType: undefined,
       model: undefined,
       isActive: undefined,

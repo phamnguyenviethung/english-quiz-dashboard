@@ -16,6 +16,10 @@ cefrLevels?: string;
  * CSV topic id, vd `3,7,12`. Bỏ trống = mọi topic đang bật.
  */
 topicIds?: string;
+/**
+ * CSV, vd `daily,academic`. Bỏ trống = cả 2 type.
+ */
+types?: string;
 scope?: GetAdminReadingsBucketsScope;
 /**
  * @minimum 1
