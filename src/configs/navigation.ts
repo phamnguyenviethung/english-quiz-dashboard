@@ -18,6 +18,7 @@ export type NavPath =
   | "/"
   | "/topics"
   | "/question-pool"
+  | "/pool-review"
   | "/readings"
   | "/reading-questions"
   | "/refill"
@@ -69,6 +70,12 @@ export const NAV_GROUPS: NavGroup[] = [
         label: "Kho câu hỏi",
         icon: IconDatabase,
         to: "/question-pool",
+      },
+      {
+        key: "pool-review",
+        label: "Duyệt câu hỏi AI",
+        icon: IconSparkles,
+        to: "/pool-review",
       },
       {
         key: "readings",
