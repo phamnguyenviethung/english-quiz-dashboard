@@ -10,8 +10,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import { Spinner } from "@/components/ui/spinner"
-import { useEnqueueReviews } from "@/features/pool-review/hooks/use-review-mutations.ts"
+import { SendReviewDialog } from "@/features/pool-review/components/send-review-dialog.tsx"
 import {
   formatOptionCountLabel,
   getEngLevelBadgeClass,
@@ -36,26 +35,19 @@ function MetaRow({ label, value }: { label: string; value: string }) {
 function PoolQuestionDetailContent({ question }: { question: PoolQuestion }) {
   const quizTypeMeta = getQuizTypeMeta(question.quizType)
   const QuizTypeIcon = quizTypeMeta.icon
-  const { enqueueReviews, isPending: sendingReview } = useEnqueueReviews()
 
   return (
     <div className="space-y-6 px-4 pb-6">
       <div className="flex flex-wrap items-center gap-2">
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={sendingReview}
-          onClick={() =>
-            void enqueueReviews({ poolQuestionIds: [question.id] })
+        <SendReviewDialog
+          poolQuestionIds={[question.id]}
+          trigger={
+            <Button size="sm" variant="outline">
+              <IconSparkles stroke={1.5} data-icon="inline-start" />
+              Gửi AI review
+            </Button>
           }
-        >
-          {sendingReview ? (
-            <Spinner data-icon="inline-start" />
-          ) : (
-            <IconSparkles stroke={1.5} data-icon="inline-start" />
-          )}
-          Gửi AI review
-        </Button>
+        />
         <Button size="sm" variant="ghost" render={<Link to="/pool-review" />}>
           Xem các review
         </Button>

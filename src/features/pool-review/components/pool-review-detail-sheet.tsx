@@ -123,6 +123,14 @@ function DetailBody({
         </div>
       </dl>
 
+      {review.adminNote ? (
+        <Section title="Ghi chú của admin">
+          <p className="rounded-2xl border bg-muted/40 p-3 text-sm whitespace-pre-wrap">
+            {review.adminNote}
+          </p>
+        </Section>
+      ) : null}
+
       {review.status === "failed" ? (
         <div className="flex items-start gap-2 rounded-2xl border border-destructive/40 bg-destructive/5 p-3 text-sm">
           <IconAlertTriangle

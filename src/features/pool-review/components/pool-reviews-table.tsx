@@ -1,5 +1,6 @@
 import {
   IconArrowsSort,
+  IconMessage2,
   IconSortAscending,
   IconSortDescending,
 } from "@tabler/icons-react"
@@ -127,7 +128,16 @@ export function PoolReviewsTable({
                     </Badge>
                   </TableCell>
                   <TableCell className="max-w-48 truncate text-muted-foreground">
-                    {item.topicName ?? "Không chủ đề"}
+                    <span className="inline-flex items-center gap-1">
+                      {item.topicName ?? "Không chủ đề"}
+                      {item.adminNote ? (
+                        <IconMessage2
+                          stroke={1.5}
+                          className="size-3.5 shrink-0 text-foreground/60"
+                          title="Có ghi chú của admin"
+                        />
+                      ) : null}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <ReviewVerdictBadge verdict={item.verdict} />

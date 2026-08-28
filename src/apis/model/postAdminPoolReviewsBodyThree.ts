@@ -16,4 +16,9 @@ export type PostAdminPoolReviewsBodyThree = {
   poolQuestionIds: (string | number)[];
   /** OpenRouter model id cho việc review. Bỏ trống → random trong pool `manualEnabled`. */
   model?: string;
+  /**
+     * Ghi chú admin gửi kèm cho AI review — chèn vào prompt làm hướng soi riêng cho các câu này.
+     * @maxLength 1000
+     */
+  adminNote?: string;
 };

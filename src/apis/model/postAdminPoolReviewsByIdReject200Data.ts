@@ -16,6 +16,7 @@ export type PostAdminPoolReviewsByIdReject200Data = {
   optionCount: number;
   topicId: number | null;
   topicName: string | null;
+  adminNote: string | null;
   verdict: string | null;
   summary: string | null;
   score: number | null;
