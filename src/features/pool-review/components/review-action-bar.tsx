@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { IconCheck, IconPencil, IconX } from "@tabler/icons-react"
+import { IconCheck, IconX } from "@tabler/icons-react"
 
 import {
   AlertDialog,
@@ -13,10 +13,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
-import { Textarea } from "@/components/ui/textarea"
 
 import {
   useApproveReview,
@@ -24,7 +23,13 @@ import {
   useRejectReview,
 } from "../hooks/use-review-mutations.ts"
 import type { PoolReviewDetail } from "../types.ts"
+import { ReviewEditJsonDialog } from "./review-edit-json-dialog.tsx"
 
+/**
+ * Chỉ trả về các nút, để đặt trực tiếp vào `DetailDialogFooter` — footer ép con
+ * trực tiếp thành full-width trên điện thoại nên không được bọc thêm thẻ nào.
+ * Phần chữ giải thích trạng thái nằm ở body, xem `ReviewStatusNotice`.
+ */
 export function ReviewActionBar({
   review,
   onResolved,
@@ -43,207 +48,156 @@ export function ReviewActionBar({
   })
 
   const [note, setNote] = useState("")
-  const [editing, setEditing] = useState(false)
-  const [draft, setDraft] = useState("")
-  const [draftError, setDraftError] = useState<string | undefined>()
 
   const isPending = review.status === "pending"
   const canApprove = isPending && review.checklist?.formatValid !== false
 
-  const openEditor = () => {
-    setDraft(JSON.stringify(review.revised ?? {}, null, 2))
-    setDraftError(undefined)
-    setEditing(true)
-  }
-
-  const submitEdited = async () => {
-    let parsed: unknown
-    try {
-      parsed = JSON.parse(draft)
-    } catch {
-      setDraftError("JSON không hợp lệ.")
-      return
-    }
-    await approveReview(review.id, { data: parsed })
-    setEditing(false)
-  }
-
   if (!isPending) {
     return (
-      <div className="flex items-center justify-between gap-3 rounded-2xl border p-3">
-        <p className="text-sm text-muted-foreground">
-          Review đã được xử lý ({review.status}). Không thể duyệt/từ chối lại.
-        </p>
-        <AlertDialog>
-          <AlertDialogTrigger
-            render={
-              <Button variant="ghost" size="sm" disabled={deleting}>
-                <IconX stroke={1.5} data-icon="inline-start" />
-                Xoá review
-              </Button>
-            }
-          />
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Xoá review #{review.id}?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Chỉ xoá bản ghi review này, không ảnh hưởng câu trong pool.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel render={<Button variant="outline" />}>
-                Huỷ
-              </AlertDialogCancel>
-              <AlertDialogAction
-                render={
-                  <Button
-                    variant="destructive"
-                    onClick={() => void deleteReview(review.id)}
-                  />
-                }
-              >
-                Xoá
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
+      <AlertDialog>
+        <AlertDialogTrigger
+          render={
+            <Button variant="outline" disabled={deleting}>
+              <IconX stroke={1.5} data-icon="inline-start" />
+              Xoá review
+            </Button>
+          }
+        />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xoá review #{review.id}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Chỉ xoá bản ghi review này, không ảnh hưởng câu trong pool.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel render={<Button variant="outline" />}>
+              Huỷ
+            </AlertDialogCancel>
+            <AlertDialogAction
+              render={
+                <Button
+                  variant="destructive"
+                  onClick={() => void deleteReview(review.id)}
+                />
+              }
+            >
+              Xoá
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     )
   }
 
   return (
-    <div className="space-y-3 rounded-2xl border p-3">
-      {review.checklist?.formatValid === false ? (
-        <p className="rounded-xl bg-rose-500/10 p-2 text-sm text-rose-700 dark:text-rose-300">
-          Bản sửa của AI không đúng schema câu hỏi. Sửa tay trước khi duyệt.
-        </p>
-      ) : null}
-
-      {editing ? (
-        <div className="space-y-2">
+    <>
+      <AlertDialog>
+        <AlertDialogTrigger
+          render={
+            <Button variant="ghost" disabled={rejecting}>
+              <IconX stroke={1.5} data-icon="inline-start" />
+              Từ chối
+            </Button>
+          }
+        />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Từ chối review #{review.id}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Giữ nguyên câu trong pool, chỉ đánh dấu review là đã từ chối.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
           <Field>
-            <FieldLabel htmlFor="review-edit-json">
-              Sửa dữ liệu câu hỏi (JSON)
+            <FieldLabel htmlFor="review-reject-note">
+              Ghi chú (không bắt buộc)
             </FieldLabel>
-            <Textarea
-              id="review-edit-json"
-              className="min-h-64 font-mono text-xs"
-              value={draft}
-              onChange={(event) => setDraft(event.target.value)}
+            <Input
+              id="review-reject-note"
+              maxLength={500}
+              value={note}
+              onChange={(event) => setNote(event.target.value)}
+              placeholder="Lý do từ chối…"
             />
-            <FieldDescription>
-              Sẽ được validate lại theo schema `{review.quizType}` ở server.
-            </FieldDescription>
-            {draftError ? (
-              <p className="text-sm text-destructive">{draftError}</p>
-            ) : null}
           </Field>
-          <div className="flex gap-2">
-            <Button disabled={approving} onClick={() => void submitEdited()}>
-              {approving ? <Spinner data-icon="inline-start" /> : null}
-              Duyệt bản đã sửa
-            </Button>
-            <Button variant="outline" onClick={() => setEditing(false)}>
+          <AlertDialogFooter>
+            <AlertDialogCancel render={<Button variant="outline" />}>
               Huỷ
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-wrap items-center gap-2">
-          <AlertDialog>
-            <AlertDialogTrigger
+            </AlertDialogCancel>
+            <AlertDialogAction
               render={
-                <Button disabled={!canApprove || approving}>
-                  {approving ? (
-                    <Spinner data-icon="inline-start" />
-                  ) : (
-                    <IconCheck stroke={1.5} data-icon="inline-start" />
-                  )}
-                  Duyệt bản AI sửa
-                </Button>
-              }
-            />
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Duyệt review #{review.id}?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Ghi đè câu #{review.poolQuestionRefId} trong pool bằng bản AI
-                  đã sửa. Không tự hoàn tác được.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel render={<Button variant="outline" />}>
-                  Huỷ
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  render={
-                    <Button onClick={() => void approveReview(review.id)} />
+                <Button
+                  variant="destructive"
+                  onClick={() =>
+                    void rejectReview(review.id, {
+                      note: note.trim() || undefined,
+                    })
                   }
-                >
-                  Duyệt
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          <Button variant="outline" onClick={openEditor}>
-            <IconPencil stroke={1.5} data-icon="inline-start" />
-            Sửa tay trước khi duyệt
-          </Button>
-
-          <AlertDialog>
-            <AlertDialogTrigger
-              render={
-                <Button variant="ghost" disabled={rejecting}>
-                  <IconX stroke={1.5} data-icon="inline-start" />
-                  Từ chối
-                </Button>
-              }
-            />
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  Từ chối review #{review.id}?
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  Giữ nguyên câu trong pool, chỉ đánh dấu review là đã từ chối.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <Field>
-                <FieldLabel htmlFor="review-reject-note">
-                  Ghi chú (không bắt buộc)
-                </FieldLabel>
-                <Input
-                  id="review-reject-note"
-                  maxLength={500}
-                  value={note}
-                  onChange={(event) => setNote(event.target.value)}
-                  placeholder="Lý do từ chối…"
                 />
-              </Field>
-              <AlertDialogFooter>
-                <AlertDialogCancel render={<Button variant="outline" />}>
-                  Huỷ
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  render={
-                    <Button
-                      variant="destructive"
-                      onClick={() =>
-                        void rejectReview(review.id, {
-                          note: note.trim() || undefined,
-                        })
-                      }
-                    />
-                  }
-                >
-                  Từ chối
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-      )}
-    </div>
+              }
+            >
+              Từ chối
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <ReviewEditJsonDialog review={review} onResolved={onResolved} />
+
+      <AlertDialog>
+        <AlertDialogTrigger
+          render={
+            <Button disabled={!canApprove || approving}>
+              {approving ? (
+                <Spinner data-icon="inline-start" />
+              ) : (
+                <IconCheck stroke={1.5} data-icon="inline-start" />
+              )}
+              Duyệt bản AI sửa
+            </Button>
+          }
+        />
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Duyệt review #{review.id}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Ghi đè câu #{review.poolQuestionRefId} trong pool bằng bản AI đã
+              sửa. Không tự hoàn tác được.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel render={<Button variant="outline" />}>
+              Huỷ
+            </AlertDialogCancel>
+            <AlertDialogAction
+              render={<Button onClick={() => void approveReview(review.id)} />}
+            >
+              Duyệt
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
+}
+
+/** Lý do vì sao hàng nút ở footer bị giới hạn — đặt ở cuối body. */
+export function ReviewStatusNotice({ review }: { review: PoolReviewDetail }) {
+  if (review.status !== "pending") {
+    return (
+      <p className="rounded-2xl border p-3 text-sm text-muted-foreground">
+        Review đã được xử lý ({review.status}). Không thể duyệt/từ chối lại.
+      </p>
+    )
+  }
+
+  if (review.checklist?.formatValid === false) {
+    return (
+      <p className="rounded-2xl bg-rose-500/10 p-3 text-sm text-rose-700 dark:text-rose-300">
+        Bản sửa của AI không đúng schema câu hỏi. Sửa tay trước khi duyệt.
+      </p>
+    )
+  }
+
+  return null
 }

@@ -1,11 +1,12 @@
-import { QueryError } from "@/components/common/query-error.tsx"
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
+  DetailDialog,
+  DetailDialogBody,
+  DetailDialogContent,
+  DetailDialogDescription,
+  DetailDialogHeader,
+  DetailDialogTitle,
+} from "@/components/common/detail-dialog.tsx"
+import { QueryError } from "@/components/common/query-error.tsx"
 import { Skeleton } from "@/components/ui/skeleton"
 
 import { useCronRunDetail } from "../hooks/use-cron-run-detail.ts"
@@ -24,16 +25,16 @@ export function CronRunDetailSheet({
   const { detail, isPending, isError, error, refetch } = useCronRunDetail(runId)
 
   return (
-    <Sheet open={Boolean(runId)} onOpenChange={onOpenChange}>
-      <SheetContent className="overflow-y-auto sm:max-w-3xl!">
-        <SheetHeader>
-          <SheetTitle>Chi tiết lượt chạy</SheetTitle>
-          <SheetDescription>
+    <DetailDialog open={Boolean(runId)} onOpenChange={onOpenChange}>
+      <DetailDialogContent className="sm:max-w-4xl">
+        <DetailDialogHeader>
+          <DetailDialogTitle>Chi tiết lượt chạy</DetailDialogTitle>
+          <DetailDialogDescription>
             Tổng hợp bucket và các lần gọi model trong lượt chạy này.
-          </SheetDescription>
-        </SheetHeader>
+          </DetailDialogDescription>
+        </DetailDialogHeader>
 
-        <div className="space-y-6 px-4 pb-6">
+        <DetailDialogBody className="space-y-6">
           {isError ? (
             <QueryError
               title="Không tải được chi tiết"
@@ -74,8 +75,8 @@ export function CronRunDetailSheet({
               </section>
             </>
           )}
-        </div>
-      </SheetContent>
-    </Sheet>
+        </DetailDialogBody>
+      </DetailDialogContent>
+    </DetailDialog>
   )
 }
