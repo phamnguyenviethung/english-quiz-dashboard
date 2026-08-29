@@ -1,15 +1,17 @@
 import { Link } from "@tanstack/react-router"
 import { IconSparkles } from "@tabler/icons-react"
 
+import {
+  DetailDialog,
+  DetailDialogBody,
+  DetailDialogContent,
+  DetailDialogDescription,
+  DetailDialogFooter,
+  DetailDialogHeader,
+  DetailDialogTitle,
+} from "@/components/common/detail-dialog.tsx"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
 import { SendReviewDialog } from "@/features/pool-review/components/send-review-dialog.tsx"
 import {
   formatOptionCountLabel,
@@ -37,22 +39,7 @@ function PoolQuestionDetailContent({ question }: { question: PoolQuestion }) {
   const QuizTypeIcon = quizTypeMeta.icon
 
   return (
-    <div className="space-y-6 px-4 pb-6">
-      <div className="flex flex-wrap items-center gap-2">
-        <SendReviewDialog
-          poolQuestionIds={[question.id]}
-          trigger={
-            <Button size="sm" variant="outline">
-              <IconSparkles stroke={1.5} data-icon="inline-start" />
-              Gửi AI review
-            </Button>
-          }
-        />
-        <Button size="sm" variant="ghost" render={<Link to="/pool-review" />}>
-          Xem các review
-        </Button>
-      </div>
-
+    <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="secondary">
           {QuizTypeIcon ? (
@@ -78,7 +65,7 @@ function PoolQuestionDetailContent({ question }: { question: PoolQuestion }) {
         </span>
       </div>
 
-      <dl className="grid grid-cols-2 gap-4 rounded-2xl border p-4 sm:grid-cols-4">
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-3 rounded-2xl border p-4 sm:grid-cols-4">
         <MetaRow label="ID" value={String(question.id)} />
         <MetaRow label="Token vào" value={formatNumber(question.tokenIn)} />
         <MetaRow label="Token ra" value={formatNumber(question.tokenOut)} />
@@ -102,17 +89,36 @@ export function PoolQuestionDetailSheet({
   onOpenChange: (open: boolean) => void
 }) {
   return (
-    <Sheet open={Boolean(question)} onOpenChange={onOpenChange}>
-      <SheetContent className="overflow-y-auto sm:max-w-2xl!">
-        <SheetHeader>
-          <SheetTitle>Chi tiết câu hỏi</SheetTitle>
-          <SheetDescription>
+    <DetailDialog open={Boolean(question)} onOpenChange={onOpenChange}>
+      <DetailDialogContent>
+        <DetailDialogHeader>
+          <DetailDialogTitle>Chi tiết câu hỏi</DetailDialogTitle>
+          <DetailDialogDescription>
             Nội dung và metadata của câu đang lưu trong pool.
-          </SheetDescription>
-        </SheetHeader>
+          </DetailDialogDescription>
+        </DetailDialogHeader>
 
-        {question ? <PoolQuestionDetailContent question={question} /> : null}
-      </SheetContent>
-    </Sheet>
+        <DetailDialogBody>
+          {question ? <PoolQuestionDetailContent question={question} /> : null}
+        </DetailDialogBody>
+
+        <DetailDialogFooter>
+          <Button variant="ghost" render={<Link to="/pool-review" />}>
+            Xem các review
+          </Button>
+          {question ? (
+            <SendReviewDialog
+              poolQuestionIds={[question.id]}
+              trigger={
+                <Button>
+                  <IconSparkles stroke={1.5} data-icon="inline-start" />
+                  Gửi AI review
+                </Button>
+              }
+            />
+          ) : null}
+        </DetailDialogFooter>
+      </DetailDialogContent>
+    </DetailDialog>
   )
 }

@@ -1,14 +1,16 @@
 import { IconAlertTriangle } from "@tabler/icons-react"
 
+import {
+  DetailDialog,
+  DetailDialogBody,
+  DetailDialogContent,
+  DetailDialogDescription,
+  DetailDialogFooter,
+  DetailDialogHeader,
+  DetailDialogTitle,
+} from "@/components/common/detail-dialog.tsx"
 import { QueryError } from "@/components/common/query-error.tsx"
 import { Badge } from "@/components/ui/badge"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   getEngLevelBadgeClass,
@@ -20,7 +22,7 @@ import { getReviewSeverityMeta } from "../constants.ts"
 import { usePoolReview } from "../hooks/use-pool-review.ts"
 import type { PoolReviewDetail } from "../types.ts"
 import { QuestionDiffView } from "./question-diff-view.tsx"
-import { ReviewActionBar } from "./review-action-bar.tsx"
+import { ReviewActionBar, ReviewStatusNotice } from "./review-action-bar.tsx"
 import { ReviewChecklist } from "./review-checklist.tsx"
 import { ReviewStatusBadge, ReviewVerdictBadge } from "./review-badges.tsx"
 
@@ -70,15 +72,9 @@ function IssuesList({ issues }: { issues: PoolReviewDetail["issues"] }) {
   )
 }
 
-function DetailBody({
-  review,
-  onResolved,
-}: {
-  review: PoolReviewDetail
-  onResolved: () => void
-}) {
+function DetailBody({ review }: { review: PoolReviewDetail }) {
   return (
-    <div className="space-y-6 px-4 pb-6">
+    <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="secondary">{getQuizTypeLabel(review.quizType)}</Badge>
         <Badge
@@ -94,7 +90,7 @@ function DetailBody({
         </span>
       </div>
 
-      <dl className="grid grid-cols-2 gap-4 rounded-2xl border p-4 sm:grid-cols-4">
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-3 rounded-2xl border p-4 sm:grid-cols-4">
         <div className="flex flex-col gap-0.5">
           <dt className="text-xs text-muted-foreground">Câu trong pool</dt>
           <dd className="text-sm tabular-nums">#{review.poolQuestionRefId}</dd>
@@ -170,7 +166,7 @@ function DetailBody({
         </>
       )}
 
-      <ReviewActionBar review={review} onResolved={onResolved} />
+      <ReviewStatusNotice review={review} />
     </div>
   )
 }
@@ -185,35 +181,44 @@ export function PoolReviewDetailSheet({
   const { review, isPending, isError, error, refetch } = usePoolReview(reviewId)
 
   return (
-    <Sheet open={reviewId !== undefined} onOpenChange={onOpenChange}>
-      <SheetContent className="overflow-y-auto sm:max-w-2xl!">
-        <SheetHeader>
-          <SheetTitle>
+    <DetailDialog open={reviewId !== undefined} onOpenChange={onOpenChange}>
+      <DetailDialogContent className="sm:max-w-4xl">
+        <DetailDialogHeader>
+          <DetailDialogTitle>
             {reviewId === undefined ? "Chi tiết review" : `Review #${reviewId}`}
-          </SheetTitle>
-          <SheetDescription>
+          </DetailDialogTitle>
+          <DetailDialogDescription>
             Kết quả AI rà soát, checklist thay đổi và thao tác duyệt/từ chối.
-          </SheetDescription>
-        </SheetHeader>
+          </DetailDialogDescription>
+        </DetailDialogHeader>
 
-        {isError ? (
-          <div className="px-4">
+        <DetailDialogBody>
+          {isError ? (
             <QueryError
               title="Không tải được review"
               error={error}
               onRetry={() => void refetch()}
             />
-          </div>
-        ) : isPending ? (
-          <div className="space-y-3 px-4">
-            <Skeleton className="h-8 w-2/3" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-40 w-full" />
-          </div>
-        ) : review ? (
-          <DetailBody review={review} onResolved={() => onOpenChange(false)} />
+          ) : isPending ? (
+            <div className="space-y-3">
+              <Skeleton className="h-8 w-2/3" />
+              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-40 w-full" />
+            </div>
+          ) : review ? (
+            <DetailBody review={review} />
+          ) : null}
+        </DetailDialogBody>
+
+        {review ? (
+          <DetailDialogFooter>
+            <ReviewActionBar
+              review={review}
+              onResolved={() => onOpenChange(false)}
+            />
+          </DetailDialogFooter>
         ) : null}
-      </SheetContent>
-    </Sheet>
+      </DetailDialogContent>
+    </DetailDialog>
   )
 }

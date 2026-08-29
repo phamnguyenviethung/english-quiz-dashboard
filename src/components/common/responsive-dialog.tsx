@@ -37,7 +37,8 @@ import { cn } from "@/lib/utils"
  */
 const ResponsiveDialogContext = createContext(false)
 
-function useIsDrawer() {
+/** Cho detail-dialog.tsx dựng bố cục riêng trên cùng cây context này. */
+export function useIsDrawer() {
   return useContext(ResponsiveDialogContext)
 }
 

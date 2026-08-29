@@ -7,6 +7,15 @@ import {
 } from "@tabler/icons-react"
 
 import {
+  DetailDialog,
+  DetailDialogBody,
+  DetailDialogContent,
+  DetailDialogDescription,
+  DetailDialogFooter,
+  DetailDialogHeader,
+  DetailDialogTitle,
+} from "@/components/common/detail-dialog.tsx"
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -20,13 +29,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
@@ -69,6 +71,10 @@ function MetaRow({ label, value }: { label: string; value: string }) {
   )
 }
 
+/**
+ * Render cả body lẫn footer vì hàng nút đổi theo `isEditing` — giữ state ở đây
+ * thay vì kéo lên component ngoài.
+ */
 function ReadingDetailContent({
   passage,
   onDeleted,
@@ -112,30 +118,127 @@ function ReadingDetailContent({
     })
 
   return (
-    <div className="space-y-6 px-4 pb-6">
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="outline">{passage.cefrLevel}</Badge>
-        <Badge variant="outline">{getReadingTypeLabel(passage.type)}</Badge>
-        <WordCountBadge wordCount={passage.wordCount} />
-        <span className="text-sm text-muted-foreground">
-          {passage.topicName ?? "Không có chủ đề"}
-        </span>
-      </div>
+    <>
+      <DetailDialogBody className="space-y-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="outline">{passage.cefrLevel}</Badge>
+          <Badge variant="outline">{getReadingTypeLabel(passage.type)}</Badge>
+          <WordCountBadge wordCount={passage.wordCount} />
+          <span className="text-sm text-muted-foreground">
+            {passage.topicName ?? "Không có chủ đề"}
+          </span>
+        </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+        <label className="flex items-center justify-between gap-3 rounded-2xl border p-3 text-sm">
+          <span>
+            Trạng thái bài đọc
+            <span className="block text-xs text-muted-foreground">
+              {passage.isActive
+                ? "Đang bật, hệ thống có thể dùng bài này."
+                : "Đã tắt, bài không được đem ra dùng."}
+            </span>
+          </span>
+          <Switch
+            checked={passage.isActive}
+            disabled={isPending}
+            onCheckedChange={(checked) => void setActive(passage.id, checked)}
+          />
+        </label>
+
+        <Tabs defaultValue="passage">
+          <TabsList className="w-full *:flex-1 sm:w-auto sm:*:flex-none">
+            <TabsTrigger value="passage">Bài đọc</TabsTrigger>
+            <TabsTrigger value="questions">
+              Câu hỏi{questionCount === undefined ? "" : ` (${questionCount})`}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="passage" className="space-y-6 pt-4">
+            {isEditing ? (
+              <div className="space-y-4">
+                <Field
+                  data-invalid={titleDraft.trim().length === 0 || undefined}
+                >
+                  <FieldLabel htmlFor="reading-title">Tiêu đề</FieldLabel>
+                  <Input
+                    id="reading-title"
+                    value={titleDraft}
+                    disabled={isPending}
+                    onChange={(event) => setTitleDraft(event.target.value)}
+                  />
+                </Field>
+
+                <Field data-invalid={draftParagraphs.length < 2 || undefined}>
+                  <FieldLabel htmlFor="reading-body">Nội dung</FieldLabel>
+                  <Textarea
+                    id="reading-body"
+                    rows={10}
+                    className="leading-relaxed md:min-h-96"
+                    value={bodyDraft}
+                    disabled={isPending}
+                    onChange={(event) => setBodyDraft(event.target.value)}
+                  />
+                  <FieldDescription>
+                    Ngăn cách các đoạn bằng một dòng trống. Hiện có{" "}
+                    {draftParagraphs.length} đoạn, {draftWordCount} từ (band{" "}
+                    {READING_WORD_BAND.min}-{READING_WORD_BAND.max}).
+                    {draftParagraphs.length < 2
+                      ? " Cần ít nhất 2 đoạn."
+                      : ""}{" "}
+                    Lưu nội dung mới sẽ tắt toàn bộ câu hỏi của bài; hệ thống
+                    sinh lại ở lần chạy sau.
+                  </FieldDescription>
+                </Field>
+              </div>
+            ) : (
+              <article className="space-y-4">
+                <h3 className="text-lg font-semibold tracking-tight">
+                  {passage.title}
+                </h3>
+                {passage.paragraphs.map((paragraph, index) => (
+                  <p key={index} className="text-[15px] leading-7">
+                    {paragraph}
+                  </p>
+                ))}
+              </article>
+            )}
+
+            <dl className="grid grid-cols-2 gap-x-4 gap-y-3 rounded-2xl border p-4 sm:grid-cols-4">
+              <MetaRow label="ID" value={String(passage.id)} />
+              <MetaRow
+                label="Token vào"
+                value={formatNumber(passage.tokenIn)}
+              />
+              <MetaRow
+                label="Token ra"
+                value={formatNumber(passage.tokenOut)}
+              />
+              <MetaRow
+                label="Tạo lúc"
+                value={formatDateTime(passage.createdAt)}
+              />
+              <div className="col-span-2 flex flex-col gap-0.5 sm:col-span-4">
+                <dt className="text-xs text-muted-foreground">Model</dt>
+                <dd className="font-mono text-sm break-all">{passage.model}</dd>
+              </div>
+            </dl>
+          </TabsContent>
+
+          <TabsContent value="questions" className="pt-4">
+            <PassageQuestionsPanel
+              passageId={passage.id}
+              passageTitle={passage.title}
+              cefrLevel={passage.cefrLevel}
+            />
+          </TabsContent>
+        </Tabs>
+      </DetailDialogBody>
+
+      <DetailDialogFooter className="md:justify-between">
         {isEditing ? (
           <>
             <Button
-              size="sm"
-              disabled={isPending || isDraftInvalid}
-              onClick={handleSave}
-            >
-              <IconDeviceFloppy stroke={1.5} data-icon="inline-start" />
-              Lưu
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
+              variant="outline"
               disabled={isPending}
               onClick={() => {
                 setIsEditing(false)
@@ -146,116 +249,29 @@ function ReadingDetailContent({
               <IconX stroke={1.5} data-icon="inline-start" />
               Huỷ
             </Button>
+            <Button disabled={isPending || isDraftInvalid} onClick={handleSave}>
+              <IconDeviceFloppy stroke={1.5} data-icon="inline-start" />
+              Lưu
+            </Button>
           </>
         ) : (
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setIsEditing(true)}
-          >
-            <IconPencil stroke={1.5} data-icon="inline-start" />
-            Sửa nội dung
-          </Button>
+          <>
+            <Button
+              variant="ghost"
+              className="text-destructive"
+              disabled={isDeleting}
+              onClick={() => setConfirmDelete(true)}
+            >
+              <IconTrash stroke={1.5} data-icon="inline-start" />
+              Xoá
+            </Button>
+            <Button variant="outline" onClick={() => setIsEditing(true)}>
+              <IconPencil stroke={1.5} data-icon="inline-start" />
+              Sửa nội dung
+            </Button>
+          </>
         )}
-
-        <label className="ml-auto flex items-center gap-2 text-sm">
-          <Switch
-            checked={passage.isActive}
-            disabled={isPending}
-            onCheckedChange={(checked) => void setActive(passage.id, checked)}
-          />
-          {passage.isActive ? "Đang bật" : "Đã tắt"}
-        </label>
-
-        <Button
-          size="sm"
-          variant="ghost"
-          className="text-destructive"
-          disabled={isDeleting}
-          onClick={() => setConfirmDelete(true)}
-        >
-          <IconTrash stroke={1.5} data-icon="inline-start" />
-          Xoá
-        </Button>
-      </div>
-
-      <Tabs defaultValue="passage">
-        <TabsList>
-          <TabsTrigger value="passage">Bài đọc</TabsTrigger>
-          <TabsTrigger value="questions">
-            Câu hỏi{questionCount === undefined ? "" : ` (${questionCount})`}
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="passage" className="space-y-6 pt-4">
-          {isEditing ? (
-            <div className="space-y-4">
-              <Field data-invalid={titleDraft.trim().length === 0 || undefined}>
-                <FieldLabel htmlFor="reading-title">Tiêu đề</FieldLabel>
-                <Input
-                  id="reading-title"
-                  value={titleDraft}
-                  disabled={isPending}
-                  onChange={(event) => setTitleDraft(event.target.value)}
-                />
-              </Field>
-
-              <Field data-invalid={draftParagraphs.length < 2 || undefined}>
-                <FieldLabel htmlFor="reading-body">Nội dung</FieldLabel>
-                <Textarea
-                  id="reading-body"
-                  rows={16}
-                  className="leading-relaxed"
-                  value={bodyDraft}
-                  disabled={isPending}
-                  onChange={(event) => setBodyDraft(event.target.value)}
-                />
-                <FieldDescription>
-                  Ngăn cách các đoạn bằng một dòng trống. Hiện có{" "}
-                  {draftParagraphs.length} đoạn, {draftWordCount} từ (band{" "}
-                  {READING_WORD_BAND.min}-{READING_WORD_BAND.max}).
-                  {draftParagraphs.length < 2 ? " Cần ít nhất 2 đoạn." : ""} Lưu
-                  nội dung mới sẽ tắt toàn bộ câu hỏi của bài; hệ thống sinh lại
-                  ở lần chạy sau.
-                </FieldDescription>
-              </Field>
-            </div>
-          ) : (
-            <article className="space-y-4">
-              <h3 className="text-lg font-semibold tracking-tight">
-                {passage.title}
-              </h3>
-              {passage.paragraphs.map((paragraph, index) => (
-                <p key={index} className="text-[15px] leading-7">
-                  {paragraph}
-                </p>
-              ))}
-            </article>
-          )}
-
-          <dl className="grid grid-cols-2 gap-4 rounded-2xl border p-4 sm:grid-cols-4">
-            <MetaRow label="ID" value={String(passage.id)} />
-            <MetaRow label="Token vào" value={formatNumber(passage.tokenIn)} />
-            <MetaRow label="Token ra" value={formatNumber(passage.tokenOut)} />
-            <MetaRow
-              label="Tạo lúc"
-              value={formatDateTime(passage.createdAt)}
-            />
-            <div className="col-span-2 flex flex-col gap-0.5 sm:col-span-4">
-              <dt className="text-xs text-muted-foreground">Model</dt>
-              <dd className="font-mono text-sm break-all">{passage.model}</dd>
-            </div>
-          </dl>
-        </TabsContent>
-
-        <TabsContent value="questions" className="pt-4">
-          <PassageQuestionsPanel
-            passageId={passage.id}
-            passageTitle={passage.title}
-            cefrLevel={passage.cefrLevel}
-          />
-        </TabsContent>
-      </Tabs>
+      </DetailDialogFooter>
 
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <AlertDialogContent>
@@ -277,7 +293,7 @@ function ReadingDetailContent({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </>
   )
 }
 
@@ -289,14 +305,14 @@ export function ReadingDetailSheet({
   onOpenChange: (open: boolean) => void
 }) {
   return (
-    <Sheet open={Boolean(passage)} onOpenChange={onOpenChange}>
-      <SheetContent className="overflow-y-auto sm:max-w-2xl!">
-        <SheetHeader>
-          <SheetTitle>Chi tiết bài đọc</SheetTitle>
-          <SheetDescription>
+    <DetailDialog open={Boolean(passage)} onOpenChange={onOpenChange}>
+      <DetailDialogContent className="sm:max-w-4xl">
+        <DetailDialogHeader>
+          <DetailDialogTitle>Chi tiết bài đọc</DetailDialogTitle>
+          <DetailDialogDescription>
             Nội dung và metadata của bài đang lưu trong kho.
-          </SheetDescription>
-        </SheetHeader>
+          </DetailDialogDescription>
+        </DetailDialogHeader>
 
         {passage ? (
           <ReadingDetailContent
@@ -304,7 +320,7 @@ export function ReadingDetailSheet({
             onDeleted={() => onOpenChange(false)}
           />
         ) : null}
-      </SheetContent>
-    </Sheet>
+      </DetailDialogContent>
+    </DetailDialog>
   )
 }
