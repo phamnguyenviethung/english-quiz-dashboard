@@ -7,22 +7,26 @@
  */
 
 export type PostAdminPoolReviewsByIdReject200DataChecklist = {
-  /** word / sentence / description / paragraph / context đổi. */
-  questionTextChanged: boolean;
-  /** correctAnswer / correctStatement / oddWord đổi. */
-  answerChanged: boolean;
-  /** wrongAnswers / wrongStatements / groupWords đổi. */
-  optionsChanged: boolean;
-  explanationChanged: boolean;
-  /** exampleSentence / exampleTranslation đổi. */
-  exampleChanged: boolean;
-  /** Bản gốc có lỗi kiến thức/logic. */
-  hasFactualError: boolean;
-  hasGrammarError: boolean;
-  /** Bản gốc lệch topic. */
-  topicMismatch: boolean;
-  /** Bản gốc lệch CEFR level. */
+  /** Người học ở level này không giải được từ đề + options. */
+  notSolvable: boolean;
+  /** Thiếu dữ kiện / phải đoán / cần kiến thức ngoài. */
+  insufficientContext: boolean;
+  /** Có ≥2 phương án hợp lý. */
+  multipleDefensibleAnswers: boolean;
+  /** Đáp án đúng thực ra sai. */
+  answerIncorrect: boolean;
+  /** `explanation` không khớp đáp án đúng. */
+  explanationMismatch: boolean;
+  /** Giải thích phương án sai lệch index / sai đối tượng / chung chung. */
+  distractorExplanationMismatch: boolean;
+  /** Bản dịch VI↔EN lệch (false nếu loại không có field dịch). */
+  translationMismatch: boolean;
+  /** Có lỗi chính tả/ngữ pháp ở bất kỳ field nào. */
+  spellingOrGrammarError: boolean;
+  /** Lệch chủ đề (chỉ xét central term + context). */
+  offTopic: boolean;
+  /** Rõ ràng lệch cấp độ CEFR. */
   levelMismatch: boolean;
-  /** revisedData parse đúng schema quizType (do server tính). */
+  /** revisedData parse đúng schema quizType (do server tính, true = tốt). */
   formatValid: boolean;
 } | null;

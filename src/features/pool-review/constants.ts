@@ -56,20 +56,22 @@ export const REVIEW_VERDICT_META: Record<
 }
 
 // Nhãn tiếng Việt cho 10 cờ trong checklist (khớp PoolReviewChecklist ở backend).
+// Cờ do AI trả: true = vấn đề CÓ trong bản gốc. `formatValid` (server set): true = tốt.
 export const CHECKLIST_LABELS: Record<string, string> = {
-  questionTextChanged: "Đổi nội dung câu hỏi",
-  answerChanged: "Đổi đáp án đúng",
-  optionsChanged: "Đổi các phương án",
-  explanationChanged: "Đổi phần giải thích",
-  exampleChanged: "Đổi câu ví dụ",
-  hasFactualError: "Có lỗi kiến thức/logic",
-  hasGrammarError: "Có lỗi ngữ pháp",
-  topicMismatch: "Lệch chủ đề",
+  notSolvable: "Người học không giải được",
+  insufficientContext: "Thiếu dữ kiện / phải đoán",
+  multipleDefensibleAnswers: "Có nhiều đáp án hợp lý",
+  answerIncorrect: "Đáp án đúng bị sai",
+  explanationMismatch: "Giải thích không khớp đáp án",
+  distractorExplanationMismatch: "Giải thích phương án sai bị lệch",
+  translationMismatch: "Bản dịch VI↔EN lệch",
+  spellingOrGrammarError: "Có lỗi chính tả / ngữ pháp",
+  offTopic: "Lệch chủ đề",
   levelMismatch: "Lệch cấp độ CEFR",
   formatValid: "Bản sửa đúng schema",
 }
 
-// Cờ mà giá trị true = tốt (ngược với các cờ còn lại true = có vấn đề/thay đổi).
+// Cờ mà giá trị true = tốt (ngược với các cờ còn lại true = có vấn đề).
 export const CHECKLIST_POSITIVE_WHEN_TRUE = new Set(["formatValid"])
 
 export const REVIEW_SEVERITY_META: Record<

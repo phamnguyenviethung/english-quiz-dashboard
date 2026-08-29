@@ -152,7 +152,7 @@ function DetailBody({
             </Section>
           ) : null}
 
-          <Section title="Checklist thay đổi">
+          <Section title="Kết quả rà soát">
             <ReviewChecklist checklist={review.checklist} />
           </Section>
 
