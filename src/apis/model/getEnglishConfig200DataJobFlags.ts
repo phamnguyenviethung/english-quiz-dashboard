@@ -26,4 +26,5 @@ export type GetEnglishConfig200DataJobFlags = {
      * @exclusiveMinimum 0
      */
   readingQuestionRefillMaxPerRun: number;
+  siblingGenEnabled: boolean;
 };

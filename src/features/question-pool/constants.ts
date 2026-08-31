@@ -35,6 +35,31 @@ export const FILTER_PILL_LABEL = "text-foreground/60"
 export const QUESTIONS_PAGE_SIZE = 20
 export const PAGE_SIZE_OPTIONS = [20, 50, 100]
 
+/**
+ * Loại câu hỗ trợ sinh "câu tương tự" (sibling). Phải khớp SIBLING_SUPPORTED_QUIZ_TYPES
+ * ở backend (`questionTypes.ts`). Chỉ dùng để bật/tắt nút — submit vẫn được backend chặn
+ * lại (400) nếu lệch.
+ */
+export const SIBLING_SUPPORTED_QUIZ_TYPES = [
+  "vocab",
+  "phrase",
+  "idiom",
+  "slang",
+  "synonym",
+  "fillblank",
+  "conversation",
+  "description",
+  "verb-use-match",
+] as const
+
+export const SIBLING_COUNT_OPTIONS = [1, 2, 3, 5] as const
+export const SIBLING_DEFAULT_COUNT = 3
+export const SIBLING_NOTE_MAX = 1000
+
+export function isSiblingSupportedQuizType(quizType: string): boolean {
+  return (SIBLING_SUPPORTED_QUIZ_TYPES as readonly string[]).includes(quizType)
+}
+
 export const COLUMN_VISIBILITY_STORAGE_KEY = "question-pool:columns"
 
 export const MANUAL_REFILL_SCOPE_META: Record<

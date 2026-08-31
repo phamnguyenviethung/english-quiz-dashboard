@@ -15,6 +15,8 @@ export interface PoolQuestionsFilterInput {
   optionCount: number | undefined
   createdFrom: string | undefined
   createdTo: string | undefined
+  sourceQuestionId: number | undefined
+  onlySiblings: boolean
   sort: GetEnglishPoolQuestionsParams["sort"]
   page: number
   pageSize: number
@@ -30,6 +32,8 @@ export function buildPoolQuestionsParams({
   optionCount,
   createdFrom,
   createdTo,
+  sourceQuestionId,
+  onlySiblings,
   sort,
   page,
   pageSize,
@@ -43,6 +47,11 @@ export function buildPoolQuestionsParams({
     ...(optionCount ? { optionCount } : {}),
     ...(createdFrom ? { createdFrom } : {}),
     ...(createdTo ? { createdTo } : {}),
+    ...(sourceQuestionId
+      ? { sourceQuestionId }
+      : onlySiblings
+        ? { onlySiblings: true }
+        : {}),
     ...(sort ? { sort } : {}),
     page,
     pageSize,

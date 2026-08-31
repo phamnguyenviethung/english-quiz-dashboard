@@ -26,6 +26,15 @@ createdTo?: string;
  * @maxLength 100
  */
 q?: string;
+/**
+ * Chỉ lấy câu tương tự (sibling) sinh từ câu pool gốc này.
+ * @minimum 1
+ */
+sourceQuestionId?: string | number;
+/**
+ * true = chỉ lấy câu là sibling (có sourceQuestionId).
+ */
+onlySiblings?: boolean | string;
 sort?: GetEnglishPoolQuestionsSort;
 /**
  * @minimum 1

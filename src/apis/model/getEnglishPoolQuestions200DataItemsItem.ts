@@ -17,6 +17,7 @@ export type GetEnglishPoolQuestions200DataItemsItem = {
   tokenOut: number;
   optionCount: number;
   topicId: number | null;
+  sourceQuestionId: number | null;
   engLevel: string;
   topicName: string | null;
   createdAt: string | number | null;

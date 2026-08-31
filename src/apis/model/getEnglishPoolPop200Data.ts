@@ -17,4 +17,5 @@ export type GetEnglishPoolPop200Data = {
   tokenOut: number;
   optionCount: number;
   topicId: number | null;
+  sourceQuestionId: number | null;
 };

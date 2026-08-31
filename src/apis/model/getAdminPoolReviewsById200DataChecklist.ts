@@ -9,14 +9,22 @@
 export type GetAdminPoolReviewsById200DataChecklist = {
   /** Người học ở level này không giải được từ đề + options. */
   notSolvable: boolean;
-  /** Thiếu dữ kiện / phải đoán / cần kiến thức ngoài. */
+  /** Không có manh mối chốt đúng 1 option / distractor gần nghĩa cũng lọt. */
   insufficientContext: boolean;
   /** Có ≥2 phương án hợp lý. */
   multipleDefensibleAnswers: boolean;
   /** Đáp án đúng thực ra sai. */
   answerIncorrect: boolean;
-  /** `explanation` không khớp đáp án đúng. */
+  /** Options lệch loại từ / độ dài / dạng ngữ pháp / ngôn ngữ, hoặc không điền được vào chỗ trống. */
+  optionsFormInconsistent: boolean;
+  /** Phải biết dữ kiện ngoài câu / vượt level mới chọn được. */
+  requiresOutsideKnowledge: boolean;
+  /** Đáp án AI tự giải ra khác đáp án được gán. */
+  solvedAnswerMismatch: boolean;
+  /** `explanation` mâu thuẫn / mô tả option khác. */
   explanationMismatch: boolean;
+  /** Theo đề + `explanation` vẫn không dẫn tới đúng option được gán. */
+  explanationDoesNotDeriveAnswer: boolean;
   /** Giải thích phương án sai lệch index / sai đối tượng / chung chung. */
   distractorExplanationMismatch: boolean;
   /** Bản dịch VI↔EN lệch (false nếu loại không có field dịch). */

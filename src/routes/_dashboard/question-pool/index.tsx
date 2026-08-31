@@ -23,6 +23,7 @@ import {
   QUIZ_TYPES,
 } from "@/features/quiz/constants.ts"
 import { SendReviewDialog } from "@/features/pool-review/components/send-review-dialog.tsx"
+import { GenerateSiblingsDialog } from "@/features/question-pool/components/generate-siblings-dialog.tsx"
 import { PoolColumnVisibilityMenu } from "@/features/question-pool/components/pool-column-visibility-menu.tsx"
 import { PoolPreviewDialog } from "@/features/question-pool/components/pool-preview-dialog.tsx"
 import { PoolQuestionDetailSheet } from "@/features/question-pool/components/pool-question-detail-sheet.tsx"
@@ -66,6 +67,10 @@ interface PoolSearch {
   pageSize?: number
   questionId?: number
   sendReview?: number
+  /** Mở dialog tạo câu tương tự ở cấp trang cho câu gốc này. */
+  genSiblings?: number
+  /** Lọc danh sách: chỉ câu tương tự sinh từ câu gốc này. */
+  sourceQuestionId?: number
 }
 
 function parseIsoParam(value: unknown): string | undefined {
@@ -115,6 +120,16 @@ export const Route = createFileRoute("/_dashboard/question-pool/")({
       Number.isInteger(parsedSendReview) && parsedSendReview > 0
         ? parsedSendReview
         : undefined
+    const parsedGenSiblings = Number(search.genSiblings)
+    const genSiblings =
+      Number.isInteger(parsedGenSiblings) && parsedGenSiblings > 0
+        ? parsedGenSiblings
+        : undefined
+    const parsedSourceQuestionId = Number(search.sourceQuestionId)
+    const sourceQuestionId =
+      Number.isInteger(parsedSourceQuestionId) && parsedSourceQuestionId > 0
+        ? parsedSourceQuestionId
+        : undefined
 
     return {
       ...(q ? { q } : {}),
@@ -131,6 +146,8 @@ export const Route = createFileRoute("/_dashboard/question-pool/")({
       ...(pageSize ? { pageSize } : {}),
       ...(questionId ? { questionId } : {}),
       ...(sendReview ? { sendReview } : {}),
+      ...(genSiblings ? { genSiblings } : {}),
+      ...(sourceQuestionId ? { sourceQuestionId } : {}),
     }
   },
   loaderDeps: ({ search }) => ({
@@ -144,6 +161,8 @@ export const Route = createFileRoute("/_dashboard/question-pool/")({
       optionCount: search.optionCount,
       createdFrom: search.createdFrom,
       createdTo: search.createdTo,
+      sourceQuestionId: search.sourceQuestionId,
+      onlySiblings: false,
       // Phải khớp default dùng trong component, nếu không params ở loader và ở
       // component lệch nhau => query key khác nhau => prefetch không hit cache lúc SSR.
       sort: search.sort ?? DEFAULT_POOL_SORT,
@@ -182,6 +201,8 @@ function QuestionPoolPage() {
     optionCount: search.optionCount,
     createdFrom: search.createdFrom,
     createdTo: search.createdTo,
+    sourceQuestionId: search.sourceQuestionId,
+    onlySiblings: false,
     sort,
     page,
     pageSize,
@@ -232,6 +253,7 @@ function QuestionPoolPage() {
       optionCount: undefined,
       createdFrom: undefined,
       createdTo: undefined,
+      sourceQuestionId: undefined,
     })
 
   const isEmpty = !isPending && items?.length === 0
@@ -314,6 +336,21 @@ function QuestionPoolPage() {
         <PoolColumnVisibilityMenu table={table} onReset={resetVisibility} />
       </PoolQuestionsToolbar>
 
+      {search.sourceQuestionId !== undefined ? (
+        <div className="flex items-center justify-between gap-2 rounded-2xl border bg-secondary/40 px-4 py-2 text-sm">
+          <span>
+            Đang lọc: câu tương tự sinh từ câu #{search.sourceQuestionId}
+          </span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => applyFilter({ sourceQuestionId: undefined })}
+          >
+            Bỏ lọc
+          </Button>
+        </div>
+      ) : null}
+
       {isError ? (
         <QueryError
           title="Không tải được danh sách câu hỏi"
@@ -381,6 +418,12 @@ function QuestionPoolPage() {
         onSendReview={(id) =>
           updateSearch({ questionId: undefined, sendReview: id })
         }
+        onGenerateSiblings={(id) =>
+          updateSearch({ questionId: undefined, genSiblings: id })
+        }
+        onViewSiblings={(id) =>
+          applyFilter({ sourceQuestionId: id, questionId: undefined })
+        }
       />
 
       <SendReviewDialog
@@ -390,6 +433,14 @@ function QuestionPoolPage() {
         open={search.sendReview !== undefined}
         onOpenChange={(open) => {
           if (!open) updateSearch({ sendReview: undefined })
+        }}
+      />
+
+      <GenerateSiblingsDialog
+        sourceQuestionId={search.genSiblings}
+        open={search.genSiblings !== undefined}
+        onOpenChange={(open) => {
+          if (!open) updateSearch({ genSiblings: undefined })
         }}
       />
 
