@@ -1,14 +1,20 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { IconBook, IconDatabase, IconHelpCircle } from "@tabler/icons-react"
+import {
+  IconBook,
+  IconCopyPlus,
+  IconDatabase,
+  IconHelpCircle,
+} from "@tabler/icons-react"
 
 import { getGetAdminModelsQueryOptions } from "@/apis/admin-models/admin-models.ts"
 import { PageHeader } from "@/components/common/page-header.tsx"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ManualRefillPage } from "@/features/question-pool/components/manual-refill-page.tsx"
+import { SiblingRefillPage } from "@/features/question-pool/components/sibling-refill-page.tsx"
 import { ReadingQuestionRefillPage } from "@/features/reading-questions/components/reading-question-refill-page.tsx"
 import { ReadingRefillPage } from "@/features/readings/components/reading-refill-page.tsx"
 
-const TABS = ["questions", "readings", "reading-questions"] as const
+const TABS = ["questions", "siblings", "readings", "reading-questions"] as const
 type RefillTab = (typeof TABS)[number]
 
 const DEFAULT_TAB: RefillTab = "questions"
@@ -56,6 +62,10 @@ function RefillPage() {
             <IconDatabase stroke={1.5} data-icon="inline-start" />
             Câu hỏi
           </TabsTrigger>
+          <TabsTrigger value="siblings">
+            <IconCopyPlus stroke={1.5} data-icon="inline-start" />
+            Câu tương tự
+          </TabsTrigger>
           <TabsTrigger value="readings">
             <IconBook stroke={1.5} data-icon="inline-start" />
             Bài đọc
@@ -70,6 +80,9 @@ function RefillPage() {
             giữ mount cả hai sẽ bắn hai request mỗi lần đổi filter. */}
         <TabsContent value="questions" className="pt-4">
           <ManualRefillPage />
+        </TabsContent>
+        <TabsContent value="siblings" className="pt-4">
+          <SiblingRefillPage />
         </TabsContent>
         <TabsContent value="readings" className="pt-4">
           <ReadingRefillPage />

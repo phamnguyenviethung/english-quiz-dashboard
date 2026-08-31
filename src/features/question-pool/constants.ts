@@ -1,4 +1,4 @@
-import type { ManualRefillScope } from "./types.ts"
+import type { ManualRefillScope, SiblingRefillScope } from "./types.ts"
 
 // Nhãn filter đã nằm trong trigger của pill ("Cấp độ: Tất cả"), nên giá trị
 // hiển thị chỉ cần "Tất cả" — nhắc lại tên filter ở đây là thừa.
@@ -56,9 +56,31 @@ export const SIBLING_COUNT_OPTIONS = [1, 2, 3, 5] as const
 export const SIBLING_DEFAULT_COUNT = 3
 export const SIBLING_NOTE_MAX = 1000
 
+/** Mặc định cho tab bulk khi ô để trống — backend vẫn lấy từ config nếu không gửi. */
+export const SIBLING_DEFAULT_SOURCES_PER_BUCKET = 2
+
 export function isSiblingSupportedQuizType(quizType: string): boolean {
   return (SIBLING_SUPPORTED_QUIZ_TYPES as readonly string[]).includes(quizType)
 }
+
+export const SIBLING_REFILL_SCOPE_META: Record<
+  SiblingRefillScope,
+  { label: string; description: string }
+> = {
+  deficient: {
+    label: "Chỉ bucket còn thiếu",
+    description:
+      "Chỉ bù câu tương tự cho bucket chưa đạt số câu tối đa. Bucket đã đầy được bỏ qua.",
+  },
+  all: {
+    label: "Toàn bộ bucket",
+    description:
+      "Ép sinh câu tương tự cho mọi bucket khớp filter, kể cả bucket đã đầy.",
+  },
+}
+
+/** Ngưỡng bật cảnh báo chi phí ở tab sinh câu tương tự (theo số câu sẽ thêm). */
+export const SIBLING_REFILL_COST_WARNING = 150
 
 export const COLUMN_VISIBILITY_STORAGE_KEY = "question-pool:columns"
 

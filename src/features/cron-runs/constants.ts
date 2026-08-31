@@ -33,6 +33,8 @@ export const CRON_JOB_LABELS: Record<string, string> = {
   pool_refill: "Bổ sung kho câu hỏi",
   manual_fill: "Bổ sung kho câu hỏi (thủ công)",
   question_gen: "Sinh câu hỏi",
+  sibling_gen: "Sinh câu tương tự",
+  sibling_gen_manual: "Sinh câu tương tự (thủ công)",
   reading_refill: "Bổ sung bài đọc",
   reading_manual_fill: "Bổ sung bài đọc (thủ công)",
   reading_question_refill: "Bổ sung câu hỏi bài đọc",

@@ -25,6 +25,11 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  GetAdminPoolSiblingsBuckets200,
+  GetAdminPoolSiblingsBuckets400,
+  GetAdminPoolSiblingsBuckets401,
+  GetAdminPoolSiblingsBuckets500,
+  GetAdminPoolSiblingsBucketsParams,
   GetAdminPoolSiblingsSupportedTypes200,
   GetAdminPoolSiblingsSupportedTypes401,
   GetAdminPoolSiblingsSupportedTypes500,
@@ -35,7 +40,14 @@ import type {
   PostAdminPoolSiblingsById500,
   PostAdminPoolSiblingsByIdBodyOne,
   PostAdminPoolSiblingsByIdBodyThree,
-  PostAdminPoolSiblingsByIdBodyTwo
+  PostAdminPoolSiblingsByIdBodyTwo,
+  PostAdminPoolSiblingsRefill200,
+  PostAdminPoolSiblingsRefill400,
+  PostAdminPoolSiblingsRefill401,
+  PostAdminPoolSiblingsRefill500,
+  PostAdminPoolSiblingsRefillBodyOne,
+  PostAdminPoolSiblingsRefillBodyThree,
+  PostAdminPoolSiblingsRefillBodyTwo
 } from '../model';
 
 import { axiosClient } from '../../configs/axiosClient.ts';
@@ -218,4 +230,162 @@ export const usePostAdminPoolSiblingsById = <TError = ErrorType<PostAdminPoolSib
         TContext
       > => {
       return useMutation(getPostAdminPoolSiblingsByIdMutationOptions(options), queryClient);
+    }
+    /**
+ * Bucket nào sẽ được sinh câu tương tự với đúng bộ tham số này, kèm `sourceCount` (số câu gốc dùng làm nguồn) và `plannedCount` (ước lượng số câu sẽ thêm). Dùng chung `buildManualSiblingPlan` với endpoint chạy thật. Chỉ đọc, không tốn LLM. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
+ * @summary Preview buckets cho manual bulk sibling refill
+ */
+export const getAdminPoolSiblingsBuckets = (
+    params?: GetAdminPoolSiblingsBucketsParams,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+) => {
+
+
+      return axiosClient<GetAdminPoolSiblingsBuckets200>(
+      {url: `/admin/pool/siblings/buckets`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetAdminPoolSiblingsBucketsQueryKey = (params?: GetAdminPoolSiblingsBucketsParams,) => {
+    return [
+    `/admin/pool/siblings/buckets`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetAdminPoolSiblingsBucketsQueryOptions = <TData = Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError = ErrorType<GetAdminPoolSiblingsBuckets400 | GetAdminPoolSiblingsBuckets401 | GetAdminPoolSiblingsBuckets500>>(params?: GetAdminPoolSiblingsBucketsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminPoolSiblingsBucketsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>> = ({ signal }) => getAdminPoolSiblingsBuckets(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetAdminPoolSiblingsBucketsQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>>
+export type GetAdminPoolSiblingsBucketsQueryError = ErrorType<GetAdminPoolSiblingsBuckets400 | GetAdminPoolSiblingsBuckets401 | GetAdminPoolSiblingsBuckets500>
+
+
+export function useGetAdminPoolSiblingsBuckets<TData = Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError = ErrorType<GetAdminPoolSiblingsBuckets400 | GetAdminPoolSiblingsBuckets401 | GetAdminPoolSiblingsBuckets500>>(
+ params: undefined |  GetAdminPoolSiblingsBucketsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>,
+          TError,
+          Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminPoolSiblingsBuckets<TData = Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError = ErrorType<GetAdminPoolSiblingsBuckets400 | GetAdminPoolSiblingsBuckets401 | GetAdminPoolSiblingsBuckets500>>(
+ params?: GetAdminPoolSiblingsBucketsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>,
+          TError,
+          Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetAdminPoolSiblingsBuckets<TData = Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError = ErrorType<GetAdminPoolSiblingsBuckets400 | GetAdminPoolSiblingsBuckets401 | GetAdminPoolSiblingsBuckets500>>(
+ params?: GetAdminPoolSiblingsBucketsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Preview buckets cho manual bulk sibling refill
+ */
+
+export function useGetAdminPoolSiblingsBuckets<TData = Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError = ErrorType<GetAdminPoolSiblingsBuckets400 | GetAdminPoolSiblingsBuckets401 | GetAdminPoolSiblingsBuckets500>>(
+ params?: GetAdminPoolSiblingsBucketsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAdminPoolSiblingsBuckets>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetAdminPoolSiblingsBucketsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * Quét bucket (engLevel × topic × quizType, chỉ 9 loại hỗ trợ), lấy câu gốc sẵn có sinh câu tương tự — chạy in-process (không qua BullMQ), fire-and-forget, trả ngay `{ runId, totalBuckets }`. `scope=deficient` (mặc định) chỉ bù bucket dưới `maxPerBucket`; `scope=all` ép sinh cho mọi bucket khớp. Theo dõi ở GET /english/cron/runs/:runId (jobKey `sibling_gen_manual`). Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
+ * @summary Trigger manual bulk sibling refill
+ */
+export const postAdminPoolSiblingsRefill = (
+    postAdminPoolSiblingsRefillBody: BodyType<PostAdminPoolSiblingsRefillBodyOne | PostAdminPoolSiblingsRefillBodyTwo | PostAdminPoolSiblingsRefillBodyThree>| PostAdminPoolSiblingsRefillBodyTwo | PostAdminPoolSiblingsRefillBodyThree,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+) => {
+
+
+      return axiosClient<PostAdminPoolSiblingsRefill200>(
+      {url: `/admin/pool/siblings/refill`, method: 'POST',
+      data: postAdminPoolSiblingsRefillBody, signal
+    },
+      options);
+    }
+
+
+
+
+export const getPostAdminPoolSiblingsRefillMutationOptions = <TError = ErrorType<PostAdminPoolSiblingsRefill400 | PostAdminPoolSiblingsRefill401 | PostAdminPoolSiblingsRefill500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminPoolSiblingsRefill>>, TError,{data: BodyType<PostAdminPoolSiblingsRefillBodyOne | PostAdminPoolSiblingsRefillBodyTwo | PostAdminPoolSiblingsRefillBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAdminPoolSiblingsRefill>>, TError,{data: BodyType<PostAdminPoolSiblingsRefillBodyOne | PostAdminPoolSiblingsRefillBodyTwo | PostAdminPoolSiblingsRefillBodyThree>}, TContext> => {
+
+const mutationKey = ['postAdminPoolSiblingsRefill'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminPoolSiblingsRefill>>, {data: BodyType<PostAdminPoolSiblingsRefillBodyOne | PostAdminPoolSiblingsRefillBodyTwo | PostAdminPoolSiblingsRefillBodyThree>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postAdminPoolSiblingsRefill(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAdminPoolSiblingsRefillMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminPoolSiblingsRefill>>>
+    export type PostAdminPoolSiblingsRefillMutationBody = BodyType<PostAdminPoolSiblingsRefillBodyOne | PostAdminPoolSiblingsRefillBodyTwo | PostAdminPoolSiblingsRefillBodyThree>
+    export type PostAdminPoolSiblingsRefillMutationError = ErrorType<PostAdminPoolSiblingsRefill400 | PostAdminPoolSiblingsRefill401 | PostAdminPoolSiblingsRefill500>
+
+    /**
+ * @summary Trigger manual bulk sibling refill
+ */
+export const usePostAdminPoolSiblingsRefill = <TError = ErrorType<PostAdminPoolSiblingsRefill400 | PostAdminPoolSiblingsRefill401 | PostAdminPoolSiblingsRefill500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminPoolSiblingsRefill>>, TError,{data: BodyType<PostAdminPoolSiblingsRefillBodyOne | PostAdminPoolSiblingsRefillBodyTwo | PostAdminPoolSiblingsRefillBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAdminPoolSiblingsRefill>>,
+        TError,
+        {data: BodyType<PostAdminPoolSiblingsRefillBodyOne | PostAdminPoolSiblingsRefillBodyTwo | PostAdminPoolSiblingsRefillBodyThree>},
+        TContext
+      > => {
+      return useMutation(getPostAdminPoolSiblingsRefillMutationOptions(options), queryClient);
     }
