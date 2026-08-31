@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils"
 import type { PoolReview, PoolReviewsSort } from "../types.ts"
 import { ReviewStatusBadge, ReviewVerdictBadge } from "./review-badges.tsx"
 
-const COLUMN_COUNT = 9
+const COLUMN_COUNT = 6
 
 function IdSortHeader({
   sort,
@@ -44,14 +44,14 @@ function IdSortHeader({
       : IconArrowsSort
 
   return (
-    <TableHead className="w-16">
+    <TableHead className="w-28">
       <Button
         variant="ghost"
         size="sm"
         className="-ml-2 h-8 gap-1.5 font-medium"
         onClick={() => onSortChange(isDesc ? "id_asc" : "id_desc")}
       >
-        ID
+        Câu #
         <Icon
           stroke={1.5}
           className={cn("size-3.5", !isAsc && !isDesc && "opacity-50")}
@@ -66,7 +66,6 @@ export function PoolReviewsTable({
   sort,
   isPending,
   isRefetching,
-  selectedId,
   onSortChange,
   onSelect,
 }: {
@@ -74,14 +73,13 @@ export function PoolReviewsTable({
   sort: PoolReviewsSort
   isPending: boolean
   isRefetching: boolean
-  selectedId: number | undefined
   onSortChange: (sort: PoolReviewsSort) => void
   onSelect: (id: number) => void
 }) {
   return (
     <div
       className={cn(
-        "overflow-x-auto rounded-2xl border transition-opacity",
+        "hidden overflow-x-auto rounded-2xl border transition-opacity md:block",
         isRefetching && "opacity-60"
       )}
     >
@@ -89,14 +87,11 @@ export function PoolReviewsTable({
         <TableHeader>
           <TableRow>
             <IdSortHeader sort={sort} onSortChange={onSortChange} />
-            <TableHead className="w-20">Câu #</TableHead>
-            <TableHead className="w-40">Loại</TableHead>
-            <TableHead className="w-16">Cấp độ</TableHead>
+            <TableHead>Loại · cấp độ</TableHead>
             <TableHead>Chủ đề</TableHead>
             <TableHead className="w-24">Kết luận</TableHead>
             <TableHead className="w-28">Thay đổi</TableHead>
-            <TableHead className="w-28">Trạng thái</TableHead>
-            <TableHead className="w-32">Tạo lúc</TableHead>
+            <TableHead className="w-32">Trạng thái</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -108,24 +103,27 @@ export function PoolReviewsTable({
               return (
                 <TableRow
                   key={item.id}
-                  data-state={item.id === selectedId ? "selected" : undefined}
                   className="cursor-pointer"
                   onClick={() => onSelect(item.id)}
                 >
-                  <TableCell className="text-muted-foreground tabular-nums">
-                    {item.id}
-                  </TableCell>
                   <TableCell className="tabular-nums">
-                    #{item.poolQuestionRefId}
+                    <span className="font-medium">
+                      #{item.poolQuestionRefId}
+                    </span>
+                    <span className="ml-1.5 text-xs text-muted-foreground">
+                      r{item.id}
+                    </span>
                   </TableCell>
-                  <TableCell>{getQuizTypeLabel(item.quizType)}</TableCell>
                   <TableCell>
-                    <Badge
-                      variant="outline"
-                      className={getEngLevelBadgeClass(item.engLevel)}
-                    >
-                      {item.engLevel}
-                    </Badge>
+                    <span className="inline-flex items-center gap-1.5">
+                      {getQuizTypeLabel(item.quizType)}
+                      <Badge
+                        variant="outline"
+                        className={getEngLevelBadgeClass(item.engLevel)}
+                      >
+                        {item.engLevel}
+                      </Badge>
+                    </span>
                   </TableCell>
                   <TableCell className="max-w-48 truncate text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
@@ -134,7 +132,6 @@ export function PoolReviewsTable({
                         <IconMessage2
                           stroke={1.5}
                           className="size-3.5 shrink-0 text-foreground/60"
-                          title="Có ghi chú của admin"
                         />
                       ) : null}
                     </span>
@@ -152,10 +149,12 @@ export function PoolReviewsTable({
                     )}
                   </TableCell>
                   <TableCell>
-                    <ReviewStatusBadge status={item.status} />
-                  </TableCell>
-                  <TableCell className="text-muted-foreground tabular-nums">
-                    {formatDateTime(item.createdAt)}
+                    <div className="flex flex-col gap-0.5">
+                      <ReviewStatusBadge status={item.status} />
+                      <span className="text-xs text-muted-foreground tabular-nums">
+                        {formatDateTime(item.createdAt)}
+                      </span>
+                    </div>
                   </TableCell>
                 </TableRow>
               )

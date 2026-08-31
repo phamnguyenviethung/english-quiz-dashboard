@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { formatNumber } from "@/lib/format.ts"
+import { cn } from "@/lib/utils"
 
 import { PAGE_SIZE_OPTIONS } from "../constants.ts"
 
@@ -88,22 +89,24 @@ export function PoolReviewsPagination({
             <PaginationPrevious
               text="Trước"
               aria-disabled={isFirst}
-              className={
+              className={cn(
+                "min-h-11 sm:min-h-9",
                 isFirst ? "pointer-events-none opacity-50" : "cursor-pointer"
-              }
+              )}
               onClick={() => {
                 if (!isFirst) onPageChange(page - 1)
               }}
             />
           </PaginationItem>
 
+          {/* Cửa sổ số trang: chỉ hiện từ sm trở lên; điện thoại chỉ cần Trước/Sau. */}
           {buildPageWindow(page, totalPages).map((value, index) =>
             value === null ? (
-              <PaginationItem key={`gap-${index}`}>
+              <PaginationItem key={`gap-${index}`} className="hidden sm:block">
                 <PaginationEllipsis />
               </PaginationItem>
             ) : (
-              <PaginationItem key={value}>
+              <PaginationItem key={value} className="hidden sm:block">
                 <PaginationLink
                   isActive={value === page}
                   className="cursor-pointer tabular-nums"
@@ -119,9 +122,10 @@ export function PoolReviewsPagination({
             <PaginationNext
               text="Sau"
               aria-disabled={isLast}
-              className={
+              className={cn(
+                "min-h-11 sm:min-h-9",
                 isLast ? "pointer-events-none opacity-50" : "cursor-pointer"
-              }
+              )}
               onClick={() => {
                 if (!isLast) onPageChange(page + 1)
               }}

@@ -13,14 +13,20 @@ function stringify(value: unknown): string {
 export function JsonBlock({
   value,
   className,
+  scroll = true,
 }: {
   value: unknown
   className?: string
+  /** `false` = không bọc vùng cuộn riêng (tránh bẫy cuộn khi đã nằm trong trang cuộn được). */
+  scroll?: boolean
 }) {
   return (
     <pre
       className={cn(
-        "max-h-64 overflow-auto rounded-2xl bg-muted p-3 text-xs",
+        "rounded-2xl bg-muted p-3 text-xs",
+        scroll
+          ? "max-h-64 overflow-auto"
+          : "wrap-break-word whitespace-pre-wrap",
         className
       )}
     >

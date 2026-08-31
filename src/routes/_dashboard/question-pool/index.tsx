@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
 import { IconEye, IconSearchOff, IconStack2 } from "@tabler/icons-react"
@@ -22,9 +22,11 @@ import {
   OPTION_COUNTS,
   QUIZ_TYPES,
 } from "@/features/quiz/constants.ts"
+import { SendReviewDialog } from "@/features/pool-review/components/send-review-dialog.tsx"
 import { PoolColumnVisibilityMenu } from "@/features/question-pool/components/pool-column-visibility-menu.tsx"
 import { PoolPreviewDialog } from "@/features/question-pool/components/pool-preview-dialog.tsx"
 import { PoolQuestionDetailSheet } from "@/features/question-pool/components/pool-question-detail-sheet.tsx"
+import { PoolReviewSelectionBar } from "@/features/question-pool/components/pool-review-selection-bar.tsx"
 import { PoolQuestionsPagination } from "@/features/question-pool/components/pool-questions-pagination.tsx"
 import { PoolQuestionsTable } from "@/features/question-pool/components/pool-questions-table.tsx"
 import { PoolQuestionsToolbar } from "@/features/question-pool/components/pool-questions-toolbar.tsx"
@@ -63,6 +65,7 @@ interface PoolSearch {
   page?: number
   pageSize?: number
   questionId?: number
+  sendReview?: number
 }
 
 function parseIsoParam(value: unknown): string | undefined {
@@ -107,6 +110,11 @@ export const Route = createFileRoute("/_dashboard/question-pool/")({
       Number.isInteger(parsedQuestionId) && parsedQuestionId > 0
         ? parsedQuestionId
         : undefined
+    const parsedSendReview = Number(search.sendReview)
+    const sendReview =
+      Number.isInteger(parsedSendReview) && parsedSendReview > 0
+        ? parsedSendReview
+        : undefined
 
     return {
       ...(q ? { q } : {}),
@@ -122,6 +130,7 @@ export const Route = createFileRoute("/_dashboard/question-pool/")({
       ...(page ? { page } : {}),
       ...(pageSize ? { pageSize } : {}),
       ...(questionId ? { questionId } : {}),
+      ...(sendReview ? { sendReview } : {}),
     }
   },
   loaderDeps: ({ search }) => ({
@@ -239,6 +248,33 @@ function QuestionPoolPage() {
     onColumnVisibilityChange: setColumnVisibility,
   })
 
+  // Chọn hàng loạt để gửi AI review. Reset khi bộ lọc / trang đổi (danh sách khác).
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set())
+  const paramsKey = useMemo(() => JSON.stringify(params), [params])
+  useEffect(() => setSelectedIds(new Set()), [paramsKey])
+
+  const pageIds = items?.map((question) => question.id) ?? []
+  const allOnPageSelected =
+    pageIds.length > 0 && pageIds.every((id) => selectedIds.has(id))
+  const someOnPageSelected = pageIds.some((id) => selectedIds.has(id))
+
+  const toggleSelected = (id: number) =>
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  const toggleAllOnPage = () =>
+    setSelectedIds((prev) => {
+      const next = new Set(prev)
+      for (const id of pageIds) {
+        if (allOnPageSelected) next.delete(id)
+        else next.add(id)
+      }
+      return next
+    })
+
   return (
     <>
       <PageHeader
@@ -308,6 +344,13 @@ function QuestionPoolPage() {
             isRefetching={isRefetching}
             selectedQuestionId={search.questionId}
             onSelect={(questionId) => updateSearch({ questionId })}
+            selection={{
+              selectedIds,
+              onToggle: toggleSelected,
+              allOnPageSelected,
+              someOnPageSelected,
+              onToggleAllOnPage: toggleAllOnPage,
+            }}
           />
           <PoolQuestionsPagination
             page={page}
@@ -325,10 +368,28 @@ function QuestionPoolPage() {
         </>
       )}
 
+      <PoolReviewSelectionBar
+        selectedIds={[...selectedIds]}
+        onClear={() => setSelectedIds(new Set())}
+      />
+
       <PoolQuestionDetailSheet
         question={selectedQuestion}
         onOpenChange={(open) => {
           if (!open) updateSearch({ questionId: undefined })
+        }}
+        onSendReview={(id) =>
+          updateSearch({ questionId: undefined, sendReview: id })
+        }
+      />
+
+      <SendReviewDialog
+        poolQuestionIds={
+          search.sendReview !== undefined ? [search.sendReview] : []
+        }
+        open={search.sendReview !== undefined}
+        onOpenChange={(open) => {
+          if (!open) updateSearch({ sendReview: undefined })
         }}
       />
 

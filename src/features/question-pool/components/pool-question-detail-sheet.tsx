@@ -12,7 +12,6 @@ import {
 } from "@/components/common/detail-dialog.tsx"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { SendReviewDialog } from "@/features/pool-review/components/send-review-dialog.tsx"
 import {
   formatOptionCountLabel,
   getEngLevelBadgeClass,
@@ -84,9 +83,12 @@ function PoolQuestionDetailContent({ question }: { question: PoolQuestion }) {
 export function PoolQuestionDetailSheet({
   question,
   onOpenChange,
+  onSendReview,
 }: {
   question: PoolQuestion | undefined
   onOpenChange: (open: boolean) => void
+  /** Đóng drawer rồi mở dialog gửi review ở cấp trang (tránh overlay chồng overlay). */
+  onSendReview: (id: number) => void
 }) {
   return (
     <DetailDialog open={Boolean(question)} onOpenChange={onOpenChange}>
@@ -103,19 +105,24 @@ export function PoolQuestionDetailSheet({
         </DetailDialogBody>
 
         <DetailDialogFooter>
-          <Button variant="ghost" render={<Link to="/pool-review" />}>
-            Xem các review
-          </Button>
           {question ? (
-            <SendReviewDialog
-              poolQuestionIds={[question.id]}
-              trigger={
-                <Button>
-                  <IconSparkles stroke={1.5} data-icon="inline-start" />
-                  Gửi AI review
-                </Button>
-              }
-            />
+            <>
+              <Button
+                variant="ghost"
+                render={
+                  <Link
+                    to="/pool-review"
+                    search={{ poolQuestionRefId: question.id }}
+                  />
+                }
+              >
+                Xem review của câu này
+              </Button>
+              <Button onClick={() => onSendReview(question.id)}>
+                <IconSparkles stroke={1.5} data-icon="inline-start" />
+                Gửi AI review
+              </Button>
+            </>
           ) : null}
         </DetailDialogFooter>
       </DetailDialogContent>

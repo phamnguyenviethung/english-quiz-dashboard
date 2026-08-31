@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useQueryClient } from "@tanstack/react-query"
-import { IconSearchOff } from "@tabler/icons-react"
+import { IconSearchOff, IconX } from "@tabler/icons-react"
 
 import {
   getGetAdminPoolReviewsQueryKey,
@@ -8,6 +8,7 @@ import {
 } from "@/apis/admin-pool-review/admin-pool-review.ts"
 import { PageHeader } from "@/components/common/page-header.tsx"
 import { QueryError } from "@/components/common/query-error.tsx"
+import { Badge } from "@/components/ui/badge"
 import {
   Empty,
   EmptyDescription,
@@ -15,101 +16,24 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { PoolReviewDetailSheet } from "@/features/pool-review/components/pool-review-detail-sheet.tsx"
+import { PoolReviewCardList } from "@/features/pool-review/components/pool-review-card-list.tsx"
 import { PoolReviewsPagination } from "@/features/pool-review/components/pool-reviews-pagination.tsx"
 import { PoolReviewsTable } from "@/features/pool-review/components/pool-reviews-table.tsx"
 import { PoolReviewsToolbar } from "@/features/pool-review/components/pool-reviews-toolbar.tsx"
 import type { PoolReviewsToolbarFilters } from "@/features/pool-review/components/pool-reviews-toolbar.tsx"
+import { DEFAULT_POOL_REVIEW_SORT } from "@/features/pool-review/constants.ts"
+import { usePoolReviews } from "@/features/pool-review/hooks/use-pool-reviews.ts"
 import {
-  DEFAULT_POOL_REVIEW_SORT,
-  PAGE_SIZE_OPTIONS,
-  POOL_REVIEW_SORTS,
-  REVIEWS_PAGE_SIZE,
-  REVIEW_STATUS_META,
-  REVIEW_VERDICT_META,
-} from "@/features/pool-review/constants.ts"
-import {
-  buildPoolReviewsParams,
-  usePoolReviews,
-} from "@/features/pool-review/hooks/use-pool-reviews.ts"
-import type {
-  PoolReviewsParams,
-  PoolReviewsSort,
-} from "@/features/pool-review/types.ts"
-import { ENG_LEVELS, QUIZ_TYPES } from "@/features/quiz/constants.ts"
-import type { EngLevel, QuizType } from "@/features/quiz/types.ts"
+  parsePoolReviewListSearch,
+  poolReviewListParams,
+} from "@/features/pool-review/search.ts"
+import type { PoolReviewListSearch } from "@/features/pool-review/search.ts"
 import { formatNumber } from "@/lib/format.ts"
 
-type ReviewStatus = NonNullable<PoolReviewsParams["status"]>
-type ReviewVerdict = NonNullable<PoolReviewsParams["verdict"]>
-
-interface PoolReviewSearch {
-  status?: ReviewStatus
-  verdict?: ReviewVerdict
-  quizType?: QuizType
-  engLevel?: EngLevel
-  q?: string
-  sort?: PoolReviewsSort
-  page?: number
-  pageSize?: number
-  reviewId?: number
-}
-
-function parsePositiveInt(value: unknown): number | undefined {
-  const parsed = Number(value)
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : undefined
-}
-
 export const Route = createFileRoute("/_dashboard/pool-review/")({
-  validateSearch: (search: Record<string, unknown>): PoolReviewSearch => {
-    const status = Object.hasOwn(REVIEW_STATUS_META, String(search.status))
-      ? (search.status as ReviewStatus)
-      : undefined
-    const verdict = Object.hasOwn(REVIEW_VERDICT_META, String(search.verdict))
-      ? (search.verdict as ReviewVerdict)
-      : undefined
-    const quizType = QUIZ_TYPES.find((type) => type === search.quizType)
-    const engLevel = ENG_LEVELS.find((level) => level === search.engLevel)
-    const q =
-      typeof search.q === "string" && search.q.trim()
-        ? search.q.trim().slice(0, 100)
-        : undefined
-    const sort = POOL_REVIEW_SORTS.find((value) => value === search.sort)
-    const parsedPage = Number(search.page)
-    const page =
-      Number.isInteger(parsedPage) && parsedPage > 1 ? parsedPage : undefined
-    const parsedPageSize = Number(search.pageSize)
-    const pageSize = PAGE_SIZE_OPTIONS.find(
-      (size) => size === parsedPageSize && size !== REVIEWS_PAGE_SIZE
-    )
-    const reviewId = parsePositiveInt(search.reviewId)
-
-    return {
-      ...(status ? { status } : {}),
-      ...(verdict ? { verdict } : {}),
-      ...(quizType ? { quizType } : {}),
-      ...(engLevel ? { engLevel } : {}),
-      ...(q ? { q } : {}),
-      ...(sort ? { sort } : {}),
-      ...(page ? { page } : {}),
-      ...(pageSize ? { pageSize } : {}),
-      ...(reviewId ? { reviewId } : {}),
-    }
-  },
-  loaderDeps: ({ search }) => ({
-    params: buildPoolReviewsParams({
-      status: search.status,
-      verdict: search.verdict,
-      quizType: search.quizType,
-      engLevel: search.engLevel,
-      topicId: undefined,
-      poolQuestionRefId: undefined,
-      q: search.q,
-      sort: search.sort ?? DEFAULT_POOL_REVIEW_SORT,
-      page: search.page ?? 1,
-      pageSize: search.pageSize ?? REVIEWS_PAGE_SIZE,
-    }),
-  }),
+  validateSearch: (search: Record<string, unknown>): PoolReviewListSearch =>
+    parsePoolReviewListSearch(search),
+  loaderDeps: ({ search }) => ({ params: poolReviewListParams(search) }),
   loader: ({ context, deps }) =>
     context.queryClient.prefetchQuery(
       getGetAdminPoolReviewsQueryOptions(deps.params)
@@ -124,25 +48,13 @@ function PoolReviewPage() {
 
   const sort = search.sort ?? DEFAULT_POOL_REVIEW_SORT
   const page = search.page ?? 1
-  const pageSize = search.pageSize ?? REVIEWS_PAGE_SIZE
-
-  const params = buildPoolReviewsParams({
-    status: search.status,
-    verdict: search.verdict,
-    quizType: search.quizType,
-    engLevel: search.engLevel,
-    topicId: undefined,
-    poolQuestionRefId: undefined,
-    q: search.q,
-    sort,
-    page,
-    pageSize,
-  })
+  const params = poolReviewListParams(search)
 
   const {
     items,
     total,
     totalPages,
+    pageSize,
     isPending,
     isError,
     error,
@@ -150,12 +62,19 @@ function PoolReviewPage() {
     isFetching,
   } = usePoolReviews(params)
 
-  const updateSearch = (patch: Partial<PoolReviewSearch>) => {
+  const updateSearch = (patch: Partial<PoolReviewListSearch>) => {
     void navigate({ search: (prev) => ({ ...prev, ...patch }), replace: true })
   }
 
-  const applyFilter = (patch: Partial<PoolReviewSearch>) =>
-    updateSearch({ ...patch, page: undefined, reviewId: undefined })
+  const applyFilter = (patch: Partial<PoolReviewListSearch>) =>
+    updateSearch({ ...patch, page: undefined })
+
+  const openReview = (reviewId: number) =>
+    void navigate({
+      to: "/pool-review/$reviewId",
+      params: { reviewId: String(reviewId) },
+      search,
+    })
 
   const filters: PoolReviewsToolbarFilters = {
     q: search.q,
@@ -165,13 +84,14 @@ function PoolReviewPage() {
     engLevel: search.engLevel,
   }
 
-  const hasActiveFilter = [
-    filters.q,
-    filters.status,
-    filters.verdict,
-    filters.quizType,
-    filters.engLevel,
-  ].some(Boolean)
+  const hasActiveFilter =
+    [
+      filters.q,
+      filters.status,
+      filters.verdict,
+      filters.quizType,
+      filters.engLevel,
+    ].some(Boolean) || search.poolQuestionRefId !== undefined
 
   const isEmpty = !isPending && items?.length === 0
 
@@ -199,6 +119,7 @@ function PoolReviewPage() {
             verdict: undefined,
             quizType: undefined,
             engLevel: undefined,
+            poolQuestionRefId: undefined,
           })
         }
         onRefresh={() =>
@@ -207,6 +128,21 @@ function PoolReviewPage() {
           })
         }
       />
+
+      {search.poolQuestionRefId !== undefined ? (
+        <div>
+          <Badge variant="secondary" className="gap-1">
+            Câu #{search.poolQuestionRefId}
+            <button
+              type="button"
+              aria-label="Bỏ lọc câu"
+              onClick={() => applyFilter({ poolQuestionRefId: undefined })}
+            >
+              <IconX stroke={1.5} className="size-3.5" />
+            </button>
+          </Badge>
+        </div>
+      ) : null}
 
       {isError ? (
         <QueryError
@@ -235,9 +171,14 @@ function PoolReviewPage() {
             sort={sort}
             isPending={isPending}
             isRefetching={isFetching && !isPending}
-            selectedId={search.reviewId}
             onSortChange={(value) => applyFilter({ sort: value })}
-            onSelect={(reviewId) => updateSearch({ reviewId })}
+            onSelect={openReview}
+          />
+          <PoolReviewCardList
+            items={items}
+            isPending={isPending}
+            isRefetching={isFetching && !isPending}
+            onSelect={openReview}
           />
           <PoolReviewsPagination
             page={page}
@@ -245,22 +186,12 @@ function PoolReviewPage() {
             totalPages={totalPages}
             total={total}
             onPageChange={(value) =>
-              updateSearch({
-                page: value > 1 ? value : undefined,
-                reviewId: undefined,
-              })
+              updateSearch({ page: value > 1 ? value : undefined })
             }
             onPageSizeChange={(value) => applyFilter({ pageSize: value })}
           />
         </>
       )}
-
-      <PoolReviewDetailSheet
-        reviewId={search.reviewId}
-        onOpenChange={(open) => {
-          if (!open) updateSearch({ reviewId: undefined })
-        }}
-      />
     </>
   )
 }

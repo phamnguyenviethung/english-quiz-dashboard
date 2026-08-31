@@ -1,18 +1,30 @@
-import { IconCheck, IconMinus } from "@tabler/icons-react"
+import { useState } from "react"
+import {
+  IconAlertTriangle,
+  IconCheck,
+  IconChevronDown,
+} from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
 
-import { CHECKLIST_LABELS, CHECKLIST_POSITIVE_WHEN_TRUE } from "../constants.ts"
+import { CHECKLIST_LABELS, CHECKLIST_ORDER } from "../constants.ts"
 import type { PoolReview } from "../types.ts"
 
 // checklist là object cùng shape ở list/detail/approve — nhận generic record boolean.
 type ChecklistLike = NonNullable<PoolReview["checklist"]>
+
+function orderIndex(key: string): number {
+  const i = CHECKLIST_ORDER.indexOf(key)
+  return i === -1 ? CHECKLIST_ORDER.length : i
+}
 
 export function ReviewChecklist({
   checklist,
 }: {
   checklist: ChecklistLike | null | undefined
 }) {
+  const [showPassing, setShowPassing] = useState(false)
+
   if (!checklist) {
     return (
       <p className="text-sm text-muted-foreground">
@@ -21,37 +33,80 @@ export function ReviewChecklist({
     )
   }
 
-  const entries = Object.entries(checklist)
+  const record = checklist as Record<string, boolean | undefined>
+  const formatValid = record.formatValid
+
+  const entries = Object.entries(record)
+    .filter(([key]) => key !== "formatValid")
+    .sort(([a], [b]) => orderIndex(a) - orderIndex(b))
+
+  const flagged = entries.filter(([, value]) => value === true)
+  const passing = entries.filter(([, value]) => value !== true)
 
   return (
-    <ul className="grid gap-1.5 sm:grid-cols-2">
-      {entries.map(([key, value]) => {
-        const positiveWhenTrue = CHECKLIST_POSITIVE_WHEN_TRUE.has(key)
-        // "Đáng chú ý" = có thay đổi/vấn đề (value=true) trừ cờ formatValid (true=tốt).
-        const flagged = positiveWhenTrue ? !value : value
-
-        return (
-          <li key={key} className="flex items-center gap-2 text-sm">
-            <span
-              className={cn(
-                "flex size-4 shrink-0 items-center justify-center rounded-full",
-                flagged
-                  ? "bg-amber-500/15 text-amber-700 dark:bg-amber-400/15 dark:text-amber-300"
-                  : "bg-muted text-muted-foreground"
-              )}
+    <div className="space-y-2">
+      {flagged.length === 0 ? (
+        <p className="flex items-center gap-2 rounded-xl border-l-2 border-emerald-500 bg-emerald-500/5 px-3 py-2 text-sm text-emerald-700 dark:text-emerald-300">
+          <IconCheck stroke={2} className="size-4 shrink-0" />
+          AI không phát hiện vấn đề nào ở bản gốc.
+        </p>
+      ) : (
+        <ul className="space-y-1.5">
+          {flagged.map(([key]) => (
+            <li
+              key={key}
+              className="flex min-h-9 items-center gap-2 rounded-xl border-l-2 border-amber-500 bg-amber-500/5 px-3 py-1.5 text-sm text-amber-800 dark:text-amber-200"
             >
-              {flagged ? (
-                <IconCheck className="size-3" stroke={2.5} />
-              ) : (
-                <IconMinus className="size-3" stroke={2.5} />
-              )}
-            </span>
-            <span className={cn(!flagged && "text-muted-foreground")}>
+              <IconAlertTriangle stroke={1.75} className="size-4 shrink-0" />
               {CHECKLIST_LABELS[key] ?? key}
-            </span>
-          </li>
-        )
-      })}
-    </ul>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {formatValid === false ? (
+        <p className="flex min-h-9 items-center gap-2 rounded-xl border-l-2 border-rose-500 bg-rose-500/10 px-3 py-1.5 text-sm text-rose-700 dark:text-rose-300">
+          <IconAlertTriangle stroke={1.75} className="size-4 shrink-0" />
+          Bản AI sửa không đúng schema câu hỏi — cần mở tab “Sửa tay”.
+        </p>
+      ) : formatValid === true ? (
+        <p className="flex min-h-9 items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground">
+          <IconCheck stroke={2} className="size-4 shrink-0 text-emerald-600" />
+          Bản AI sửa đúng schema câu hỏi.
+        </p>
+      ) : null}
+
+      {passing.length > 0 ? (
+        <div>
+          <button
+            type="button"
+            onClick={() => setShowPassing((value) => !value)}
+            className="flex min-h-9 items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <IconChevronDown
+              stroke={1.75}
+              className={cn(
+                "size-4 transition-transform",
+                showPassing && "rotate-180"
+              )}
+            />
+            {passing.length} mục khác đạt
+          </button>
+          {showPassing ? (
+            <ul className="mt-1 grid gap-1 sm:grid-cols-2">
+              {passing.map(([key]) => (
+                <li
+                  key={key}
+                  className="flex items-center gap-2 px-3 py-1 text-sm text-muted-foreground"
+                >
+                  <IconCheck stroke={2} className="size-3.5 shrink-0" />
+                  {CHECKLIST_LABELS[key] ?? key}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
   )
 }

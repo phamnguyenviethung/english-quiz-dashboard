@@ -1,6 +1,7 @@
 import { IconArrowDown, IconArrowUp, IconArrowsSort } from "@tabler/icons-react"
 
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
   TableBody,
@@ -13,20 +14,30 @@ import { cn } from "@/lib/utils"
 
 import type { PoolTable } from "../hooks/use-pool-table.ts"
 
+export interface PoolTableSelection {
+  selectedIds: Set<number>
+  onToggle: (questionId: number) => void
+  allOnPageSelected: boolean
+  someOnPageSelected: boolean
+  onToggleAllOnPage: () => void
+}
+
 export function PoolQuestionsTable({
   table,
   isPending,
   isRefetching,
   selectedQuestionId,
   onSelect,
+  selection,
 }: {
   table: PoolTable
   isPending: boolean
   isRefetching: boolean
   selectedQuestionId: number | undefined
   onSelect: (questionId: number) => void
+  selection: PoolTableSelection
 }) {
-  const visibleColumnCount = table.getVisibleLeafColumns().length
+  const visibleColumnCount = table.getVisibleLeafColumns().length + 1
 
   return (
     <div className="overflow-x-auto rounded-2xl border">
@@ -44,6 +55,19 @@ export function PoolQuestionsTable({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
+              <TableHead className="w-10">
+                <label className="flex min-h-11 min-w-11 items-center justify-center">
+                  <Checkbox
+                    aria-label="Chọn tất cả câu trên trang"
+                    checked={selection.allOnPageSelected}
+                    indeterminate={
+                      selection.someOnPageSelected &&
+                      !selection.allOnPageSelected
+                    }
+                    onCheckedChange={() => selection.onToggleAllOnPage()}
+                  />
+                </label>
+              </TableHead>
               {headerGroup.headers.map((header) => {
                 const meta = header.column.columnDef.meta
                 const sortDirection = header.column.getIsSorted()
@@ -105,6 +129,20 @@ export function PoolQuestionsTable({
                 }
                 className="cursor-pointer"
               >
+                <TableCell
+                  className="w-10"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <label className="flex min-h-11 min-w-11 items-center justify-center">
+                    <Checkbox
+                      aria-label={`Chọn câu #${row.original.id}`}
+                      checked={selection.selectedIds.has(row.original.id)}
+                      onCheckedChange={() =>
+                        selection.onToggle(row.original.id)
+                      }
+                    />
+                  </label>
+                </TableCell>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}

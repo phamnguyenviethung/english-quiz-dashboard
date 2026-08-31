@@ -55,14 +55,18 @@ export const REVIEW_VERDICT_META: Record<
   },
 }
 
-// Nhãn tiếng Việt cho 10 cờ trong checklist (khớp PoolReviewChecklist ở backend).
+// Nhãn tiếng Việt cho các cờ trong checklist (khớp PoolReviewChecklist ở backend).
 // Cờ do AI trả: true = vấn đề CÓ trong bản gốc. `formatValid` (server set): true = tốt.
 export const CHECKLIST_LABELS: Record<string, string> = {
   notSolvable: "Người học không giải được",
   insufficientContext: "Thiếu dữ kiện / phải đoán",
   multipleDefensibleAnswers: "Có nhiều đáp án hợp lý",
   answerIncorrect: "Đáp án đúng bị sai",
+  optionsFormInconsistent: "Phương án lệch hình thức",
+  requiresOutsideKnowledge: "Cần kiến thức ngoài đề",
+  solvedAnswerMismatch: "AI giải ra khác đáp án gán",
   explanationMismatch: "Giải thích không khớp đáp án",
+  explanationDoesNotDeriveAnswer: "Giải thích không dẫn ra đáp án",
   distractorExplanationMismatch: "Giải thích phương án sai bị lệch",
   translationMismatch: "Bản dịch VI↔EN lệch",
   spellingOrGrammarError: "Có lỗi chính tả / ngữ pháp",
@@ -70,6 +74,25 @@ export const CHECKLIST_LABELS: Record<string, string> = {
   levelMismatch: "Lệch cấp độ CEFR",
   formatValid: "Bản sửa đúng schema",
 }
+
+// Thứ tự hiển thị cờ (nặng → nhẹ). Cờ không có trong danh sách xếp sau, giữ nguyên
+// thứ tự key. `formatValid` luôn tách riêng nên không nằm ở đây.
+export const CHECKLIST_ORDER: string[] = [
+  "answerIncorrect",
+  "solvedAnswerMismatch",
+  "multipleDefensibleAnswers",
+  "notSolvable",
+  "insufficientContext",
+  "requiresOutsideKnowledge",
+  "optionsFormInconsistent",
+  "explanationMismatch",
+  "explanationDoesNotDeriveAnswer",
+  "distractorExplanationMismatch",
+  "translationMismatch",
+  "spellingOrGrammarError",
+  "offTopic",
+  "levelMismatch",
+]
 
 // Cờ mà giá trị true = tốt (ngược với các cờ còn lại true = có vấn đề).
 export const CHECKLIST_POSITIVE_WHEN_TRUE = new Set(["formatValid"])

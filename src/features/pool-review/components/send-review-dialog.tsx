@@ -1,7 +1,7 @@
 import type { ReactElement } from "react"
 import { useState } from "react"
 import { IconAlertTriangle } from "@tabler/icons-react"
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 
 import {
   ResponsiveDialog,
@@ -39,20 +39,35 @@ export function SendReviewDialog({
   poolQuestionIds,
   trigger,
   onSent,
+  open: openProp,
+  onOpenChange: onOpenChangeProp,
 }: {
   poolQuestionIds: number[]
-  trigger: ReactElement
+  /** Bỏ trống khi điều khiển từ ngoài bằng `open`/`onOpenChange`. */
+  trigger?: ReactElement
   onSent?: () => void
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }) {
-  const [open, setOpen] = useState(false)
+  const [openState, setOpenState] = useState(false)
+  const open = openProp ?? openState
+  const setOpen = onOpenChangeProp ?? setOpenState
   const [model, setModel] = useState<string>(AUTO_MODEL)
   const [note, setNote] = useState("")
+  const navigate = useNavigate()
 
   const { models, isPending: modelsPending } = useManualRefillModels()
   const { enqueueReviews, isPending: sending } = useEnqueueReviews({
     onSuccess: () => {
       setOpen(false)
       onSent?.()
+      void navigate({
+        to: "/pool-review",
+        search:
+          poolQuestionIds.length === 1
+            ? { poolQuestionRefId: poolQuestionIds[0], status: "pending" }
+            : { status: "pending", sort: "id_desc" },
+      })
     },
   })
 
@@ -75,7 +90,7 @@ export function SendReviewDialog({
 
   return (
     <ResponsiveDialog open={open} onOpenChange={handleOpenChange}>
-      <ResponsiveDialogTrigger render={trigger} />
+      {trigger ? <ResponsiveDialogTrigger render={trigger} /> : null}
       <ResponsiveDialogContent className="sm:max-w-lg">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>Gửi AI review</ResponsiveDialogTitle>
