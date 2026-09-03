@@ -1,28 +1,31 @@
 import { useMemo, useState } from "react"
 import {
-  IconCircleCheck,
+  IconBook,
+  IconCheck,
   IconClockBolt,
+  IconCopy,
   IconCpu,
   IconHandClick,
   IconPlus,
   IconRefresh,
   IconSearch,
+  IconX,
 } from "@tabler/icons-react"
 
 import { QueryError } from "@/components/common/query-error.tsx"
-import { StatTile, StatTileGrid } from "@/components/common/stat-tile.tsx"
-import { StatusBadge } from "@/components/common/status-badge.tsx"
 import { StickyTable } from "@/components/common/sticky-table.tsx"
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Spinner } from "@/components/ui/spinner"
 import {
   TableBody,
@@ -31,12 +34,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { toast } from "@/components/ui/toast"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { formatModelName } from "@/features/quiz/constants.ts"
+import { copyText } from "@/lib/clipboard.ts"
 import {
   formatDateTime,
   formatNumber,
@@ -44,7 +49,6 @@ import {
 } from "@/lib/format.ts"
 import { cn } from "@/lib/utils"
 
-import { MODEL_CONTEXT_META, MODEL_STATUS_META } from "../constants.ts"
 import { useAiModels } from "../hooks/use-ai-models.ts"
 import { usePoolModelUsage } from "../hooks/use-pool-model-usage.ts"
 import {
@@ -53,162 +57,157 @@ import {
 } from "../hooks/use-sync-model-pricing.ts"
 import type { AiModel } from "../types.ts"
 import { countProviderOptions } from "../utils/provider-preferences.ts"
+import { AiModelCard } from "./ai-model-card.tsx"
 import { AiModelFormDialog } from "./ai-model-form-dialog.tsx"
+import { AiModelsFilterBar } from "./ai-models-filter-bar.tsx"
+import type {
+  ModelFilterCounts,
+  ModelFilterTab,
+} from "./ai-models-filter-bar.tsx"
 import { AiModelRowActions } from "./ai-model-row-actions.tsx"
 import { ModelCatalogDialog } from "./model-catalog-dialog.tsx"
 
 const COLUMN_COUNT = 6
 
-// Model đã tắt dùng nền `bg-muted` mờ hơn hẳn `bg-card` để quét bảng nhận ra
-// ngay, không cần chờ đọc badge trạng thái.
-const ROW_ACTIVE = "bg-card hover:bg-card"
-const ROW_INACTIVE = "bg-muted hover:bg-muted"
-
-/**
- * Ở điện thoại chỉ giữ cột Model và Actions; Trạng thái/Ngữ cảnh/Giá/Đã sinh ẩn
- * đi và gộp thành dòng phụ trong ModelIdentityCell nên bảng không cuộn ngang.
- */
-const HIDE_UNDER_MD = "hidden md:table-cell"
-
-const SKELETON_COLUMN_CLASSES = [
-  undefined,
-  HIDE_UNDER_MD,
-  HIDE_UNDER_MD,
-  HIDE_UNDER_MD,
-  HIDE_UNDER_MD,
-  "p-1 md:p-3",
-]
-
-function ModelIdentityCell({
-  model,
-  usage,
-}: {
-  model: AiModel
-  usage: number | undefined
-}) {
+/** Cell hiển thị định danh model trên Desktop kèm nút copy nhanh */
+function DesktopModelCell({ model }: { model: AiModel }) {
+  const [copied, setCopied] = useState(false)
   const { provider, name, suffix } = formatModelName(model.modelId)
-  const status = MODEL_STATUS_META[model.isActive ? "active" : "inactive"]
+
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const ok = await copyText(model.modelId)
+    if (ok) {
+      setCopied(true)
+      toast.add({
+        type: "info",
+        title: "Đã sao chép Model ID",
+        description: model.modelId,
+      })
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <div className="flex max-w-52 min-w-0 flex-col gap-0.5 sm:max-w-64 md:max-w-sm">
-              <span
-                className={cn(
-                  "truncate text-sm font-medium",
-                  !model.isActive && "text-muted-foreground"
-                )}
-              >
-                {model.key}
-              </span>
-              <span className="truncate font-mono text-xs text-muted-foreground">
-                {provider ? `${provider}/` : ""}
-                {name}
-                {suffix ? `:${suffix}` : ""}
-              </span>
-            </div>
-          }
-        />
-        <TooltipContent className="max-w-xs">
-          <div className="flex flex-col gap-0.5 break-all">
-            <span className="font-medium">{model.key}</span>
-            <span className="font-mono">{model.modelId}</span>
-          </div>
-        </TooltipContent>
-      </Tooltip>
-
-      {/* Bù lại 4 cột bị ẩn ở điện thoại (xem HIDE_UNDER_MD). */}
-      <div className="flex flex-wrap items-center gap-1.5 md:hidden">
-        <StatusBadge meta={status} />
-        <ContextsCell model={model} />
-      </div>
-      <div className="flex items-center gap-3 md:hidden">
-        <PriceCell model={model} />
-        <span className="text-xs text-muted-foreground tabular-nums">
-          {usage === undefined ? "Chưa sinh" : `${formatNumber(usage)} đã sinh`}
+    <div className="flex flex-col gap-0.5">
+      <div className="flex items-center gap-2">
+        <span
+          className={cn(
+            "text-sm font-semibold tracking-tight text-foreground",
+            !model.isActive && "text-muted-foreground"
+          )}
+        >
+          {model.key}
         </span>
+        {provider ? (
+          <span className="rounded-md bg-muted/70 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+            {provider}
+          </span>
+        ) : null}
       </div>
+
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="group flex max-w-sm items-center gap-1.5 text-left font-mono text-xs text-muted-foreground transition-colors hover:text-foreground"
+        title="Sao chép Model ID"
+      >
+        <span className="truncate">
+          {provider ? `${provider}/` : ""}
+          {name}
+          {suffix ? `:${suffix}` : ""}
+        </span>
+        {copied ? (
+          <IconCheck className="size-3 shrink-0 text-emerald-500" />
+        ) : (
+          <IconCopy className="size-3 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+        )}
+      </button>
     </div>
   )
 }
 
-/**
- * Badge cho 3 ngữ cảnh. Mỗi ngữ cảnh một hue riêng khi bật (xem MODEL_CONTEXT_META)
- * để quét bảng là biết model phục vụ đường nào; tắt thì xám mờ hẳn đi. Kèm số tuỳ
- * chọn provider nếu có cấu hình riêng.
- */
-function ContextsCell({ model }: { model: AiModel }) {
-  const entries = [
-    {
-      key: "schedule" as const,
-      enabled: model.scheduleEnabled,
-      options: countProviderOptions(model.scheduleProvider),
-    },
-    {
-      key: "manual" as const,
-      enabled: model.manualEnabled,
-      options: countProviderOptions(model.manualProvider),
-    },
-    {
-      key: "reading" as const,
-      enabled: model.readingEnabled,
-      options: countProviderOptions(model.readingProvider),
-    },
-  ]
+/** Cell hiển thị các ngữ cảnh đang bật của model trên Desktop */
+function DesktopContextsCell({ model }: { model: AiModel }) {
+  const scheduleOptions = countProviderOptions(model.scheduleProvider)
+  const manualOptions = countProviderOptions(model.manualProvider)
+  const readingOptions = countProviderOptions(model.readingProvider)
+
+  const hasAnyContext =
+    model.scheduleEnabled || model.manualEnabled || model.readingEnabled
+
+  if (!hasAnyContext) {
+    return (
+      <span className="text-xs text-amber-600 italic dark:text-amber-400">
+        Chưa gán ngữ cảnh
+      </span>
+    )
+  }
 
   return (
-    <div className="flex flex-wrap gap-1">
-      {entries.map((entry) => {
-        const meta = MODEL_CONTEXT_META[entry.key]
-        const label =
-          entry.enabled && entry.options > 0
-            ? `${meta.label} · ${entry.options}`
-            : meta.label
-
-        return entry.enabled ? (
-          <StatusBadge
-            key={entry.key}
-            meta={{
-              label,
-              variant: "secondary",
-              tone: meta.tone,
-              icon: meta.icon,
-            }}
+    <div className="flex flex-wrap items-center gap-1.5">
+      {model.scheduleEnabled ? (
+        <span className="inline-flex items-center gap-1 rounded-md bg-secondary/80 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground">
+          <IconClockBolt
+            className="size-3 text-muted-foreground"
+            stroke={1.5}
           />
-        ) : (
-          <Badge
-            key={entry.key}
-            variant="outline"
-            className="text-muted-foreground"
-          >
-            {label}
-          </Badge>
-        )
-      })}
+          Tự động
+          {scheduleOptions > 0 ? (
+            <span className="font-mono text-muted-foreground">
+              · {scheduleOptions}
+            </span>
+          ) : null}
+        </span>
+      ) : null}
+
+      {model.manualEnabled ? (
+        <span className="inline-flex items-center gap-1 rounded-md bg-secondary/80 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground">
+          <IconHandClick
+            className="size-3 text-muted-foreground"
+            stroke={1.5}
+          />
+          Thủ công
+          {manualOptions > 0 ? (
+            <span className="font-mono text-muted-foreground">
+              · {manualOptions}
+            </span>
+          ) : null}
+        </span>
+      ) : null}
+
+      {model.readingEnabled ? (
+        <span className="inline-flex items-center gap-1 rounded-md bg-secondary/80 px-2 py-0.5 text-[11px] font-medium text-secondary-foreground">
+          <IconBook className="size-3 text-muted-foreground" stroke={1.5} />
+          Bài đọc
+          {readingOptions > 0 ? (
+            <span className="font-mono text-muted-foreground">
+              · {readingOptions}
+            </span>
+          ) : null}
+        </span>
+      ) : null}
     </div>
   )
 }
 
-function PriceCell({ model }: { model: AiModel }) {
+/** Cell hiển thị giá token trên Desktop */
+function DesktopPriceCell({ model }: { model: AiModel }) {
   const hasPrice =
     model.pricePromptPerToken !== null || model.priceCompletionPerToken !== null
 
-  // Thiếu giá là việc cần xử lý (bấm đồng bộ) nên tô amber cho nổi, thay vì để
-  // chìm trong một rừng dấu gạch.
   if (!hasPrice) {
     return (
       <Tooltip>
         <TooltipTrigger
           render={
             <span className="text-xs text-amber-600 dark:text-amber-400">
-              Chưa có
+              Chưa có giá
             </span>
           }
         />
         <TooltipContent>
-          Chưa có giá. Bấm đồng bộ để lấy từ OpenRouter.
+          Chưa có giá. Bấm nút đồng bộ ở cột thao tác để lấy từ OpenRouter.
         </TooltipContent>
       </Tooltip>
     )
@@ -218,149 +217,48 @@ function PriceCell({ model }: { model: AiModel }) {
     <Tooltip>
       <TooltipTrigger
         render={
-          <div className="flex flex-col gap-0.5 text-xs tabular-nums">
-            <span>{formatUsdPerMillion(model.pricePromptPerToken)}</span>
+          <div className="flex flex-col items-end gap-0.5 text-xs tabular-nums">
+            <span className="font-medium text-foreground">
+              ${formatUsdPerMillion(model.pricePromptPerToken)}
+            </span>
             <span className="text-muted-foreground">
-              {formatUsdPerMillion(model.priceCompletionPerToken)}
+              ${formatUsdPerMillion(model.priceCompletionPerToken)}
             </span>
           </div>
         }
       />
       <TooltipContent>
-        USD trên 1 triệu token: đầu vào / đầu ra.
+        Giá USD trên 1 triệu token (Vào / Ra).
         {model.pricingSyncedAt
-          ? ` Đồng bộ ${formatDateTime(model.pricingSyncedAt)}.`
+          ? ` Đồng bộ lúc ${formatDateTime(model.pricingSyncedAt)}.`
           : ""}
       </TooltipContent>
     </Tooltip>
   )
 }
 
-function AiModelsTable({
-  models,
-  isPending,
-  usageByModelId,
-}: {
-  models: AiModel[]
-  isPending: boolean
-  usageByModelId: Map<string, number>
-}) {
-  const { syncModelPricing, pendingId } = useSyncModelPricing()
+/** Cell trạng thái trên Desktop */
+function DesktopStatusCell({ isActive }: { isActive: boolean }) {
+  if (isActive) {
+    return (
+      <Badge
+        variant="outline"
+        className="gap-1.5 border-emerald-500/30 bg-emerald-500/5 px-2 py-0.5 text-xs font-normal text-emerald-700 dark:text-emerald-400"
+      >
+        <span className="size-1.5 rounded-full bg-emerald-500" />
+        Hoạt động
+      </Badge>
+    )
+  }
 
   return (
-    <StickyTable>
-      <TableHeader>
-        <TableRow className="bg-card hover:bg-card">
-          <TableHead>Model</TableHead>
-          <TableHead className={HIDE_UNDER_MD}>Trạng thái</TableHead>
-          <TableHead className={cn(HIDE_UNDER_MD, "w-52")}>Ngữ cảnh</TableHead>
-          <TableHead className={cn(HIDE_UNDER_MD, "w-28 text-right")}>
-            Giá /1M
-          </TableHead>
-          <TableHead className={cn(HIDE_UNDER_MD, "w-24 text-right")}>
-            Đã sinh
-          </TableHead>
-          <TableHead className="w-12 md:w-48" />
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {isPending ? (
-          <TableSkeletonRows
-            columns={COLUMN_COUNT}
-            rowClassName={ROW_ACTIVE}
-            columnClassNames={SKELETON_COLUMN_CLASSES}
-          />
-        ) : (
-          models.map((model) => {
-            const status =
-              MODEL_STATUS_META[model.isActive ? "active" : "inactive"]
-            const usage = usageByModelId.get(model.modelId)
-
-            return (
-              <TableRow
-                key={model.id}
-                className={model.isActive ? ROW_ACTIVE : ROW_INACTIVE}
-              >
-                <TableCell className="align-top">
-                  <ModelIdentityCell model={model} usage={usage} />
-                </TableCell>
-                <TableCell className={HIDE_UNDER_MD}>
-                  <StatusBadge meta={status} />
-                </TableCell>
-                <TableCell className={HIDE_UNDER_MD}>
-                  <ContextsCell model={model} />
-                </TableCell>
-                <TableCell className={cn(HIDE_UNDER_MD, "text-right")}>
-                  <PriceCell model={model} />
-                </TableCell>
-                <TableCell
-                  className={cn(
-                    HIDE_UNDER_MD,
-                    "text-right text-xs tabular-nums",
-                    usage === undefined
-                      ? "text-muted-foreground"
-                      : "text-foreground"
-                  )}
-                >
-                  {usage === undefined ? "-" : formatNumber(usage)}
-                </TableCell>
-                <TableCell className="p-1 md:p-3">
-                  <AiModelRowActions
-                    model={model}
-                    isSyncing={pendingId === model.id}
-                    onSyncPricing={() => void syncModelPricing(model.id)}
-                  />
-                </TableCell>
-              </TableRow>
-            )
-          })
-        )}
-      </TableBody>
-    </StickyTable>
-  )
-}
-
-/**
- * Chỉ đếm model vừa bật vừa mở ngữ cảnh đó — model đã tắt không phục vụ đường nào.
- * Một ngữ cảnh về 0 nghĩa là hàng đợi sinh câu hỏi của đường đó đứng.
- */
-function AiModelsSummary({ models }: { models: AiModel[] }) {
-  const summary = useMemo(() => {
-    const active = models.filter((model) => model.isActive)
-    return {
-      total: models.length,
-      active: active.length,
-      schedule: active.filter((model) => model.scheduleEnabled).length,
-      manual: active.filter((model) => model.manualEnabled).length,
-    }
-  }, [models])
-
-  return (
-    <StatTileGrid className="mb-4 sm:grid-cols-2 lg:grid-cols-4">
-      <StatTile label="Tổng model" value={summary.total} icon={IconCpu} />
-      <StatTile
-        label="Đang hoạt động"
-        value={summary.active}
-        icon={IconCircleCheck}
-        tone={summary.active === 0 ? "danger" : "default"}
-      />
-      <StatTile
-        label="Ngữ cảnh Tự động"
-        value={summary.schedule}
-        icon={IconClockBolt}
-        tone={summary.schedule === 0 ? "danger" : "default"}
-        hint={
-          summary.schedule === 0 ? "Cron không có model để chọn" : undefined
-        }
-      />
-      <StatTile
-        label="Ngữ cảnh Thủ công"
-        value={summary.manual}
-        icon={IconHandClick}
-        tone={summary.manual === 0 ? "danger" : "default"}
-        hint={summary.manual === 0 ? "Bổ sung kho thủ công sẽ lỗi" : undefined}
-      />
-    </StatTileGrid>
+    <Badge
+      variant="outline"
+      className="gap-1.5 px-2 py-0.5 text-xs font-normal text-muted-foreground"
+    >
+      <span className="size-1.5 rounded-full bg-zinc-400 dark:bg-zinc-500" />
+      Đã tắt
+    </Badge>
   )
 }
 
@@ -369,46 +267,90 @@ export function AiModelsPanel({ className }: { className?: string }) {
   const { usageByModelId } = usePoolModelUsage()
   const { syncAllModelsPricing, isPending: isSyncingAll } =
     useSyncAllModelsPricing()
+  const { syncModelPricing, pendingId } = useSyncModelPricing()
 
   // Chọn model từ catalog sẽ mở form thêm mới với modelId điền sẵn.
   const [presetModelId, setPresetModelId] = useState<string>()
 
-  return (
-    <Card className={className}>
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <IconCpu className="size-4 text-muted-foreground" stroke={1.5} />
-          <CardTitle>Danh sách model</CardTitle>
-        </div>
-        <CardDescription>
-          Model được chọn ngẫu nhiên trong số các model đang bật của từng ngữ
-          cảnh. Tắt một model để loại nó khỏi vòng chọn mà không mất lịch sử.
-        </CardDescription>
+  // Trạng thái tìm kiếm & lọc
+  const [search, setSearch] = useState("")
+  const [activeTab, setActiveTab] = useState<ModelFilterTab>("all")
 
-        {/*
-          Cố tình không dùng CardAction: slot đó ép CardHeader sang
-          grid-cols-[1fr_auto], ba nút bị nhồi vào cột phải và wrap răng cưa ở
-          khoảng 640-900px trong khi description bị bóp thành dải mỏng. Cho hàng
-          action xuống một dòng riêng rộng bằng card thì mọi breakpoint dùng
-          chung một quy tắc wrap, và thứ tự DOM trùng thứ tự nhìn thấy nên tab
-          order không còn nhảy cóc như lúc dùng order-*.
-        */}
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          {/*
-            Không thêm min-w-0: Button có whitespace-nowrap nên giữ
-            min-width:auto để ở ~320px nút thứ hai tự rơi xuống dòng riêng thay
-            vì tràn chữ ra ngoài.
-          */}
+  // Thống kê số lượng cho các filter pills
+  const counts: ModelFilterCounts = useMemo(() => {
+    const active = models.filter((m) => m.isActive)
+    return {
+      total: models.length,
+      active: active.length,
+      schedule: active.filter((m) => m.scheduleEnabled).length,
+      manual: active.filter((m) => m.manualEnabled).length,
+      reading: active.filter((m) => m.readingEnabled).length,
+      inactive: models.length - active.length,
+    }
+  }, [models])
+
+  // Lọc danh sách theo tab và từ khoá tìm kiếm
+  const filteredModels = useMemo(() => {
+    const q = search.trim().toLowerCase()
+
+    return models.filter((model) => {
+      // Lọc theo Tab
+      if (activeTab === "active" && !model.isActive) return false
+      if (activeTab === "inactive" && model.isActive) return false
+      if (
+        activeTab === "schedule" &&
+        (!model.isActive || !model.scheduleEnabled)
+      )
+        return false
+      if (activeTab === "manual" && (!model.isActive || !model.manualEnabled))
+        return false
+      if (activeTab === "reading" && (!model.isActive || !model.readingEnabled))
+        return false
+
+      // Lọc theo Từ khoá
+      if (q) {
+        const matchKey = model.key.toLowerCase().includes(q)
+        const matchId = model.modelId.toLowerCase().includes(q)
+        return matchKey || matchId
+      }
+
+      return true
+    })
+  }, [models, activeTab, search])
+
+  const isFiltered = search.trim() !== "" || activeTab !== "all"
+
+  const handleResetFilters = () => {
+    setSearch("")
+    setActiveTab("all")
+  }
+
+  return (
+    <div className={cn("flex flex-col gap-6", className)}>
+      {/* 1. Header & Actions Bar */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-semibold tracking-tight">AI Models</h1>
+          </div>
+          <p className="max-w-[70ch] text-xs text-muted-foreground sm:text-sm">
+            Quản lý model OpenRouter sinh câu hỏi: bật/tắt theo ngữ cảnh, định
+            tuyến provider và giá token.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
           <Button
             variant="outline"
-            className="h-11 flex-1 sm:h-9 sm:flex-none"
+            size="sm"
+            className="h-9 gap-1.5 text-xs font-medium"
             onClick={() => void syncAllModelsPricing()}
             disabled={isSyncingAll || models.length === 0}
           >
             {isSyncingAll ? (
-              <Spinner data-icon="inline-start" />
+              <Spinner className="size-3.5" />
             ) : (
-              <IconRefresh stroke={1.5} data-icon="inline-start" />
+              <IconRefresh className="size-3.5" stroke={1.5} />
             )}
             Đồng bộ giá
           </Button>
@@ -419,9 +361,10 @@ export function AiModelsPanel({ className }: { className?: string }) {
             trigger={
               <Button
                 variant="outline"
-                className="h-11 flex-1 sm:h-9 sm:flex-none"
+                size="sm"
+                className="h-9 gap-1.5 text-xs font-medium"
               >
-                <IconSearch stroke={1.5} data-icon="inline-start" />
+                <IconSearch className="size-3.5" stroke={1.5} />
                 Duyệt catalog
               </Button>
             }
@@ -429,53 +372,253 @@ export function AiModelsPanel({ className }: { className?: string }) {
 
           <AiModelFormDialog
             trigger={
-              <Button className="h-11 w-full sm:ml-auto sm:h-9 sm:w-auto">
-                <IconPlus stroke={1.5} data-icon="inline-start" />
+              <Button
+                size="sm"
+                className="h-9 gap-1.5 text-xs font-medium shadow-2xs"
+              >
+                <IconPlus className="size-3.5" stroke={2} />
                 Thêm model
               </Button>
             }
           />
         </div>
-      </CardHeader>
+      </div>
 
-      <CardContent>
-        {isError ? (
-          <QueryError
-            title="Không tải được danh sách model"
-            error={error}
-            onRetry={() => void refetch()}
-          />
-        ) : !isPending && models.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed py-10 text-center">
-            <IconCpu className="size-6 text-muted-foreground" stroke={1.5} />
-            <div className="space-y-1">
-              <p className="text-sm font-medium">Chưa có model nào</p>
-              <p className="text-xs text-muted-foreground">
-                Thêm model đầu tiên để hàng đợi sinh câu hỏi có thể chạy.
-              </p>
-            </div>
+      {/* 2. Error State */}
+      {isError ? (
+        <QueryError
+          title="Không tải được danh sách model"
+          error={error}
+          onRetry={() => void refetch()}
+        />
+      ) : null}
+
+      {/* 3. Empty State (Khi database chưa có model nào) */}
+      {!isPending && !isError && models.length === 0 ? (
+        <Empty className="rounded-3xl border border-dashed py-14">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <IconCpu className="size-6" stroke={1.5} />
+            </EmptyMedia>
+            <EmptyTitle>Chưa có AI Model nào</EmptyTitle>
+            <EmptyDescription className="max-w-md">
+              Hệ thống cần ít nhất một model đang hoạt động để hàng đợi sinh câu
+              hỏi tự động và thủ công có thể hoạt động.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
             <AiModelFormDialog
               trigger={
-                <Button size="sm" className="h-11 sm:h-8">
-                  <IconPlus stroke={1.5} data-icon="inline-start" />
-                  Thêm model
+                <Button className="gap-1.5">
+                  <IconPlus className="size-4" stroke={2} />
+                  Thêm model đầu tiên
                 </Button>
               }
             />
-          </div>
-        ) : (
-          <>
-            {isPending ? null : <AiModelsSummary models={models} />}
-            <AiModelsTable
-              models={models}
-              isPending={isPending}
-              usageByModelId={usageByModelId}
-            />
-          </>
-        )}
-      </CardContent>
+          </EmptyContent>
+        </Empty>
+      ) : null}
 
-      {/* Form điều khiển từ ngoài để catalog có thể mở nó kèm modelId đã chọn. */}
+      {/* 4. Filter Bar & Data Views (Khi có data hoặc đang loading) */}
+      {!isError && (models.length > 0 || isPending) ? (
+        <div className="flex flex-col gap-4">
+          {/* Thanh tìm kiếm và Filter Pills */}
+          <AiModelsFilterBar
+            search={search}
+            onSearchChange={setSearch}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            counts={counts}
+          />
+
+          {/* Dòng trạng thái khi đang lọc */}
+          {isFiltered && !isPending ? (
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>
+                Hiển thị{" "}
+                <strong className="font-semibold text-foreground">
+                  {filteredModels.length}
+                </strong>{" "}
+                trong số {models.length} model
+              </span>
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="flex items-center gap-1 font-medium text-primary transition-colors hover:underline"
+              >
+                <IconX className="size-3" stroke={2} />
+                Xoá bộ lọc
+              </button>
+            </div>
+          ) : null}
+
+          {/* Skeleton Loaders khi đang tải dữ liệu */}
+          {isPending ? (
+            <>
+              {/* Mobile Skeleton Cards */}
+              <div className="flex flex-col gap-3 md:hidden">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col gap-3 rounded-2xl border bg-card p-4 shadow-2xs"
+                  >
+                    <div className="flex items-center justify-between">
+                      <Skeleton className="h-5 w-32 rounded-md" />
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                    </div>
+                    <Skeleton className="h-4 w-48 rounded-md" />
+                    <div className="flex gap-2">
+                      <Skeleton className="h-5 w-16 rounded-md" />
+                      <Skeleton className="h-5 w-16 rounded-md" />
+                    </div>
+                    <div className="flex justify-between border-t pt-2">
+                      <Skeleton className="h-4 w-28 rounded-md" />
+                      <Skeleton className="h-4 w-16 rounded-md" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Skeleton Table */}
+              <div className="hidden overflow-hidden rounded-2xl border bg-card shadow-2xs md:block">
+                <StickyTable>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Model</TableHead>
+                      <TableHead className="w-32">Trạng thái</TableHead>
+                      <TableHead className="w-56">Ngữ cảnh</TableHead>
+                      <TableHead className="w-36 text-right">
+                        Giá / 1M
+                      </TableHead>
+                      <TableHead className="w-28 text-right">Đã sinh</TableHead>
+                      <TableHead className="w-36 text-right" />
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableSkeletonRows columns={COLUMN_COUNT} />
+                  </TableBody>
+                </StickyTable>
+              </div>
+            </>
+          ) : null}
+
+          {/* Không có kết quả sau khi lọc */}
+          {!isPending && models.length > 0 && filteredModels.length === 0 ? (
+            <Empty className="rounded-2xl border border-dashed py-12">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <IconSearch className="size-5 text-muted-foreground" />
+                </EmptyMedia>
+                <EmptyTitle>Không tìm thấy model nào</EmptyTitle>
+                <EmptyDescription>
+                  Không có model nào khớp với điều kiện lọc hiện tại. Thử đổi từ
+                  khoá hoặc reset bộ lọc.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResetFilters}
+                  className="gap-1.5"
+                >
+                  <IconX className="size-3.5" stroke={2} />
+                  Xoá bộ lọc
+                </Button>
+              </EmptyContent>
+            </Empty>
+          ) : null}
+
+          {/* Danh sách Model khi đã có dữ liệu */}
+          {!isPending && filteredModels.length > 0 ? (
+            <>
+              {/* Chế độ xem Mobile: Danh sách Cards tinh tế, touch-friendly */}
+              <div className="flex flex-col gap-3 md:hidden">
+                {filteredModels.map((model) => (
+                  <AiModelCard
+                    key={model.id}
+                    model={model}
+                    usage={usageByModelId.get(model.modelId)}
+                    isSyncing={pendingId === model.id}
+                    onSyncPricing={() => void syncModelPricing(model.id)}
+                  />
+                ))}
+              </div>
+
+              {/* Chế độ xem Desktop: Bảng thoáng đãng, sắc nét */}
+              <div className="hidden overflow-hidden rounded-2xl border bg-card shadow-2xs md:block">
+                <StickyTable>
+                  <TableHeader>
+                    <TableRow className="bg-card hover:bg-card">
+                      <TableHead>Model</TableHead>
+                      <TableHead className="w-32">Trạng thái</TableHead>
+                      <TableHead className="w-60">Ngữ cảnh</TableHead>
+                      <TableHead className="w-36 text-right">
+                        Giá / 1M token
+                      </TableHead>
+                      <TableHead className="w-28 text-right">Đã sinh</TableHead>
+                      <TableHead className="w-36 text-right" />
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredModels.map((model) => {
+                      const usage = usageByModelId.get(model.modelId)
+
+                      return (
+                        <TableRow
+                          key={model.id}
+                          className={cn(
+                            "transition-colors",
+                            !model.isActive && "opacity-80"
+                          )}
+                        >
+                          <TableCell className="py-3">
+                            <DesktopModelCell model={model} />
+                          </TableCell>
+
+                          <TableCell className="py-3">
+                            <DesktopStatusCell isActive={model.isActive} />
+                          </TableCell>
+
+                          <TableCell className="py-3">
+                            <DesktopContextsCell model={model} />
+                          </TableCell>
+
+                          <TableCell className="py-3 text-right">
+                            <DesktopPriceCell model={model} />
+                          </TableCell>
+
+                          <TableCell className="py-3 text-right text-xs tabular-nums">
+                            {usage === undefined ? (
+                              <span className="text-muted-foreground">-</span>
+                            ) : (
+                              <span className="font-medium text-foreground">
+                                {formatNumber(usage)}
+                              </span>
+                            )}
+                          </TableCell>
+
+                          <TableCell className="py-3 text-right">
+                            <AiModelRowActions
+                              model={model}
+                              isSyncing={pendingId === model.id}
+                              onSyncPricing={() =>
+                                void syncModelPricing(model.id)
+                              }
+                            />
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
+                  </TableBody>
+                </StickyTable>
+              </div>
+            </>
+          ) : null}
+        </div>
+      ) : null}
+
+      {/* Form điều khiển từ ngoài để Catalog có thể mở nó kèm modelId đã chọn */}
       <AiModelFormDialog
         key={presetModelId}
         presetModelId={presetModelId}
@@ -484,6 +627,6 @@ export function AiModelsPanel({ className }: { className?: string }) {
           if (!open) setPresetModelId(undefined)
         }}
       />
-    </Card>
+    </div>
   )
 }

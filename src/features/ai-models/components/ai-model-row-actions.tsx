@@ -1,5 +1,6 @@
 import { useState } from "react"
 import {
+  IconCopy,
   IconDotsVertical,
   IconPencil,
   IconPlayerPause,
@@ -12,14 +13,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Spinner } from "@/components/ui/spinner"
+import { toast } from "@/components/ui/toast"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { copyText } from "@/lib/clipboard.ts"
 
 import { useUpdateAiModel } from "../hooks/use-update-ai-model.ts"
 import type { AiModel } from "../types.ts"
@@ -27,10 +31,9 @@ import { AiModelDeactivateDialog } from "./ai-model-deactivate-dialog.tsx"
 import { AiModelFormDialog } from "./ai-model-form-dialog.tsx"
 
 /**
- * Ba hành động của một hàng. Ở điện thoại chúng gom vào một nút 44px để cột ghim
- * bên phải không nuốt mất màn hình; từ md trở lên vẫn là ba nút rời như cũ. Hai
- * nhánh ẩn/hiện bằng CSS nhưng dùng chung một bộ dialog controlled bên dưới nên
- * state không bị nhân đôi.
+ * Hành động của một model.
+ * Ở màn hình nhỏ (mobile card): hiển thị nút 3 chấm dropdown gọn gàng.
+ * Ở màn hình lớn (desktop table): hiển thị các icon/nút trực tiếp để thao tác 1 chạm.
  */
 export function AiModelRowActions({
   model,
@@ -60,40 +63,61 @@ export function AiModelRowActions({
     })
   }
 
+  const handleCopyId = async () => {
+    const ok = await copyText(model.modelId)
+    if (ok) {
+      toast.add({
+        type: "info",
+        title: "Đã sao chép Model ID",
+        description: model.modelId,
+      })
+    }
+  }
+
   return (
     <>
+      {/* Mobile Dropdown View */}
       <div className="flex justify-end md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger
             render={
               <Button
                 variant="ghost"
-                size="icon"
-                className="size-11"
+                size="icon-sm"
+                className="size-8 rounded-lg text-muted-foreground hover:text-foreground"
                 aria-label={`Hành động cho model ${model.key}`}
               >
-                <IconDotsVertical stroke={1.5} />
+                <IconDotsVertical className="size-4" stroke={1.5} />
               </Button>
             }
           />
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem onClick={handleCopyId}>
+              <IconCopy className="size-4" stroke={1.5} />
+              Sao chép ID
+            </DropdownMenuItem>
             <DropdownMenuItem disabled={isSyncing} onClick={onSyncPricing}>
-              {isSyncing ? <Spinner /> : <IconRefresh stroke={1.5} />}
+              {isSyncing ? (
+                <Spinner />
+              ) : (
+                <IconRefresh className="size-4" stroke={1.5} />
+              )}
               Đồng bộ giá
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setFormOpen(true)}>
-              <IconPencil stroke={1.5} />
-              Sửa model
+              <IconPencil className="size-4" stroke={1.5} />
+              Chỉnh sửa model
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               variant={model.isActive ? "destructive" : "default"}
               disabled={isTogglingActive}
               onClick={handleToggleActive}
             >
               {model.isActive ? (
-                <IconPlayerPause stroke={1.5} />
+                <IconPlayerPause className="size-4" stroke={1.5} />
               ) : (
-                <IconPlayerPlay stroke={1.5} />
+                <IconPlayerPlay className="size-4" stroke={1.5} />
               )}
               {model.isActive ? "Tắt model" : "Bật lại model"}
             </DropdownMenuItem>
@@ -101,41 +125,66 @@ export function AiModelRowActions({
         </DropdownMenu>
       </div>
 
-      <div className="hidden justify-end gap-2 md:flex">
+      {/* Desktop Direct Actions View */}
+      <div className="hidden items-center justify-end gap-1.5 md:flex">
         <Tooltip>
           <TooltipTrigger
             render={
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon-sm"
+                className="size-8 text-muted-foreground hover:text-foreground"
                 aria-label={`Đồng bộ giá model ${model.key}`}
                 disabled={isSyncing}
                 onClick={onSyncPricing}
               >
-                {isSyncing ? <Spinner /> : <IconRefresh stroke={1.5} />}
+                {isSyncing ? (
+                  <Spinner />
+                ) : (
+                  <IconRefresh className="size-4" stroke={1.5} />
+                )}
               </Button>
             }
           />
-          <TooltipContent>Đồng bộ giá</TooltipContent>
+          <TooltipContent>Đồng bộ giá từ OpenRouter</TooltipContent>
         </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="size-8 text-muted-foreground hover:text-foreground"
+                aria-label={`Sửa model ${model.key}`}
+                onClick={() => setFormOpen(true)}
+              >
+                <IconPencil className="size-4" stroke={1.5} />
+              </Button>
+            }
+          />
+          <TooltipContent>Chỉnh sửa cấu hình</TooltipContent>
+        </Tooltip>
+
         <Button
-          variant="outline"
-          size="icon-sm"
-          aria-label={`Sửa model ${model.key}`}
-          onClick={() => setFormOpen(true)}
-        >
-          <IconPencil stroke={1.5} />
-        </Button>
-        <Button
-          variant="outline"
+          variant={model.isActive ? "outline" : "default"}
           size="sm"
+          className="h-8 px-2.5 text-xs"
           disabled={isTogglingActive}
           onClick={handleToggleActive}
         >
           {model.isActive ? (
-            <IconPlayerPause stroke={1.5} data-icon="inline-start" />
+            <IconPlayerPause
+              className="size-3.5"
+              stroke={1.5}
+              data-icon="inline-start"
+            />
           ) : (
-            <IconPlayerPlay stroke={1.5} data-icon="inline-start" />
+            <IconPlayerPlay
+              className="size-3.5"
+              stroke={1.5}
+              data-icon="inline-start"
+            />
           )}
           {model.isActive ? "Tắt" : "Bật lại"}
         </Button>
