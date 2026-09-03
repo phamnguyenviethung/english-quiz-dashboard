@@ -59,6 +59,26 @@ export const READING_SORTS = [
 export const ALL_VALUE = "all"
 export const ALL_LABEL = "Tất cả"
 
+export const ALL_LEVELS_VALUE = "all"
+export const ALL_LEVELS_LABEL = "Tất cả"
+
+export const ALL_TOPICS_VALUE = "all"
+export const ALL_TOPICS_LABEL = "Tất cả"
+
+export const ALL_TYPES_VALUE = "all"
+export const ALL_TYPES_LABEL = "Tất cả"
+
+export const ALL_MODELS_VALUE = "all"
+export const ALL_MODELS_LABEL = "Tất cả"
+
+export const ALL_STATUS_VALUE = "all"
+export const ALL_STATUS_LABEL = "Tất cả"
+
+export const FILTER_PILL = "h-9 w-auto max-w-64 gap-1.5 rounded-3xl"
+export const FILTER_PILL_ACTIVE =
+  "border-border bg-secondary text-secondary-foreground"
+export const FILTER_PILL_LABEL = "text-foreground/60"
+
 export const ACTIVE_VALUE = "active"
 export const INACTIVE_VALUE = "inactive"
 

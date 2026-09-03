@@ -32,9 +32,9 @@ function DashboardLayout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="min-w-0">
         <AppHeader />
-        <main className="flex min-h-[calc(100dvh-4rem)] flex-1 flex-col gap-6 p-4 md:p-6">
+        <main className="flex min-h-[calc(100dvh-4rem)] flex-1 flex-col gap-6 p-4 md:p-6 min-w-0">
           <Outlet />
         </main>
       </SidebarInset>

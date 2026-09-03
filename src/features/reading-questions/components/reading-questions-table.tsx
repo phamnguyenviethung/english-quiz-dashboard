@@ -1,12 +1,11 @@
 import {
+  IconArrowDown,
+  IconArrowUp,
   IconArrowsSort,
-  IconSortAscending,
-  IconSortDescending,
 } from "@tabler/icons-react"
 
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -15,7 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { getEngLevelBadgeClass } from "@/features/quiz/constants.ts"
+import {
+  formatModelName,
+  getEngLevelBadgeClass,
+} from "@/features/quiz/constants.ts"
 import { getReadingTypeLabel } from "@/features/readings/constants.ts"
 import { cn } from "@/lib/utils"
 
@@ -53,26 +55,28 @@ function SortHeader({
   const pair = SORT_PAIRS[column]
   const isAsc = sort === pair.asc
   const isDesc = sort === pair.desc
-  const Icon = isAsc
-    ? IconSortAscending
+  const SortIcon = isAsc
+    ? IconArrowUp
     : isDesc
-      ? IconSortDescending
+      ? IconArrowDown
       : IconArrowsSort
 
   return (
     <TableHead className={className}>
-      <Button
-        variant="ghost"
-        size="sm"
-        className="-ml-2 h-8 gap-1.5 font-medium"
+      <button
+        type="button"
         onClick={() => onSortChange(isDesc ? pair.asc : pair.desc)}
+        className={cn(
+          "inline-flex items-center gap-1 hover:text-foreground",
+          (isAsc || isDesc) && "text-foreground"
+        )}
       >
-        {label}
-        <Icon
+        <span>{label}</span>
+        <SortIcon
+          className={cn("size-3.5", !isAsc && !isDesc && "opacity-40")}
           stroke={1.5}
-          className={cn("size-3.5", !isAsc && !isDesc && "opacity-50")}
         />
-      </Button>
+      </button>
     </TableHead>
   )
 }
@@ -95,13 +99,14 @@ export function ReadingQuestionsTable({
   onSelect: (id: number) => void
 }) {
   return (
-    <div
-      className={cn(
-        "overflow-x-auto rounded-2xl border transition-opacity",
-        isRefetching && "opacity-60"
-      )}
-    >
-      <Table>
+    <div className="overflow-x-auto rounded-2xl border min-w-0 w-full">
+      <Table
+        className={cn(
+          "transition-opacity",
+          isRefetching && !isPending && "opacity-60"
+        )}
+        aria-busy={isRefetching || isPending}
+      >
         <TableHeader>
           <TableRow>
             <SortHeader
@@ -109,7 +114,7 @@ export function ReadingQuestionsTable({
               label="ID"
               sort={sort}
               onSortChange={onSortChange}
-              className="w-20"
+              className="w-16"
             />
             <TableHead>Câu hỏi</TableHead>
             <TableHead className="w-44">Loại</TableHead>
@@ -123,59 +128,84 @@ export function ReadingQuestionsTable({
               className="w-24"
             />
             <TableHead>Model</TableHead>
-            <TableHead className="w-24">Trạng thái</TableHead>
+            <TableHead className="w-28">Trạng thái</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {isPending ? (
             <TableSkeletonRows columns={COLUMN_COUNT} />
           ) : (
-            items?.map((item) => (
-              <TableRow
-                key={item.id}
-                data-state={item.id === selectedId ? "selected" : undefined}
-                className="cursor-pointer"
-                onClick={() => onSelect(item.id)}
-              >
-                <TableCell className="text-muted-foreground tabular-nums">
-                  {item.id}
-                </TableCell>
-                <TableCell className="max-w-96 truncate font-medium">
-                  {item.question}
-                </TableCell>
-                <TableCell>
-                  <ReadingQuestionTypeBadge quizType={item.quizType} />
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant="outline"
-                    className={getEngLevelBadgeClass(item.cefrLevel)}
+            items?.map((item) => {
+              const model = formatModelName(item.model)
+
+              return (
+                <TableRow
+                  key={item.id}
+                  data-state={item.id === selectedId ? "selected" : undefined}
+                  className="cursor-pointer"
+                  onClick={() => onSelect(item.id)}
+                >
+                  <TableCell className="text-muted-foreground tabular-nums font-mono text-xs">
+                    {item.id}
+                  </TableCell>
+                  <TableCell
+                    className="max-w-96 truncate font-medium"
+                    title={item.question}
                   >
-                    {item.cefrLevel}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge variant="outline">
-                    {getReadingTypeLabel(item.type)}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-muted-foreground tabular-nums">
-                  #{item.passageRefId}
-                </TableCell>
-                <TableCell className="font-mono text-xs text-muted-foreground">
-                  {item.model}
-                </TableCell>
-                <TableCell>
-                  {item.isActive ? (
-                    <Badge variant="secondary">Đang bật</Badge>
-                  ) : (
-                    <Badge variant="outline" className="text-muted-foreground">
-                      Đã tắt
+                    {item.question}
+                  </TableCell>
+                  <TableCell>
+                    <ReadingQuestionTypeBadge quizType={item.quizType} />
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant="secondary"
+                      className={getEngLevelBadgeClass(item.cefrLevel)}
+                    >
+                      {item.cefrLevel}
                     </Badge>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">
+                      {getReadingTypeLabel(item.type)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground tabular-nums">
+                    #{item.passageRefId}
+                  </TableCell>
+                  <TableCell
+                    className="text-xs text-muted-foreground"
+                    title={item.model}
+                  >
+                    {model.provider ? (
+                      <span className="text-muted-foreground/70">
+                        {model.provider}/
+                      </span>
+                    ) : null}
+                    <span className="font-medium text-foreground">
+                      {model.name}
+                    </span>
+                    {model.suffix ? (
+                      <span className="text-muted-foreground/70">
+                        :{model.suffix}
+                      </span>
+                    ) : null}
+                  </TableCell>
+                  <TableCell>
+                    {item.isActive ? (
+                      <Badge variant="secondary">Đang bật</Badge>
+                    ) : (
+                      <Badge
+                        variant="outline"
+                        className="text-muted-foreground"
+                      >
+                        Đã tắt
+                      </Badge>
+                    )}
+                  </TableCell>
+                </TableRow>
+              )
+            })
           )}
         </TableBody>
       </Table>
