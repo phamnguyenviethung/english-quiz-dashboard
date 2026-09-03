@@ -1,14 +1,10 @@
 import { Link } from "@tanstack/react-router"
 import { IconSchool } from "@tabler/icons-react"
-import { useQuery } from "@tanstack/react-query"
 
 import { NAV_GROUPS } from "@/configs/navigation.ts"
-import { sessionQueryOptions } from "@/configs/authClient.ts"
-import { SidebarUser } from "@/features/auth/components/sidebar-user.tsx"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -19,8 +15,6 @@ import {
 import { NavMain } from "./nav-main.tsx"
 
 export function AppSidebar() {
-  const { data: session } = useQuery(sessionQueryOptions)
-
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -49,16 +43,6 @@ export function AppSidebar() {
       <SidebarContent>
         <NavMain groups={NAV_GROUPS} />
       </SidebarContent>
-
-      {session?.user ? (
-        <SidebarFooter>
-          <SidebarUser
-            name={session.user.name}
-            email={session.user.email}
-            image={session.user.image}
-          />
-        </SidebarFooter>
-      ) : null}
 
       <SidebarRail />
     </Sidebar>

@@ -1,5 +1,6 @@
 import { useRouterState } from "@tanstack/react-router"
 
+import { HeaderUser } from "@/features/auth/components/header-user.tsx"
 import { findNavLocation } from "@/configs/navigation.ts"
 import { ThemeToggle } from "@/components/theme/theme-toggle.tsx"
 import {
@@ -42,8 +43,9 @@ export function AppHeader() {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-2">
         <ThemeToggle />
+        <HeaderUser />
       </div>
     </header>
   )
