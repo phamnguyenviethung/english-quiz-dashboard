@@ -1,3 +1,4 @@
+import type { ReactElement } from "react"
 import { useEffect, useRef, useState } from "react"
 import {
   IconAlertTriangle,
@@ -85,7 +86,13 @@ function IssuedKeyPanel({ issued }: { issued: IssuedApiKey }) {
   )
 }
 
-export function IssueApiKeyDialog({ tenantId }: { tenantId: number }) {
+export function IssueApiKeyDialog({
+  tenantId,
+  trigger,
+}: {
+  tenantId: number
+  trigger?: ReactElement
+}) {
   const [open, setOpen] = useState(false)
   const [label, setLabel] = useState("")
   const [issued, setIssued] = useState<IssuedApiKey | null>(null)
@@ -122,10 +129,12 @@ export function IssueApiKeyDialog({ tenantId }: { tenantId: number }) {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button>
-            <IconPlus stroke={1.5} data-icon="inline-start" />
-            Cấp API key
-          </Button>
+          trigger ?? (
+            <Button>
+              <IconPlus stroke={1.5} data-icon="inline-start" />
+              Cấp API key
+            </Button>
+          )
         }
       />
       <DialogContent>

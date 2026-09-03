@@ -1,6 +1,15 @@
-import { IconKey } from "@tabler/icons-react"
+import { IconKey, IconPlus } from "@tabler/icons-react"
 
 import { QueryError } from "@/components/common/query-error.tsx"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Empty,
   EmptyContent,
@@ -28,6 +37,8 @@ export function TenantApiKeysPanel({ tenantId }: { tenantId: number }) {
     })
   }
 
+  const activeCount = apiKeys.filter((k) => k.isActive).length
+
   if (isError) {
     return (
       <QueryError
@@ -39,40 +50,74 @@ export function TenantApiKeysPanel({ tenantId }: { tenantId: number }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="max-w-[65ch] text-sm text-muted-foreground">
-          Key có dạng <code className="font-mono">eqk_...</code>, chỉ đọc được
-          quiz trong phạm vi chủ đề / dạng quiz đã cấp cho tenant này. Thu hồi
-          để chặn ngay client đang dùng.
-        </p>
-        <IssueApiKeyDialog tenantId={tenantId} />
-      </div>
+    <Card className="rounded-3xl border shadow-xs">
+      <CardHeader className="flex flex-col gap-3 pb-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-start gap-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <IconKey className="size-5" stroke={1.5} />
+          </div>
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <CardTitle className="text-lg font-semibold">
+                Quản lý API Key
+              </CardTitle>
+              {!isPending && apiKeys.length > 0 ? (
+                <Badge variant="outline" className="text-[11px]">
+                  {activeCount} / {apiKeys.length} đang hoạt động
+                </Badge>
+              ) : null}
+            </div>
+            <CardDescription className="max-w-[70ch]">
+              Key có tiền tố <code className="font-mono text-xs font-semibold text-foreground">eqk_...</code>,
+              dùng xác thực trong header HTTP Bearer. Thu hồi sẽ ngay lập tức chặn client tương ứng.
+            </CardDescription>
+          </div>
+        </div>
 
-      {!isPending && apiKeys.length === 0 ? (
-        <Empty className="rounded-2xl border">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <IconKey stroke={1.5} />
-            </EmptyMedia>
-            <EmptyTitle>Chưa có API key</EmptyTitle>
-            <EmptyDescription>
-              Tenant chưa gọi được API cho tới khi có ít nhất một key đang hoạt
-              động.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <IssueApiKeyDialog tenantId={tenantId} />
-          </EmptyContent>
-        </Empty>
-      ) : (
-        <TenantApiKeysTable
-          apiKeys={apiKeys}
-          isPending={isPending}
-          isRevoking={isRevoking}
-          onRevoke={handleRevoke}
+        <IssueApiKeyDialog
+          tenantId={tenantId}
+          trigger={
+            <Button className="shrink-0">
+              <IconPlus stroke={1.5} data-icon="inline-start" />
+              Cấp API key
+            </Button>
+          }
         />
-      )}
-    </div>
+      </CardHeader>
+
+      <CardContent>
+        {!isPending && apiKeys.length === 0 ? (
+          <Empty className="rounded-2xl border border-dashed py-12">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <IconKey stroke={1.5} />
+              </EmptyMedia>
+              <EmptyTitle>Chưa có API key nào</EmptyTitle>
+              <EmptyDescription className="max-w-md">
+                Tenant chưa thể gửi request tới các API endpoint cho đến khi bạn tạo ít nhất một API key đang hoạt động.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <IssueApiKeyDialog
+                tenantId={tenantId}
+                trigger={
+                  <Button>
+                    <IconPlus stroke={1.5} data-icon="inline-start" />
+                    Cấp API key đầu tiên
+                  </Button>
+                }
+              />
+            </EmptyContent>
+          </Empty>
+        ) : (
+          <TenantApiKeysTable
+            apiKeys={apiKeys}
+            isPending={isPending}
+            isRevoking={isRevoking}
+            onRevoke={handleRevoke}
+          />
+        )}
+      </CardContent>
+    </Card>
   )
 }

@@ -50,14 +50,31 @@ export function TenantApiKeysTable({
 
               return (
                 <TableRow key={apiKey.id}>
-                  <TableCell className="font-mono text-xs text-muted-foreground">
-                    {apiKey.id}
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {apiKey.label ?? "-"}
+                  <TableCell>
+                    <span className="font-mono text-xs text-muted-foreground">
+                      #{apiKey.id}
+                    </span>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={status.variant}>{status.label}</Badge>
+                    {apiKey.label ? (
+                      <span className="font-medium text-foreground">
+                        {apiKey.label}
+                      </span>
+                    ) : (
+                      <span className="text-xs italic text-muted-foreground">
+                        Không có nhãn
+                      </span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={status.variant} className="gap-1.5">
+                      <span
+                        className={`size-1.5 rounded-full ${
+                          apiKey.isActive ? "bg-emerald-500" : "bg-zinc-400"
+                        }`}
+                      />
+                      {status.label}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground tabular-nums">
                     {formatDateTime(apiKey.lastUsedAt)}
