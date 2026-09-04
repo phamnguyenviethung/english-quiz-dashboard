@@ -14,8 +14,18 @@ import { SiblingRefillPage } from "@/features/question-pool/components/sibling-r
 import { ReadingQuestionRefillPage } from "@/features/reading-questions/components/reading-question-refill-page.tsx"
 import { ReadingRefillPage } from "@/features/readings/components/reading-refill-page.tsx"
 
-const TABS = ["questions", "siblings", "readings", "reading-questions"] as const
-type RefillTab = (typeof TABS)[number]
+const REFILL_TABS = [
+  { value: "questions", label: "Câu hỏi", icon: IconDatabase },
+  { value: "siblings", label: "Câu tương tự", icon: IconCopyPlus },
+  { value: "readings", label: "Bài đọc", icon: IconBook },
+  {
+    value: "reading-questions",
+    label: "Câu hỏi đọc hiểu",
+    icon: IconHelpCircle,
+  },
+] as const
+
+type RefillTab = (typeof REFILL_TABS)[number]["value"]
 
 const DEFAULT_TAB: RefillTab = "questions"
 
@@ -25,7 +35,9 @@ interface RefillSearch {
 
 export const Route = createFileRoute("/_dashboard/refill")({
   validateSearch: (search: Record<string, unknown>): RefillSearch => {
-    const tab = TABS.find((value) => value === search.tab)
+    const tab = REFILL_TABS.some((item) => item.value === search.tab)
+      ? (search.tab as RefillTab)
+      : undefined
     // Tab mặc định không đẩy vào URL để `/refill` luôn là URL chuẩn của nó.
     return tab && tab !== DEFAULT_TAB ? { tab } : {}
   },
@@ -57,24 +69,23 @@ function RefillPage() {
           })
         }
       >
-        <TabsList>
-          <TabsTrigger value="questions">
-            <IconDatabase stroke={1.5} data-icon="inline-start" />
-            Câu hỏi
-          </TabsTrigger>
-          <TabsTrigger value="siblings">
-            <IconCopyPlus stroke={1.5} data-icon="inline-start" />
-            Câu tương tự
-          </TabsTrigger>
-          <TabsTrigger value="readings">
-            <IconBook stroke={1.5} data-icon="inline-start" />
-            Bài đọc
-          </TabsTrigger>
-          <TabsTrigger value="reading-questions">
-            <IconHelpCircle stroke={1.5} data-icon="inline-start" />
-            Câu hỏi đọc hiểu
-          </TabsTrigger>
-        </TabsList>
+        <div className="-mx-4 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <TabsList className="h-10 w-max shrink-0 p-1 sm:w-fit">
+            {REFILL_TABS.map((tab) => {
+              const Icon = tab.icon
+              return (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="gap-2 px-3.5 py-1.5 text-xs font-medium shrink-0 sm:text-sm"
+                >
+                  <Icon stroke={1.5} data-icon="inline-start" />
+                  {tab.label}
+                </TabsTrigger>
+              )
+            })}
+          </TabsList>
+        </div>
 
         {/* Không đặt `keepMounted`: mỗi panel có một query preview bucket luôn bật,
             giữ mount cả hai sẽ bắn hai request mỗi lần đổi filter. */}
