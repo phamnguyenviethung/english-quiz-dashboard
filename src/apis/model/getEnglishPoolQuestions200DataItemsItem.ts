@@ -18,6 +18,8 @@ export type GetEnglishPoolQuestions200DataItemsItem = {
   optionCount: number;
   topicId: number | null;
   sourceQuestionId: number | null;
+  /** true = câu thuộc bucket beginner (≤ B1, ≤ 4 đáp án). */
+  forBeginner: boolean;
   engLevel: string;
   topicName: string | null;
   createdAt: string | number | null;

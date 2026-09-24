@@ -12,5 +12,6 @@ export type GetEnglishPoolCount200Data = {
   engLevel: GetEnglishPoolCount200DataEngLevel;
   quizType: GetEnglishPoolCount200DataQuizType;
   topicId: number | null;
+  forBeginner: boolean;
   count: number;
 };

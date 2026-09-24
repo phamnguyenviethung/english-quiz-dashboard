@@ -24,6 +24,8 @@ export type GetEnglishReadingsPop200DataQuestionsItem = {
   topicName: string | null;
   /** daily | academic — snapshot từ passage lúc sinh câu hỏi. */
   type: string;
+  /** Snapshot từ passage.forBeginner. */
+  forBeginner: boolean;
   model: string;
   tokenIn: number;
   tokenOut: number;

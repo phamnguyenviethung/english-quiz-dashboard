@@ -8,6 +8,7 @@ export interface GenerateReadingInput {
   cefrLevel: PostAdminReadingsGenerateBodyOne["cefrLevel"]
   type: PostAdminReadingsGenerateBodyOne["type"]
   model?: string
+  forBeginner?: boolean
 }
 
 /**
@@ -34,6 +35,7 @@ export function useGenerateReading() {
         cefrLevel: input.cefrLevel,
         type: input.type,
         ...(input.model ? { model: input.model } : {}),
+        ...(input.forBeginner ? { forBeginner: true } : {}),
       },
     })
 

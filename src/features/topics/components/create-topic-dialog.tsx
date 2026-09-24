@@ -12,9 +12,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
+import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { API_ERROR_CODE, isApiErrorCode } from "@/lib/api-error.ts"
 
@@ -27,6 +34,7 @@ const EMPTY_VALUES = { name: "", description: "" }
 export function CreateTopicDialog() {
   const [open, setOpen] = useState(false)
   const [values, setValues] = useState(EMPTY_VALUES)
+  const [forBeginner, setForBeginner] = useState(false)
   const [errors, setErrors] = useState<CreateTopicErrors>({})
   const [submitted, setSubmitted] = useState(false)
 
@@ -48,6 +56,7 @@ export function CreateTopicDialog() {
     setOpen(nextOpen)
     if (!nextOpen) {
       setValues(EMPTY_VALUES)
+      setForBeginner(false)
       setErrors({})
       setSubmitted(false)
       reset()
@@ -63,7 +72,7 @@ export function CreateTopicDialog() {
     if (hasErrors(nextErrors)) return
 
     try {
-      await createTopic(values)
+      await createTopic({ ...values, forBeginner })
     } catch (error) {
       if (isApiErrorCode(error, API_ERROR_CODE.CONFLICT)) {
         setErrors({ name: "Tên chủ đề đã tồn tại, hãy chọn tên khác." })
@@ -129,6 +138,24 @@ export function CreateTopicDialog() {
                   ? { message: errors.description }
                   : undefined,
               ]}
+            />
+          </Field>
+
+          <Field orientation="horizontal">
+            <FieldContent>
+              <FieldLabel htmlFor="topic-for-beginner">
+                Dành cho người mới
+              </FieldLabel>
+              <FieldDescription>
+                Sinh thêm câu hỏi và bài đọc A1–B1, tối đa 4 đáp án cho chủ đề
+                này.
+              </FieldDescription>
+            </FieldContent>
+            <Switch
+              id="topic-for-beginner"
+              checked={forBeginner}
+              disabled={isPending}
+              onCheckedChange={setForBeginner}
             />
           </Field>
 

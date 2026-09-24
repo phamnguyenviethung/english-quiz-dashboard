@@ -60,6 +60,8 @@ export interface GenerateFormValues {
   topic: string
   model: string
   excludeWords: string
+  /** Sinh bằng prompt người mới (≤ B1, ≤ 4 đáp án). Không áp dụng cho reading. */
+  forBeginner: boolean
 }
 
 export type GenerateFormErrors = Partial<

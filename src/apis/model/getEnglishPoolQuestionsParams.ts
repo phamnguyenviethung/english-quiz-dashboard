@@ -35,6 +35,10 @@ sourceQuestionId?: string | number;
  * true = chỉ lấy câu là sibling (có sourceQuestionId).
  */
 onlySiblings?: boolean | string;
+/**
+ * true = chỉ câu beginner, false = chỉ câu thường. Bỏ trống = cả hai.
+ */
+forBeginner?: boolean | string;
 sort?: GetEnglishPoolQuestionsSort;
 /**
  * @minimum 1

@@ -5,6 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { GetAdminPoolBucketsAudience } from './getAdminPoolBucketsAudience.ts';
 import type { GetAdminPoolBucketsScope } from './getAdminPoolBucketsScope.ts';
 
 export type GetAdminPoolBucketsParams = {
@@ -20,6 +21,7 @@ topicIds?: string;
  * CSV quizType, vd `vocab,idiom`. Bỏ trống = mọi loại đang bật.
  */
 quizTypes?: string;
+audience?: GetAdminPoolBucketsAudience;
 scope?: GetAdminPoolBucketsScope;
 /**
  * @minimum 1

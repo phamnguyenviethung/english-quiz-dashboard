@@ -114,6 +114,26 @@ describe("validateConfigGroups · quiz_distribution", () => {
   })
 })
 
+describe("validateConfigGroups · beginner_quiz_types", () => {
+  const key = "beginner_quiz_types.items"
+
+  it("chấp nhận kể cả khi tắt hết loại cho người mới", () => {
+    const record = arrRecord(key, "beginner_quiz_types", [
+      { quizType: "vocab", enabled: false },
+      { quizType: "idiom", enabled: false },
+    ])
+    expect(validateConfigGroups([record], {})).toEqual({})
+  })
+
+  it("báo lỗi khi một loại câu bị khai hai lần", () => {
+    const record = arrRecord(key, "beginner_quiz_types", [
+      { quizType: "vocab", enabled: true },
+      { quizType: "vocab", enabled: false },
+    ])
+    expect(validateConfigGroups([record], {})[key]).toContain("một lần")
+  })
+})
+
 describe("validateConfigGroups · lịch cron", () => {
   const key = "pool_refill_schedule.items"
 

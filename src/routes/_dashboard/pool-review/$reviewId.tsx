@@ -15,6 +15,7 @@ import { PageHeader } from "@/components/common/page-header.tsx"
 import { QueryError } from "@/components/common/query-error.tsx"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
+import { BeginnerBadge } from "@/features/beginner/components/beginner-badge.tsx"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -314,6 +315,7 @@ function PoolReviewDetailPage() {
         >
           {review.engLevel}
         </Badge>
+        {review.forBeginner ? <BeginnerBadge /> : null}
         {review.score !== null ? (
           <span className="text-sm text-muted-foreground tabular-nums">
             {review.score}/100

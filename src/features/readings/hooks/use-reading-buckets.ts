@@ -40,6 +40,7 @@ export function buildReadingBucketsParams(
       ? { topicIds: input.topicIds.join(",") }
       : {}),
     ...(input.types.length > 0 ? { types: input.types.join(",") } : {}),
+    ...(input.audience ? { audience: input.audience } : {}),
     ...(input.countPerBucket === undefined
       ? {}
       : { countPerBucket: input.countPerBucket }),

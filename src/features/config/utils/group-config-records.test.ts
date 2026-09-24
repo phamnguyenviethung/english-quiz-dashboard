@@ -25,6 +25,12 @@ describe("sectionOf", () => {
     ).toBe("distribution")
   })
 
+  it("đưa loại câu cho người mới vào cùng nhóm phân bổ", () => {
+    expect(
+      sectionOf(record({ namespace: "beginner_quiz_types", path: "items" }))
+    ).toBe("distribution")
+  })
+
   it("đưa mọi field manualFill* vào nhóm sinh thủ công", () => {
     expect(sectionOf(record({ path: "manualFillMinCount" }))).toBe("manual")
     expect(sectionOf(record({ path: "manualFillConcurrency" }))).toBe("manual")

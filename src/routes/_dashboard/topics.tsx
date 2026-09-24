@@ -25,10 +25,12 @@ import {
 import type { TopicsSort } from "@/features/topics/constants.ts"
 import { useTopics } from "@/features/topics/hooks/use-topics.ts"
 import { formatNumber } from "@/lib/format.ts"
+import { parseForBeginnerSearch } from "@/features/beginner/constants.ts"
 
 interface TopicsSearch {
   q?: string
   isActive?: boolean
+  forBeginner?: boolean
   sort?: TopicsSort
   page?: number
   pageSize?: number
@@ -46,6 +48,7 @@ export const Route = createFileRoute("/_dashboard/topics")({
         : search.isActive === false || search.isActive === "false"
           ? false
           : undefined
+    const forBeginner = parseForBeginnerSearch(search.forBeginner)
     const sort = TOPIC_SORTS.find((value) => value === search.sort)
     const parsedPage = Number(search.page)
     const page =
@@ -58,6 +61,7 @@ export const Route = createFileRoute("/_dashboard/topics")({
     return {
       ...(q ? { q } : {}),
       ...(isActive === undefined ? {} : { isActive }),
+      ...(forBeginner === undefined ? {} : { forBeginner }),
       ...(sort ? { sort } : {}),
       ...(page ? { page } : {}),
       ...(pageSize ? { pageSize } : {}),
@@ -87,6 +91,7 @@ function TopicsPage() {
     applyFilter({
       q: undefined,
       isActive: undefined,
+      forBeginner: undefined,
     })
 
   // Lọc và sắp xếp phía client
@@ -94,6 +99,9 @@ function TopicsPage() {
     let result = topics
     if (search.isActive !== undefined) {
       result = result.filter((t) => t.isActive === search.isActive)
+    }
+    if (search.forBeginner !== undefined) {
+      result = result.filter((t) => t.forBeginner === search.forBeginner)
     }
     if (search.q) {
       const query = search.q.toLowerCase()
@@ -127,7 +135,7 @@ function TopicsPage() {
           return a.id - b.id
       }
     })
-  }, [topics, search.isActive, search.q, sort])
+  }, [topics, search.isActive, search.forBeginner, search.q, sort])
 
   const total = filteredTopics.length
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
@@ -136,7 +144,10 @@ function TopicsPage() {
     return filteredTopics.slice(start, start + pageSize)
   }, [filteredTopics, page, pageSize])
 
-  const hasActiveFilter = Boolean(search.q) || search.isActive !== undefined
+  const hasActiveFilter =
+    Boolean(search.q) ||
+    search.isActive !== undefined ||
+    search.forBeginner !== undefined
   const isEmpty = !isPending && topics.length === 0
   const isFilteredEmpty = !isPending && !isEmpty && filteredTopics.length === 0
 
@@ -153,7 +164,11 @@ function TopicsPage() {
       />
 
       <TopicsToolbar
-        filters={{ q: search.q, isActive: search.isActive }}
+        filters={{
+          q: search.q,
+          isActive: search.isActive,
+          forBeginner: search.forBeginner,
+        }}
         hasActiveFilter={hasActiveFilter}
         isRefreshing={isRefetching}
         onSearchChange={(value) => applyFilter({ q: value })}
@@ -176,8 +191,8 @@ function TopicsPage() {
             </EmptyMedia>
             <EmptyTitle>Chưa có chủ đề nào</EmptyTitle>
             <EmptyDescription>
-              Tạo chủ đề đầu tiên để bắt đầu phân loại câu hỏi theo từng nhóm nội
-              dung.
+              Tạo chủ đề đầu tiên để bắt đầu phân loại câu hỏi theo từng nhóm
+              nội dung.
             </EmptyDescription>
           </EmptyHeader>
           <EmptyContent>

@@ -13,4 +13,6 @@ export type PatchAdminReadingsByIdBodyOne = {
   paragraphs?: string[];
   /** false = tắt bài, không tính vào bucket count nữa. */
   isActive?: boolean;
+  /** true = đánh dấu bài dành cho beginner (chỉ bài A1–B1, type daily). Cờ của câu hỏi thuộc bài đổi theo. */
+  forBeginner?: boolean;
 };

@@ -2,6 +2,12 @@ import { useMemo, useState } from "react"
 import { useNavigate } from "@tanstack/react-router"
 
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { AudienceToggle } from "@/features/beginner/components/audience-toggle.tsx"
+import {
+  BEGINNER_LEVELS,
+  toBucketAudience,
+} from "@/features/beginner/constants.ts"
+import type { AudienceValue } from "@/features/beginner/constants.ts"
 import { Input } from "@/components/ui/input"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
@@ -59,7 +65,13 @@ function parsePositiveInt(raw: string): {
   return { value: invalid ? undefined : parsed, invalid }
 }
 
-export function SiblingRefillPage() {
+export function SiblingRefillPage({
+  initialAudience = "all",
+  initialTopicIds = [],
+}: {
+  initialAudience?: AudienceValue
+  initialTopicIds?: number[]
+} = {}) {
   const navigate = useNavigate()
 
   const [scope, setScope] = useState<SiblingRefillScope>(INITIAL_SCOPE)
@@ -68,7 +80,18 @@ export function SiblingRefillPage() {
   const [models, setModels] = useState<string[]>([])
   const [engLevels, setEngLevels] = useState<EngLevel[]>([])
   const [quizTypes, setQuizTypes] = useState<QuizType[]>([])
-  const [topicIds, setTopicIds] = useState<number[]>([])
+  const [topicIds, setTopicIds] = useState<number[]>(initialTopicIds)
+  const [audience, setAudience] = useState<AudienceValue>(initialAudience)
+
+  // Beginner không có B2 — bỏ B2 khỏi bộ lọc để preview không lặng lẽ rỗng.
+  const changeAudience = (value: AudienceValue) => {
+    setAudience(value)
+    if (value === "beginner") {
+      setEngLevels((current) =>
+        current.filter((level) => BEGINNER_LEVELS.includes(level))
+      )
+    }
+  }
   const [deselectedKeys, setDeselectedKeys] = useState<Set<string>>(new Set())
 
   const sources = parsePositiveInt(sourcesPerBucketInput)
@@ -89,6 +112,7 @@ export function SiblingRefillPage() {
       engLevels,
       quizTypes,
       topicIds,
+      audience: toBucketAudience(audience),
       ...(isSourcesInvalid ? {} : { sourcesPerBucket: sources.value }),
       ...(isSiblingsInvalid ? {} : { siblingsPerSource: siblings.value }),
     },
@@ -113,6 +137,7 @@ export function SiblingRefillPage() {
         currentCount: bucket.currentCount,
         plannedCount: bucket.plannedCount,
         variantLabel: getQuizTypeLabel(bucket.quizType),
+        forBeginner: bucket.forBeginner,
       })),
     [preview.buckets]
   )
@@ -178,6 +203,7 @@ export function SiblingRefillPage() {
       engLevels,
       quizTypes,
       topicIds,
+      audience: toBucketAudience(audience),
       ...(sources.value === undefined
         ? {}
         : { sourcesPerBucket: sources.value }),
@@ -287,6 +313,19 @@ export function SiblingRefillPage() {
             className="gap-5 py-6"
           >
             <Field>
+              <FieldLabel>Đối tượng</FieldLabel>
+              <AudienceToggle
+                value={audience}
+                disabled={isPending}
+                onChange={changeAudience}
+              />
+              <FieldDescription>
+                Người mới = bucket A1–B1, tối đa 4 đáp án, chỉ chủ đề bật cho
+                người mới.
+              </FieldDescription>
+            </Field>
+
+            <Field>
               <FieldLabel>Cấp độ</FieldLabel>
               <ToggleGroup
                 variant="outline"
@@ -301,6 +340,10 @@ export function SiblingRefillPage() {
                     key={level}
                     value={level}
                     className={TOUCH_TOGGLE}
+                    disabled={
+                      audience === "beginner" &&
+                      !BEGINNER_LEVELS.includes(level)
+                    }
                   >
                     {level}
                   </ToggleGroupItem>

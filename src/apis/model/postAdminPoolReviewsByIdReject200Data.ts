@@ -16,6 +16,8 @@ export type PostAdminPoolReviewsByIdReject200Data = {
   optionCount: number;
   topicId: number | null;
   topicName: string | null;
+  /** true = nội dung beginner (≤ B1, ≤ 4 đáp án) — xem docs/beginner.md. */
+  forBeginner: boolean;
   adminNote: string | null;
   verdict: string | null;
   summary: string | null;

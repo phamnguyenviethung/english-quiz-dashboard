@@ -38,6 +38,7 @@ import type { EngLevel } from "@/features/quiz/types.ts"
 import { READING_TYPES } from "@/features/readings/constants.ts"
 import type { ReadingType } from "@/features/readings/types.ts"
 import { formatNumber } from "@/lib/format.ts"
+import { parseForBeginnerSearch } from "@/features/beginner/constants.ts"
 
 interface ReadingQuestionsSearch {
   q?: string
@@ -48,6 +49,7 @@ interface ReadingQuestionsSearch {
   quizType?: string
   model?: string
   isActive?: boolean
+  forBeginner?: boolean
   sort?: ReadingQuestionsSort
   page?: number
   pageSize?: number
@@ -82,6 +84,7 @@ export const Route = createFileRoute("/_dashboard/reading-questions/")({
         : search.isActive === false || search.isActive === "false"
           ? false
           : undefined
+    const forBeginner = parseForBeginnerSearch(search.forBeginner)
     const sort = READING_QUESTION_SORTS.find((value) => value === search.sort)
     const parsedPage = Number(search.page)
     const page =
@@ -101,6 +104,7 @@ export const Route = createFileRoute("/_dashboard/reading-questions/")({
       ...(quizType ? { quizType } : {}),
       ...(model ? { model } : {}),
       ...(isActive === undefined ? {} : { isActive }),
+      ...(forBeginner === undefined ? {} : { forBeginner }),
       ...(sort ? { sort } : {}),
       ...(page ? { page } : {}),
       ...(pageSize ? { pageSize } : {}),
@@ -117,6 +121,7 @@ export const Route = createFileRoute("/_dashboard/reading-questions/")({
       quizType: search.quizType,
       model: search.model,
       isActive: search.isActive,
+      forBeginner: search.forBeginner,
       // Phải khớp default dùng trong component, nếu không params ở loader và ở
       // component lệch nhau => query key khác nhau => prefetch không hit cache lúc SSR.
       sort: search.sort ?? DEFAULT_READING_QUESTION_SORT,
@@ -149,6 +154,7 @@ function ReadingQuestionsPage() {
     quizType: search.quizType,
     model: search.model,
     isActive: search.isActive,
+    forBeginner: search.forBeginner,
     sort,
     page,
     pageSize,
@@ -181,6 +187,7 @@ function ReadingQuestionsPage() {
     quizType: search.quizType,
     model: search.model,
     isActive: search.isActive,
+    forBeginner: search.forBeginner,
     passageId: search.passageId,
   }
 
@@ -192,7 +199,9 @@ function ReadingQuestionsPage() {
       filters.quizType,
       filters.model,
       filters.passageId,
-    ].some(Boolean) || filters.isActive !== undefined
+    ].some(Boolean) ||
+    filters.isActive !== undefined ||
+    filters.forBeginner !== undefined
 
   const clearAllFilters = () =>
     applyFilter({
@@ -204,6 +213,7 @@ function ReadingQuestionsPage() {
       quizType: undefined,
       model: undefined,
       isActive: undefined,
+      forBeginner: undefined,
     })
 
   const isEmpty = !isPending && items?.length === 0

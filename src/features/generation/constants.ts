@@ -48,6 +48,7 @@ export const DEFAULT_GENERATE_VALUES: GenerateFormValues = {
   topic: "",
   model: "",
   excludeWords: "",
+  forBeginner: false,
 }
 
 export const PART_OF_SPEECH_LABELS: Record<string, string> = {

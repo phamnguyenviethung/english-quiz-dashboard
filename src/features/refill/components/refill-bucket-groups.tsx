@@ -6,6 +6,7 @@ import {
 } from "@tabler/icons-react"
 
 import { Badge } from "@/components/ui/badge"
+import { BeginnerBadge } from "@/features/beginner/components/beginner-badge.tsx"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -286,6 +287,9 @@ export function RefillBucketGroups({
                         >
                           {bucket.level}
                         </Badge>
+                        {bucket.forBeginner ? (
+                          <BeginnerBadge label="Mới" />
+                        ) : null}
                         {/* Reading chỉ có 1 chiều nên không có nhãn phụ; vẫn giữ ô rỗng
                             để cột số bên phải thẳng hàng giữa hai loại. */}
                         <span className="min-w-0 flex-1 truncate text-sm">

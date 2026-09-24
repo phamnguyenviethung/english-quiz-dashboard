@@ -2,7 +2,13 @@ import type { FormEvent } from "react"
 import { IconSparkles } from "@tabler/icons-react"
 
 import { Button } from "@/components/ui/button"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -11,6 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import {
+  BEGINNER_LEVELS,
+  BEGINNER_MAX_OPTIONS,
+} from "@/features/beginner/constants.ts"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
@@ -55,6 +66,19 @@ export function GenerateForm({
 }) {
   const { topics, items, isPending: isTopicsPending } = useTopicNameOptions()
   const isReading = values.quizType === READING_QUIZ_TYPE
+  const isBeginner = values.forBeginner && !isReading
+
+  // Beginner chỉ có A1–B1 và tối đa 4 đáp án — ép về giá trị hợp lệ khi bật.
+  const toggleBeginner = (checked: boolean) =>
+    onChange({
+      forBeginner: checked,
+      ...(checked && !BEGINNER_LEVELS.includes(values.engLevel)
+        ? { engLevel: "B1" }
+        : {}),
+      ...(checked && values.optionCount > BEGINNER_MAX_OPTIONS
+        ? { optionCount: BEGINNER_MAX_OPTIONS }
+        : {}),
+    })
 
   const quizTypeItems = Object.fromEntries(
     GENERATE_QUIZ_TYPES.map((type) => [type, GENERATE_TYPE_META[type].label])
@@ -102,6 +126,25 @@ export function GenerateForm({
         </Select>
       </Field>
 
+      {isReading ? null : (
+        <Field orientation="horizontal">
+          <FieldContent>
+            <FieldLabel htmlFor="generate-for-beginner">
+              Prompt cho người mới
+            </FieldLabel>
+            <FieldDescription>
+              Tối đa B1, 4 đáp án, từ vựng thường ngày. Loại câu phải đang bật
+              cho người mới.
+            </FieldDescription>
+          </FieldContent>
+          <Switch
+            id="generate-for-beginner"
+            checked={values.forBeginner}
+            onCheckedChange={toggleBeginner}
+          />
+        </Field>
+      )}
+
       <div className="grid grid-cols-2 gap-4">
         <Field>
           <FieldLabel htmlFor="generate-eng-level">Cấp độ</FieldLabel>
@@ -115,7 +158,11 @@ export function GenerateForm({
             </SelectTrigger>
             <SelectContent>
               {ENG_LEVELS.map((level) => (
-                <SelectItem key={level} value={level}>
+                <SelectItem
+                  key={level}
+                  value={level}
+                  disabled={isBeginner && !BEGINNER_LEVELS.includes(level)}
+                >
                   {level}
                 </SelectItem>
               ))}
@@ -137,7 +184,11 @@ export function GenerateForm({
             </SelectTrigger>
             <SelectContent>
               {GENERATE_OPTION_COUNTS.map((count) => (
-                <SelectItem key={count} value={String(count)}>
+                <SelectItem
+                  key={count}
+                  value={String(count)}
+                  disabled={isBeginner && count > BEGINNER_MAX_OPTIONS}
+                >
                   {formatOptionCountLabel(count)}
                 </SelectItem>
               ))}

@@ -14,4 +14,8 @@ topicId?: string | number;
  * CSV id câu hỏi cần loại, vd "12,88,301". Tối đa 200 id (dư bị cắt), phần tử không phải số nguyên dương bị bỏ qua. Dùng để client tự chống lặp câu theo từng end-user.
  */
 excludeIds?: string;
+/**
+ * true = chỉ nội dung beginner (≤ B1, ≤ 4 đáp án). Bỏ trống/false = chỉ nội dung thường.
+ */
+beginner?: boolean | string;
 };

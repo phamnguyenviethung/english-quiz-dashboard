@@ -42,6 +42,7 @@ export function buildPoolBucketsParams(
     ...(input.quizTypes.length > 0
       ? { quizTypes: input.quizTypes.join(",") }
       : {}),
+    ...(input.audience ? { audience: input.audience } : {}),
     ...(input.countPerBucket === undefined
       ? {}
       : { countPerBucket: input.countPerBucket }),

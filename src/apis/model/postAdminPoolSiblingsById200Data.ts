@@ -23,7 +23,11 @@ export type PostAdminPoolSiblingsById200Data = {
   skipped: number;
   tokenIn: number;
   tokenOut: number;
+  /** Tên model OpenRouter trả về (đã cắt prefix provider). */
   model: string;
+  /** Model id đã cấu hình (ai_models.modelId) — dùng để tính giá. */
+  configuredModel: string;
+  costUsd: number | null;
   /** ID các câu sibling vừa thêm vào pool. */
   poolQuestionIds: number[];
   warnings: string[];

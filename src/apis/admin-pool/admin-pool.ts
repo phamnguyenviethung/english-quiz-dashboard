@@ -30,6 +30,14 @@ import type {
   GetAdminPoolBuckets401,
   GetAdminPoolBuckets500,
   GetAdminPoolBucketsParams,
+  PatchAdminPoolQuestionsById200,
+  PatchAdminPoolQuestionsById400,
+  PatchAdminPoolQuestionsById401,
+  PatchAdminPoolQuestionsById404,
+  PatchAdminPoolQuestionsById500,
+  PatchAdminPoolQuestionsByIdBodyOne,
+  PatchAdminPoolQuestionsByIdBodyThree,
+  PatchAdminPoolQuestionsByIdBodyTwo,
   PostAdminPoolRefill200,
   PostAdminPoolRefill400,
   PostAdminPoolRefill401,
@@ -219,4 +227,69 @@ export const usePostAdminPoolRefill = <TError = ErrorType<PostAdminPoolRefill400
         TContext
       > => {
       return useMutation(getPostAdminPoolRefillMutationOptions(options), queryClient);
+    }
+    /**
+ * Bật/tắt cờ beginner của 1 câu pool — câu chuyển bucket ngay lập tức. Chỉ câu level A1–B1, tối đa 4 đáp án và thuộc loại câu đang bật cho beginner mới được đánh dấu (vi phạm trả 400). Câu không tồn tại trả 404. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
+ * @summary Mark a pool question for beginner
+ */
+export const patchAdminPoolQuestionsById = (
+    id: string | number,
+    patchAdminPoolQuestionsByIdBody: BodyType<PatchAdminPoolQuestionsByIdBodyOne | PatchAdminPoolQuestionsByIdBodyTwo | PatchAdminPoolQuestionsByIdBodyThree>| PatchAdminPoolQuestionsByIdBodyTwo | PatchAdminPoolQuestionsByIdBodyThree,
+ options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
+) => {
+
+
+      return axiosClient<PatchAdminPoolQuestionsById200>(
+      {url: `/admin/pool/questions/${id}`, method: 'PATCH',
+      data: patchAdminPoolQuestionsByIdBody, signal
+    },
+      options);
+    }
+
+
+
+
+export const getPatchAdminPoolQuestionsByIdMutationOptions = <TError = ErrorType<PatchAdminPoolQuestionsById400 | PatchAdminPoolQuestionsById401 | PatchAdminPoolQuestionsById404 | PatchAdminPoolQuestionsById500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchAdminPoolQuestionsById>>, TError,{id: string | number;data: BodyType<PatchAdminPoolQuestionsByIdBodyOne | PatchAdminPoolQuestionsByIdBodyTwo | PatchAdminPoolQuestionsByIdBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+): UseMutationOptions<Awaited<ReturnType<typeof patchAdminPoolQuestionsById>>, TError,{id: string | number;data: BodyType<PatchAdminPoolQuestionsByIdBodyOne | PatchAdminPoolQuestionsByIdBodyTwo | PatchAdminPoolQuestionsByIdBodyThree>}, TContext> => {
+
+const mutationKey = ['patchAdminPoolQuestionsById'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchAdminPoolQuestionsById>>, {id: string | number;data: BodyType<PatchAdminPoolQuestionsByIdBodyOne | PatchAdminPoolQuestionsByIdBodyTwo | PatchAdminPoolQuestionsByIdBodyThree>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  patchAdminPoolQuestionsById(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatchAdminPoolQuestionsByIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchAdminPoolQuestionsById>>>
+    export type PatchAdminPoolQuestionsByIdMutationBody = BodyType<PatchAdminPoolQuestionsByIdBodyOne | PatchAdminPoolQuestionsByIdBodyTwo | PatchAdminPoolQuestionsByIdBodyThree>
+    export type PatchAdminPoolQuestionsByIdMutationError = ErrorType<PatchAdminPoolQuestionsById400 | PatchAdminPoolQuestionsById401 | PatchAdminPoolQuestionsById404 | PatchAdminPoolQuestionsById500>
+
+    /**
+ * @summary Mark a pool question for beginner
+ */
+export const usePatchAdminPoolQuestionsById = <TError = ErrorType<PatchAdminPoolQuestionsById400 | PatchAdminPoolQuestionsById401 | PatchAdminPoolQuestionsById404 | PatchAdminPoolQuestionsById500>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchAdminPoolQuestionsById>>, TError,{id: string | number;data: BodyType<PatchAdminPoolQuestionsByIdBodyOne | PatchAdminPoolQuestionsByIdBodyTwo | PatchAdminPoolQuestionsByIdBodyThree>}, TContext>, request?: SecondParameter<typeof axiosClient>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof patchAdminPoolQuestionsById>>,
+        TError,
+        {id: string | number;data: BodyType<PatchAdminPoolQuestionsByIdBodyOne | PatchAdminPoolQuestionsByIdBodyTwo | PatchAdminPoolQuestionsByIdBodyThree>},
+        TContext
+      > => {
+      return useMutation(getPatchAdminPoolQuestionsByIdMutationOptions(options), queryClient);
     }

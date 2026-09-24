@@ -100,6 +100,15 @@ export function validateConfigGroups(
     }
   }
 
+  const beginnerKey = "beginner_quiz_types.items"
+  const beginnerRows = rowsAt(resolved, beginnerKey)
+  if (beginnerRows) {
+    const quizTypes = beginnerRows.map((row) => String(row.quizType ?? ""))
+    if (new Set(quizTypes).size !== quizTypes.length) {
+      errors[beginnerKey] = "Mỗi loại câu hỏi chỉ được khai một lần."
+    }
+  }
+
   for (const { record } of resolved.values()) {
     if (!record.namespace.endsWith("_schedule")) continue
     const rows = rowsAt(resolved, record.recordKey)

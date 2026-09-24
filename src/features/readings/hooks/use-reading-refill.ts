@@ -19,6 +19,7 @@ function buildFilter(
     ...(input.cefrLevels.length > 0 ? { cefrLevels: input.cefrLevels } : {}),
     ...(input.topicIds.length > 0 ? { topicIds: input.topicIds } : {}),
     ...(input.types.length > 0 ? { types: input.types } : {}),
+    ...(input.audience ? { audience: input.audience } : {}),
   }
 
   return Object.keys(filter).length > 0 ? filter : undefined

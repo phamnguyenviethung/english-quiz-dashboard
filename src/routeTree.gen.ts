@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as DashboardIndexRouteImport } from './routes/_dashboard/index'
 import { Route as DashboardAiModelsRouteImport } from './routes/_dashboard/ai-models'
+import { Route as DashboardBeginnerRouteImport } from './routes/_dashboard/beginner'
 import { Route as DashboardConfigRouteImport } from './routes/_dashboard/config'
 import { Route as DashboardCronRunsRouteImport } from './routes/_dashboard/cron-runs'
 import { Route as DashboardGenerateRouteImport } from './routes/_dashboard/generate'
@@ -58,6 +59,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
 const DashboardAiModelsRoute = DashboardAiModelsRouteImport.update({
   id: '/ai-models',
   path: '/ai-models',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardBeginnerRoute = DashboardBeginnerRouteImport.update({
+  id: '/beginner',
+  path: '/beginner',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardConfigRoute = DashboardConfigRouteImport.update({
@@ -148,6 +154,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/ai-models': typeof DashboardAiModelsRoute
+  '/beginner': typeof DashboardBeginnerRoute
   '/config': typeof DashboardConfigRoute
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/ai-models': typeof DashboardAiModelsRoute
+  '/beginner': typeof DashboardBeginnerRoute
   '/config': typeof DashboardConfigRoute
   '/cron-runs': typeof DashboardCronRunsRoute
   '/generate': typeof DashboardGenerateRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_dashboard/ai-models': typeof DashboardAiModelsRoute
+  '/_dashboard/beginner': typeof DashboardBeginnerRoute
   '/_dashboard/config': typeof DashboardConfigRoute
   '/_dashboard/cron-runs': typeof DashboardCronRunsRoute
   '/_dashboard/generate': typeof DashboardGenerateRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/ai-models'
+    | '/beginner'
     | '/config'
     | '/cron-runs'
     | '/generate'
@@ -239,6 +249,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/ai-models'
+    | '/beginner'
     | '/config'
     | '/cron-runs'
     | '/generate'
@@ -262,6 +273,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/_dashboard/ai-models'
+    | '/_dashboard/beginner'
     | '/_dashboard/config'
     | '/_dashboard/cron-runs'
     | '/_dashboard/generate'
@@ -329,6 +341,13 @@ declare module '@tanstack/react-router' {
       path: '/ai-models'
       fullPath: '/ai-models'
       preLoaderRoute: typeof DashboardAiModelsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/_dashboard/beginner': {
+      id: '/_dashboard/beginner'
+      path: '/beginner'
+      fullPath: '/beginner'
+      preLoaderRoute: typeof DashboardBeginnerRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/_dashboard/config': {
@@ -441,6 +460,7 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardAiModelsRoute: typeof DashboardAiModelsRoute
+  DashboardBeginnerRoute: typeof DashboardBeginnerRoute
   DashboardConfigRoute: typeof DashboardConfigRoute
   DashboardCronRunsRoute: typeof DashboardCronRunsRoute
   DashboardGenerateRoute: typeof DashboardGenerateRoute
@@ -461,6 +481,7 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAiModelsRoute: DashboardAiModelsRoute,
+  DashboardBeginnerRoute: DashboardBeginnerRoute,
   DashboardConfigRoute: DashboardConfigRoute,
   DashboardCronRunsRoute: DashboardCronRunsRoute,
   DashboardGenerateRoute: DashboardGenerateRoute,

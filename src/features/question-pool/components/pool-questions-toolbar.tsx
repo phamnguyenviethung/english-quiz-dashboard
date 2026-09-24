@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { BeginnerFilterPill } from "@/features/beginner/components/beginner-filter-pill.tsx"
 import { Spinner } from "@/components/ui/spinner"
 import {
   ENG_LEVELS,
@@ -65,6 +66,7 @@ export interface PoolToolbarFilters {
   noTopic: boolean
   model: string | undefined
   optionCount: OptionCount | undefined
+  forBeginner: boolean | undefined
   createdFrom: string | undefined
   createdTo: string | undefined
 }
@@ -360,6 +362,11 @@ export function PoolQuestionsToolbar({
             ))}
           </SelectContent>
         </Select>
+
+        <BeginnerFilterPill
+          value={filters.forBeginner}
+          onChange={(value) => onFilterChange({ forBeginner: value })}
+        />
 
         <PoolDateRangeFilter
           value={{

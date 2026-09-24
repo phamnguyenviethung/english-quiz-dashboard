@@ -15,4 +15,6 @@ export type PostEnglishPoolFillBodyTwo = {
   optionCount: PostEnglishPoolFillBodyTwoOptionCount;
   topicId?: number | null;
   topicName?: string | null;
+  /** true = nạp bucket beginner (≤ B1, optionCount 4). */
+  forBeginner?: boolean;
 };

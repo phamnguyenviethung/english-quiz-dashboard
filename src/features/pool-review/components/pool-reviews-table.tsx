@@ -7,6 +7,7 @@ import {
 
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
+import { BeginnerBadge } from "@/features/beginner/components/beginner-badge.tsx"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -123,6 +124,7 @@ export function PoolReviewsTable({
                       >
                         {item.engLevel}
                       </Badge>
+                      {item.forBeginner ? <BeginnerBadge label="Mới" /> : null}
                     </span>
                   </TableCell>
                   <TableCell className="max-w-48 truncate text-muted-foreground">

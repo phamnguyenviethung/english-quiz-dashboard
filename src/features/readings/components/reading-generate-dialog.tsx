@@ -10,7 +10,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+} from "@/components/ui/field"
+import { Switch } from "@/components/ui/switch"
+import {
+  BEGINNER_LEVELS,
+  BEGINNER_READING_TYPE,
+} from "@/features/beginner/constants.ts"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -59,6 +69,15 @@ export function ReadingGenerateDialog({
   const [cefrLevel, setCefrLevel] = useState<EngLevel>(DEFAULT_LEVEL)
   const [type, setType] = useState<ReadingType>(DEFAULT_TYPE)
   const [model, setModel] = useState<string>(ALL_VALUE)
+  const [forBeginner, setForBeginner] = useState(false)
+
+  // Beginner chỉ có A1–B1 và bài daily — ép về giá trị hợp lệ thay vì để API trả 400.
+  const changeForBeginner = (checked: boolean) => {
+    setForBeginner(checked)
+    if (!checked) return
+    if (!BEGINNER_LEVELS.includes(cefrLevel)) setCefrLevel("B1")
+    setType(BEGINNER_READING_TYPE)
+  }
 
   const isSubmitDisabled = isPending || topicName.trim().length === 0
 
@@ -68,6 +87,7 @@ export function ReadingGenerateDialog({
       topicName,
       cefrLevel,
       type,
+      forBeginner,
       ...(model === ALL_VALUE ? {} : { model }),
     })
   }
@@ -122,7 +142,11 @@ export function ReadingGenerateDialog({
               </SelectTrigger>
               <SelectContent>
                 {ENG_LEVELS.map((level) => (
-                  <SelectItem key={level} value={level}>
+                  <SelectItem
+                    key={level}
+                    value={level}
+                    disabled={forBeginner && !BEGINNER_LEVELS.includes(level)}
+                  >
                     {level}
                   </SelectItem>
                 ))}
@@ -145,7 +169,11 @@ export function ReadingGenerateDialog({
               </SelectTrigger>
               <SelectContent>
                 {READING_TYPES.map((value) => (
-                  <SelectItem key={value} value={value}>
+                  <SelectItem
+                    key={value}
+                    value={value}
+                    disabled={forBeginner && value !== BEGINNER_READING_TYPE}
+                  >
                     {READING_TYPE_META[value].label}
                   </SelectItem>
                 ))}
@@ -154,6 +182,24 @@ export function ReadingGenerateDialog({
             <FieldDescription>
               {READING_TYPE_META[type].description}
             </FieldDescription>
+          </Field>
+
+          <Field orientation="horizontal" className="sm:col-span-4">
+            <FieldContent>
+              <FieldLabel htmlFor="generate-for-beginner">
+                Prompt cho người mới
+              </FieldLabel>
+              <FieldDescription>
+                Từ vựng thường ngày theo wordlist Cambridge, câu ngắn. Chỉ A1–B1
+                và loại đời thường.
+              </FieldDescription>
+            </FieldContent>
+            <Switch
+              id="generate-for-beginner"
+              checked={forBeginner}
+              disabled={isPending}
+              onCheckedChange={changeForBeginner}
+            />
           </Field>
 
           <Field className="sm:col-span-2">

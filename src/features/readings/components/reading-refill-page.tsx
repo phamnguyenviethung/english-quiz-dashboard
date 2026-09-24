@@ -2,6 +2,13 @@ import { useMemo, useState } from "react"
 import { useNavigate } from "@tanstack/react-router"
 
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { AudienceToggle } from "@/features/beginner/components/audience-toggle.tsx"
+import {
+  BEGINNER_LEVELS,
+  BEGINNER_READING_TYPE,
+  toBucketAudience,
+} from "@/features/beginner/constants.ts"
+import type { AudienceValue } from "@/features/beginner/constants.ts"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
   BUCKET_FILTER_ALL_HINT,
@@ -48,15 +55,35 @@ const COPY: RefillCopy = {
   costWarningThreshold: REFILL_COST_WARNING_PASSAGES,
 }
 
-export function ReadingRefillPage() {
+export function ReadingRefillPage({
+  initialAudience = "all",
+  initialTopicIds = [],
+}: {
+  initialAudience?: AudienceValue
+  initialTopicIds?: number[]
+} = {}) {
   const navigate = useNavigate()
 
   const [scope, setScope] = useState<ReadingRefillScope>(INITIAL_SCOPE)
   const [countPerBucket, setCountPerBucket] = useState("")
   const [models, setModels] = useState<string[]>([])
   const [cefrLevels, setCefrLevels] = useState<EngLevel[]>([])
-  const [topicIds, setTopicIds] = useState<number[]>([])
+  const [topicIds, setTopicIds] = useState<number[]>(initialTopicIds)
   const [types, setTypes] = useState<ReadingType[]>([])
+  const [audience, setAudience] = useState<AudienceValue>(initialAudience)
+
+  // Bài đọc beginner chỉ có A1–B1 và loại daily — bỏ lựa chọn không hợp lệ để preview không rỗng.
+  const changeAudience = (value: AudienceValue) => {
+    setAudience(value)
+    if (value === "beginner") {
+      setCefrLevels((current) =>
+        current.filter((level) => BEGINNER_LEVELS.includes(level))
+      )
+      setTypes((current) =>
+        current.filter((type) => type === BEGINNER_READING_TYPE)
+      )
+    }
+  }
   // Lưu bucket bị BỎ tick chứ không phải bucket được tick: khi nới bộ lọc, bucket mới
   // về mặc định vẫn được chọn thay vì im lặng bị bỏ sót.
   const [deselectedKeys, setDeselectedKeys] = useState<Set<string>>(new Set())
@@ -79,6 +106,7 @@ export function ReadingRefillPage() {
       cefrLevels,
       topicIds,
       types,
+      audience: toBucketAudience(audience),
       ...(isCountInvalid ? {} : { countPerBucket: parsedCount }),
     },
     true
@@ -102,6 +130,7 @@ export function ReadingRefillPage() {
         currentCount: bucket.currentCount,
         plannedCount: bucket.plannedCount,
         variantLabel: getReadingTypeLabel(bucket.type),
+        forBeginner: bucket.forBeginner,
       })),
     [preview.buckets]
   )
@@ -163,6 +192,7 @@ export function ReadingRefillPage() {
       cefrLevels,
       topicIds,
       types,
+      audience: toBucketAudience(audience),
       ...(parsedCount === undefined ? {} : { countPerBucket: parsedCount }),
       // Chọn hết theo bộ lọc thì để API tự quét: payload gọn và không đóng băng
       // danh sách bucket theo ảnh chụp preview.
@@ -218,6 +248,18 @@ export function ReadingRefillPage() {
             className="gap-5 py-6"
           >
             <Field>
+              <FieldLabel>Đối tượng</FieldLabel>
+              <AudienceToggle
+                value={audience}
+                disabled={isPending}
+                onChange={changeAudience}
+              />
+              <FieldDescription>
+                Người mới = bài đời thường A1–B1, chỉ chủ đề bật cho người mới.
+              </FieldDescription>
+            </Field>
+
+            <Field>
               <FieldLabel>Cấp độ</FieldLabel>
               <ToggleGroup
                 variant="outline"
@@ -232,6 +274,10 @@ export function ReadingRefillPage() {
                     key={level}
                     value={level}
                     className={TOUCH_TOGGLE}
+                    disabled={
+                      audience === "beginner" &&
+                      !BEGINNER_LEVELS.includes(level)
+                    }
                   >
                     {level}
                   </ToggleGroupItem>
@@ -265,6 +311,9 @@ export function ReadingRefillPage() {
                     key={type}
                     value={type}
                     className={TOUCH_TOGGLE}
+                    disabled={
+                      audience === "beginner" && type !== BEGINNER_READING_TYPE
+                    }
                   >
                     {READING_TYPE_META[type].label}
                   </ToggleGroupItem>

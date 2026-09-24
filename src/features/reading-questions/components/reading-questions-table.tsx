@@ -1,8 +1,4 @@
-import {
-  IconArrowDown,
-  IconArrowUp,
-  IconArrowsSort,
-} from "@tabler/icons-react"
+import { IconArrowDown, IconArrowUp, IconArrowsSort } from "@tabler/icons-react"
 
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
@@ -19,6 +15,7 @@ import {
   getEngLevelBadgeClass,
 } from "@/features/quiz/constants.ts"
 import { getReadingTypeLabel } from "@/features/readings/constants.ts"
+import { BeginnerBadge } from "@/features/beginner/components/beginner-badge.tsx"
 import { cn } from "@/lib/utils"
 
 import type {
@@ -55,11 +52,7 @@ function SortHeader({
   const pair = SORT_PAIRS[column]
   const isAsc = sort === pair.asc
   const isDesc = sort === pair.desc
-  const SortIcon = isAsc
-    ? IconArrowUp
-    : isDesc
-      ? IconArrowDown
-      : IconArrowsSort
+  const SortIcon = isAsc ? IconArrowUp : isDesc ? IconArrowDown : IconArrowsSort
 
   return (
     <TableHead className={className}>
@@ -99,7 +92,7 @@ export function ReadingQuestionsTable({
   onSelect: (id: number) => void
 }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border min-w-0 w-full">
+    <div className="w-full min-w-0 overflow-x-auto rounded-2xl border">
       <Table
         className={cn(
           "transition-opacity",
@@ -145,7 +138,7 @@ export function ReadingQuestionsTable({
                   className="cursor-pointer"
                   onClick={() => onSelect(item.id)}
                 >
-                  <TableCell className="text-muted-foreground tabular-nums font-mono text-xs">
+                  <TableCell className="font-mono text-xs text-muted-foreground tabular-nums">
                     {item.id}
                   </TableCell>
                   <TableCell
@@ -166,9 +159,12 @@ export function ReadingQuestionsTable({
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline">
-                      {getReadingTypeLabel(item.type)}
-                    </Badge>
+                    <div className="flex flex-wrap items-center gap-1">
+                      <Badge variant="outline">
+                        {getReadingTypeLabel(item.type)}
+                      </Badge>
+                      {item.forBeginner ? <BeginnerBadge label="Mới" /> : null}
+                    </div>
                   </TableCell>
                   <TableCell className="text-muted-foreground tabular-nums">
                     #{item.passageRefId}

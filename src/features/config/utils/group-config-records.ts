@@ -21,7 +21,11 @@ export function tabOf(record: ConfigRecord): ConfigTabKey {
  * mới thêm ở backend tự rơi vào đúng nhóm mà không phải sửa dashboard.
  */
 export function sectionOf(record: ConfigRecord): ConfigSectionKey {
-  if (record.namespace === "quiz_distribution") return "distribution"
+  if (
+    record.namespace === "quiz_distribution" ||
+    record.namespace === "beginner_quiz_types"
+  )
+    return "distribution"
   if (record.path.startsWith("manualFill")) return "manual"
   if (
     record.namespace === "job_flags" ||

@@ -10,5 +10,6 @@ export type GetEnglishReadingsCount200Data = {
   cefrLevel: string | null;
   topicId: number | null;
   type: string;
+  forBeginner: boolean;
   count: number;
 };

@@ -56,7 +56,16 @@ export function useUpdateReading({
   const setActive = (id: number, isActive: boolean) =>
     updateReading(id, { isActive })
 
-  return { updateReading, setActive, isPending: mutation.isPending }
+  /** Đánh dấu bài cho người mới — câu hỏi của bài đổi cờ theo trong cùng transaction. */
+  const setForBeginner = (id: number, forBeginner: boolean) =>
+    updateReading(id, { forBeginner }).catch(() => undefined)
+
+  return {
+    updateReading,
+    setActive,
+    setForBeginner,
+    isPending: mutation.isPending,
+  }
 }
 
 export function useDeleteReading({

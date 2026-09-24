@@ -42,7 +42,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Sinh 1 câu hỏi bằng LLM theo `:quizType`. Shape của `question` trong response phụ thuộc quizType — xem oneOf trong response schema. quizType ngoài allow-list của tenant trả 403.
+ * Sinh 1 câu hỏi bằng LLM theo `:quizType`. Shape của `question` trong response phụ thuộc quizType — xem oneOf trong response schema. quizType ngoài allow-list của tenant trả 403. `forBeginner=true` với engLevel B2, optionCount 5 hoặc quizType chưa bật cho beginner trả 400.
  * @summary Generate a question on-demand
  */
 export const postEnglishGenerateByQuizType = (

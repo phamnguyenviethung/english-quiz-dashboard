@@ -12,6 +12,8 @@ export type PostEnglishTopics201Data = {
   displayName: string | null;
   description: string | null;
   isActive: boolean;
+  /** Topic được dùng cho nội dung beginner. */
+  forBeginner: boolean;
   createdAt: string | number | null;
   updatedAt: string | number | null;
 };

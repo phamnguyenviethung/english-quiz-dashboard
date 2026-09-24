@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { BeginnerFilterPill } from "@/features/beginner/components/beginner-filter-pill.tsx"
 import { Spinner } from "@/components/ui/spinner"
 import { ENG_LEVELS, formatModelName } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
@@ -59,6 +60,7 @@ export interface ReadingsToolbarFilters {
   type: ReadingType | undefined
   model: string | undefined
   isActive: boolean | undefined
+  forBeginner: boolean | undefined
 }
 
 export function ReadingsToolbar({
@@ -296,9 +298,7 @@ export function ReadingsToolbar({
           onValueChange={(value) =>
             onFilterChange({
               isActive:
-                value === ALL_STATUS_VALUE
-                  ? undefined
-                  : value === ACTIVE_VALUE,
+                value === ALL_STATUS_VALUE ? undefined : value === ACTIVE_VALUE,
             })
           }
         >
@@ -318,6 +318,11 @@ export function ReadingsToolbar({
             <SelectItem value={INACTIVE_VALUE}>Đã tắt</SelectItem>
           </SelectContent>
         </Select>
+
+        <BeginnerFilterPill
+          value={filters.forBeginner}
+          onChange={(value) => onFilterChange({ forBeginner: value })}
+        />
 
         {hasActiveFilter ? (
           <Button

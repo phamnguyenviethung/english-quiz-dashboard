@@ -16,6 +16,10 @@ withoutTopic?: boolean | string;
 type?: GetAdminReadingsType;
 model?: string;
 isActive?: boolean | string;
+/**
+ * true = chỉ bài beginner, false = chỉ bài thường.
+ */
+forBeginner?: boolean | string;
 createdFrom?: string;
 createdTo?: string;
 /**

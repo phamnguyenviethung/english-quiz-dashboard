@@ -12,4 +12,8 @@ export type GetEnglishReadingsCountParams = {
 cefrLevel?: GetEnglishReadingsCountCefrLevel;
 topicId?: string | number;
 type?: GetEnglishReadingsCountType;
+/**
+ * true = chỉ nội dung beginner (≤ B1, ≤ 4 đáp án). Bỏ trống/false = chỉ nội dung thường.
+ */
+beginner?: boolean | string;
 };

@@ -13,6 +13,7 @@ export interface ReadingsFilterInput {
   type: GetAdminReadingsParams["type"]
   model: string | undefined
   isActive: boolean | undefined
+  forBeginner?: boolean
   createdFrom: string | undefined
   createdTo: string | undefined
   sort: GetAdminReadingsParams["sort"]
@@ -28,6 +29,7 @@ export function buildReadingsParams({
   type,
   model,
   isActive,
+  forBeginner,
   createdFrom,
   createdTo,
   sort,
@@ -41,6 +43,7 @@ export function buildReadingsParams({
     ...(type ? { type } : {}),
     ...(model ? { model } : {}),
     ...(isActive === undefined ? {} : { isActive }),
+    ...(forBeginner === undefined ? {} : { forBeginner }),
     ...(createdFrom ? { createdFrom } : {}),
     ...(createdTo ? { createdTo } : {}),
     ...(sort ? { sort } : {}),

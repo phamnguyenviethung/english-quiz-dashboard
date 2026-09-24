@@ -5,6 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { GetAdminPoolSiblingsBucketsAudience } from './getAdminPoolSiblingsBucketsAudience.ts';
 import type { GetAdminPoolSiblingsBucketsScope } from './getAdminPoolSiblingsBucketsScope.ts';
 
 export type GetAdminPoolSiblingsBucketsParams = {
@@ -20,6 +21,7 @@ topicIds?: string;
  * CSV quizType — chỉ trong 9 loại hỗ trợ sibling, loại khác trả 400.
  */
 quizTypes?: string;
+audience?: GetAdminPoolSiblingsBucketsAudience;
 scope?: GetAdminPoolSiblingsBucketsScope;
 /**
  * @minimum 1

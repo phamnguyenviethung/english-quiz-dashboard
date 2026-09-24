@@ -51,6 +51,7 @@ import {
 } from "@/features/question-pool/utils/sort.ts"
 import type { EngLevel, OptionCount, QuizType } from "@/features/quiz/types.ts"
 import { formatNumber } from "@/lib/format.ts"
+import { parseForBeginnerSearch } from "@/features/beginner/constants.ts"
 
 interface PoolSearch {
   q?: string
@@ -60,6 +61,7 @@ interface PoolSearch {
   quizType?: QuizType
   model?: string
   noTopic?: boolean
+  forBeginner?: boolean
   createdFrom?: string
   createdTo?: string
   sort?: PoolQuestionsSort
@@ -100,6 +102,7 @@ export const Route = createFileRoute("/_dashboard/question-pool/")({
         ? parsedTopicId
         : undefined
     const noTopic = search.noTopic === true || search.noTopic === "true"
+    const forBeginner = parseForBeginnerSearch(search.forBeginner)
     const createdFrom = parseIsoParam(search.createdFrom)
     const createdTo = parseIsoParam(search.createdTo)
     const sort = POOL_SORTS.find((value) => value === search.sort)
@@ -139,6 +142,7 @@ export const Route = createFileRoute("/_dashboard/question-pool/")({
       ...(model ? { model } : {}),
       // topicId và noTopic loại trừ nhau — noTopic là bucket riêng (topicId IS NULL).
       ...(noTopic ? { noTopic } : topicId ? { topicId } : {}),
+      ...(forBeginner === undefined ? {} : { forBeginner }),
       ...(createdFrom ? { createdFrom } : {}),
       ...(createdTo ? { createdTo } : {}),
       ...(sort ? { sort } : {}),
@@ -163,6 +167,7 @@ export const Route = createFileRoute("/_dashboard/question-pool/")({
       createdTo: search.createdTo,
       sourceQuestionId: search.sourceQuestionId,
       onlySiblings: false,
+      forBeginner: search.forBeginner,
       // Phải khớp default dùng trong component, nếu không params ở loader và ở
       // component lệch nhau => query key khác nhau => prefetch không hit cache lúc SSR.
       sort: search.sort ?? DEFAULT_POOL_SORT,
@@ -203,6 +208,7 @@ function QuestionPoolPage() {
     createdTo: search.createdTo,
     sourceQuestionId: search.sourceQuestionId,
     onlySiblings: false,
+    forBeginner: search.forBeginner,
     sort,
     page,
     pageSize,
@@ -236,6 +242,7 @@ function QuestionPoolPage() {
     noTopic,
     model: search.model,
     optionCount: search.optionCount,
+    forBeginner: search.forBeginner,
     createdFrom: search.createdFrom,
     createdTo: search.createdTo,
   }
@@ -251,6 +258,7 @@ function QuestionPoolPage() {
       noTopic: undefined,
       model: undefined,
       optionCount: undefined,
+      forBeginner: undefined,
       createdFrom: undefined,
       createdTo: undefined,
       sourceQuestionId: undefined,
@@ -463,6 +471,7 @@ function countActiveFilters(filters: PoolToolbarFilters): number {
     filters.noTopic || filters.topicId !== undefined,
     filters.model,
     filters.optionCount,
+    filters.forBeginner !== undefined,
     filters.createdFrom ?? filters.createdTo,
   ].filter(Boolean).length
 }

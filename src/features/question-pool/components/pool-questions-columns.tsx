@@ -11,6 +11,7 @@ import {
   getEngLevelBadgeClass,
   getQuizTypeMeta,
 } from "@/features/quiz/constants.ts"
+import { BeginnerBadge } from "@/features/beginner/components/beginner-badge.tsx"
 import { formatDateTime, formatNumber } from "@/lib/format.ts"
 
 import { NO_TOPIC_LABEL } from "../constants.ts"
@@ -68,6 +69,17 @@ export const poolColumns = helper.columns([
         {getValue()}
       </Badge>
     ),
+  }),
+  helper.accessor("forBeginner", {
+    header: "Đối tượng",
+    enableSorting: false,
+    meta: { label: "Đối tượng", headClassName: "w-28" },
+    cell: ({ getValue }) =>
+      getValue() ? (
+        <BeginnerBadge />
+      ) : (
+        <span className="text-xs text-muted-foreground">Thường</span>
+      ),
   }),
   helper.accessor("topicName", {
     header: "Chủ đề",

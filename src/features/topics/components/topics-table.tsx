@@ -1,11 +1,9 @@
-import {
-  IconArrowDown,
-  IconArrowUp,
-  IconArrowsSort,
-} from "@tabler/icons-react"
+import { IconArrowDown, IconArrowUp, IconArrowsSort } from "@tabler/icons-react"
 
 import { TableSkeletonRows } from "@/components/common/table-skeleton-rows.tsx"
 import { Badge } from "@/components/ui/badge"
+import { Switch } from "@/components/ui/switch"
+import { useUpdateTopic } from "@/features/beginner/hooks/use-update-topic.ts"
 import {
   Table,
   TableBody,
@@ -20,8 +18,9 @@ import { cn } from "@/lib/utils"
 import { TOPIC_STATUS_META } from "../constants.ts"
 import type { TopicSortableColumn, TopicsSort } from "../constants.ts"
 import type { Topic } from "../hooks/use-topics.ts"
+import { EditTopicDialog } from "./edit-topic-dialog.tsx"
 
-const COLUMN_COUNT = 6
+const COLUMN_COUNT = 8
 
 const SORT_PAIRS: Record<
   TopicSortableColumn,
@@ -48,11 +47,7 @@ function SortHeader({
   const pair = SORT_PAIRS[column]
   const isAsc = sort === pair.asc
   const isDesc = sort === pair.desc
-  const SortIcon = isAsc
-    ? IconArrowUp
-    : isDesc
-      ? IconArrowDown
-      : IconArrowsSort
+  const SortIcon = isAsc ? IconArrowUp : isDesc ? IconArrowDown : IconArrowsSort
 
   return (
     <TableHead className={className}>
@@ -91,8 +86,10 @@ export function TopicsTable({
   onSortChange: (sort: TopicsSort) => void
   onSelect?: (id: number) => void
 }) {
+  const { setForBeginner, pendingTopicId } = useUpdateTopic()
+
   return (
-    <div className="overflow-x-auto rounded-2xl border min-w-0 w-full">
+    <div className="w-full min-w-0 overflow-x-auto rounded-2xl border">
       <Table
         className={cn(
           "transition-opacity",
@@ -118,6 +115,7 @@ export function TopicsTable({
             <TableHead>Tên hiển thị</TableHead>
             <TableHead>Mô tả</TableHead>
             <TableHead className="w-28">Trạng thái</TableHead>
+            <TableHead className="w-28">Người mới</TableHead>
             <SortHeader
               column="createdAt"
               label="Tạo lúc"
@@ -125,6 +123,9 @@ export function TopicsTable({
               onSortChange={onSortChange}
               className="w-40"
             />
+            <TableHead className="w-14">
+              <span className="sr-only">Hành động</span>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -166,8 +167,26 @@ export function TopicsTable({
                   <TableCell>
                     <Badge variant={status.variant}>{status.label}</Badge>
                   </TableCell>
+                  <TableCell onClick={(event) => event.stopPropagation()}>
+                    <Switch
+                      aria-label={`Dùng "${topic.displayName ?? topic.name}" cho người mới`}
+                      checked={topic.forBeginner}
+                      disabled={pendingTopicId === topic.id}
+                      aria-busy={pendingTopicId === topic.id}
+                      onCheckedChange={(checked) =>
+                        void setForBeginner(
+                          topic.id,
+                          topic.displayName ?? topic.name,
+                          checked
+                        )
+                      }
+                    />
+                  </TableCell>
                   <TableCell className="text-xs text-muted-foreground tabular-nums">
                     {formatDateTime(topic.createdAt)}
+                  </TableCell>
+                  <TableCell onClick={(event) => event.stopPropagation()}>
+                    <EditTopicDialog topic={topic} />
                   </TableCell>
                 </TableRow>
               )

@@ -43,6 +43,7 @@ export function buildSiblingBucketsParams(
     ...(input.quizTypes.length > 0
       ? { quizTypes: input.quizTypes.join(",") }
       : {}),
+    ...(input.audience ? { audience: input.audience } : {}),
     ...(input.sourcesPerBucket === undefined
       ? {}
       : { sourcesPerBucket: input.sourcesPerBucket }),

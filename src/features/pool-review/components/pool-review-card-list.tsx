@@ -1,6 +1,7 @@
 import { IconMessage2 } from "@tabler/icons-react"
 
 import { Badge } from "@/components/ui/badge"
+import { BeginnerBadge } from "@/features/beginner/components/beginner-badge.tsx"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   getEngLevelBadgeClass,
@@ -68,6 +69,7 @@ export function PoolReviewCardList({
                 >
                   {item.engLevel}
                 </Badge>
+                {item.forBeginner ? <BeginnerBadge label="Mới" /> : null}
                 <ReviewVerdictBadge verdict={item.verdict} />
                 <ReviewStatusBadge status={item.status} />
               </div>

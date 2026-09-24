@@ -16,4 +16,8 @@ type?: GetEnglishReadingsPopType;
  * CSV id BÀI ĐỌC cần loại, vd "12,88". Tối đa 200 id. Dùng để client tự chống lặp bài theo end-user.
  */
 excludeIds?: string;
+/**
+ * true = chỉ nội dung beginner (≤ B1, ≤ 4 đáp án). Bỏ trống/false = chỉ nội dung thường.
+ */
+beginner?: boolean | string;
 };

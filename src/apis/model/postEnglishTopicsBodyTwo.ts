@@ -9,4 +9,6 @@
 export type PostEnglishTopicsBodyTwo = {
   name: string;
   description?: string;
+  /** true = topic dùng cho nội dung beginner. Mặc định false. */
+  forBeginner?: boolean;
 };

@@ -35,8 +35,10 @@ import type {
   GetEnglishPoolModels401,
   GetEnglishPoolModels500,
   GetEnglishPoolPickQuizType200,
+  GetEnglishPoolPickQuizType400,
   GetEnglishPoolPickQuizType401,
   GetEnglishPoolPickQuizType500,
+  GetEnglishPoolPickQuizTypeParams,
   GetEnglishPoolPop200,
   GetEnglishPoolPop400,
   GetEnglishPoolPop401,
@@ -84,7 +86,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Lấy 1 câu hỏi random trong bucket (engLevel, topicId) — câu KHÔNG bị xoá, pool là kho dùng lại được. `excludeIds` loại thêm các câu client đã phục vụ rồi. topicId ngoài allow-list trả 403. Bucket trống (hoặc mọi câu đều bị loại bởi `excludeIds`) trả 404.
+ * Lấy 1 câu hỏi random trong bucket (engLevel, topicId) — câu KHÔNG bị xoá, pool là kho dùng lại được. `excludeIds` loại thêm các câu client đã phục vụ rồi. topicId ngoài allow-list trả 403. Bucket trống (hoặc mọi câu đều bị loại bởi `excludeIds`) trả 404. `beginner=true` chỉ lấy câu beginner (chỉ loại câu đang bật cho beginner); engLevel B2 + beginner trả 400.
  * @summary Pop a question from the pre-generated pool
  */
 export const getEnglishPoolPop = (
@@ -178,7 +180,7 @@ export function useGetEnglishPoolPop<TData = Awaited<ReturnType<typeof getEnglis
 
 
 /**
- * Đếm số câu hỏi hiện có trong bucket (engLevel, quizType, topicId).
+ * Đếm số câu hỏi hiện có trong bucket (engLevel, quizType, topicId). `beginner=true` đếm bucket beginner.
  * @summary Count questions in a pool bucket
  */
 export const getEnglishPoolCount = (
@@ -523,17 +525,18 @@ export const usePostEnglishPoolFill = <TError = ErrorType<PostEnglishPoolFill400
       return useMutation(getPostEnglishPoolFillMutationOptions(options), queryClient);
     }
     /**
- * Chọn ngẫu nhiên 1 quizType theo trọng số cấu hình trong quiz_distribution (chỉ tính type enabled, weight>0).
+ * Chọn ngẫu nhiên 1 quizType theo trọng số cấu hình trong quiz_distribution (chỉ tính type enabled, weight>0). `beginner=true` chỉ bốc trong các loại đang bật cho beginner (không loại nào bật → 400).
  * @summary Pick a random quiz type by weighted distribution
  */
 export const getEnglishPoolPickQuizType = (
-
+    params?: GetEnglishPoolPickQuizTypeParams,
  options?: SecondParameter<typeof axiosClient>,signal?: AbortSignal
 ) => {
 
 
       return axiosClient<GetEnglishPoolPickQuizType200>(
-      {url: `/english/pool/pick-quiz-type`, method: 'GET', signal
+      {url: `/english/pool/pick-quiz-type`, method: 'GET',
+        params, signal
     },
       options);
     }
@@ -541,23 +544,23 @@ export const getEnglishPoolPickQuizType = (
 
 
 
-export const getGetEnglishPoolPickQuizTypeQueryKey = () => {
+export const getGetEnglishPoolPickQuizTypeQueryKey = (params?: GetEnglishPoolPickQuizTypeParams,) => {
     return [
-    `/english/pool/pick-quiz-type`
+    `/english/pool/pick-quiz-type`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getGetEnglishPoolPickQuizTypeQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+export const getGetEnglishPoolPickQuizTypeQueryOptions = <TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType400 | GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(params?: GetEnglishPoolPickQuizTypeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetEnglishPoolPickQuizTypeQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetEnglishPoolPickQuizTypeQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>> = ({ signal }) => getEnglishPoolPickQuizType(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>> = ({ signal }) => getEnglishPoolPickQuizType(params, requestOptions, signal);
 
 
 
@@ -567,11 +570,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetEnglishPoolPickQuizTypeQueryResult = NonNullable<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>>
-export type GetEnglishPoolPickQuizTypeQueryError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>
+export type GetEnglishPoolPickQuizTypeQueryError = ErrorType<GetEnglishPoolPickQuizType400 | GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>
 
 
-export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>> & Pick<
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType400 | GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
+ params: undefined |  GetEnglishPoolPickQuizTypeParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
           TError,
@@ -580,8 +583,8 @@ export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof 
       >, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>> & Pick<
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType400 | GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
+ params?: GetEnglishPoolPickQuizTypeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>,
           TError,
@@ -590,20 +593,20 @@ export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof 
       >, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType400 | GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
+ params?: GetEnglishPoolPickQuizTypeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Pick a random quiz type by weighted distribution
  */
 
-export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
+export function useGetEnglishPoolPickQuizType<TData = Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError = ErrorType<GetEnglishPoolPickQuizType400 | GetEnglishPoolPickQuizType401 | GetEnglishPoolPickQuizType500>>(
+ params?: GetEnglishPoolPickQuizTypeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getEnglishPoolPickQuizType>>, TError, TData>>, request?: SecondParameter<typeof axiosClient>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetEnglishPoolPickQuizTypeQueryOptions(options)
+  const queryOptions = getGetEnglishPoolPickQuizTypeQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

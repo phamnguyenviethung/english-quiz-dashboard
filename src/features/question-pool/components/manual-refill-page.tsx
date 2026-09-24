@@ -2,6 +2,12 @@ import { useMemo, useState } from "react"
 import { useNavigate } from "@tanstack/react-router"
 
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { AudienceToggle } from "@/features/beginner/components/audience-toggle.tsx"
+import {
+  BEGINNER_LEVELS,
+  toBucketAudience,
+} from "@/features/beginner/constants.ts"
+import type { AudienceValue } from "@/features/beginner/constants.ts"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
   BUCKET_FILTER_ALL_HINT,
@@ -49,7 +55,13 @@ const COPY: RefillCopy = {
   costWarningThreshold: REFILL_COST_WARNING_QUESTIONS,
 }
 
-export function ManualRefillPage() {
+export function ManualRefillPage({
+  initialAudience = "all",
+  initialTopicIds = [],
+}: {
+  initialAudience?: AudienceValue
+  initialTopicIds?: number[]
+} = {}) {
   const navigate = useNavigate()
 
   const [scope, setScope] = useState<ManualRefillScope>(INITIAL_SCOPE)
@@ -57,7 +69,18 @@ export function ManualRefillPage() {
   const [models, setModels] = useState<string[]>([])
   const [engLevels, setEngLevels] = useState<EngLevel[]>([])
   const [quizTypes, setQuizTypes] = useState<QuizType[]>([])
-  const [topicIds, setTopicIds] = useState<number[]>([])
+  const [topicIds, setTopicIds] = useState<number[]>(initialTopicIds)
+  const [audience, setAudience] = useState<AudienceValue>(initialAudience)
+
+  // Beginner không có B2 — bỏ B2 khỏi bộ lọc để preview không lặng lẽ rỗng.
+  const changeAudience = (value: AudienceValue) => {
+    setAudience(value)
+    if (value === "beginner") {
+      setEngLevels((current) =>
+        current.filter((level) => BEGINNER_LEVELS.includes(level))
+      )
+    }
+  }
   // Lưu bucket bị BỎ tick, không phải bucket được tick: khi nới bộ lọc và danh sách
   // bucket mới về, bucket mới mặc định vẫn được chọn thay vì im lặng bị bỏ sót.
   const [deselectedKeys, setDeselectedKeys] = useState<Set<string>>(new Set())
@@ -80,6 +103,7 @@ export function ManualRefillPage() {
       engLevels,
       quizTypes,
       topicIds,
+      audience: toBucketAudience(audience),
       ...(isCountInvalid ? {} : { countPerBucket: parsedCount }),
     },
     true
@@ -103,6 +127,7 @@ export function ManualRefillPage() {
         currentCount: bucket.currentCount,
         plannedCount: bucket.plannedCount,
         variantLabel: getQuizTypeLabel(bucket.quizType),
+        forBeginner: bucket.forBeginner,
       })),
     [preview.buckets]
   )
@@ -164,6 +189,7 @@ export function ManualRefillPage() {
       engLevels,
       quizTypes,
       topicIds,
+      audience: toBucketAudience(audience),
       ...(parsedCount === undefined ? {} : { countPerBucket: parsedCount }),
       // Chọn hết theo bộ lọc thì để API tự quét: payload gọn và không đóng băng
       // danh sách bucket theo ảnh chụp preview.
@@ -219,6 +245,19 @@ export function ManualRefillPage() {
             className="gap-5 py-6"
           >
             <Field>
+              <FieldLabel>Đối tượng</FieldLabel>
+              <AudienceToggle
+                value={audience}
+                disabled={isPending}
+                onChange={changeAudience}
+              />
+              <FieldDescription>
+                Người mới = bucket A1–B1, tối đa 4 đáp án, chỉ chủ đề bật cho
+                người mới.
+              </FieldDescription>
+            </Field>
+
+            <Field>
               <FieldLabel>Cấp độ</FieldLabel>
               <ToggleGroup
                 variant="outline"
@@ -233,6 +272,10 @@ export function ManualRefillPage() {
                     key={level}
                     value={level}
                     className={TOUCH_TOGGLE}
+                    disabled={
+                      audience === "beginner" &&
+                      !BEGINNER_LEVELS.includes(level)
+                    }
                   >
                     {level}
                   </ToggleGroupItem>

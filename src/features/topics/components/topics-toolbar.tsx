@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
+import { BeginnerFilterPill } from "@/features/beginner/components/beginner-filter-pill.tsx"
 import { useDebouncedValue } from "@/hooks/use-debounced-value.ts"
 import { cn } from "@/lib/utils"
 
@@ -37,6 +38,7 @@ import {
 export interface TopicsToolbarFilters {
   q: string | undefined
   isActive: boolean | undefined
+  forBeginner: boolean | undefined
 }
 
 export function TopicsToolbar({
@@ -133,9 +135,7 @@ export function TopicsToolbar({
           onValueChange={(value) =>
             onFilterChange({
               isActive:
-                value === ALL_STATUS_VALUE
-                  ? undefined
-                  : value === ACTIVE_VALUE,
+                value === ALL_STATUS_VALUE ? undefined : value === ACTIVE_VALUE,
             })
           }
         >
@@ -155,6 +155,11 @@ export function TopicsToolbar({
             <SelectItem value={INACTIVE_VALUE}>Đã tắt</SelectItem>
           </SelectContent>
         </Select>
+
+        <BeginnerFilterPill
+          value={filters.forBeginner}
+          onChange={(value) => onFilterChange({ forBeginner: value })}
+        />
 
         {hasActiveFilter ? (
           <Button

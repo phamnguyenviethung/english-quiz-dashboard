@@ -596,7 +596,7 @@ export function useGetAdminReadingsById<TData = Awaited<ReturnType<typeof getAdm
 
 
 /**
- * Partial update (title/paragraphs/isActive). Sửa `paragraphs` sẽ tự tính lại `wordCount` — 2 giá trị này không bao giờ lệch nhau. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
+ * Partial update (title/paragraphs/isActive/forBeginner). Sửa `paragraphs` sẽ tự tính lại `wordCount` — 2 giá trị này không bao giờ lệch nhau. Yêu cầu tài khoản `role = "admin"` qua `Authorization: Bearer <session token>` (hoặc cookie phiên đăng nhập).
  * @summary Update reading passage
  */
 export const patchAdminReadingsById = (

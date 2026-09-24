@@ -14,4 +14,6 @@ export type PostEnglishGenerateByQuizTypeBodyOne = {
   topic?: string;
   model?: string;
   excludeWords?: string[];
+  /** true = sinh bằng prompt beginner (engLevel ≤ B1, optionCount ≤ 4). */
+  forBeginner?: boolean;
 };

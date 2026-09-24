@@ -5,6 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { PostAdminPoolRefillBodyOneFilterAudience } from './postAdminPoolRefillBodyOneFilterAudience.ts';
 import type { PostAdminPoolRefillBodyOneFilterEngLevelsItem } from './postAdminPoolRefillBodyOneFilterEngLevelsItem.ts';
 import type { PostAdminPoolRefillBodyOneFilterQuizTypesItem } from './postAdminPoolRefillBodyOneFilterQuizTypesItem.ts';
 
@@ -15,4 +16,5 @@ export type PostAdminPoolRefillBodyOneFilter = {
   engLevels?: PostAdminPoolRefillBodyOneFilterEngLevelsItem[];
   topicIds?: (string | number)[];
   quizTypes?: PostAdminPoolRefillBodyOneFilterQuizTypesItem[];
+  audience?: PostAdminPoolRefillBodyOneFilterAudience;
 };

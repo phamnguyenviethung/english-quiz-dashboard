@@ -18,6 +18,8 @@ export type GetAdminReadings200DataItemsItem = {
   topicName: string | null;
   /** daily | academic — xem READING_PASSAGE_TYPES. */
   type: string;
+  /** true = nội dung beginner (≤ B1, ≤ 4 đáp án) — xem docs/beginner.md. */
+  forBeginner: boolean;
   model: string;
   tokenIn: number;
   tokenOut: number;

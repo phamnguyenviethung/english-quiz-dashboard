@@ -10,6 +10,7 @@ import type {
   PostAdminPoolSiblingsRefillBodyOneScope,
 } from "@/apis/model"
 
+import type { BucketAudience } from "@/features/beginner/constants.ts"
 import type { EngLevel, QuizType } from "@/features/quiz/types.ts"
 
 export type PoolQuestion = GetEnglishPoolQuestions200DataItemsItem
@@ -38,6 +39,8 @@ export interface PoolBucketFilter {
   engLevels: EngLevel[]
   topicIds: number[]
   quizTypes: QuizType[]
+  /** undefined = cả bucket thường lẫn bucket người mới. */
+  audience?: BucketAudience
 }
 
 export interface ManualRefillInput extends PoolBucketFilter {

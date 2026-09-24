@@ -5,6 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { GetEnglishConfig200DataBeginnerQuizTypesItem } from './getEnglishConfig200DataBeginnerQuizTypesItem.ts';
 import type { GetEnglishConfig200DataJobFlags } from './getEnglishConfig200DataJobFlags.ts';
 import type { GetEnglishConfig200DataPoolRefillScheduleItem } from './getEnglishConfig200DataPoolRefillScheduleItem.ts';
 import type { GetEnglishConfig200DataQuestionPool } from './getEnglishConfig200DataQuestionPool.ts';
@@ -18,6 +19,7 @@ export type GetEnglishConfig200Data = {
   question_pool: GetEnglishConfig200DataQuestionPool;
   /** @minItems 1 */
   quiz_distribution: GetEnglishConfig200DataQuizDistributionItem[];
+  beginner_quiz_types: GetEnglishConfig200DataBeginnerQuizTypesItem[];
   job_flags: GetEnglishConfig200DataJobFlags;
   pool_refill_schedule: GetEnglishConfig200DataPoolRefillScheduleItem[];
   reading_passage: GetEnglishConfig200DataReadingPassage;

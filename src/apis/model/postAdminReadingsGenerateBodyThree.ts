@@ -18,4 +18,6 @@ export type PostAdminReadingsGenerateBodyThree = {
   type: PostAdminReadingsGenerateBodyThreeType;
   /** OpenRouter model id. Bỏ trống → random trong pool `readingEnabled`. */
   model?: string;
+  /** true = dùng prompt beginner (chỉ cefrLevel A1–B1, type daily; sai trả 400). */
+  forBeginner?: boolean;
 };

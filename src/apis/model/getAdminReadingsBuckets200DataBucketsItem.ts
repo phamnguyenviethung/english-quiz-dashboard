@@ -7,13 +7,15 @@
  */
 
 export type GetAdminReadingsBuckets200DataBucketsItem = {
-  /** `{cefrLevel}:{topicId|null}:{type}` — id ổn định để chọn/bỏ chọn bucket. */
+  /** `{cefrLevel}:{topicId|null}:{type}` (bucket beginner thêm hậu tố `:beginner`) — id ổn định để chọn/bỏ chọn bucket. */
   bucketKey: string;
   cefrLevel: string;
   topicId: number | null;
   topicName: string | null;
   /** daily | academic. */
   type: string;
+  /** true = nội dung beginner (≤ B1, ≤ 4 đáp án) — xem docs/beginner.md. */
+  forBeginner: boolean;
   /** Số bài đang active trong bucket. */
   currentCount: number;
   /** reading_passage.maxPerBucket - currentCount (có thể âm nếu đang dư). */

@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { BeginnerFilterPill } from "@/features/beginner/components/beginner-filter-pill.tsx"
 import { Spinner } from "@/components/ui/spinner"
 import { ENG_LEVELS, formatModelName } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
@@ -59,6 +60,7 @@ export interface ReadingQuestionsToolbarFilters {
   quizType: string | undefined
   model: string | undefined
   isActive: boolean | undefined
+  forBeginner: boolean | undefined
   passageId: number | undefined
 }
 
@@ -230,7 +232,9 @@ export function ReadingQuestionsToolbar({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={ALL_QUIZ_TYPES_VALUE}>Tất cả dạng câu</SelectItem>
+            <SelectItem value={ALL_QUIZ_TYPES_VALUE}>
+              Tất cả dạng câu
+            </SelectItem>
             {READING_QUESTION_TYPES.map((type) => (
               <SelectItem key={type} value={type}>
                 {READING_QUESTION_TYPE_LABELS[type]}
@@ -302,9 +306,7 @@ export function ReadingQuestionsToolbar({
           onValueChange={(value) =>
             onFilterChange({
               isActive:
-                value === ALL_STATUS_VALUE
-                  ? undefined
-                  : value === ACTIVE_VALUE,
+                value === ALL_STATUS_VALUE ? undefined : value === ACTIVE_VALUE,
             })
           }
         >
@@ -324,6 +326,11 @@ export function ReadingQuestionsToolbar({
             <SelectItem value={INACTIVE_VALUE}>Đã tắt</SelectItem>
           </SelectContent>
         </Select>
+
+        <BeginnerFilterPill
+          value={filters.forBeginner}
+          onChange={(value) => onFilterChange({ forBeginner: value })}
+        />
 
         {filters.passageId === undefined ? null : (
           <Button

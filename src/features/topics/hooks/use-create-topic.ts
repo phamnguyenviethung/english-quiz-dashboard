@@ -37,12 +37,17 @@ export function useCreateTopic({ onSuccess }: { onSuccess?: () => void } = {}) {
     },
   })
 
-  const createTopic = (values: { name: string; description: string }) => {
+  const createTopic = (values: {
+    name: string
+    description: string
+    forBeginner?: boolean
+  }) => {
     const description = values.description.trim()
     return mutation.mutateAsync({
       data: {
         name: values.name.trim(),
         ...(description ? { description } : {}),
+        ...(values.forBeginner ? { forBeginner: true } : {}),
       },
     })
   }

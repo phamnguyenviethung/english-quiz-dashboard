@@ -37,6 +37,7 @@ interface GenerateSearch {
   engLevel?: EngLevel
   optionCount?: GenerateOptionCount
   topic?: string
+  beginner?: boolean
 }
 
 export const Route = createFileRoute("/_dashboard/generate")({
@@ -53,7 +54,10 @@ export const Route = createFileRoute("/_dashboard/generate")({
         ? search.topic
         : undefined
 
+    const beginner = search.beginner === true || search.beginner === "true"
+
     return {
+      ...(beginner ? { beginner } : {}),
       ...(quizType ? { quizType } : {}),
       ...(engLevel ? { engLevel } : {}),
       ...(optionCount ? { optionCount } : {}),
@@ -77,11 +81,18 @@ function GeneratePage() {
     engLevel: search.engLevel ?? DEFAULT_GENERATE_VALUES.engLevel,
     optionCount: search.optionCount ?? DEFAULT_GENERATE_VALUES.optionCount,
     topic: search.topic ?? "",
+    forBeginner: search.beginner ?? false,
     ...freeText,
   }
 
   const handleChange = (patch: Partial<GenerateFormValues>) => {
-    const { model, excludeWords, ...searchPatch } = patch
+    const { model, excludeWords, forBeginner, ...rest } = patch
+    const searchPatch: Partial<GenerateSearch> = {
+      ...rest,
+      ...(forBeginner === undefined
+        ? {}
+        : { beginner: forBeginner || undefined }),
+    }
 
     if (model !== undefined || excludeWords !== undefined) {
       setFreeText((prev) => ({

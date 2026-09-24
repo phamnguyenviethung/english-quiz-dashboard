@@ -16,4 +16,5 @@ export type GetEnglishReadingsPop200DataPassage = {
   topicName: string | null;
   /** daily | academic. */
   type: string;
+  forBeginner: boolean;
 };

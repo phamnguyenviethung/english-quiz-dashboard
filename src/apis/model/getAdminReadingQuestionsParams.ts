@@ -27,6 +27,10 @@ type?: GetAdminReadingQuestionsType;
 quizType?: string;
 model?: string;
 isActive?: boolean | string;
+/**
+ * true = chỉ câu của bài beginner.
+ */
+forBeginner?: boolean | string;
 createdFrom?: string;
 createdTo?: string;
 /**

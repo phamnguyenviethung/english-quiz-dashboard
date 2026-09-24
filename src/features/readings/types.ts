@@ -9,6 +9,7 @@ import type {
   PostAdminReadingsGenerate200DataUsage,
   PostAdminReadingsRefillBodyOneScope,
 } from "@/apis/model"
+import type { BucketAudience } from "@/features/beginner/constants.ts"
 
 import type { EngLevel } from "@/features/quiz/types.ts"
 
@@ -29,6 +30,8 @@ export interface ReadingBucketFilter {
   cefrLevels: EngLevel[]
   topicIds: number[]
   types: ReadingType[]
+  /** undefined = cả bucket thường lẫn bucket người mới. */
+  audience?: BucketAudience
 }
 
 export interface ReadingRefillInput extends ReadingBucketFilter {

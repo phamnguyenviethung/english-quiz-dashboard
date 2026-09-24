@@ -8,6 +8,7 @@ import {
   IconHelpCircle,
   IconLayoutGrid,
   IconListDetails,
+  IconSeedling,
   IconSparkles,
   IconStack2,
   IconTags,
@@ -17,6 +18,7 @@ import {
 export type NavPath =
   | "/"
   | "/topics"
+  | "/beginner"
   | "/question-pool"
   | "/pool-review"
   | "/readings"
@@ -65,6 +67,12 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Nội dung",
     items: [
       { key: "topics", label: "Chủ đề", icon: IconTags, to: "/topics" },
+      {
+        key: "beginner",
+        label: "Người mới bắt đầu",
+        icon: IconSeedling,
+        to: "/beginner",
+      },
       {
         key: "question-pool",
         label: "Kho câu hỏi",

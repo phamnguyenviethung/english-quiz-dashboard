@@ -20,6 +20,7 @@ function buildFilter(
     ...(input.engLevels.length > 0 ? { engLevels: input.engLevels } : {}),
     ...(input.topicIds.length > 0 ? { topicIds: input.topicIds } : {}),
     ...(input.quizTypes.length > 0 ? { quizTypes: input.quizTypes } : {}),
+    ...(input.audience ? { audience: input.audience } : {}),
   }
 
   return Object.keys(filter).length > 0 ? filter : undefined

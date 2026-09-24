@@ -50,6 +50,7 @@ export function useGenerateQuestion() {
           ...(topic ? { topic } : {}),
           ...(model ? { model } : {}),
           ...(excludeWords.length > 0 ? { excludeWords } : {}),
+          ...(values.forBeginner ? { forBeginner: true } : {}),
         },
       })
       setView(normalizeGeneratedQuestion(response.data))

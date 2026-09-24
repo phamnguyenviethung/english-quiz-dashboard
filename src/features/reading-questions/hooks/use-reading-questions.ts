@@ -14,6 +14,7 @@ export interface ReadingQuestionsFilterInput {
   quizType: string | undefined
   model: string | undefined
   isActive: boolean | undefined
+  forBeginner?: boolean
   sort: GetAdminReadingQuestionsParams["sort"]
   page: number
   pageSize: number
@@ -28,6 +29,7 @@ export function buildReadingQuestionsParams({
   quizType,
   model,
   isActive,
+  forBeginner,
   sort,
   page,
   pageSize,
@@ -41,6 +43,7 @@ export function buildReadingQuestionsParams({
     ...(quizType ? { quizType } : {}),
     ...(model ? { model } : {}),
     ...(isActive === undefined ? {} : { isActive }),
+    ...(forBeginner === undefined ? {} : { forBeginner }),
     ...(sort ? { sort } : {}),
     page,
     pageSize,

@@ -41,6 +41,7 @@ import type {
 import { ENG_LEVELS } from "@/features/quiz/constants.ts"
 import type { EngLevel } from "@/features/quiz/types.ts"
 import { formatNumber } from "@/lib/format.ts"
+import { parseForBeginnerSearch } from "@/features/beginner/constants.ts"
 
 interface ReadingsSearch {
   q?: string
@@ -49,6 +50,7 @@ interface ReadingsSearch {
   type?: ReadingType
   model?: string
   isActive?: boolean
+  forBeginner?: boolean
   createdFrom?: string
   createdTo?: string
   sort?: ReadingPassagesSort
@@ -86,6 +88,7 @@ export const Route = createFileRoute("/_dashboard/readings/")({
         : search.isActive === false || search.isActive === "false"
           ? false
           : undefined
+    const forBeginner = parseForBeginnerSearch(search.forBeginner)
     const createdFrom = parseIsoParam(search.createdFrom)
     const createdTo = parseIsoParam(search.createdTo)
     const sort = READING_SORTS.find((value) => value === search.sort)
@@ -105,6 +108,7 @@ export const Route = createFileRoute("/_dashboard/readings/")({
       ...(type ? { type } : {}),
       ...(model ? { model } : {}),
       ...(isActive === undefined ? {} : { isActive }),
+      ...(forBeginner === undefined ? {} : { forBeginner }),
       ...(createdFrom ? { createdFrom } : {}),
       ...(createdTo ? { createdTo } : {}),
       ...(sort ? { sort } : {}),
@@ -122,6 +126,7 @@ export const Route = createFileRoute("/_dashboard/readings/")({
       type: search.type,
       model: search.model,
       isActive: search.isActive,
+      forBeginner: search.forBeginner,
       createdFrom: search.createdFrom,
       createdTo: search.createdTo,
       // Phải khớp default dùng trong component, nếu không params ở loader và ở
@@ -156,6 +161,7 @@ function ReadingsPage() {
     type: search.type,
     model: search.model,
     isActive: search.isActive,
+    forBeginner: search.forBeginner,
     createdFrom: search.createdFrom,
     createdTo: search.createdTo,
     sort,
@@ -190,6 +196,7 @@ function ReadingsPage() {
     type: search.type,
     model: search.model,
     isActive: search.isActive,
+    forBeginner: search.forBeginner,
   }
 
   const hasActiveFilter =
@@ -199,7 +206,9 @@ function ReadingsPage() {
       filters.topicId,
       filters.type,
       filters.model,
-    ].some(Boolean) || filters.isActive !== undefined
+    ].some(Boolean) ||
+    filters.isActive !== undefined ||
+    filters.forBeginner !== undefined
 
   const clearAllFilters = () =>
     applyFilter({
@@ -209,6 +218,7 @@ function ReadingsPage() {
       type: undefined,
       model: undefined,
       isActive: undefined,
+      forBeginner: undefined,
       createdFrom: undefined,
       createdTo: undefined,
     })

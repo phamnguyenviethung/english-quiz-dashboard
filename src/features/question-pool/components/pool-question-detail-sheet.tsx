@@ -17,6 +17,10 @@ import {
   getEngLevelBadgeClass,
   getQuizTypeMeta,
 } from "@/features/quiz/constants.ts"
+import { BeginnerBadge } from "@/features/beginner/components/beginner-badge.tsx"
+import { BeginnerToggleRow } from "@/features/beginner/components/beginner-toggle-row.tsx"
+import { getBeginnerIneligibleReason } from "@/features/beginner/constants.ts"
+import { useTogglePoolQuestionBeginner } from "@/features/beginner/hooks/use-toggle-pool-question-beginner.ts"
 import { formatDateTime, formatNumber } from "@/lib/format.ts"
 
 import { isSiblingSupportedQuizType, NO_TOPIC_LABEL } from "../constants.ts"
@@ -36,6 +40,7 @@ function MetaRow({ label, value }: { label: string; value: string }) {
 function PoolQuestionDetailContent({ question }: { question: PoolQuestion }) {
   const quizTypeMeta = getQuizTypeMeta(question.quizType)
   const QuizTypeIcon = quizTypeMeta.icon
+  const { setForBeginner, pendingId } = useTogglePoolQuestionBeginner()
 
   return (
     <div className="space-y-6">
@@ -59,10 +64,25 @@ function PoolQuestionDetailContent({ question }: { question: PoolQuestion }) {
         <Badge variant="outline">
           {formatOptionCountLabel(question.optionCount)}
         </Badge>
+        {question.forBeginner ? <BeginnerBadge /> : null}
         <span className="text-sm text-muted-foreground">
           {question.topicName ?? NO_TOPIC_LABEL}
         </span>
       </div>
+
+      <BeginnerToggleRow
+        checked={question.forBeginner}
+        isPending={pendingId === question.id}
+        ineligibleReason={getBeginnerIneligibleReason({
+          engLevel: question.engLevel,
+          optionCount: question.optionCount,
+        })}
+        description={{
+          on: "Câu nằm ở bucket người mới, chỉ phục vụ khi bot gọi beginner=true.",
+          off: "Câu thường. Bật để chuyển sang bucket người mới (loại câu phải đang bật cho người mới).",
+        }}
+        onCheckedChange={(checked) => void setForBeginner(question.id, checked)}
+      />
 
       <dl className="grid grid-cols-2 gap-x-4 gap-y-3 rounded-2xl border p-4 sm:grid-cols-4">
         <MetaRow label="ID" value={String(question.id)} />

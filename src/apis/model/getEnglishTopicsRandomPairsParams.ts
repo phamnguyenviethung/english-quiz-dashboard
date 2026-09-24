@@ -11,4 +11,8 @@ export type GetEnglishTopicsRandomPairsParams = {
  * @minimum 1
  */
 pairCount?: string | number;
+/**
+ * true = chỉ nội dung beginner (≤ B1, ≤ 4 đáp án). Bỏ trống/false = chỉ nội dung thường.
+ */
+beginner?: boolean | string;
 };

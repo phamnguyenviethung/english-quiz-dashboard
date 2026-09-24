@@ -5,6 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { GetAdminReadingsBucketsAudience } from './getAdminReadingsBucketsAudience.ts';
 import type { GetAdminReadingsBucketsScope } from './getAdminReadingsBucketsScope.ts';
 
 export type GetAdminReadingsBucketsParams = {
@@ -20,6 +21,7 @@ topicIds?: string;
  * CSV, vd `daily,academic`. Bỏ trống = cả 2 type.
  */
 types?: string;
+audience?: GetAdminReadingsBucketsAudience;
 scope?: GetAdminReadingsBucketsScope;
 /**
  * @minimum 1

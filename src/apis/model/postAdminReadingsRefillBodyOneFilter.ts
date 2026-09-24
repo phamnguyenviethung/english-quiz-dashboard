@@ -5,6 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { PostAdminReadingsRefillBodyOneFilterAudience } from './postAdminReadingsRefillBodyOneFilterAudience.ts';
 import type { PostAdminReadingsRefillBodyOneFilterCefrLevelsItem } from './postAdminReadingsRefillBodyOneFilterCefrLevelsItem.ts';
 import type { PostAdminReadingsRefillBodyOneFilterTypesItem } from './postAdminReadingsRefillBodyOneFilterTypesItem.ts';
 
@@ -15,4 +16,5 @@ export type PostAdminReadingsRefillBodyOneFilter = {
   cefrLevels?: PostAdminReadingsRefillBodyOneFilterCefrLevelsItem[];
   topicIds?: (string | number)[];
   types?: PostAdminReadingsRefillBodyOneFilterTypesItem[];
+  audience?: PostAdminReadingsRefillBodyOneFilterAudience;
 };

@@ -17,6 +17,8 @@ export interface PoolQuestionsFilterInput {
   createdTo: string | undefined
   sourceQuestionId: number | undefined
   onlySiblings: boolean
+  /** undefined = cả câu thường lẫn câu người mới. */
+  forBeginner?: boolean
   sort: GetEnglishPoolQuestionsParams["sort"]
   page: number
   pageSize: number
@@ -34,6 +36,7 @@ export function buildPoolQuestionsParams({
   createdTo,
   sourceQuestionId,
   onlySiblings,
+  forBeginner,
   sort,
   page,
   pageSize,
@@ -52,6 +55,7 @@ export function buildPoolQuestionsParams({
       : onlySiblings
         ? { onlySiblings: true }
         : {}),
+    ...(forBeginner === undefined ? {} : { forBeginner }),
     ...(sort ? { sort } : {}),
     page,
     pageSize,

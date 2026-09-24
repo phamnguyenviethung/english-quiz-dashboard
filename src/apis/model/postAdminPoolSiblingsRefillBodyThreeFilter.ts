@@ -5,6 +5,7 @@
  * Development documentation
  * OpenAPI spec version: 0.0.0
  */
+import type { PostAdminPoolSiblingsRefillBodyThreeFilterAudience } from './postAdminPoolSiblingsRefillBodyThreeFilterAudience.ts';
 import type { PostAdminPoolSiblingsRefillBodyThreeFilterEngLevelsItem } from './postAdminPoolSiblingsRefillBodyThreeFilterEngLevelsItem.ts';
 import type { PostAdminPoolSiblingsRefillBodyThreeFilterQuizTypesItem } from './postAdminPoolSiblingsRefillBodyThreeFilterQuizTypesItem.ts';
 
@@ -12,4 +13,5 @@ export type PostAdminPoolSiblingsRefillBodyThreeFilter = {
   engLevels?: PostAdminPoolSiblingsRefillBodyThreeFilterEngLevelsItem[];
   topicIds?: (string | number)[];
   quizTypes?: PostAdminPoolSiblingsRefillBodyThreeFilterQuizTypesItem[];
+  audience?: PostAdminPoolSiblingsRefillBodyThreeFilterAudience;
 };

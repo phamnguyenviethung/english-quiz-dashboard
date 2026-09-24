@@ -12,6 +12,8 @@ export interface RefillBucketView {
   plannedCount: number
   /** Chiều phụ chỉ pool mới có (loại quiz). Reading để trống. */
   variantLabel?: string
+  /** Bucket người mới — trùng topic/level/loại với bucket thường nên phải có nhãn riêng. */
+  forBeginner?: boolean
 }
 
 export interface RefillBucketSummaryView {

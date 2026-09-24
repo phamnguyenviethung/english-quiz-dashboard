@@ -5,7 +5,7 @@ import {
 
 /** Sampler ngẫu nhiên: không cache, chỉ chạy khi bấm nút. */
 export function usePickQuizType() {
-  const query = useGetEnglishPoolPickQuizType({
+  const query = useGetEnglishPoolPickQuizType(undefined, {
     query: {
       ...getGetEnglishPoolPickQuizTypeQueryOptions(),
       enabled: false,

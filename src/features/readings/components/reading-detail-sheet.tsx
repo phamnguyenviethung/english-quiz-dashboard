@@ -34,6 +34,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { PassageQuestionsPanel } from "@/features/reading-questions/components/passage-questions-panel.tsx"
 import { useReadingQuestions } from "@/features/reading-questions/hooks/use-reading-questions.ts"
+import { BeginnerBadge } from "@/features/beginner/components/beginner-badge.tsx"
+import { BeginnerToggleRow } from "@/features/beginner/components/beginner-toggle-row.tsx"
+import { getBeginnerIneligibleReason } from "@/features/beginner/constants.ts"
 import { formatDateTime, formatNumber } from "@/lib/format.ts"
 
 import { READING_WORD_BAND, getReadingTypeLabel } from "../constants.ts"
@@ -94,9 +97,10 @@ function ReadingDetailContent({
     setBodyDraft(toDraft(passage.paragraphs))
   }, [passage.id, passage.title, passage.paragraphs])
 
-  const { updateReading, setActive, isPending } = useUpdateReading({
-    onSuccess: () => setIsEditing(false),
-  })
+  const { updateReading, setActive, setForBeginner, isPending } =
+    useUpdateReading({
+      onSuccess: () => setIsEditing(false),
+    })
   const { deleteReading, isPending: isDeleting } = useDeleteReading({
     onSuccess: onDeleted,
   })
@@ -124,6 +128,7 @@ function ReadingDetailContent({
           <Badge variant="outline">{passage.cefrLevel}</Badge>
           <Badge variant="outline">{getReadingTypeLabel(passage.type)}</Badge>
           <WordCountBadge wordCount={passage.wordCount} />
+          {passage.forBeginner ? <BeginnerBadge /> : null}
           <span className="text-sm text-muted-foreground">
             {passage.topicName ?? "Không có chủ đề"}
           </span>
@@ -144,6 +149,22 @@ function ReadingDetailContent({
             onCheckedChange={(checked) => void setActive(passage.id, checked)}
           />
         </label>
+
+        <BeginnerToggleRow
+          checked={passage.forBeginner}
+          isPending={isPending}
+          ineligibleReason={getBeginnerIneligibleReason({
+            engLevel: passage.cefrLevel,
+            readingType: passage.type,
+          })}
+          description={{
+            on: "Bài và câu hỏi của bài chỉ phục vụ khi bot gọi beginner=true.",
+            off: "Bài thường. Bật để chuyển bài (kèm câu hỏi) sang kho người mới.",
+          }}
+          onCheckedChange={(checked) =>
+            void setForBeginner(passage.id, checked)
+          }
+        />
 
         <Tabs defaultValue="passage">
           <TabsList className="w-full *:flex-1 sm:w-auto sm:*:flex-none">

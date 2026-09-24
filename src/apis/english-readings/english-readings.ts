@@ -60,7 +60,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 /**
- * Lấy 1 bài đọc random kèm trọn bộ câu hỏi đọc hiểu. Chỉ trả bài đã **đủ** `reading_question.questionsPerPassage` câu đang active — bài nửa vời không bao giờ được phục vụ. Bài KHÔNG bị xoá, kho dùng lại được. Bỏ trống `topicId` = mọi topic tenant được cấp (bài đọc luôn gắn topic nên tenant bị giới hạn sẽ chỉ thấy topic trong allow-list). `topicId` ngoài allow-list trả 403. Bỏ trống `type` = "daily" (không đổi hành vi với client cũ). `type` là hard filter xuyên suốt fallback (topicId → cefrLevel → excludeIds) — không bao giờ trả nhầm content style. Không có bài nào sẵn sàng trả 404.
+ * Lấy 1 bài đọc random kèm trọn bộ câu hỏi đọc hiểu. Chỉ trả bài đã **đủ** `reading_question.questionsPerPassage` câu đang active — bài nửa vời không bao giờ được phục vụ. Bài KHÔNG bị xoá, kho dùng lại được. Bỏ trống `topicId` = mọi topic tenant được cấp (bài đọc luôn gắn topic nên tenant bị giới hạn sẽ chỉ thấy topic trong allow-list). `topicId` ngoài allow-list trả 403. Bỏ trống `type` = "daily" (không đổi hành vi với client cũ). `type` là hard filter xuyên suốt fallback (topicId → cefrLevel → excludeIds) — không bao giờ trả nhầm content style. Không có bài nào sẵn sàng trả 404. `beginner=true` chỉ lấy bài beginner (type "daily", level ≤ B1) — cờ này cũng là hard filter xuyên suốt fallback; beginner + cefrLevel B2 hoặc type "academic" trả 400.
  * @summary Pop a reading passage with its questions
  */
 export const getEnglishReadingsPop = (
